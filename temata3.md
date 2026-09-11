@@ -245,3 +245,28 @@ Info `0xFF` = pseudosprite, jeho první bajt je číslo akce. Action 02
 (varAction2) se pak dekóduje podle wiki stránky `VariationalAction2`
 a `VarAction2Advanced` (tabulka operátorů). Takhle jsem přečetl, co
 skutečně dělá `kaas_planes.grf`.
+
+### Modely v `glb/GLB/` — rozebráno 2026-09-11
+
+Oba jsou týž raketoplán, 9 meshů, 9 materiálů. **Liší se jmény
+materiálů, a to je past:**
+
+| | materiály | co z toho |
+|---|---|---|
+| `bsg__shuttle_mk._iiix0cx60.glb` (v kořeni) | `Col_shuttle_mk2_hull`, `..._doors`, `..._engines`, … | syrový export ze Sketchfabu |
+| `glbobj/Shuttle.glb` | `barva`, `okna`, `dvere`, `korba`, `pneu`, `disky`, `podvozek`, `sedacky` | **sedí na slovník ve skriptu** |
+
+Slovník `UPRAVIT_MATERIALY` je psaný na ty české názvy. Skript bere
+**první `.glb` v adresáři**, tedy ten kořenový — u kterého se žádný
+materiál netrefí a model se vyrenderuje v původních barvách. Projde to
+bez chyby, jen se to vypíše jako varování. Proto má letecká verze výpis,
+které materiály se opravdu přepsaly.
+
+**Natočení je u obou stejné a správné.** Kořenový má na uzlu
+`Sketchfab_model` matici otočení o 90° kolem X, `Shuttle.glb` má tutéž
+rotaci na každém meshi zvlášť. Po převodu glTF (Y nahoru) → Blender
+(Z nahoru) oba leží naplocho, délka ≈19 podél osy **Y**, šířka 6,85,
+výška 4,4. Takže úhly se kvůli modelu měnit nemusí.
+
+**Blender v tomhle prostředí není** (`xvfb-run` a `python3` ano).
+Vyrenderovat a zkontrolovat tu nemůžu — skripty jdou psát, ne zkoušet.
