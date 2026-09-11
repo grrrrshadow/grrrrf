@@ -268,5 +268,23 @@ rotaci na každém meshi zvlášť. Po převodu glTF (Y nahoru) → Blender
 (Z nahoru) oba leží naplocho, délka ≈19 podél osy **Y**, šířka 6,85,
 výška 4,4. Takže úhly se kvůli modelu měnit nemusí.
 
-**Blender v tomhle prostředí není** (`xvfb-run` a `python3` ano).
-Vyrenderovat a zkontrolovat tu nemůžu — skripty jdou psát, ne zkoušet.
+### Blender TU JDE — přes `pip install bpy` (2026-09-11)
+
+Napřed jsem hráči napsal, že Blender v prostředí není a renderovat
+nemůžu. **Byl to ukvapený závěr.** Blender je na PyPI jako modul `bpy`
+a PyPI je odsud dostupné napřímo:
+
+```
+python3 -m pip install bpy      # Blender 5.0.1, Python 3.11
+python3 muj_skript.py           # bez --background, bpy uz bezi headless
+```
+
+Skripty psané pro `blender --background --python x.py` fungují beze
+změny — `bpy.data.filepath` je prázdný, takže `base_dir` vyjde na
+aktuální adresář, přesně jak to ten skript čeká.
+
+**Render je rychlý:** devět úhlů 248×248 při 64 vzorcích za **15 sekund**
+na CPU. Takže zkoušet se to dá klidně opakovaně.
+
+Ponaučení: než napíšu „tohle tu nejde“, zkusit i jiné cesty než
+`command -v`. Chyběl `blender` jako binárka, ale ne Blender jako takový.
