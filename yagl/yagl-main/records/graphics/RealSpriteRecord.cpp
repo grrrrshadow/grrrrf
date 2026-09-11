@@ -558,6 +558,18 @@ bool RealSpriteRecord::is_pure_white(const Pixel& pixel)
 }
 
 
+bool RealSpriteRecord::is_background(const Pixel& pixel)
+{
+    // Fully transparent is background, whatever the RGB underneath says.
+    if ((m_colour & HAS_RGB) && (m_colour & HAS_ALPHA) && (pixel.alpha == 0x00))
+    {
+        return true;
+    }
+
+    return is_pure_white(pixel);
+}
+
+
 void RealSpriteRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
 {
     // [8, 21, -3, -11], normal, 8bpp,
@@ -691,7 +703,7 @@ void RealSpriteRecord::check_white_border(const SpriteSheet* sheet, uint16_t xpi
 {
     SpriteSheet::Pixel pixel;
     pixel = sheet->pixel(xpix, ypix);
-    if (!is_pure_white(pixel))
+    if (!is_background(pixel))
     {
         if (non_white_pixels == 0)
         {
@@ -724,7 +736,9 @@ void RealSpriteRecord::check_white_border(const SpriteSheet* sheet)
     if (non_white_pixels > 0)
     {
         std::cout << "WARNING: Sprite #" << to_hex(m_sprite_id, false);
-        std::cout << " has " << non_white_pixels << " non-white pixels in its border. Its YAGL rectangle may be misaligned or too small.\n";
+        std::cout << " has " << non_white_pixels << " non-background pixels in its border"
+                     " (neither pure white nor fully transparent)."
+                     " Its YAGL rectangle may be misaligned or too small.\n";
         std::cout << "    The first is at [" << xpos << ", " << ypos << "] in sprite sheet " << m_filename << std::endl;
     }
 }

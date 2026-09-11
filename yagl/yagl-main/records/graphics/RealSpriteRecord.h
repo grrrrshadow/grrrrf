@@ -126,6 +126,12 @@ private:
 
     // Check whether a pixel is pure white - we warn about this, and perhaps fix.
     bool is_pure_white(const Pixel& pixel);
+    // Check whether a pixel counts as empty background AROUND a sprite. Pure
+    // white is the convention for palette sheets, but a 32bpp sheet rendered
+    // from a 3D tool carries its transparency in the alpha channel instead,
+    // and the RGB underneath is whatever the renderer left there - commonly
+    // black. Such a pixel is background just as much as a white one is.
+    bool is_background(const Pixel& pixel);
     // Non-owning pointers passed as a slightly more efficient implementation detail.
     void check_white_border(const SpriteSheet* sheet);
     void check_white_border(const SpriteSheet* sheet, uint16_t xpix, uint16_t ypix,
