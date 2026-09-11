@@ -55,6 +55,19 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
   až v novém sezení. README proxy k tomu říká jasně: 403 nezkoušet
   dokola a neobcházet, jen nahlásit zablokovaný host.
 
-  Náhradní cesty, dokud je doména zavřená: hráč mi obsah vloží sem
-  (text/soubor), nebo si stejné informace vezmu z dosažitelných zdrojů
-  (GitHub jde — zdrojáky OpenTTD, NML apod.).
+  **Vyřešeno 2026-09-11:** hráč mi tabulku vložil rovnou do chatu.
+  Rozluštěná a uložená v `cargo-classes.md` — viz níž. Stránku samotnou
+  jsem pořád nečetl, mám jen tu tabulku, kterou poslal.
+
+  Ostatní náhradní cesty, kdyby bylo potřeba víc: hráč vloží další část,
+  nebo si vezmu, co jde, z dosažitelných zdrojů (GitHub funguje —
+  zdrojáky OpenTTD, NML apod.).
+
+## Soubory v tomhle repu
+
+- **`cargo-classes.md`** — kódy nákladu pro GRF, rozluštěné. Čtyřmístné
+  číslo u nákladu je **bitmask tříd**, ne pořadové číslo; klíč bitů 0–15
+  je tam v tabulce. Ověřeno strojově proti všem 144 řádkům, co poslal
+  hráč: sedí 143, jediný nesoulad je `SCRP` (chyba ve zdroji).
+  Součástí je i seznam nákladů, které používá CZIS — to je ten sloupec,
+  co platí pro CZTR.
