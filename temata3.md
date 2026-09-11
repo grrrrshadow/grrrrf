@@ -55,9 +55,13 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
   až v novém sezení. README proxy k tomu říká jasně: 403 nezkoušet
   dokola a neobcházet, jen nahlásit zablokovaný host.
 
-  **Vyřešeno 2026-09-11:** hráč mi tabulku vložil rovnou do chatu.
-  Rozluštěná a uložená v `cargo-classes.md` — viz níž. Stránku samotnou
-  jsem pořád nečetl, mám jen tu tabulku, kterou poslal.
+  **Otevřeno 2026-09-11:** hráč doménu povolil a wiki je od té chvíle
+  dostupná (HTTP 200). Stahuju si stránky syrově přes `?action=raw`,
+  ne přes shrnutí — u specifikací chci přesná data, ne převyprávění.
+
+  Kontrola: seznam v `naklady.md`, který jsem opsal z chatu, **sedí
+  přesně proti originálu** — 146 ku 146, jediný rozdíl je wiki odkaz
+  kolem popisu u `NHNO`.
 
   Ostatní náhradní cesty, kdyby bylo potřeba víc: hráč vloží další část,
   nebo si vezmu, co jde, z dosažitelných zdrojů (GitHub funguje —
@@ -124,3 +128,28 @@ není. Číst environmenty umím (`list_environments`), měnit ne.
 úroveň Trusted.** Trusted = balíčkové registry, GitHub, cloud SDK —
 `tt-wiki.net` v tom není, proto to padá. Přepnout ho musí hráč ručně
 v UI podle postupu výš. Já k tomu můžu leda dodat ten název.
+
+### Které stránky wiki jsou k čemu (2026-09-11)
+
+- `CargoTypes` — seznam labelů nákladu.
+- `Action0/Cargos` — vlastnosti nákladu. **CargoClasses je 16, label 17.**
+  Je tam i celá tabulka bitů tříd.
+- `Action0/Global Settings` — **překladová tabulka je vlastnost 09**
+  u feature 08. Je tam příklad zápisu v NFO.
+- `Action0/Industries`, `Action0/Industry Tiles` — průmysl a jeho dlaždice.
+- `CargoDefaultProps` — výchozí náklady podle klimatu.
+- `Action3` — napojení grafiky na typy nákladu.
+
+Stahovat přes `curl "...?action=raw"`. Stránky s lomítkem v názvu
+(`Action0/Cargos`) přes `index.php` s `--data-urlencode title=...`,
+protože `Action0Cargos` je jen redirect.
+
+### Co z toho mění přístup k práci
+
+1. **Třídy nákladu nejsou spolehlivý identifikátor.** Specifikace sama
+   říká, že se liší mezi sety a v čase. Na konkrétní náklad se refituje
+   **podle labelu**, ne podle tříd.
+2. **Label se nepřejmenovává.** Měnit ho bez moc dobrého důvodu je podle
+   specifikace špatná praxe.
+3. **FIRS, AXIS, ITI, Sunshine Trains a Iron Horse mají vlastní schéma
+   tříd (FRAX)**, tahle tabulka pro ně neplatí.
