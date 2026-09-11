@@ -179,3 +179,17 @@ v tabulce — jen je dávám vedle sebe, protože splést je je snadné:
 
 `NUKF` (Nuclear fuel) a `NUKW` (Nuclear waste) mají v tabulce popis
 tříd slovy, ale **chybí jim číselný kód**. Ostatních 144 ho má.
+
+## Labely, které v té tabulce nejsou
+
+Viděné v reálném GRF (`VWT1cargo.yagl`, hráč poslal 2026-09-11), ale ve
+vložené wiki tabulce svůj řádek nemají. **Co znamenají, nevím** — neopsal
+jsem je odnikud, jen jsem je našel v souboru. Netipovat.
+
+`FARM` · `LVPT` · `HOPS` · `ELEC` · `NODC` · `CCPR` · `HWAR` · `STBL` ·
+`FOCA` · `PPWK` · `RBAR` · `SEAL` · `STPP` · `STTB` · `TYCO` · `WELD` ·
+`PUMP` · `NWST` · `FREE`
+
+Z toho `ELEC` a `NODC` jsou přesně ty dva, na které se odkazovala
+poznámka u `ELTR` („CZIS uses its own labels") a řádek v tabulce neměly.
+Takže se opravdu používají.
