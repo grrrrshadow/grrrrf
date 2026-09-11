@@ -22,6 +22,14 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
    odložit jako odkaz. Kde to nejde (viz Odkazy), musím to nahlas říct
    a domluvit náhradní cestu, ne to mlčky obejít ani předstírat,
    že jsem to četl.
+7. **Fakta znát nazpaměť, ne je odvozovat** (zadáno 2026-09-11). U věcí
+   jako zkratky nákladu chce hráč spolehlivost, ne chytrost: `PASS` je
+   Passengers, tečka. Nehledat v tom vzory a nedovozovat, co tam není —
+   od toho je opsaná tabulka v `naklady.md`.
+8. **`forclaude` je jen ke čtení** (zadáno 2026-09-11). Je to zdroj
+   pravdy o tom, jak se hra chová — čtu z něj, ale **nic v něm neměním,
+   nekomituju, nepushuju.** Po každé práci s ním zkontrolovat, že
+   `git status` je prázdný.
 
 ## Poznámky
 
@@ -76,11 +84,14 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
   tříd, ne pořadová čísla). Hráč k tomu 2026-09-11 řekl, že o tom nic neví
   a nechce, abych hledal souvislosti — takže je to jen odložená reference,
   ne něco, čím se má argumentovat. Přednost má slovník.
-7. **Fakta znát nazpaměť, ne je odvozovat** (zadáno 2026-09-11). U věcí
-   jako zkratky nákladu chce hráč spolehlivost, ne chytrost: `PASS` je
-   Passengers, tečka. Nehledat v tom vzory a nedovozovat, co tam není —
-   od toho je opsaná tabulka v `naklady.md`.
-
+- **`prekladova-tabulka-vzor.yagl`** — vzorová překladová tabulka, 147
+  slotů včetně našeho `MARI`. Neznámé labely dole jako `undefined`.
+- **`letadla-stavy.md`** — jak u letadla poznat fázi letu. Proměnná
+  `0xE2` = fáze, `0xE6` = nakládání, `0xB4` = rychlost. Je tam i pořadí
+  směrů pro sprity.
+- **`glb/`** — rozbalený `GLB.zip` z releasu `glb`: blenderový render
+  modelů na sprity. Velké binárky (modely, HDRI) jsou gitignorované,
+  leží v releasu.
 ## Jak povolit zablokovanou doménu (zjištěno 2026-09-11)
 
 Nepovoluje se to v chatu ani na GitHubu. Je to nastavení **cloud
@@ -179,3 +190,58 @@ co je při práci důležité:
 Důsledek pro `cargo-classes.md`: ta reference je o třídách, které
 nepoužíváme. Nezahazuju ji (hodí se vědět, co které číslo znamená, když
 se čte cizí GRF), ale **nemá se s ní začínat**.
+
+## Render spritů z 3D: `glb/GLB/glb3BBC.py`
+
+Blenderový skript. Spouští se `blender --background --python glb3bbc.py`
+a vyrobí PNG sprity z `.glb` modelu, který najde vedle sebe.
+
+Jak funguje:
+
+- Kamera je **ortografická**, pověšená na prázdný objekt („jeřáb“), který
+  se přes constraint `TRACK_TO` dívá na střed modelu. Střed se počítá
+  z krajních vrcholů, ne z originu.
+- Model visí na druhém prázdném objektu („gramofon“) a **otáčí se model,
+  ne kamera**. Seznam `ROTATION_ANGLES` jsou úhly toho otočení.
+- Osvětlení je HDRI ze složky `hdri/` (`snow.exr`, `overcast.exr`,
+  `sunset.hdr`). Stíny z HDRI jsou vypnuté.
+- `UPRAVIT_MATERIALY` přepisuje barvu, drsnost a kovovost materiálů
+  podle jména. Jména musí sedět na materiály v modelu.
+- Renderuje se ve `512×512` a ukládá ve `248×248`.
+
+Hodnoty, které si hráč nechal v komentářích pro různé modely:
+
+| model | `CAMERA_PARALLEL_SCALE` | `CAMERA_DISTANCE` |
+|---|---|---|
+| shuttle | 25 | 20 |
+| An-224 | 120 | 70 |
+| C-17 | 60 | 70 |
+
+Co u letadla změnit oproti autům: `HILL_TILT_DEGREES` (teď `-23`) je
+náklon do kopce — letadlo terén nekopíruje, takže **na nulu**.
+`CAMERA_ROTATION_DEGREES_X = 30` je okomentované jako „autaspravny“.
+
+### Úhly
+
+Devátý úhel v seznamu je **sprite do depa**, ne směr. Osm skutečných
+směrů musí jít v pořadí výčtu `Direction` z hry:
+`N, NE, E, SE, S, SW, W, NW`. Pro auta i letadla stejně.
+
+Oba seznamy v tom skriptu jsou **tentýž seznam posunutý o 3 pozice**,
+krok −45°. Pořadí je tedy správně, liší se jen natočení modelu v GLB.
+U nového modelu se proto **neladí pořadí, jen počáteční posun**.
+
+## Dvě techniky, které se osvědčily
+
+**Číst zip z releasu bez stahování.** GitHub na release assety umí
+`Range` requesty (HTTP 206). Přes ně se dá načíst konec zipu, z něj
+centrální adresář, a stáhnout jen ten jeden soubor, co chci. U 156MB
+zipu to ušetří všechno ostatní. Funguje i pro velké archivy.
+
+**Rozebrat `.grf` bez nástrojů.** `grfcodec` ani `nml` tu nejsou, ale
+kontejner verze 2 se čte snadno: 10 bajtů hlavička, dword offset datové
+sekce, bajt komprese, a pak řetěz `dword délka + bajt info + data`.
+Info `0xFF` = pseudosprite, jeho první bajt je číslo akce. Action 02
+(varAction2) se pak dekóduje podle wiki stránky `VariationalAction2`
+a `VarAction2Advanced` (tabulka operátorů). Takhle jsem přečetl, co
+skutečně dělá `kaas_planes.grf`.
