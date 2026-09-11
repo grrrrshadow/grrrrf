@@ -640,22 +640,32 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "SCRP"; // kovový šrot                         [Scrap Metal]
     }
+    // ---- NAŠE VLASTNÍ NÁKLADY ----
+    // instance_id: 0x0092
+    {
+        cargo_translation_table: "MARI"; // marihuana                           [Marihuana]
+    }
 }
 
 // ====================================================================
 // NAŠE NOVÉ NÁKLADY
 // ====================================================================
-// Hráč zmínil MARI = marihuana. Pozor: jestli na ni má jít ruční
-// refit, nesmí skončit tady dole, ale NAHOŘE ve slotech 0x00-0x1F -
-// a za něco jiného, protože těch 32 je plných.
+// MARI (marihuana) uz v tabulce je, na jejim konci - viz sekce
+// NASE VLASTNI NAKLADY. Dalsi pridavej za ni.
 //
-// Label jsou přesně 4 znaky, kratší se doplní podtržítkem.
-// Nový náklad potřebuje kromě řádku tady i vlastní definici:
-// Action0 feature 0B, vlastnost 17 (label) a 16 (třídy).
+// Pozor na jedno: tim, ze je pod carou, se na ni bude refitovat
+// jen pres tridy nakladu, ne jmenovite. Pro bezny naklad to staci.
+// Kdyby mel mit nejaky nas naklad vlastni rucni refit, musi nahoru
+// do 0x00-0x1F za neco jineho - je to presun jednoho radku.
 //
-//    // instance_id: 0x0092
+// Samotny radek tady nakladu nestaci. Novy naklad se jeste musi
+// definovat: Action0 feature 0B, vlastnost 17 (label) a 16 (tridy),
+// plus jmena a ikona. To zatim hotove neni.
+//
+// Label jsou presne 4 znaky, kratsi se doplni podtrzitkem.
+//    // instance_id: 0x0093
 //    {
-//        cargo_translation_table: "MARI"; // marihuana
+//        cargo_translation_table: "XXXX"; // co to je
 //    }
 
 // ====================================================================
@@ -687,5 +697,5 @@ properties<GlobalSettings, 0x0000> // Action00
 //    cargo_translation_table: "NWST"; // ???
 //    cargo_translation_table: "FREE"; // ???
 
-// v tabulce výš: 146 nákladů, sloty 0x0000-0x0091
+// v tabulce výš: 147 nákladů, sloty 0x0000-0x0092
 // z toho v refit masce: 32 (0x0000-0x001F)
