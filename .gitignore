@@ -1,0 +1,8 @@
+# Velké binárky z GLB.zip: modely a HDRI osvětlení.
+# Nejdou do gitu schválně — jsou v releasu "glb" (GLB.zip, 156 MB) a
+# jednotlivě mají 6-71 MB. GitHub nad 50 MB na soubor nadává, nad 100 MB
+# push rovnou odmítá. Release je pro ně správné místo, git ne.
+# Rozbalené v pracovním adresáři jsou, jen se necommitují.
+glb/GLB/hdri/*.exr
+glb/GLB/hdri/*.hdr
+glb/GLB/**/*.glb

@@ -1,0 +1,38 @@
+
+
+proot-distro login debian
+
+proot-distro login ubuntu
+
+cd /storage/emulated/0/Download/gfdc/3D/RTO
+
+xvfb-run -a python3 render15.py
+
+blender --background --python glb3bbc.py
+
+proot-distro login debian --user root
+
+# zjisti, kde je python3
+which python3
+# typicky: /usr/bin/python3
+
+# pøejmenuj/odstraò existující python (pokud je) a vytvoø symlink
+mv /usr/bin/python /usr/bin/python.old 2>/dev/null
+ln -s /usr/bin/python3 /usr/bin/python
+
+# Vstup do Blenderu v background režimu a vypsání všech nainstalovaných add-onù
+blender --background --python-expr "import bpy; print([a.module for a in bpy.context.preferences.addons])"
+
+apt install qemu-user-static
+
+blender --background --python materialyglb.py
+blender -b -P objtoglb.py
+
+
+oprava obj z prisma3d app
+sed -i 's/,/./g' centr.obj
+ovìøení opravy, nesmi nic vypsat
+grep ',' centr.obj | head
+
+
+
