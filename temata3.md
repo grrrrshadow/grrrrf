@@ -65,9 +65,14 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
 
 ## Soubory v tomhle repu
 
-- **`cargo-classes.md`** — kódy nákladu pro GRF, rozluštěné. Čtyřmístné
-  číslo u nákladu je **bitmask tříd**, ne pořadové číslo; klíč bitů 0–15
-  je tam v tabulce. Ověřeno strojově proti všem 144 řádkům, co poslal
-  hráč: sedí 143, jediný nesoulad je `SCRP` (chyba ve zdroji).
-  Součástí je i seznam nákladů, které používá CZIS — to je ten sloupec,
-  co platí pro CZTR.
+- **`naklady.md`** — *tohle je ten hlavní.* Prostý slovník
+  zkratka → náklad, všech 146, podle abecedy. `PASS` = Passengers a tak
+  dál. Žádné odvozování, jen opsaná tabulka. Tohle mám umět neomylně.
+- **`cargo-classes.md`** — rozbor čtyřmístných čísel (jsou to bitmasky
+  tříd, ne pořadová čísla). Hráč k tomu 2026-09-11 řekl, že o tom nic neví
+  a nechce, abych hledal souvislosti — takže je to jen odložená reference,
+  ne něco, čím se má argumentovat. Přednost má slovník.
+7. **Fakta znát nazpaměť, ne je odvozovat** (zadáno 2026-09-11). U věcí
+   jako zkratky nákladu chce hráč spolehlivost, ne chytrost: `PASS` je
+   Passengers, tečka. Nehledat v tom vzory a nedovozovat, co tam není —
+   od toho je opsaná tabulka v `naklady.md`.

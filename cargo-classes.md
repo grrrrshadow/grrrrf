@@ -60,7 +60,8 @@ ověřit, až půjde stránka otevřít.)*
    jenže `0x0010` je *bulk*; piece goods je `0x0020`. Jeden z těch dvou
    údajů je špatně. `SCRP` je stejně označený jako zastaralý (místo něj
    `SCMT`), takže to nejspíš nikoho netrápí — ale nekopírovat to.
-   Zkontrolováno strojově: tohle je **jediný** nesoulad ze 144 řádků.
+   Zkontrolováno strojově: tohle je **jediný** nesoulad ze 144 řádků,
+   které kód mají.
 2. **`ELEC` a `NODC` chybí.** U `ELTR` je poznámka, že CZIS používá
    vlastní labely `ELEC` a `NODC` — ale ani jeden z nich v tabulce svůj
    řádek nemá. Pokud je budu potřebovat, musí se dohledat jinde.
@@ -225,3 +226,9 @@ YETI, OTIS, XIS, 2TT) a poznámky o přejmenováních a odchylkách tříd
 v jednotlivých setech (např. OTIS má `PAPR` jako `0220`, XIS má `FRUT`
 jako `00A4`). Z těch jsem si vytáhl jen **CZIS**, protože CZTR je český
 set. Zbytek zatím uložený nemám — kdyby byl potřeba, musí se vložit znovu.
+
+## Doplněk 2026-09-11
+
+Labelů je celkem **146**, ne 144. `NUKF` a `NUKW` mají třídy popsané jen
+slovy („Piece goods, hazardous") a číselný kód jim ve zdroji chybí, proto
+v tabulkách výš nejsou. Úplný seznam zkratek je v `naklady.md`.
