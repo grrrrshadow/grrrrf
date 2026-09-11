@@ -76,3 +76,30 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
    jako zkratky nákladu chce hráč spolehlivost, ne chytrost: `PASS` je
    Passengers, tečka. Nehledat v tom vzory a nedovozovat, co tam není —
    od toho je opsaná tabulka v `naklady.md`.
+
+## Jak povolit zablokovanou doménu (zjištěno 2026-09-11)
+
+Nepovoluje se to v chatu ani na GitHubu. Je to nastavení **cloud
+environmentu** na claude.ai. Postup podle dokumentace
+(https://code.claude.com/docs/en/cloud-environments#network-access):
+
+1. Otevřít environment k editaci (ikona mráčku na příslušné obrazovce
+   Claude Code — vlastní osobní environment nemá zvláštní stránku
+   v nastavení účtu).
+2. V dialogu položka **Network access**. Má čtyři úrovně:
+   **None** (nic), **Trusted** (výchozí — balíčkové registry, GitHub,
+   cloud SDK), **Full** (cokoliv), **Custom** (vlastní seznam).
+3. Zvolit **Custom** a do pole **Allowed domains** napsat doménu,
+   jednu na řádek. `*.` na začátku bere všechny subdomény.
+4. Zaškrtnout **„Also include default list of common package managers“**,
+   jinak se seznamem nahradí i ty výchozí povolené domény.
+
+Projeví se to v **novém sezení** — běžící VM už svou politiku má.
+
+Důležité k tomu: GitHub jde vlastní proxy mimo tenhle allowlist, takže
+o přístup k repozitářům se tímhle přijít nedá. Allowlist je taky per
+environment, žádný organizační společný neexistuje.
+
+Pro `newgrf-specs.tt-wiki.net` tedy: **Custom** + řádek
+`newgrf-specs.tt-wiki.net` (nebo rovnou `*.tt-wiki.net`) + ponechat
+výchozí seznam. Kdo nechce nic řešit, dá **Full**, ale to otevře všechno.
