@@ -288,3 +288,28 @@ na CPU. Takže zkoušet se to dá klidně opakovaně.
 
 Ponaučení: než napíšu „tohle tu nejde“, zkusit i jiné cesty než
 `command -v`. Chyběl `blender` jako binárka, ale ne Blender jako takový.
+
+## yagl — tímhle se u nás dělá GRF (2026-09-11)
+
+Hráč mi poslal `yagl` a řekl jasně: **chce, abych byl kompatibilní
+s jeho postupy.** Zkoušel jsem instalovat `nml` a zamítl to. Takže:
+
+- **Nástroj je `yagl`**, ne nml, ne grfcodec. Leží v `yagl/yagl-main/`,
+  postup v `yagl/POSTUP.md`. Přeloží se za 32 s, testy procházejí.
+- Round-trip ověřený na `kaas_planes.grf`: rozdíl 10 bajtů z 3,65 MB.
+- **`.yagl` se musí jmenovat stejně jako cílový `.grf`**, jinak encoder
+  spadne. A soubor se má jmenovat stejně jako jméno GRF v seznamu ve
+  hře, jinak ho hráč nenajde.
+- Budeme yagl rozvíjet pro vlastní potřeby — je to náš nástroj, ne jen
+  vypůjčený.
+
+Ponaučení: **než sáhnu po nástroji, zeptat se, čím to dělá hráč.**
+Sáhl jsem po nml, protože je obvyklejší. Nebylo to na mně.
+
+## Slovník materiálů v `glb3letadlo.py` je prázdný
+
+Byl psaný na autíčka (`pneu`, `disky`, `korba`, `poklice`…) a na
+raketoplánu se buď netrefil vůbec (kořenový model), nebo se trefil na
+špatné díly — modrá „pneu“ přistála na motorech, žluté „disky“ na
+panelech. Hráč řekl smazat, pošle ho, až budeme dělat auta. Mechanika
+v skriptu zůstala, stačí slovník zase naplnit.

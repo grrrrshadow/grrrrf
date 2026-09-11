@@ -6,3 +6,7 @@
 glb/GLB/hdri/*.exr
 glb/GLB/hdri/*.hdr
 glb/GLB/**/*.glb
+
+# yagl: přeložené výstupy. Zdroják se commituje, build ne — je to 9 MB
+# binárek a objektů a přeložit se to dá za 32 sekund.
+yagl/yagl-main/build/
