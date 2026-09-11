@@ -103,3 +103,24 @@ environment, žádný organizační společný neexistuje.
 Pro `newgrf-specs.tt-wiki.net` tedy: **Custom** + řádek
 `newgrf-specs.tt-wiki.net` (nebo rovnou `*.tt-wiki.net`) + ponechat
 výchozí seznam. Kdo nechce nic řešit, dá **Full**, ale to otevře všechno.
+
+### Pozor: režim oprávnění NENÍ síťová politika (2026-09-11)
+
+Hráč navrhl, ať si přístup na wiki zařídím sám přes nastavení
+„Claude handles permission decisions“ (auto režim). Nejde to a je dobré
+vědět proč, ať to znovu nezkouším:
+
+- **Režim oprávnění** říká, jestli se musím ptát, než něco udělám.
+  Týká se nástrojů, které mám — spustit příkaz, zapsat soubor, pushnout.
+- **Síťová politika** říká, kam vůbec smí to VM ven. Vynucuje ji proxy
+  venku za sandboxem. Žádný režim oprávnění ji nemění.
+
+Takže ani ve full auto se na zablokovanou doménu nedostanu: nejde
+o nepovolený nástroj, ale o nástroj, který **neexistuje**. Ověřeno
+hledáním v nástrojích — nic na editaci environmentu ani allowlistu tam
+není. Číst environmenty umím (`list_environments`), měnit ne.
+
+**Tenhle účet má jediný environment: `Default`, `env_01GmZvt3ZwYvH9Tt9gJSSZkf`,
+úroveň Trusted.** Trusted = balíčkové registry, GitHub, cloud SDK —
+`tt-wiki.net` v tom není, proto to padá. Přepnout ho musí hráč ručně
+v UI podle postupu výš. Já k tomu můžu leda dodat ten název.
