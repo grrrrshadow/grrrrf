@@ -17,6 +17,11 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
 4. **Export do ostatních repozitářů jen když o tom hráč ví.** Ne potichu.
 5. **V ostatních repozitářích nic nepřepisovat, nemazat, needitovat.**
    Tohle platí bez výjimky.
+6. **Mám sbírat informace nezbytné pro tvorbu** (zadáno 2026-09-11) —
+   zdroje, které mi hráč dá, si mám otevřít a nastudovat, ne je jen
+   odložit jako odkaz. Kde to nejde (viz Odkazy), musím to nahlas říct
+   a domluvit náhradní cestu, ne to mlčky obejít ani předstírat,
+   že jsem to četl.
 
 ## Poznámky
 
@@ -37,8 +42,19 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
 - **NewGRF CargoTypes** — https://newgrf-specs.tt-wiki.net/wiki/CargoTypes
   (dal mi ho hráč 2026-09-11). Specifikace typů nákladu pro NewGRF —
   patří k tomu, co v `forclaude` řeší `CZTR_Wagons_cargo.yagl`.
-  **Pozor:** z tohohle prostředí se ta stránka neotevře, egress proxy
-  doménu `newgrf-specs.tt-wiki.net` blokuje. Obsah jsem tedy nečetl,
-  mám zatím jen odkaz. Až ho budu potřebovat, musí mi obsah podat hráč
-  (vložit text / soubor), nebo se to musí povolit v síťové politice
-  prostředí.
+  **Stav: nepřečteno, host je zablokovaný.** Ověřeno dvakrát —
+  `WebFetch` vrátí `EGRESS_BLOCKED` a `curl` skončí na
+  `CONNECT tunnel failed, response 403`. To je 403 od egress proxy,
+  tedy síťová politika prostředí, ne moje nastavení.
+
+  **Důležité, ať to znovu nepletu:** tenhle blok nejde odemknout tím,
+  že mi to hráč v chatu povolí. Jeho svolení mě opravňuje ten zdroj
+  použít, ale díru do sítě neudělá. Povolení domény se dělá v nastavení
+  network policy toho prostředí (Claude Code on the web —
+  https://code.claude.com/docs/en/claude-code-on-the-web) a projeví se
+  až v novém sezení. README proxy k tomu říká jasně: 403 nezkoušet
+  dokola a neobcházet, jen nahlásit zablokovaný host.
+
+  Náhradní cesty, dokud je doména zavřená: hráč mi obsah vloží sem
+  (text/soubor), nebo si stejné informace vezmu z dosažitelných zdrojů
+  (GitHub jde — zdrojáky OpenTTD, NML apod.).
