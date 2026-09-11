@@ -675,27 +675,28 @@ properties<GlobalSettings, 0x0000> // Action00
 // tyhle nejsou. (Fulltext hledání na té wiki je rozbité - vrací nulu
 // i na PASS - takže víc než tohle tvrdit nemůžu.)
 // Hráč říká, že část z nich jsou naše nové náklady a část kódy,
-// které někde viděl. Nechávám je bez popisu, dokud nevím které je co.
+// které někde viděl. Dokud nevím které je co, mají u sebe undefined -
+// ne domyšlený význam.
 //
-//    cargo_translation_table: "FARM"; // ???
-//    cargo_translation_table: "LVPT"; // ???
-//    cargo_translation_table: "HOPS"; // ???
-//    cargo_translation_table: "ELEC"; // ???
-//    cargo_translation_table: "NODC"; // ???
-//    cargo_translation_table: "CCPR"; // ???
-//    cargo_translation_table: "HWAR"; // ???
-//    cargo_translation_table: "STBL"; // ???
-//    cargo_translation_table: "FOCA"; // ???
-//    cargo_translation_table: "PPWK"; // ???
-//    cargo_translation_table: "RBAR"; // ???
-//    cargo_translation_table: "SEAL"; // ???
-//    cargo_translation_table: "STPP"; // ???
-//    cargo_translation_table: "STTB"; // ???
-//    cargo_translation_table: "TYCO"; // ???
-//    cargo_translation_table: "WELD"; // ???
-//    cargo_translation_table: "PUMP"; // ???
-//    cargo_translation_table: "NWST"; // ???
-//    cargo_translation_table: "FREE"; // ???
+//    cargo_translation_table: "FARM"; // undefined
+//    cargo_translation_table: "LVPT"; // undefined
+//    cargo_translation_table: "HOPS"; // undefined
+//    cargo_translation_table: "ELEC"; // undefined
+//    cargo_translation_table: "NODC"; // undefined
+//    cargo_translation_table: "CCPR"; // undefined
+//    cargo_translation_table: "HWAR"; // undefined
+//    cargo_translation_table: "STBL"; // undefined
+//    cargo_translation_table: "FOCA"; // undefined
+//    cargo_translation_table: "PPWK"; // undefined
+//    cargo_translation_table: "RBAR"; // undefined
+//    cargo_translation_table: "SEAL"; // undefined
+//    cargo_translation_table: "STPP"; // undefined
+//    cargo_translation_table: "STTB"; // undefined
+//    cargo_translation_table: "TYCO"; // undefined
+//    cargo_translation_table: "WELD"; // undefined
+//    cargo_translation_table: "PUMP"; // undefined
+//    cargo_translation_table: "NWST"; // undefined
+//    cargo_translation_table: "FREE"; // undefined
 
 // v tabulce výš: 147 nákladů, sloty 0x0000-0x0092
 // z toho v refit masce: 32 (0x0000-0x001F)
