@@ -34,8 +34,21 @@ cd shuttle
 | Action04 | jméno „Shuttle" |
 | Action03 | napojení grafiky na letadlo |
 
-Vlastnosti: 480 mph, 80 cestujících, 20 pošty, od roku 1960, neomezený
-dolet, dostupné ve všech klimatech.
+Vlastnosti: 480 mph, 80 cestujících, 20 pošty, **od roku 2042**,
+neomezený dolet, všechna klimata.
+
+## !!! climate_availability !!!
+
+**`climate_availability: null;` znamená ŽÁDNÉ klima, ne „všechna".**
+Vozidlo se pak nikdy neobjeví v nákupním menu a hra na to nijak
+neupozorní — GRF svítí v seznamu zeleně, bez chyby. Rozhoduje o tom
+jediný řádek v `newgrf.cpp`:
+
+```cpp
+if (!e->info.climates.Test(_settings_game.game_creation.landscape)) continue;
+```
+
+Správně se to píše výčtem: `Temperate | Arctic | Tropical | Toyland`.
 
 ## Co zatím NENÍ hotové
 
@@ -45,6 +58,6 @@ dolet, dostupné ve všech klimatech.
 - **Žádný stín ani vrtule.**
 - `grf_id: "GRSH"` jsem si vymyslel. Na ostrou verzi si vyber vlastní,
   ať se to nepere s cizím GRF.
-- **Nevyzkoušeno ve hře.** Prošlo to jen tím, že se GRF složí, zase
-  rozebere a vyjde totéž. Jestli to OpenTTD načte a jak to vypadá
-  na obrazovce, musíš říct ty.
+- **Ve hře zatím jen načtené.** Hráč potvrdil, že GRF je v seznamu
+  grafik zeleně a bez chyby. Jestli je letadlo v depu vidět a jak
+  vypadá za letu, se teprve ukáže.

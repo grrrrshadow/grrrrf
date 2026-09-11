@@ -334,3 +334,28 @@ Když jsem skládal `shuttle.grf`, spadlo to čtyřikrát za sebou. Pro příšt
 
 Hotové v `shuttle/`. Round-trip sedí: složit → rozebrat → vlastnosti,
 rozměry i posuny spritů zůstanou.
+
+### `climate_availability: null` = vozidlo nikdy neuvidíš (2026-09-11)
+
+`shuttle.grf` se načetl, v seznamu grafik svítil zeleně, **žádná chyba**
+— a v nákupním menu v depu nebyl. Příčina: opsal jsem
+`climate_availability: null;` z `kaas_planes`, aniž bych se podíval,
+co to znamená. **`null` = žádné klima**, ne „všechna".
+
+Hra to řeší jedním řádkem v `newgrf.cpp:1250`:
+
+```cpp
+if (!e->info.climates.Test(_settings_game.game_creation.landscape)) continue;
+```
+
+Vozidlo se prostě přeskočí. Nic nehlásí. Správně je výčet:
+`Temperate | Arctic | Tropical | Toyland` — přesně jak to má hráčův
+funkční `VWT1cargo.yagl`.
+
+**Ponaučení: nekopírovat hodnoty z cizího GRF bez ověření, co znamenají.**
+Předlohu mám mít v hráčově vlastním funkčním souboru, ne v prvním
+cizím, co je po ruce. `kaas_planes` má 35 záznamů Action06, kterými si
+vlastnosti přepisuje za běhu — proto mu `null` nevadí.
+
+**Zelené GRF bez chybové hlášky neznamená, že je vozidlo vidět.**
+Načtení a dostupnost jsou dvě různé věci.

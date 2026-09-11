@@ -75,9 +75,11 @@ properties<Aircraft, 0x0029> // Action00
         sprite_id: 0xFF;                      // 0xFF = nova grafika
         is_helicopter: false;
         is_large: false;
-        climate_availability: null;           // vsude
-        long_introduction_date: date(1960/1/1);
-        model_life_years: 255;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+                                              // POZOR: 'null' zde znamena
+                                              // ZADNE klima = nikdy se neobjevi
+        long_introduction_date: date(2042/1/1);
+        model_life_years: 0xFF;               // 0xFF = nikdy nezastara
         vehicle_life_years: 30;
         reliability_decay_speed: 20;
         cost_factor: 0x20;
