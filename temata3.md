@@ -153,3 +153,29 @@ protože `Action0Cargos` je jen redirect.
    specifikace špatná praxe.
 3. **FIRS, AXIS, ITI, Sunshine Trains a Iron Horse mají vlastní schéma
    tříd (FRAX)**, tahle tabulka pro ně neplatí.
+
+## Jak hráč dělá GRF (zadáno 2026-09-11)
+
+**U každého vozidla si ručně vypisuje, co bude vozit. Třídy nákladu
+(sypké, kapalné, chlazené...) nepoužívá.** Tohle si pamatovat, mění to,
+co je při práci důležité:
+
+- Používají se **seznamy nákladů**: u silničních vozidel vlastnosti
+  **24** (vždy povolené) a **25** (nikdy), u vlaků **2C** a **2D**.
+  Zápis: počet v jednom bajtu, pak tolik bajtů a každý je index do
+  překladové tabulky.
+- Specifikace o nich říká, že platí *„independent of any of the other
+  refit properties or the cargo classes“* a doporučuje je používat
+  přednostně před starou maskou. Takže tenhle postup není improvizace,
+  je to ta doporučená cesta.
+- **Index je bajt → dosažitelných je všech 0-255 slotů.** Stará
+  32bitová refit maska (vlastnost 16 u silničních, 1D u vlaků) je
+  zastaralá a nás se netýká.
+- Proto: **neřadit tabulku podle hranice 32 slotů.** Udělal jsem to
+  a bylo to zbytečné — opraveno.
+- Pozor na past: náklad, který ve hře neexistuje, se v seznamu podle
+  specifikace **tiše ignoruje**. Překlep v labelu se nijak neprojeví.
+
+Důsledek pro `cargo-classes.md`: ta reference je o třídách, které
+nepoužíváme. Nezahazuju ji (hodí se vědět, co které číslo znamená, když
+se čte cizí GRF), ale **nemá se s ní začínat**.

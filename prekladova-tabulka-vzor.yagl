@@ -3,45 +3,51 @@
 // ====================================================================
 //
 // Action0, feature 08 (Global Settings), vlastnost 09.
-// Zdroj: https://newgrf-specs.tt-wiki.net/wiki/Action0/Global_Settings
+// https://newgrf-specs.tt-wiki.net/wiki/Action0/Global_Settings
 //
-// ---- PRAVIDLO, PODLE KTERÉHO JE TABULKA SEŘAZENÁ -------------------
+// ---- K ČEMU TO SLOUŽÍ PŘI NAŠEM ZPŮSOBU PRÁCE ---------------------
 //
-// Refit maska vozidla má JEN 32 BITŮ. Proto se přes ni dá oslovit
-// pouze prvních 32 položek téhle tabulky. Na všechno od slotu 0x20
-// dál se vozidlo refituje už jen přes třídy nákladu, ne jmenovitě.
+// Hráč si u každého vozidla vypisuje ručně, co bude vozit, a třídy
+// nákladu (sypké, kapalné...) nepoužívá. Tahle tabulka je přesně to,
+// co takový zápis potřebuje: čísluje náklady, aby se na ně dalo
+// v seznamu u vozidla ukázat.
 //
-// Specifikace to říká rovnou: „put the cargos that need exceptions
-// to the cargo class based refitting first".
+// U silničních vozidel jsou to vlastnosti 24 a 25:
+//     24 = seznam vždy povolených nákladů  (always_refittable_cargos)
+//     25 = seznam nikdy nepovolených       (never_refittable_cargos)
+// U vlaků totéž pod čísly 2C a 2D. Zápis: počet v jednom bajtu,
+// pak tolik bajtů, a každý je index do TÉHLE tabulky.
 //
-// Čili: co má mít vlastní ruční refit (a naše nové náklady k tomu
-// nejspíš patří), MUSÍ být nad čarou ve slotech 0x00-0x1F.
+// Specifikace k nim říká, že platí „independent of any of the other
+// refit properties or the cargo classes" — čili třídy opravdu
+// nepotřebujeme. A doporučuje je používat přednostně.
 //
-// ---- DALŠÍ DVĚ VĚCI ZE SPECIFIKACE --------------------------------
+// ---- CO Z TOHO PLYNE PRO POŘADÍ -----------------------------------
 //
-// 1. Tahle vlastnost se NEDÁ nastavovat po částech. Musí být celá
+// Index je jeden bajt, takže se dá ukázat na kterýkoli slot 0-255.
+// Stará 32bitová refit maska (vlastnost 16 u silničních / 1D u vlaků)
+// je zastaralá a NÁS SE NETÝKÁ — proto tabulku nemusíme řadit podle
+// ní. (V dřívější verzi tohohle souboru jsem to dělal; bylo to zbytečné.)
+//
+// Na pořadí přesto záleží v jedné věci: jakmile se na sloty začne
+// odkazovat ze seznamů u vozidel, přečíslování ty seznamy rozbije.
+// Proto nové náklady přidávat NA KONEC.
+//
+// ---- DVĚ VĚCI ZE SPECIFIKACE --------------------------------------
+//
+// 1. Vlastnost 09 se NEDÁ nastavovat po částech. Musí být celá
 //    v jediném Action 0 a začínat od ID 0.
-// 2. Počet položek je v Action 0 jeden bajt, takže strop je 255.
-//    Našich 146 se tam vejde. Skutečné omezení je těch 32 bitů výš.
+// 2. Náklad, který ve hře neexistuje, se v seznamu u vozidla podle
+//    specifikace tiše ignoruje. Nespadne to — ale taky se to neozve,
+//    takže překlep v labelu se nijak neprojeví. Hlídat.
 //
-// ---- CO S TÍM ----------------------------------------------------
-//
-// Tohle je vzor k proškrtání, ne hotová tabulka. Prvních 12 slotů
-// drží pořadí výchozích slotů TTD (podle CargoDefaultProps), zbytek
-// nad čarou jsem doplnil běžnými náklady českého průmyslu - a přesně
-// tahle dvacítka je to, co si máš přebrat podle toho, co bude náš
-// průmysl doopravdy vozit.
+// Tohle je vzor k proškrtání, ne hotová tabulka.
 // ====================================================================
 
 properties<GlobalSettings, 0x0000> // Action00
 {
 
-    // ================================================================
-    // SLOTY 0x00-0x1F -- DOSAŽITELNÉ REFIT MASKOU
-    // Jen těchto 32 jde ve vozidle refitovat jmenovitě.
-    // ================================================================
-
-    // ---- výchozí sloty TTD, pořadí podle CargoDefaultProps ----------
+    // ---- VÝCHOZÍ SLOTY TTD — pořadí podle CargoDefaultProps ----
     // instance_id: 0x0000
     {
         cargo_translation_table: "PASS"; // cestující                           [Passengers]
@@ -91,75 +97,74 @@ properties<GlobalSettings, 0x0000> // Action00
         cargo_translation_table: "PAPR"; // papír                               [Paper]
     }
 
-    // ---- doplněno do 32: běžné náklady českého průmyslu -----------
-    // TADY ROZHODUJEŠ TY. Co sem nedáš, na to už ruční refit nebude.
+    // ---- ZÁKLADNÍ NÁKLADY — zbytek ----
     // instance_id: 0x000C
     {
-        cargo_translation_table: "FOOD"; // potraviny                           [Food]
+        cargo_translation_table: "AORE"; // bauxit (hliníková ruda)             [Bauxite (Aluminium ore)]
     }
     // instance_id: 0x000D
     {
-        cargo_translation_table: "SAND"; // písek                               [Sand]
+        cargo_translation_table: "BDMT"; // stavební materiál                   [Building Materials]
     }
     // instance_id: 0x000E
     {
-        cargo_translation_table: "GRVL"; // kámen (dřív štěrk/kamenivo)         [Stone]
+        cargo_translation_table: "BEAN"; // fazole (CZIS je má přejmenované na brambory)  [Beans]
     }
     // instance_id: 0x000F
     {
-        cargo_translation_table: "CMNT"; // cement                              [Cement]
+        cargo_translation_table: "BEER"; // alkohol (label je BEER, ale znamená alkohol obecně)  [Alcohol]
     }
     // instance_id: 0x0010
     {
-        cargo_translation_table: "LIME"; // vápenec                             [Lime stone]
+        cargo_translation_table: "BOOM"; // výbušniny                           [Explosives]
     }
     // instance_id: 0x0011
     {
-        cargo_translation_table: "CLAY"; // jíl                                 [Clay]
+        cargo_translation_table: "BRCK"; // cihly                               [Bricks]
     }
     // instance_id: 0x0012
     {
-        cargo_translation_table: "BDMT"; // stavební materiál                   [Building Materials]
+        cargo_translation_table: "CBLK"; // saze (technické)                    [Carbon Black]
     }
     // instance_id: 0x0013
     {
-        cargo_translation_table: "SCMT"; // kovový šrot                         [Scrap Metal]
+        cargo_translation_table: "CERA"; // keramika                            [Ceramics]
     }
     // instance_id: 0x0014
     {
-        cargo_translation_table: "PETR"; // benzín / topný olej                 [Petrol / Fuel Oil]
+        cargo_translation_table: "CERE"; // obiloviny                           [Cereals]
     }
     // instance_id: 0x0015
     {
-        cargo_translation_table: "RFPR"; // rafinované produkty                 [Refined products]
+        cargo_translation_table: "CLAY"; // jíl                                 [Clay]
     }
     // instance_id: 0x0016
     {
-        cargo_translation_table: "COKE"; // koks                                [Coke]
+        cargo_translation_table: "CMNT"; // cement                              [Cement]
     }
     // instance_id: 0x0017
     {
-        cargo_translation_table: "SULP"; // síra                                [Sulphur]
+        cargo_translation_table: "COPR"; // měď                                 [Copper]
     }
     // instance_id: 0x0018
     {
-        cargo_translation_table: "GLAS"; // sklo                                [Glass]
+        cargo_translation_table: "CORE"; // měděná ruda                         [Copper Ore]
     }
     // instance_id: 0x0019
     {
-        cargo_translation_table: "MILK"; // mléko                               [Milk]
+        cargo_translation_table: "CSTI"; // litina                              [Cast Iron]
     }
     // instance_id: 0x001A
     {
-        cargo_translation_table: "FRUT"; // ovoce                               [Fruit]
+        cargo_translation_table: "CTAR"; // černouhelný dehet                   [Coal Tar]
     }
     // instance_id: 0x001B
     {
-        cargo_translation_table: "WDPR"; // dřevěné výrobky (řezivo)            [Wood Products]
+        cargo_translation_table: "DIAM"; // diamanty                            [Diamonds]
     }
     // instance_id: 0x001C
     {
-        cargo_translation_table: "VEHI"; // vozidla (hotová auta)               [Vehicles]
+        cargo_translation_table: "DYES"; // barviva                             [Dyes]
     }
     // instance_id: 0x001D
     {
@@ -167,287 +172,281 @@ properties<GlobalSettings, 0x0000> // Action00
     }
     // instance_id: 0x001E
     {
-        cargo_translation_table: "FMSP"; // zemědělské zásoby                   [Farm Supplies]
+        cargo_translation_table: "FECR"; // ferochrom                           [Ferrochrome]
     }
     // instance_id: 0x001F
     {
-        cargo_translation_table: "PACK"; // obaly                               [Packaging]
-    }
-
-    // ================================================================
-    // ^^^ ČÁRA: slot 0x20 a dál UŽ NENÍ V REFIT MASCE ^^^
-    // Odsud dolů se refituje jen přes třídy nákladu.
-    // ================================================================
-
-    // ---- základní náklady ----
-    // instance_id: 0x0020
-    {
-        cargo_translation_table: "WHEA"; // pšenice                             [Wheat]
-    }
-    // instance_id: 0x0021
-    {
-        cargo_translation_table: "MAIZ"; // kukuřice                            [Maize]
-    }
-    // instance_id: 0x0022
-    {
-        cargo_translation_table: "CERE"; // obiloviny                           [Cereals]
-    }
-    // instance_id: 0x0023
-    {
-        cargo_translation_table: "GOLD"; // zlato                               [Gold]
-    }
-    // instance_id: 0x0024
-    {
-        cargo_translation_table: "DIAM"; // diamanty                            [Diamonds]
-    }
-    // instance_id: 0x0025
-    {
-        cargo_translation_table: "RUBR"; // kaučuk                              [Rubber]
-    }
-    // instance_id: 0x0026
-    {
-        cargo_translation_table: "CORE"; // měděná ruda                         [Copper Ore]
-    }
-    // instance_id: 0x0027
-    {
-        cargo_translation_table: "WATR"; // voda                                [Water]
-    }
-    // instance_id: 0x0028
-    {
-        cargo_translation_table: "SUGR"; // cukr                                [Sugar]
-    }
-    // instance_id: 0x0029
-    {
-        cargo_translation_table: "AORE"; // bauxit (hliníková ruda)             [Bauxite (Aluminium ore)]
-    }
-    // instance_id: 0x002A
-    {
-        cargo_translation_table: "BEAN"; // fazole (CZIS je má přejmenované na brambory)  [Beans]
-    }
-    // instance_id: 0x002B
-    {
-        cargo_translation_table: "BEER"; // alkohol (label je BEER, ale znamená alkohol obecně)  [Alcohol]
-    }
-    // instance_id: 0x002C
-    {
-        cargo_translation_table: "BOOM"; // výbušniny                           [Explosives]
-    }
-    // instance_id: 0x002D
-    {
-        cargo_translation_table: "BRCK"; // cihly                               [Bricks]
-    }
-    // instance_id: 0x002E
-    {
-        cargo_translation_table: "CBLK"; // saze (technické)                    [Carbon Black]
-    }
-    // instance_id: 0x002F
-    {
-        cargo_translation_table: "CERA"; // keramika                            [Ceramics]
-    }
-    // instance_id: 0x0030
-    {
-        cargo_translation_table: "COPR"; // měď                                 [Copper]
-    }
-    // instance_id: 0x0031
-    {
-        cargo_translation_table: "CSTI"; // litina                              [Cast Iron]
-    }
-    // instance_id: 0x0032
-    {
-        cargo_translation_table: "CTAR"; // černouhelný dehet                   [Coal Tar]
-    }
-    // instance_id: 0x0033
-    {
-        cargo_translation_table: "DYES"; // barviva                             [Dyes]
-    }
-    // instance_id: 0x0034
-    {
-        cargo_translation_table: "FECR"; // ferochrom                           [Ferrochrome]
-    }
-    // instance_id: 0x0035
-    {
         cargo_translation_table: "FERT"; // hnojivo                             [Fertiliser]
     }
-    // instance_id: 0x0036
+    // instance_id: 0x0020
     {
         cargo_translation_table: "FICR"; // přadné plodiny                      [Fibre crops]
     }
-    // instance_id: 0x0037
+    // instance_id: 0x0021
     {
         cargo_translation_table: "FISH"; // ryby                                [Fish]
     }
-    // instance_id: 0x0038
+    // instance_id: 0x0022
+    {
+        cargo_translation_table: "FMSP"; // zemědělské zásoby                   [Farm Supplies]
+    }
+    // instance_id: 0x0023
+    {
+        cargo_translation_table: "FOOD"; // potraviny                           [Food]
+    }
+    // instance_id: 0x0024
+    {
+        cargo_translation_table: "FRUT"; // ovoce                               [Fruit]
+    }
+    // instance_id: 0x0025
+    {
+        cargo_translation_table: "GLAS"; // sklo                                [Glass]
+    }
+    // instance_id: 0x0026
+    {
+        cargo_translation_table: "GOLD"; // zlato                               [Gold]
+    }
+    // instance_id: 0x0027
+    {
+        cargo_translation_table: "GRVL"; // kámen (dřív štěrk/kamenivo)         [Stone]
+    }
+    // instance_id: 0x0028
     {
         cargo_translation_table: "JAVA"; // káva                                [Coffee]
     }
-    // instance_id: 0x0039
+    // instance_id: 0x0029
     {
         cargo_translation_table: "KAOL"; // kaolín                              [Kaolin (China Clay)]
     }
-    // instance_id: 0x003A
+    // instance_id: 0x002A
+    {
+        cargo_translation_table: "LIME"; // vápenec                             [Lime stone]
+    }
+    // instance_id: 0x002B
+    {
+        cargo_translation_table: "MAIZ"; // kukuřice                            [Maize]
+    }
+    // instance_id: 0x002C
+    {
+        cargo_translation_table: "MILK"; // mléko                               [Milk]
+    }
+    // instance_id: 0x002D
     {
         cargo_translation_table: "OLSD"; // olejná semena                       [Oil seed]
     }
-    // instance_id: 0x003B
+    // instance_id: 0x002E
     {
         cargo_translation_table: "PEAT"; // rašelina                            [Peat]
     }
-    // instance_id: 0x003C
+    // instance_id: 0x002F
+    {
+        cargo_translation_table: "PETR"; // benzín / topný olej                 [Petrol / Fuel Oil]
+    }
+    // instance_id: 0x0030
     {
         cargo_translation_table: "PHOS"; // fosfát                              [Phosphate]
     }
-    // instance_id: 0x003D
+    // instance_id: 0x0031
     {
         cargo_translation_table: "PLAS"; // plasty                              [Plastic]
     }
-    // instance_id: 0x003E
+    // instance_id: 0x0032
     {
         cargo_translation_table: "PORE"; // pyritová ruda                       [Pyrite Ore]
     }
-    // instance_id: 0x003F
+    // instance_id: 0x0033
     {
         cargo_translation_table: "POTA"; // potaš                               [Potash]
     }
-    // instance_id: 0x0040
+    // instance_id: 0x0034
+    {
+        cargo_translation_table: "RFPR"; // rafinované produkty                 [Refined products]
+    }
+    // instance_id: 0x0035
+    {
+        cargo_translation_table: "RUBR"; // kaučuk                              [Rubber]
+    }
+    // instance_id: 0x0036
+    {
+        cargo_translation_table: "SAND"; // písek                               [Sand]
+    }
+    // instance_id: 0x0037
+    {
+        cargo_translation_table: "SCMT"; // kovový šrot                         [Scrap Metal]
+    }
+    // instance_id: 0x0038
+    {
+        cargo_translation_table: "SUGR"; // cukr                                [Sugar]
+    }
+    // instance_id: 0x0039
+    {
+        cargo_translation_table: "SULP"; // síra                                [Sulphur]
+    }
+    // instance_id: 0x003A
     {
         cargo_translation_table: "TOUR"; // turisté                             [Tourists]
     }
-    // instance_id: 0x0041
+    // instance_id: 0x003B
     {
         cargo_translation_table: "TYRE"; // pneumatiky                          [Tyres]
     }
-    // instance_id: 0x0042
+    // instance_id: 0x003C
     {
         cargo_translation_table: "URAN"; // uran                                [Uranium]
     }
-    // instance_id: 0x0043
+    // instance_id: 0x003D
+    {
+        cargo_translation_table: "VEHI"; // vozidla (hotová auta)               [Vehicles]
+    }
+    // instance_id: 0x003E
+    {
+        cargo_translation_table: "WATR"; // voda                                [Water]
+    }
+    // instance_id: 0x003F
+    {
+        cargo_translation_table: "WDPR"; // dřevěné výrobky (řezivo)            [Wood Products]
+    }
+    // instance_id: 0x0040
+    {
+        cargo_translation_table: "WHEA"; // pšenice                             [Wheat]
+    }
+    // instance_id: 0x0041
     {
         cargo_translation_table: "WOOL"; // vlna                                [Wool]
     }
-    // instance_id: 0x0044
+    // instance_id: 0x0042
     {
         cargo_translation_table: "ZINC"; // zinek                               [Zinc]
     }
-    // ---- rozšířené náklady ----
-    // instance_id: 0x0045
+
+    // ---- ROZŠÍŘENÉ NÁKLADY — jen ve specializovaných setech ----
+    // instance_id: 0x0043
     {
         cargo_translation_table: "ACID"; // kyselina                            [Acid]
     }
-    // instance_id: 0x0046
+    // instance_id: 0x0044
     {
         cargo_translation_table: "ALUM"; // hliník                              [Aluminium]
     }
-    // instance_id: 0x0047
+    // instance_id: 0x0045
     {
         cargo_translation_table: "BAKE"; // mouka                               [Flour]
     }
-    // instance_id: 0x0048
+    // instance_id: 0x0046
     {
         cargo_translation_table: "CASS"; // maniok                              [Cassava]
     }
-    // instance_id: 0x0049
+    // instance_id: 0x0047
     {
         cargo_translation_table: "CHLO"; // chlor                               [Chlorine]
     }
-    // instance_id: 0x004A
+    // instance_id: 0x0048
     {
         cargo_translation_table: "CHSE"; // sýr                                 [Cheese]
     }
-    // instance_id: 0x004B
+    // instance_id: 0x0049
     {
         cargo_translation_table: "CIGR"; // doutníky                            [Cigars]
     }
-    // instance_id: 0x004C
+    // instance_id: 0x004A
     {
         cargo_translation_table: "COAT"; // barvy a nátěry                      [Paints & Coatings]
     }
-    // instance_id: 0x004D
+    // instance_id: 0x004B
     {
         cargo_translation_table: "COBL"; // kobalt                              [Cobalt]
     }
-    // instance_id: 0x004E
+    // instance_id: 0x004C
+    {
+        cargo_translation_table: "COKE"; // koks                                [Coke]
+    }
+    // instance_id: 0x004D
     {
         cargo_translation_table: "ELTR"; // elektřina                           [Electricity]
     }
-    // instance_id: 0x004F
+    // instance_id: 0x004E
     {
         cargo_translation_table: "EOIL"; // jedlý olej                          [Edible Oil]
     }
-    // instance_id: 0x0050
+    // instance_id: 0x004F
     {
         cargo_translation_table: "FRVG"; // ovoce (případně i zelenina)         [Fruit (and optionally Vegetables)]
     }
-    // instance_id: 0x0051
+    // instance_id: 0x0050
     {
         cargo_translation_table: "FUEL"; // zemní plyn                          [Natural Gas]
     }
-    // instance_id: 0x0052
+    // instance_id: 0x0051
     {
         cargo_translation_table: "FURN"; // nábytek                             [Furniture]
     }
-    // instance_id: 0x0053
+    // instance_id: 0x0052
     {
         cargo_translation_table: "IRON"; // surové železo                       [Pig Iron]
     }
-    // instance_id: 0x0054
+    // instance_id: 0x0053
     {
         cargo_translation_table: "LYE_"; // hydroxid sodný (louh)               [Sodium Hydroxide (Lye)]
     }
-    // instance_id: 0x0055
+    // instance_id: 0x0054
     {
         cargo_translation_table: "MEAT"; // maso                                [Meat]
     }
-    // instance_id: 0x0056
+    // instance_id: 0x0055
     {
         cargo_translation_table: "METL"; // kov                                 [Metal]
     }
-    // instance_id: 0x0057
+    // instance_id: 0x0056
     {
         cargo_translation_table: "MNO2"; // mangan                              [Manganese]
     }
-    // instance_id: 0x0058
+    // instance_id: 0x0057
     {
         cargo_translation_table: "MNSP"; // výrobní zásoby                      [Manufacturing Supplies]
     }
-    // instance_id: 0x0059
+    // instance_id: 0x0058
     {
         cargo_translation_table: "MOLS"; // melasa                              [Molasses]
     }
-    // instance_id: 0x005A
+    // instance_id: 0x0059
     {
         cargo_translation_table: "MPTS"; // strojní součásti                    [Machine parts]
     }
-    // instance_id: 0x005B
+    // instance_id: 0x005A
     {
         cargo_translation_table: "NH3_"; // čpavek (amoniak)                    [Ammonia]
     }
-    // instance_id: 0x005C
+    // instance_id: 0x005B
     {
         cargo_translation_table: "NHNO"; // dusičnan amonný                     [NH4NO3 chemical]
     }
-    // instance_id: 0x005D
+    // instance_id: 0x005C
     {
         cargo_translation_table: "NICK"; // nikl                                [Nickel]
     }
-    // instance_id: 0x005E
+    // instance_id: 0x005D
     {
         cargo_translation_table: "NITR"; // dusičnan                            [Nitrate]
     }
-    // instance_id: 0x005F
+    // instance_id: 0x005E
     {
         cargo_translation_table: "NKOR"; // niklová ruda                        [Nickel ore]
     }
-    // instance_id: 0x0060
+    // instance_id: 0x005F
     {
         cargo_translation_table: "NUKF"; // jaderné palivo                      [Nuclear fuel]
     }
-    // instance_id: 0x0061
+    // instance_id: 0x0060
     {
         cargo_translation_table: "NUKW"; // jaderný odpad                       [Nuclear waste]
     }
-    // instance_id: 0x0062
+    // instance_id: 0x0061
     {
         cargo_translation_table: "NUTS"; // ořechy                              [Nuts]
+    }
+    // instance_id: 0x0062
+    {
+        cargo_translation_table: "O2__"; // kyslík                              [Oxygen]
     }
     // instance_id: 0x0063
     {
@@ -459,19 +458,19 @@ properties<GlobalSettings, 0x0000> // Action00
     }
     // instance_id: 0x0065
     {
-        cargo_translation_table: "O2__"; // kyslík                              [Oxygen]
+        cargo_translation_table: "OTI1"; // dělníci                             [Workers]
     }
     // instance_id: 0x0066
     {
-        cargo_translation_table: "OTI1"; // dělníci                             [Workers]
+        cargo_translation_table: "OTI2"; // turisté                             [Tourists]
     }
     // instance_id: 0x0067
     {
-        cargo_translation_table: "OTI2"; // turisté                             [Tourists]
+        cargo_translation_table: "OYST"; // ústřice                             [Oysters]
     }
     // instance_id: 0x0068
     {
-        cargo_translation_table: "OYST"; // ústřice                             [Oysters]
+        cargo_translation_table: "PACK"; // obaly                               [Packaging]
     }
     // instance_id: 0x0069
     {
@@ -581,7 +580,8 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "WSTE"; // odpad                               [Waste]
     }
-    // ---- fantasy / toyland (na český průmysl nejspíš smazat) ----
+
+    // ---- FANTASY / TOYLAND — na český průmysl nejspíš celé smazat ----
     // instance_id: 0x0084
     {
         cargo_translation_table: "BATT"; // baterie                             [Batteries]
@@ -626,12 +626,14 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "YETY"; // unavení dělníci (YETI set)          [Tired Workers]
     }
-    // ---- speciální (nic se nevozí, do tabulky nejspíš nepatří) ----
+
+    // ---- SPECIÁLNÍ — nic se nevozí, do tabulky nejspíš nepatří ----
     // instance_id: 0x008F
     {
         cargo_translation_table: "GEAR"; // přeřazení lokomotivy — nic se nevozí  [Locomotive regearing]
     }
-    // ---- zastaralé (do nové tabulky nedávat) ----
+
+    // ---- ZASTARALÉ — do nové tabulky nedávat ----
     // instance_id: 0x0090
     {
         cargo_translation_table: "RSGR"; // surový cukr                         [Raw Sugar]
@@ -640,6 +642,7 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "SCRP"; // kovový šrot                         [Scrap Metal]
     }
+
     // ---- NAŠE VLASTNÍ NÁKLADY ----
     // instance_id: 0x0092
     {
@@ -648,21 +651,15 @@ properties<GlobalSettings, 0x0000> // Action00
 }
 
 // ====================================================================
-// NAŠE NOVÉ NÁKLADY
+// DALŠÍ NAŠE NÁKLADY
 // ====================================================================
-// MARI (marihuana) uz v tabulce je, na jejim konci - viz sekce
-// NASE VLASTNI NAKLADY. Dalsi pridavej za ni.
+// Přidávej za MARI. Label jsou přesně 4 znaky, kratší se doplní
+// podtržítkem (OIL_, NH3_, O2__).
 //
-// Pozor na jedno: tim, ze je pod carou, se na ni bude refitovat
-// jen pres tridy nakladu, ne jmenovite. Pro bezny naklad to staci.
-// Kdyby mel mit nejaky nas naklad vlastni rucni refit, musi nahoru
-// do 0x00-0x1F za neco jineho - je to presun jednoho radku.
+// Řádek tady náklad nezakládá — jen mu přiděluje číslo. Aby ve hře
+// existoval, musí se nadefinovat: Action0 feature 0B, vlastnost 17
+// (label) a k tomu jména, ikona, váha, cena.
 //
-// Samotny radek tady nakladu nestaci. Novy naklad se jeste musi
-// definovat: Action0 feature 0B, vlastnost 17 (label) a 16 (tridy),
-// plus jmena a ikona. To zatim hotove neni.
-//
-// Label jsou presne 4 znaky, kratsi se doplni podtrzitkem.
 //    // instance_id: 0x0093
 //    {
 //        cargo_translation_table: "XXXX"; // co to je
@@ -671,12 +668,11 @@ properties<GlobalSettings, 0x0000> // Action00
 // ====================================================================
 // LABELY Z VWT1cargo.yagl, KTERÉ V SEZNAMU NA WIKI NEJSOU
 // ====================================================================
-// Ověřeno rozborem stránky CargoTypes: v její tabulce 146 labelů
-// tyhle nejsou. (Fulltext hledání na té wiki je rozbité - vrací nulu
-// i na PASS - takže víc než tohle tvrdit nemůžu.)
-// Hráč říká, že část z nich jsou naše nové náklady a část kódy,
-// které někde viděl. Dokud nevím které je co, mají u sebe undefined -
-// ne domyšlený význam.
+// Ověřeno rozborem stránky CargoTypes: mezi jejími 146 labely tyhle
+// nejsou. (Fulltext hledání na té wiki je rozbité — vrací nulu i na
+// PASS — takže víc než tohle tvrdit nemůžu.)
+// Dokud nevím, které z nich jsou naše a co znamenají, mají u sebe
+// undefined, ne domyšlený význam.
 //
 //    cargo_translation_table: "FARM"; // undefined
 //    cargo_translation_table: "LVPT"; // undefined
@@ -698,5 +694,4 @@ properties<GlobalSettings, 0x0000> // Action00
 //    cargo_translation_table: "NWST"; // undefined
 //    cargo_translation_table: "FREE"; // undefined
 
-// v tabulce výš: 147 nákladů, sloty 0x0000-0x0092
-// z toho v refit masce: 32 (0x0000-0x001F)
+// v tabulce výš: 147 nákladů, sloty 0x0000-0x0092 (strop je 255)

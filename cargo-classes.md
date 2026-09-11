@@ -1,5 +1,10 @@
 # Třídy nákladu (cargo classes) — podle specifikace
 
+> **My je nepoužíváme.** Hráč si u každého vozidla vypisuje ručně, co
+> bude vozit (vlastnosti 24/25 u silničních, 2C/2D u vlaků). Tenhle
+> soubor je na čtení cizích GRF a na pochopení těch čtyřmístných čísel
+> v tabulkách — ne návod, jak stavět naše vozidla.
+
 Ověřeno **přímo ze zdroje** 2026-09-11, kdy se otevřel přístup na wiki:
 https://newgrf-specs.tt-wiki.net/wiki/Action0/Cargos (sekce CargoClasses)
 a https://newgrf-specs.tt-wiki.net/wiki/CargoTypes.
