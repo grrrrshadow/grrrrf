@@ -1,0 +1,111 @@
+yagl_version: "";
+grf_format: Container2;
+
+// ====================================================================
+// shuttle.grf
+// ====================================================================
+// Soubor, .yagl i name: v Action08 se jmenuji stejne - "shuttle".
+// Yagl to vyzaduje a hrac to potrebuje, aby GRF nasel v seznamu.
+//
+// Sprity: vyrenderovane z glbobj/Shuttle.glb skriptem glb3letadlo.py.
+// Osm smeru v poradi vyctu Direction ze hry: N, NE, E, SE, S, SW, W, NW.
+// ====================================================================
+
+// Record #1
+grf // Action08
+{
+    grf_id: "GRSH";
+    version: GRF8;
+    name: "shuttle";
+    description: "{orange}Shuttle{new-line}{black}Zkusebni letadlo. Sprity renderovane z 3D modelu.{new-line}Licence: GPL v2";
+}
+
+// Record #2
+sprite_sets<Aircraft, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000001>   // smer 0 = N
+        {
+            [70, 114, -35, -57], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [4, 4];
+        }
+        sprite_id<0x00000002>   // smer 1 = NE
+        {
+            [173, 101, -86, -50], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [208, 4];
+        }
+        sprite_id<0x00000003>   // smer 2 = E
+        {
+            [200, 59, -100, -29], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [412, 4];
+        }
+        sprite_id<0x00000004>   // smer 3 = SE
+        {
+            [173, 101, -86, -50], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [616, 4];
+        }
+        sprite_id<0x00000005>   // smer 4 = S
+        {
+            [70, 117, -35, -58], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [4, 125];
+        }
+        sprite_id<0x00000006>   // smer 5 = SW
+        {
+            [173, 102, -86, -51], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [208, 125];
+        }
+        sprite_id<0x00000007>   // smer 6 = W
+        {
+            [200, 59, -100, -29], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [412, 125];
+        }
+        sprite_id<0x00000008>   // smer 7 = NW
+        {
+            [174, 101, -87, -50], zin4, c32bpp | chunked, "shuttle-32bpp-zin4-0.png", [616, 125];
+        }
+    }
+}
+
+// Record #3
+sprite_groups<Aircraft, 0x00FF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+
+// Record #4
+properties<Aircraft, 0x0029> // Action00
+{
+    // instance_id: 0x0029
+    {
+        sprite_id: 0xFF;                      // 0xFF = nova grafika
+        is_helicopter: false;
+        is_large: false;
+        climate_availability: null;           // vsude
+        long_introduction_date: date(1960/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 30;
+        reliability_decay_speed: 20;
+        cost_factor: 0x20;
+        running_cost_factor: 0x50;
+        speed_8_mph: 0x3C;                    // 60 * 8 = 480 mph
+        acceleration: 0x20;
+        passenger_capacity: 0x0050;           // 80 cestujicich
+        mail_capacity: 0x14;                  // 20 posty
+        loading_speed: 0x0A;
+        sound_effect_type: 0x3D;
+        miscellaneous_flags: 0x02;
+        aircraft_range: 0x0000;               // 0 = neomezeny dolet
+    }
+}
+
+// Record #5
+strings<Aircraft, default, 0x0029> // Action04
+{
+    /* 0x0029 */ "Shuttle";
+}
+
+// Record #6
+feature_graphics<Aircraft> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0029 ];
+    cargo_types:
+    {
+    };
+}

@@ -313,3 +313,24 @@ raketoplánu se buď netrefil vůbec (kořenový model), nebo se trefil na
 špatné díly — modrá „pneu“ přistála na motorech, žluté „disky“ na
 panelech. Hráč řekl smazat, pošle ho, až budeme dělat auta. Mechanika
 v skriptu zůstala, stačí slovník zase naplnit.
+
+### Na co jsem u yaglu naletěl (2026-09-11)
+
+Když jsem skládal `shuttle.grf`, spadlo to čtyřikrát za sebou. Pro příště:
+
+1. **`yagl_version:` musí sedět s buildem.** Tenhle build hlásí prázdný
+   řetězec, takže `yagl_version: "";`. Opsat verzi odjinud = chyba.
+2. **`version: GRF8;`, ne `version: 8;`** v bloku `grf`. Je to výčtová
+   hodnota, ne číslo.
+3. **Pozadí spritesheetu musí být neprůhledná bílá** `(255,255,255,255)`.
+   Yagl si kontroluje okraj kolem každého obdélníku; průhledné pozadí
+   hlásí jako „non-white pixels in its border“.
+4. **Uvnitř obdélníku naopak čistá bílá být nesmí** — znamená „tady
+   sprite není“. Průhlednost se dělá alfou; RGB pod ní dávat modrou
+   `(0,0,255,0)`, jak to má yagl ve svých 8bpp listech. A kdyby model
+   měl opravdu bílou plochu, srazit ji na `254`.
+5. **Nahraný soubor s prefixem yagl nenajde.** `64b74c3c-neco.grf`
+   hlásí „does not exist“. Přejmenovat na čisté jméno.
+
+Hotové v `shuttle/`. Round-trip sedí: složit → rozebrat → vlastnosti,
+rozměry i posuny spritů zůstanou.
