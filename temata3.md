@@ -488,3 +488,46 @@ problém je v tom, že 15 a 21 netrvají dost dlouho.
 **Ponaučení: dřív si postavit test, který odděluje dvě možnosti, než
 opakovaně ladit tu, kterou zrovna podezřívám.** Stálo to hráče dvě kola
 zkoušení nazdařbůh.
+
+### Přepínač 0xE2 — co je vyloučeno a co zbývá (2026-09-12, jen hledání)
+
+Diagnostický build `shuttletest.grf` (čumák nahoru pro pozemní stavy
+0–11) se **neprojevil ani u stojícího letadla**. Hráč potvrdil, že CZTR
+čumák v tomhle buildu zvedá. Prošel jsem všechno staticky, nic neměnil:
+
+| co | výsledek |
+|---|---|
+| fork vs čisté 16.0-beta2 | rozdíly v `newgrf_engine.cpp` jen vagonová výjimka (0x47/0x72), `vehicle_base.h` jen `IsWrecked`, `aircraft_cmd.cpp` nálet + hangár, `newgrf_act2/3.cpp` **beze změny**. Letadla neovlivňuje. |
+| vagonová výjimka forku | platí jen pro `IsWagonCargoExceptionWagon` (jeden GRF, jen vagony); `CollectDrawnCargoSlots` kontroluje `variable == 0x47` |
+| CZTR řetěz u letadla 0x29 | Action03 → přepínač na 0x0C → default → **přepínač na 0xE2** (PrimaryDWord, `& 0xFF`) → základní skupiny. Stejný tvar jako můj. **CZTR taky používá nová ID (0x29–0x8C).** |
+| load spritů | jen `zin4` 32bpp stačí, `ResizeSprites` dopočítá, 8bpp blitter dostane převod (`spritecache.cpp:480`) |
+| keš spritu | `revalidate_before_draw` se spotřebuje při kreslení (`vehicle.cpp:1210`); viditelné vozidlo se přeřeší |
+| var 0xE2 dispatch | generický switch má `case 0x62: break` → doteče k letadlovému; `MapAircraftMovementState` pro stojící letadlo vrací 0/1/2/3/4/7 — vše v 0–11 |
+| Action03 parser | `IsValidGroupID(0xFF)` projde; default group se nastaví; `SetEngineGRF` |
+| ID kolize | `dynamic_engines` default **true** → shuttle.grf a shuttletest.grf mají oddělené motory |
+| kaas / c919 | **0xE2 pro sprity nepoužívají** — kaas jen v callbackách, c919 jen 0xF2 (livery). CZTR je jediná reference. |
+
+**Logika, která zbývá:** hráč vidí *moje* sprity (jinak by spadlo na
+stock letadlo přes `original_image_index`) → řetěz je připojený → kořen
+je přepínač → přepínač běží a vrací default → hodnota 0xE2 není v 0–11.
+Pro stojící letadlo to umožňuje jedině **18** (`GetTargetAirportIfValid
+== nullptr`). Jenže to by platilo i pro CZTR ve stejné hře. Proto je
+stejně pravděpodobné, že **pozorované letadlo nebylo ShuttleTEST**:
+přidat nové GRF do rozehrané hry dovolí hra jen s
+`newgrf_developer_tools` (`UserIsAllowedToChangeNewGRFs`).
+
+**Dva testy zdarma, bez buildu:**
+1. Jmenovalo se sledované letadlo *ShuttleTEST*? Když *Shuttle*, byl to
+   starý GRF.
+2. Ikona v nákupním seznamu: s `v == nullptr` je 0xE2 nedostupná →
+   `error_group` = **první range** = u shuttletest sada „čumák nahoru".
+   Ikona v depu tedy musí být nakloněná. Rovná ikona = řetěz není
+   připojený. Nakloněná = řetěz jede, jen hodnota nesedí.
+
+**Navržený další build (až hráč řekne):** „žebřík" — 18 → čumák dolů,
+12–13 → mírně nahoru, 15 → nahoru, default rovně. Jeden pohled prozradí
+skutečnou hodnotu.
+
+Inspektor NewGRF ve hře 0xE2 **neukazuje** (jen 0x40–0x63), ale ukazuje
+0x44, jehož spodní bajt je typ cílového letiště přes
+`GetTargetAirportIfValid` — nepřímý test platnosti cíle.
