@@ -97,9 +97,10 @@ posunout jedním číslem (jeho `fix_sprites.py`).
 | Škoda 1203 Pajda + všechny TAZ 1203 | 42,5 |
 | TAZ 1500 | 43,0 |
 
-Škoda 1203 a všechny TAZ 1203 mají **stejný podvozek na pixel přesně**
-(pás kolem kol jim sedí s IoU 0,95–1,00). Je to fakt jedno auto
-s různými karoseriemi.
+Všechny TAZ 1203 mají mezi sebou **stejný podvozek na pixel přesně**
+(pás kolem kol jim sedí s IoU 0,95–1,00). Škoda 1203 Pajda má stejný
+rozvor 42,5 px, ale pás se jí liší (IoU 0,84–0,92) — kvůli otevřeným
+dveřím a jiné karoserii. Je to jedno auto s různými nástavbami.
 
 ## Pravidlo
 
