@@ -69,3 +69,65 @@ mv VWT1.grf VWT1-S1203modradodavka.grf
 přesně v **15 bajtech**, všechny uvnitř osmi offsetů Škody. Zpětné
 rozebrání ukáže jen těch osm řádků. Nic jiného se nezměnilo — rychlost,
 náklady, popis ani grf_id.
+
+
+---
+
+# Druhý pokus: společný základ pro všech 18 aut
+
+První pokus zarovnal jen Škodu 1203 (0x0082) — jedno auto z osmnácti.
+Hráč jel se **sadou**, takže logicky nic nepoznal. Skutečné zadání je:
+*„musí mít všechny stejnou výchozí pozici"*, aby se pak dala celá sada
+posunout jedním číslem (jeho `fix_sprites.py`).
+
+## Stav před opravou
+
+| | |
+|---|---|
+| 0x0080 VW T1 cztrsize | ručně doladěné |
+| 0x0081 VW T1 origsize | ručně doladěné |
+| 0x0082 – 0x0097 (16 aut) | `xoffs = −w/2`, `yoffs = −h/2`, čili nic |
+
+## Změřené rozvory (rozestup kol v bočním pohledu)
+
+| auto | rozvor v px |
+|---|---|
+| VW T1 cztrsize | 36,0 |
+| VW T1 origsize | 44,2 |
+| Škoda 1203 Pajda + všechny TAZ 1203 | 42,5 |
+| TAZ 1500 | 43,0 |
+
+Škoda 1203 a všechny TAZ 1203 mají **stejný podvozek na pixel přesně**
+(pás kolem kol jim sedí s IoU 0,95–1,00). Je to fakt jedno auto
+s různými karoseriemi.
+
+## Pravidlo
+
+Kotva = pevný bod nad **středem rozvoru na vozovce**. Ten bod se změří
+z obrázku (viz `temata3.md`), pro každý směr a každé auto. Posun kotvy
+proti němu se převezme z VW T1 origsize, proložený tuhým 3D bodem, aby
+auto v zatáčce nepodskočilo:
+
+| dir | vodorovně | svisle |
+|---|---|---|
+| N | −1,3 | −21,5 |
+| NE | +4,7 | −21,1 |
+| E | +5,0 | −20,5 |
+| SE | −0,6 | −20,1 |
+| S | −8,8 | −20,1 |
+| SW | −14,8 | −20,4 |
+| W | −15,0 | −21,0 |
+| NW | −9,4 | −21,4 |
+
+Hodnoty jsou z proložení `C + X·sin α + Y·cos α` (vodorovně) a
+`C + X·cos α + Y·sin α` (svisle). Naměřené hodnoty VW T1 origsize se od
+nich liší až o 11 px vodorovně a 8 px svisle — to je to podskočení,
+které hráč nechtěl. Proložení ho odstraní.
+
+Konkrétní čísla pro všech 18 aut jsou v `offsety-vse.md`.
+
+## Skripty
+
+`vse.py` (změří počátek u všech aut), `vse2.py` (spočte nové offsety),
+`patch3.py` (přepíše je v rozbaleném GRF), `overka.py` (obrázek na kontrolu:
+všechna auta vedle sebe s kotvou na společném křížku).
