@@ -1,0 +1,4149 @@
+yagl_version: "1.2.3-0-g903c367";
+grf_format: Container2;
+// Record #1
+optional_info // Action14
+{
+    INFO: 
+    {
+        URL_: default, "https://www.pornohub "; // Default
+        VRSN: [ 0x00 0x00 0x00 0x00 ];
+        MINV: [ 0x00 0x00 0x00 0x00 ];
+        NPAR: [ 0x01 ];
+        PARA: 
+        {
+            0x00000000: 
+            {
+                NAME: default, "hu {red}hu{green}  hu "; // Default
+                DESC: default, "{blue} hu {red} hu {blue} hu {new-line}{orange} hu "; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x00 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+        }
+        PALS: [ 0x44 ];
+        BLTR: [ 0x33 ];
+    }
+}
+// Record #2
+grf // Action08
+{
+    grf_id: "MAX\x08k";
+    version: GRF8;
+    name: "VW T1{red} VW T1{green} VWT1 {gold}{truck}";
+    description: "{red}VW T1{green}  {truck} {new-line}{green}Cargos added  {gold}{truck}  {truck}  {truck}{new-line}{orange} {truck} {new-line}{orange} 3D: renderatnight, rabatin.b {new-line}{new-line}{green} Karel Mácha {new-line}{green} compatible with decouple patch ottd 0.10.4";
+}
+// Record #3
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #4
+if_act9 (is_bit_clear(global_var[0x85] & 0xFF, 1 << 120)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #5
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #6
+if_act9 (is_not_equal(param[0x7F] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #7
+error_message<Error, default, 0x02> // Action0B <severity, language, message>
+{
+    // {grf_name} is designed to be used with {data}
+    data: "enable multiple NewGRF engine sets = on";
+}
+// Record #8
+properties<GlobalSettings, 0x0012> // Action00
+{
+    // instance_id: 0x0012
+    {
+        cost_base_multipliers: 0x0B;
+    }
+}
+// Record #9
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        cargo_translation_table: "PASS";
+    }
+    // instance_id: 0x0001
+    {
+        cargo_translation_table: "BEER";
+    }
+    // instance_id: 0x0002
+    {
+        cargo_translation_table: "WSTE";
+    }
+    // instance_id: 0x0003
+    {
+        cargo_translation_table: "RCYC";
+    }
+    // instance_id: 0x0004
+    {
+        cargo_translation_table: "MAIL";
+    }
+    // instance_id: 0x0005
+    {
+        cargo_translation_table: "GOOD";
+    }
+    // instance_id: 0x0006
+    {
+        cargo_translation_table: "BDMT";
+    }
+    // instance_id: 0x0007
+    {
+        cargo_translation_table: "ENSP";
+    }
+    // instance_id: 0x0008
+    {
+        cargo_translation_table: "FOOD";
+    }
+    // instance_id: 0x0009
+    {
+        cargo_translation_table: "DIAM";
+    }
+    // instance_id: 0x000A
+    {
+        cargo_translation_table: "VALU";
+    }
+    // instance_id: 0x000B
+    {
+        cargo_translation_table: "FARM";
+    }
+    // instance_id: 0x000C
+    {
+        cargo_translation_table: "FMSP";
+    }
+    // instance_id: 0x000D
+    {
+        cargo_translation_table: "BOOM";
+    }
+    // instance_id: 0x000E
+    {
+        cargo_translation_table: "FRUT";
+    }
+    // instance_id: 0x000F
+    {
+        cargo_translation_table: "LVPT";
+    }
+    // instance_id: 0x0010
+    {
+        cargo_translation_table: "DYES";
+    }
+    // instance_id: 0x0011
+    {
+        cargo_translation_table: "TOUR";
+    }
+    // instance_id: 0x0012
+    {
+        cargo_translation_table: "PACK";
+    }
+    // instance_id: 0x0013
+    {
+        cargo_translation_table: "HOPS";
+    }
+    // instance_id: 0x0014
+    {
+        cargo_translation_table: "TEXT";
+    }
+    // instance_id: 0x0015
+    {
+        cargo_translation_table: "GLAS";
+    }
+    // instance_id: 0x0016
+    {
+        cargo_translation_table: "VPTS";
+    }
+    // instance_id: 0x0017
+    {
+        cargo_translation_table: "WDPR";
+    }
+    // instance_id: 0x0018
+    {
+        cargo_translation_table: "WOOL";
+    }
+    // instance_id: 0x0019
+    {
+        cargo_translation_table: "FISH";
+    }
+    // instance_id: 0x001A
+    {
+        cargo_translation_table: "PAPR";
+    }
+    // instance_id: 0x001B
+    {
+        cargo_translation_table: "SUGR";
+    }
+    // instance_id: 0x001C
+    {
+        cargo_translation_table: "NUTS";
+    }
+    // instance_id: 0x001D
+    {
+        cargo_translation_table: "JAVA";
+    }
+    // instance_id: 0x001E
+    {
+        cargo_translation_table: "MNSP";
+    }
+    // instance_id: 0x001F
+    {
+        cargo_translation_table: "COAT";
+    }
+    // instance_id: 0x0020
+    {
+        cargo_translation_table: "GRVL";
+    }
+    // instance_id: 0x0021
+    {
+        cargo_translation_table: "SAND";
+    }
+    // instance_id: 0x0022
+    {
+        cargo_translation_table: "STEL";
+    }
+    // instance_id: 0x0023
+    {
+        cargo_translation_table: "COAL";
+    }
+    // instance_id: 0x0024
+    {
+        cargo_translation_table: "WOOD";
+    }
+    // instance_id: 0x0025
+    {
+        cargo_translation_table: "TYRE";
+    }
+    // instance_id: 0x0026
+    {
+        cargo_translation_table: "STST";
+    }
+    // instance_id: 0x0027
+    {
+        cargo_translation_table: "PIPE";
+    }
+    // instance_id: 0x0028
+    {
+        cargo_translation_table: "STSE";
+    }
+    // instance_id: 0x0029
+    {
+        cargo_translation_table: "STSH";
+    }
+    // instance_id: 0x002A
+    {
+        cargo_translation_table: "STWR";
+    }
+    // instance_id: 0x002B
+    {
+        cargo_translation_table: "STAL";
+    }
+    // instance_id: 0x002C
+    {
+        cargo_translation_table: "ALUM";
+    }
+    // instance_id: 0x002D
+    {
+        cargo_translation_table: "GOLD";
+    }
+    // instance_id: 0x002E
+    {
+        cargo_translation_table: "STCB";
+    }
+    // instance_id: 0x002F
+    {
+        cargo_translation_table: "CMNT";
+    }
+    // instance_id: 0x0030
+    {
+        cargo_translation_table: "CSTI";
+    }
+    // instance_id: 0x0031
+    {
+        cargo_translation_table: "VENG";
+    }
+    // instance_id: 0x0032
+    {
+        cargo_translation_table: "POWR";
+    }
+    // instance_id: 0x0033
+    {
+        cargo_translation_table: "CIGR";
+    }
+    // instance_id: 0x0034
+    {
+        cargo_translation_table: "TBCO";
+    }
+    // instance_id: 0x0035
+    {
+        cargo_translation_table: "COLA";
+    }
+    // instance_id: 0x0036
+    {
+        cargo_translation_table: "BEAN";
+    }
+    // instance_id: 0x0037
+    {
+        cargo_translation_table: "FURN";
+    }
+    // instance_id: 0x0038
+    {
+        cargo_translation_table: "MPTS";
+    }
+    // instance_id: 0x0039
+    {
+        cargo_translation_table: "SGBT";
+    }
+    // instance_id: 0x003A
+    {
+        cargo_translation_table: "SGCN";
+    }
+    // instance_id: 0x003B
+    {
+        cargo_translation_table: "TATO";
+    }
+    // instance_id: 0x003C
+    {
+        cargo_translation_table: "TWOD";
+    }
+    // instance_id: 0x003D
+    {
+        cargo_translation_table: "BATT";
+    }
+    // instance_id: 0x003E
+    {
+        cargo_translation_table: "ELEC";
+    }
+    // instance_id: 0x003F
+    {
+        cargo_translation_table: "NODC";
+    }
+    // instance_id: 0x0040
+    {
+        cargo_translation_table: "TOYS";
+    }
+    // instance_id: 0x0041
+    {
+        cargo_translation_table: "FZDR";
+    }
+    // instance_id: 0x0042
+    {
+        cargo_translation_table: "SWET";
+    }
+    // instance_id: 0x0043
+    {
+        cargo_translation_table: "CTCD";
+    }
+    // instance_id: 0x0044
+    {
+        cargo_translation_table: "SOAP";
+    }
+    // instance_id: 0x0045
+    {
+        cargo_translation_table: "MEAT";
+    }
+    // instance_id: 0x0046
+    {
+        cargo_translation_table: "SEED";
+    }
+    // instance_id: 0x0047
+    {
+        cargo_translation_table: "OLSD";
+    }
+    // instance_id: 0x0048
+    {
+        cargo_translation_table: "OTI1";
+    }
+    // instance_id: 0x0049
+    {
+        cargo_translation_table: "OTI2";
+    }
+    // instance_id: 0x004A
+    {
+        cargo_translation_table: "CHSE";
+    }
+    // instance_id: 0x004B
+    {
+        cargo_translation_table: "CERA";
+    }
+    // instance_id: 0x004C
+    {
+        cargo_translation_table: "BUBL";
+    }
+    // instance_id: 0x004D
+    {
+        cargo_translation_table: "TOFF";
+    }
+    // instance_id: 0x004E
+    {
+        cargo_translation_table: "CCPR";
+    }
+    // instance_id: 0x004F
+    {
+        cargo_translation_table: "HWAR";
+    }
+    // instance_id: 0x0050
+    {
+        cargo_translation_table: "BRCK";
+    }
+    // instance_id: 0x0051
+    {
+        cargo_translation_table: "STBL";
+    }
+    // instance_id: 0x0052
+    {
+        cargo_translation_table: "FOCA";
+    }
+    // instance_id: 0x0053
+    {
+        cargo_translation_table: "PPWK";
+    }
+    // instance_id: 0x0054
+    {
+        cargo_translation_table: "RBAR";
+    }
+    // instance_id: 0x0055
+    {
+        cargo_translation_table: "SEAL";
+    }
+    // instance_id: 0x0056
+    {
+        cargo_translation_table: "STPP";
+    }
+    // instance_id: 0x0057
+    {
+        cargo_translation_table: "STTB";
+    }
+    // instance_id: 0x0058
+    {
+        cargo_translation_table: "TYCO";
+    }
+    // instance_id: 0x0059
+    {
+        cargo_translation_table: "WELD";
+    }
+    // instance_id: 0x005A
+    {
+        cargo_translation_table: "CERA";
+    }
+    // instance_id: 0x005B
+    {
+        cargo_translation_table: "SESP";
+    }
+    // instance_id: 0x005C
+    {
+        cargo_translation_table: "LVST";
+    }
+    // instance_id: 0x005D
+    {
+        cargo_translation_table: "PUMP";
+    }
+    // instance_id: 0x005E
+    {
+        cargo_translation_table: "NWST";
+    }
+    // instance_id: 0x005F
+    {
+        cargo_translation_table: "MARI";
+    }
+    // instance_id: 0x0060
+    {
+        cargo_translation_table: "GRAI";
+    }
+    // instance_id: 0x0061
+    {
+        cargo_translation_table: "IORE";
+    }
+    // instance_id: 0x0062
+    {
+        cargo_translation_table: "WHEA";
+    }
+    // instance_id: 0x0063
+    {
+        cargo_translation_table: "RUBR";
+    }
+    // instance_id: 0x0064
+    {
+        cargo_translation_table: "MAIZ";
+    }
+    // instance_id: 0x0065
+    {
+        cargo_translation_table: "CORE";
+    }
+    // instance_id: 0x0066
+    {
+        cargo_translation_table: "BEAN";
+    }
+    // instance_id: 0x0067
+    {
+        cargo_translation_table: "AORE";
+    }
+    // instance_id: 0x0068
+    {
+        cargo_translation_table: "CBLK";
+    }
+    // instance_id: 0x0069
+    {
+        cargo_translation_table: "CERE";
+    }
+    // instance_id: 0x006A
+    {
+        cargo_translation_table: "CLAY";
+    }
+    // instance_id: 0x006B
+    {
+        cargo_translation_table: "COPR";
+    }
+    // instance_id: 0x006C
+    {
+        cargo_translation_table: "CTAR";
+    }
+    // instance_id: 0x006D
+    {
+        cargo_translation_table: "FECR";
+    }
+    // instance_id: 0x006E
+    {
+        cargo_translation_table: "FERT";
+    }
+    // instance_id: 0x006F
+    {
+        cargo_translation_table: "FICR";
+    }
+    // instance_id: 0x0070
+    {
+        cargo_translation_table: "KAOL";
+    }
+    // instance_id: 0x0071
+    {
+        cargo_translation_table: "LIME";
+    }
+    // instance_id: 0x0072
+    {
+        cargo_translation_table: "PEAT";
+    }
+    // instance_id: 0x0073
+    {
+        cargo_translation_table: "PHOS";
+    }
+    // instance_id: 0x0074
+    {
+        cargo_translation_table: "PLAS";
+    }
+    // instance_id: 0x0075
+    {
+        cargo_translation_table: "PORE";
+    }
+    // instance_id: 0x0076
+    {
+        cargo_translation_table: "POTA";
+    }
+    // instance_id: 0x0077
+    {
+        cargo_translation_table: "SULP";
+    }
+    // instance_id: 0x0078
+    {
+        cargo_translation_table: "SCMT";
+    }
+    // instance_id: 0x0079
+    {
+        cargo_translation_table: "URAN";
+    }
+    // instance_id: 0x007A
+    {
+        cargo_translation_table: "ZINC";
+    }
+    // instance_id: 0x007B
+    {
+        cargo_translation_table: "BAKE";
+    }
+    // instance_id: 0x007D
+    {
+        cargo_translation_table: "CASS";
+    }
+    // instance_id: 0x007E
+    {
+        cargo_translation_table: "COBL";
+    }
+    // instance_id: 0x007F
+    {
+        cargo_translation_table: "IRON";
+    }
+    // instance_id: 0x0080
+    {
+        cargo_translation_table: "METL";
+    }
+    // instance_id: 0x0081
+    {
+        cargo_translation_table: "MNO2";
+    }
+    // instance_id: 0x0082
+    {
+        cargo_translation_table: "ELTR";
+    }
+    // instance_id: 0x0083
+    {
+        cargo_translation_table: "EOIL";
+    }
+    // instance_id: 0x0084
+    {
+        cargo_translation_table: "FRVG";
+    }
+    // instance_id: 0x0085
+    {
+        cargo_translation_table: "NHNO";
+    }
+    // instance_id: 0x0086
+    {
+        cargo_translation_table: "NICK";
+    }
+    // instance_id: 0x0087
+    {
+        cargo_translation_table: "NITR";
+    }
+    // instance_id: 0x0088
+    {
+        cargo_translation_table: "NKOR";
+    }
+    // instance_id: 0x0089
+    {
+        cargo_translation_table: "NUKF";
+    }
+    // instance_id: 0x008A
+    {
+        cargo_translation_table: "NUKW";
+    }
+    // instance_id: 0x008B
+    {
+        cargo_translation_table: "QLME";
+    }
+    // instance_id: 0x008C
+    {
+        cargo_translation_table: "SALT";
+    }
+    // instance_id: 0x008D
+    {
+        cargo_translation_table: "SASH";
+    }
+    // instance_id: 0x008E
+    {
+        cargo_translation_table: "SLAG";
+    }
+    // instance_id: 0x008F
+    {
+        cargo_translation_table: "VBOD";
+    }
+    // instance_id: 0x0090
+    {
+        cargo_translation_table: "FREE";
+    }
+}
+// Record #10
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x44414F52;
+}
+// Record #11
+if_act9 (is_road_type_invalid("REDR")) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #12
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0xFF;
+    data_value: 0x52444552;
+}
+// Record #13
+if_act9 (is_road_type_invalid("RED_")) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #14
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0xFF;
+    data_value: 0x5F444552;
+}
+// Record #15
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7F], 4, 20, false);
+}
+// Record #16
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        
+
+    }
+    // instance_id: 0x0001
+    {
+        
+
+    }
+    // instance_id: 0x0002
+    {
+        
+
+    }
+    // instance_id: 0x0003
+    {
+        
+
+    }
+    // instance_id: 0x0024
+    {
+        
+
+    }
+    // instance_id: 0x0025
+    {
+        
+
+    }
+    // instance_id: 0x0026
+    {
+        
+
+    }
+    // instance_id: 0x0027
+    {
+        
+
+    }
+    // instance_id: 0x0028
+    {
+        
+
+    }
+    // instance_id: 0x0029
+    {
+        
+
+    }
+    // instance_id: 0x002A
+    {
+        
+
+    }
+    // instance_id: 0x002B
+    {
+        
+
+    }
+    // instance_id: 0x002C
+    {
+        
+
+    }
+    // instance_id: 0x002D
+    {
+        
+
+    }
+    // instance_id: 0x002E
+    {
+        
+
+    }
+}
+// Record #17
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000007C>
+        {
+            [30, 50, -12, -16], zin4, c32bpp | chunked, "spritesheet.png", [30, 30];
+        }
+        sprite_id<0x0000007D>
+        {
+            [60, 47, -46, -7], zin4, c32bpp | chunked, "spritesheet.png", [97, 30];
+        }
+        sprite_id<0x0000007E>
+        {
+            [67, 36, -39, -13], zin4, c32bpp | chunked, "spritesheet.png", [164, 30];
+        }
+        sprite_id<0x0000007F>
+        {
+            [60, 49, -21, -15], zin4, c32bpp | chunked, "spritesheet.png", [231, 30];
+        }
+        sprite_id<0x00000080>
+        {
+            [30, 51, -7, -25], zin4, c32bpp | chunked, "spritesheet.png", [298, 30];
+        }
+        sprite_id<0x00000081>
+        {
+            [60, 49, -24, -17], zin4, c32bpp | chunked, "spritesheet.png", [365, 30];
+        }
+        sprite_id<0x00000082>
+        {
+            [67, 36, -21, -13], zin4, c32bpp | chunked, "spritesheet.png", [432, 30];
+        }
+        sprite_id<0x00000083>
+        {
+            [60, 47, -7, -5], zin4, c32bpp | chunked, "spritesheet.png", [499, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000084>
+        {
+            [30, 50, -12, -16], zin4, c32bpp | chunked, "spritesheet.png", [30, 81];
+        }
+        sprite_id<0x00000085>
+        {
+            [60, 47, -46, -7], zin4, c32bpp | chunked, "spritesheet.png", [97, 81];
+        }
+        sprite_id<0x00000086>
+        {
+            [67, 36, -39, -13], zin4, c32bpp | chunked, "spritesheet.png", [164, 81];
+        }
+        sprite_id<0x00000087>
+        {
+            [60, 49, -21, -15], zin4, c32bpp | chunked, "spritesheet.png", [231, 81];
+        }
+        sprite_id<0x00000088>
+        {
+            [30, 51, -7, -25], zin4, c32bpp | chunked, "spritesheet.png", [298, 81];
+        }
+        sprite_id<0x00000089>
+        {
+            [60, 49, -24, -17], zin4, c32bpp | chunked, "spritesheet.png", [365, 81];
+        }
+        sprite_id<0x0000008A>
+        {
+            [67, 36, -21, -13], zin4, c32bpp | chunked, "spritesheet.png", [432, 81];
+        }
+        sprite_id<0x0000008B>
+        {
+            [60, 47, -7, -5], zin4, c32bpp | chunked, "spritesheet.png", [499, 81];
+        }
+        
+    }
+}
+// Record #298
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0001 ];
+}
+// Record #299
+properties<RoadVehicles, 0x0080> // Action00
+{
+    // instance_id: 0x0080
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_kmh: 101;
+     //  # speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x05;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #300
+strings<RoadVehicles, default, 0x0080> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0080 */ "VW T1 cztrsize";
+}
+// Record #301
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000008C>
+        {
+            [67, 36, -33, -18], zin4, c32bpp | chunked, "spritesheet.png", [566, 81];
+        }
+    }
+}
+
+// Record #302
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #303
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0080 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #303
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000008D>
+        {
+            [36, 59, -16, -25], zin4, c32bpp | chunked, "spritesheet1.png", [30, 30];
+        }
+        sprite_id<0x0000008E>
+        {
+            [72, 57, -48, -17], zin4, c32bpp | chunked, "spritesheet1.png", [113, 30];
+        }
+        sprite_id<0x0000008F>
+        {
+            [80, 43, -45, -22], zin4, c32bpp | chunked, "spritesheet1.png", [196, 30];
+        }
+        sprite_id<0x00000090>
+        {
+            [72, 59, -23, -23], zin4, c32bpp | chunked, "spritesheet1.png", [279, 30];
+        }
+        sprite_id<0x00000091>
+        {
+            [36, 61, -8, -22], zin4, c32bpp | chunked, "spritesheet1.png", [362, 30];
+        }
+        sprite_id<0x00000092>
+        {
+            [72, 58, -32, -25], zin4, c32bpp | chunked, "spritesheet1.png", [445, 30];
+        }
+        sprite_id<0x00000093>
+        {
+            [80, 43, -27, -19], zin4, c32bpp | chunked, "spritesheet1.png", [528, 30];
+        }
+        sprite_id<0x00000094>
+        {
+            [72, 57, -17, -17], zin4, c32bpp | chunked, "spritesheet1.png", [611, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000095>
+        {
+            [36, 59, -16, -25], zin4, c32bpp | chunked, "spritesheet1.png", [30, 91];
+        }
+        sprite_id<0x00000096>
+        {
+            [72, 57, -48, -17], zin4, c32bpp | chunked, "spritesheet1.png", [113, 91];
+        }
+        sprite_id<0x00000097>
+        {
+            [80, 43, -45, -22], zin4, c32bpp | chunked, "spritesheet1.png", [196, 91];
+        }
+        sprite_id<0x00000098>
+        {
+            [72, 59, -23, -23], zin4, c32bpp | chunked, "spritesheet1.png", [279, 91];
+        }
+        sprite_id<0x00000099>
+        {
+            [36, 61, -8, -22], zin4, c32bpp | chunked, "spritesheet1.png", [362, 91];
+        }
+        sprite_id<0x0000009A>
+        {
+            [72, 58, -32, -25], zin4, c32bpp | chunked, "spritesheet1.png", [445, 91];
+        }
+        sprite_id<0x0000009B>
+        {
+            [80, 43, -27, -19], zin4, c32bpp | chunked, "spritesheet1.png", [528, 91];
+        }
+        sprite_id<0x0000009C>
+        {
+            [72, 57, -17, -17], zin4, c32bpp | chunked, "spritesheet1.png", [611, 91];
+        }
+        
+    }
+}
+// Record #304
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0001 ];
+}
+// Record #305
+properties<RoadVehicles, 0x0081> // Action00
+{
+    // instance_id: 0x0081
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #306
+strings<RoadVehicles, default, 0x0081> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0081 */ "VW T1 origsize";
+}
+// Record #307
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000009D>
+        {
+            [83, 44, -41, -22], zin4, c32bpp | chunked, "spritesheet1.png", [694, 91];
+        }
+    }
+}
+
+// Record #308
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #309
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0081 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #310
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000009E>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet2.png", [30, 30];
+        }
+        sprite_id<0x0000009F>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet2.png", [149, 30];
+        }
+        sprite_id<0x000000A0>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet2.png", [268, 30];
+        }
+        sprite_id<0x000000A1>
+        {
+            [80, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet2.png", [387, 30];
+        }
+        sprite_id<0x000000A2>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet2.png", [506, 30];
+        }
+        sprite_id<0x000000A3>
+        {
+            [79, 61, -39, -30], zin4, c32bpp | chunked, "spritesheet2.png", [625, 30];
+        }
+        sprite_id<0x000000A4>
+        {
+            [86, 50, -43, -25], zin4, c32bpp | chunked, "spritesheet2.png", [744, 30];
+        }
+        sprite_id<0x000000A5>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet2.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000A6>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet2.png", [30, 101];
+        }
+        sprite_id<0x000000A7>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet2.png", [149, 101];
+        }
+        sprite_id<0x000000A8>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet2.png", [268, 101];
+        }
+        sprite_id<0x000000A9>
+        {
+            [80, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet2.png", [387, 101];
+        }
+        sprite_id<0x000000AA>
+        {
+            [36, 64, -18, -32], zin4, c32bpp | chunked, "spritesheet2.png", [506, 101];
+        }
+        sprite_id<0x000000AB>
+        {
+            [79, 62, -39, -31], zin4, c32bpp | chunked, "spritesheet2.png", [625, 101];
+        }
+        sprite_id<0x000000AC>
+        {
+            [86, 50, -43, -25], zin4, c32bpp | chunked, "spritesheet2.png", [744, 101];
+        }
+        sprite_id<0x000000AD>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet2.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **zastavka2** (nově přidané sprity)
+    {
+        sprite_id<0x000000AF>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet3.png", [30, 30];
+        }
+        sprite_id<0x000000B0>
+        {
+            [89, 59, -44, -29], zin4, c32bpp | chunked, "spritesheet3.png", [124, 30];
+        }
+        sprite_id<0x000000B1>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet3.png", [218, 30];
+        }
+        sprite_id<0x000000B2>
+        {
+            [83, 66, -41, -33], zin4, c32bpp | chunked, "spritesheet3.png", [312, 30];
+        }
+        sprite_id<0x000000B3>
+        {
+            [65, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet3.png", [406, 30];
+        }
+        sprite_id<0x000000B4>
+        {
+            [88, 66, -44, -33], zin4, c32bpp | chunked, "spritesheet3.png", [500, 30];
+        }
+        sprite_id<0x000000B5>
+        {
+            [94, 54, -47, -27], zin4, c32bpp | chunked, "spritesheet3.png", [594, 30];
+        }
+        sprite_id<0x000000B6>
+        {
+            [83, 67, -41, -33], zin4, c32bpp | chunked, "spritesheet3.png", [688, 30];
+        }
+    }
+    sprite_set // 0x0003  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x00000001>
+        {
+            [67, 71, -28, -35], zin4, c32bpp | chunked, "spritesheet2X.png", [30, 30];
+        }
+        sprite_id<0x00000002>
+        {
+            [89, 59, -61, -17], zin4, c32bpp | chunked, "spritesheet2X.png", [124, 30];
+        }
+        sprite_id<0x00000003>
+        {
+            [94, 51, -58, -27], zin4, c32bpp | chunked, "spritesheet2X.png", [218, 30];
+        }
+        sprite_id<0x00000004>
+        {
+            [83, 66, -38, -30], zin4, c32bpp | chunked, "spritesheet2X.png", [312, 30];
+        }
+        sprite_id<0x00000005>
+        {
+            [65, 70, -27, -42], zin4, c32bpp | chunked, "spritesheet2X.png", [406, 30];
+        }
+        sprite_id<0x00000006>
+        {
+            [88, 66, -35, -31], zin4, c32bpp | chunked, "spritesheet2X.png", [500, 30];
+        }
+        sprite_id<0x00000007>
+        {
+            [94, 54, -29, -30], zin4, c32bpp | chunked, "spritesheet2X.png", [594, 30];
+        }
+        sprite_id<0x00000008>
+        {
+            [83, 67, -16, -23], zin4, c32bpp | chunked, "spritesheet2X.png", [688, 30];
+        }
+    }
+}
+
+// Record #311
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #312
+properties<RoadVehicles, 0x0082> // Action00
+{
+    // instance_id: 0x0082
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #313
+strings<RoadVehicles, default, 0x0082> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0082 */ "Skoda 1203 Pajda karavan";
+}
+// Record #314
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000AE>
+        {
+            [119, 69, -59, -34], zin4, c32bpp | chunked, "spritesheet2.png", [982, 101];
+        }
+    }
+}
+
+// Record #315
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #316
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0082 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #316
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000000B7>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet4.png", [30, 30];
+        }
+        sprite_id<0x000000B8>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet4.png", [148, 30];
+        }
+        sprite_id<0x000000B9>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet4.png", [266, 30];
+        }
+        sprite_id<0x000000BA>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet4.png", [384, 30];
+        }
+        sprite_id<0x000000BB>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet4.png", [502, 30];
+        }
+        sprite_id<0x000000BC>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet4.png", [620, 30];
+        }
+        sprite_id<0x000000BD>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet4.png", [738, 30];
+        }
+        sprite_id<0x000000BE>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet4.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000BF>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet4.png", [30, 101];
+        }
+        sprite_id<0x000000C0>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet4.png", [148, 101];
+        }
+        sprite_id<0x000000C1>
+        {
+            [86, 52, -43, -26], zin4, c32bpp | chunked, "spritesheet4.png", [266, 101];
+        }
+        sprite_id<0x000000C2>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet4.png", [384, 101];
+        }
+        sprite_id<0x000000C3>
+        {
+            [37, 65, -18, -32], zin4, c32bpp | chunked, "spritesheet4.png", [502, 101];
+        }
+        sprite_id<0x000000C4>
+        {
+            [80, 62, -40, -31], zin4, c32bpp | chunked, "spritesheet4.png", [620, 101];
+        }
+        sprite_id<0x000000C5>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet4.png", [738, 101];
+        }
+        sprite_id<0x000000C6>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet4.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000000C8>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet5.png", [30, 30];
+        }
+        sprite_id<0x000000C9>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet5.png", [116, 30];
+        }
+        sprite_id<0x000000CA>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet5.png", [202, 30];
+        }
+        sprite_id<0x000000CB>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet5.png", [288, 30];
+        }
+        sprite_id<0x000000CC>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet5.png", [374, 30];
+        }
+        sprite_id<0x000000CD>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet5.png", [460, 30];
+        }
+        sprite_id<0x000000CE>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet5.png", [546, 30];
+        }
+        sprite_id<0x000000CF>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet5.png", [632, 30];
+        }
+    }
+}
+
+// Record #317
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #318
+properties<RoadVehicles, 0x0083> // Action00
+{
+    // instance_id: 0x0083
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #319
+strings<RoadVehicles, default, 0x0083> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0083 */ "TAZ 1203 valnik drevo";
+}
+// Record #320
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000C7>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet4.png", [974, 101];
+        }
+    }
+}
+
+// Record #321
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #322
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0083 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #323
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000000D0>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet6.png", [30, 30];
+        }
+        sprite_id<0x000000D1>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet6.png", [148, 30];
+        }
+        sprite_id<0x000000D2>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet6.png", [266, 30];
+        }
+        sprite_id<0x000000D3>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet6.png", [384, 30];
+        }
+        sprite_id<0x000000D4>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet6.png", [502, 30];
+        }
+        sprite_id<0x000000D5>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet6.png", [620, 30];
+        }
+        sprite_id<0x000000D6>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet6.png", [738, 30];
+        }
+        sprite_id<0x000000D7>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet6.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000D8>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet6.png", [30, 101];
+        }
+        sprite_id<0x000000D9>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet6.png", [148, 101];
+        }
+        sprite_id<0x000000DA>
+        {
+            [86, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet6.png", [266, 101];
+        }
+        sprite_id<0x000000DB>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet6.png", [384, 101];
+        }
+        sprite_id<0x000000DC>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet6.png", [502, 101];
+        }
+        sprite_id<0x000000DD>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet6.png", [620, 101];
+        }
+        sprite_id<0x000000DE>
+        {
+            [85, 50, -42, -25], zin4, c32bpp | chunked, "spritesheet6.png", [738, 101];
+        }
+        sprite_id<0x000000DF>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet6.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000000E1>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet7.png", [30, 30];
+        }
+        sprite_id<0x000000E2>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet7.png", [116, 30];
+        }
+        sprite_id<0x000000E3>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet7.png", [202, 30];
+        }
+        sprite_id<0x000000E4>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet7.png", [288, 30];
+        }
+        sprite_id<0x000000E5>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet7.png", [374, 30];
+        }
+        sprite_id<0x000000E6>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet7.png", [460, 30];
+        }
+        sprite_id<0x000000E7>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet7.png", [546, 30];
+        }
+        sprite_id<0x000000E8>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet7.png", [632, 30];
+        }
+    }
+}
+
+// Record #324
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #325
+properties<RoadVehicles, 0x0084> // Action00
+{
+    // instance_id: 0x0084
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #326
+strings<RoadVehicles, default, 0x0084> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0084 */ "TAZ 1203 valnik cerna uhli";
+}
+// Record #327
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000E0>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet6.png", [974, 101];
+        }
+    }
+}
+
+// Record #328
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #329
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0084 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #330
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000000E9>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet8.png", [30, 30];
+        }
+        sprite_id<0x000000EA>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet8.png", [148, 30];
+        }
+        sprite_id<0x000000EB>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet8.png", [266, 30];
+        }
+        sprite_id<0x000000EC>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet8.png", [384, 30];
+        }
+        sprite_id<0x000000ED>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet8.png", [502, 30];
+        }
+        sprite_id<0x000000EE>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet8.png", [620, 30];
+        }
+        sprite_id<0x000000EF>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet8.png", [738, 30];
+        }
+        sprite_id<0x000000F0>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet8.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000F1>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet8.png", [30, 101];
+        }
+        sprite_id<0x000000F2>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet8.png", [148, 101];
+        }
+        sprite_id<0x000000F3>
+        {
+            [86, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet8.png", [266, 101];
+        }
+        sprite_id<0x000000F4>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet8.png", [384, 101];
+        }
+        sprite_id<0x000000F5>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet8.png", [502, 101];
+        }
+        sprite_id<0x000000F6>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet8.png", [620, 101];
+        }
+        sprite_id<0x000000F7>
+        {
+            [85, 50, -42, -25], zin4, c32bpp | chunked, "spritesheet8.png", [738, 101];
+        }
+        sprite_id<0x000000F8>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet8.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000000FA>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet9.png", [30, 30];
+        }
+        sprite_id<0x000000FB>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet9.png", [116, 30];
+        }
+        sprite_id<0x000000FC>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet9.png", [202, 30];
+        }
+        sprite_id<0x000000FD>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet9.png", [288, 30];
+        }
+        sprite_id<0x000000FE>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet9.png", [374, 30];
+        }
+        sprite_id<0x000000FF>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet9.png", [460, 30];
+        }
+        sprite_id<0x00000100>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet9.png", [546, 30];
+        }
+        sprite_id<0x00000101>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet9.png", [632, 30];
+        }
+    }
+}
+
+// Record #331
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #332
+properties<RoadVehicles, 0x0085> // Action00
+{
+    // instance_id: 0x0085
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #333
+strings<RoadVehicles, default, 0x0085> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0085 */ "TAZ 1203 valnik hneda jil";
+}
+// Record #334
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000000F9>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet8.png", [974, 101];
+        }
+    }
+}
+
+// Record #335
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #336
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0085 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+// Record #337
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000102>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet10.png", [30, 30];
+        }
+        sprite_id<0x00000103>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet10.png", [148, 30];
+        }
+        sprite_id<0x00000104>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet10.png", [266, 30];
+        }
+        sprite_id<0x00000105>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet10.png", [384, 30];
+        }
+        sprite_id<0x00000106>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet10.png", [502, 30];
+        }
+        sprite_id<0x00000107>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet10.png", [620, 30];
+        }
+        sprite_id<0x00000108>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet10.png", [738, 30];
+        }
+        sprite_id<0x00000109>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet10.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000010A>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet10.png", [30, 101];
+        }
+        sprite_id<0x0000010B>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet10.png", [148, 101];
+        }
+        sprite_id<0x0000010C>
+        {
+            [86, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet10.png", [266, 101];
+        }
+        sprite_id<0x0000010D>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet10.png", [384, 101];
+        }
+        sprite_id<0x0000010E>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet10.png", [502, 101];
+        }
+        sprite_id<0x0000010F>
+        {
+            [80, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet10.png", [620, 101];
+        }
+        sprite_id<0x00000110>
+        {
+            [85, 50, -42, -25], zin4, c32bpp | chunked, "spritesheet10.png", [738, 101];
+        }
+        sprite_id<0x00000111>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet10.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x00000113>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet11.png", [30, 30];
+        }
+        sprite_id<0x00000114>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet11.png", [116, 30];
+        }
+        sprite_id<0x00000115>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet11.png", [202, 30];
+        }
+        sprite_id<0x00000116>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet11.png", [288, 30];
+        }
+        sprite_id<0x00000117>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet11.png", [374, 30];
+        }
+        sprite_id<0x00000118>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet11.png", [460, 30];
+        }
+        sprite_id<0x00000119>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet11.png", [546, 30];
+        }
+        sprite_id<0x0000011A>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet11.png", [632, 30];
+        }
+    }
+}
+
+// Record #338
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #339
+properties<RoadVehicles, 0x0086> // Action00
+{
+    // instance_id: 0x0086
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #340
+strings<RoadVehicles, default, 0x0086> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0086 */ "TAZ 1203 valnik zluta pisek";
+}
+// Record #341
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000112>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet10.png", [974, 101];
+        }
+    }
+}
+
+// Record #342
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #343
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0086 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+// Record #344
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000011B>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet12.png", [30, 30];
+        }
+        sprite_id<0x0000011C>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet12.png", [148, 30];
+        }
+        sprite_id<0x0000011D>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet12.png", [266, 30];
+        }
+        sprite_id<0x0000011E>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet12.png", [384, 30];
+        }
+        sprite_id<0x0000011F>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet12.png", [502, 30];
+        }
+        sprite_id<0x00000120>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet12.png", [620, 30];
+        }
+        sprite_id<0x00000121>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet12.png", [738, 30];
+        }
+        sprite_id<0x00000122>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet12.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000123>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet12.png", [30, 101];
+        }
+        sprite_id<0x00000124>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet12.png", [148, 101];
+        }
+        sprite_id<0x00000125>
+        {
+            [86, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet12.png", [266, 101];
+        }
+        sprite_id<0x00000126>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet12.png", [384, 101];
+        }
+        sprite_id<0x00000127>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet12.png", [502, 101];
+        }
+        sprite_id<0x00000128>
+        {
+            [80, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet12.png", [620, 101];
+        }
+        sprite_id<0x00000129>
+        {
+            [85, 50, -42, -25], zin4, c32bpp | chunked, "spritesheet12.png", [738, 101];
+        }
+        sprite_id<0x0000012A>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet12.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x0000012C>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet13.png", [30, 30];
+        }
+        sprite_id<0x0000012D>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet13.png", [116, 30];
+        }
+        sprite_id<0x0000012E>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet13.png", [202, 30];
+        }
+        sprite_id<0x0000012F>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet13.png", [288, 30];
+        }
+        sprite_id<0x00000130>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet13.png", [374, 30];
+        }
+        sprite_id<0x00000131>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet13.png", [460, 30];
+        }
+        sprite_id<0x00000132>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet13.png", [546, 30];
+        }
+        sprite_id<0x00000133>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet13.png", [632, 30];
+        }
+    }
+}
+
+// Record #345
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #346
+properties<RoadVehicles, 0x0087> // Action00
+{
+    // instance_id: 0x0087
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #347
+strings<RoadVehicles, default, 0x0087> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0087 */ "TAZ 1203 valnik seda kamen";
+}
+// Record #348
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000012B>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet12.png", [974, 101];
+        }
+    }
+}
+
+// Record #349
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #350
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0087 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+// Record #351
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000134>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet14.png", [30, 30];
+        }
+        sprite_id<0x00000135>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet14.png", [148, 30];
+        }
+        sprite_id<0x00000136>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet14.png", [266, 30];
+        }
+        sprite_id<0x00000137>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet14.png", [384, 30];
+        }
+        sprite_id<0x00000138>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet14.png", [502, 30];
+        }
+        sprite_id<0x00000139>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet14.png", [620, 30];
+        }
+        sprite_id<0x0000013A>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet14.png", [738, 30];
+        }
+        sprite_id<0x0000013B>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet14.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000013C>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet14.png", [30, 101];
+        }
+        sprite_id<0x0000013D>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet14.png", [148, 101];
+        }
+        sprite_id<0x0000013E>
+        {
+            [86, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet14.png", [266, 101];
+        }
+        sprite_id<0x0000013F>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet14.png", [384, 101];
+        }
+        sprite_id<0x00000140>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet14.png", [502, 101];
+        }
+        sprite_id<0x00000141>
+        {
+            [80, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet14.png", [620, 101];
+        }
+        sprite_id<0x00000142>
+        {
+            [85, 50, -42, -25], zin4, c32bpp | chunked, "spritesheet14.png", [738, 101];
+        }
+        sprite_id<0x00000143>
+        {
+            [80, 65, -40, -32], zin4, c32bpp | chunked, "spritesheet14.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x00000145>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet15.png", [30, 30];
+        }
+        sprite_id<0x00000146>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet15.png", [116, 30];
+        }
+        sprite_id<0x00000147>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet15.png", [202, 30];
+        }
+        sprite_id<0x00000148>
+        {
+            [80, 55, -40, -27], zin4, c32bpp | chunked, "spritesheet15.png", [288, 30];
+        }
+        sprite_id<0x00000149>
+        {
+            [67, 57, -33, -28], zin4, c32bpp | chunked, "spritesheet15.png", [374, 30];
+        }
+        sprite_id<0x0000014A>
+        {
+            [81, 54, -40, -27], zin4, c32bpp | chunked, "spritesheet15.png", [460, 30];
+        }
+        sprite_id<0x0000014B>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet15.png", [546, 30];
+        }
+        sprite_id<0x0000014C>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet15.png", [632, 30];
+        }
+    }
+}
+
+// Record #352
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #353
+properties<RoadVehicles, 0x0088> // Action00
+{
+    // instance_id: 0x0088
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #354
+strings<RoadVehicles, default, 0x0088> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0088 */ "TAZ 1203 valnik zluta brambor";
+}
+// Record #355
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000144>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet14.png", [974, 101];
+        }
+    }
+}
+
+// Record #356
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #357
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0088 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+// Record #500
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000014D>
+        {
+            [37, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet16.png", [30, 30];
+        }
+        sprite_id<0x0000014E>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet16.png", [148, 30];
+        }
+        sprite_id<0x0000014F>
+        {
+            [86, 46, -43, -23], zin4, c32bpp | chunked, "spritesheet16.png", [266, 30];
+        }
+        sprite_id<0x00000150>
+        {
+            [80, 57, -40, -28], zin4, c32bpp | chunked, "spritesheet16.png", [384, 30];
+        }
+        sprite_id<0x00000151>
+        {
+            [37, 57, -18, -28], zin4, c32bpp | chunked, "spritesheet16.png", [502, 30];
+        }
+        sprite_id<0x00000152>
+        {
+            [80, 56, -40, -28], zin4, c32bpp | chunked, "spritesheet16.png", [620, 30];
+        }
+        sprite_id<0x00000153>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet16.png", [738, 30];
+        }
+        sprite_id<0x00000154>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet16.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000155>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet16.png", [30, 101];
+        }
+        sprite_id<0x00000156>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet16.png", [148, 101];
+        }
+        sprite_id<0x00000157>
+        {
+            [86, 43, -43, -21], zin4, c32bpp | chunked, "spritesheet16.png", [266, 101];
+        }
+        sprite_id<0x00000158>
+        {
+            [80, 58, -40, -29], zin4, c32bpp | chunked, "spritesheet16.png", [384, 101];
+        }
+        sprite_id<0x00000159>
+        {
+            [38, 62, -19, -31], zin4, c32bpp | chunked, "spritesheet16.png", [502, 101];
+        }
+        sprite_id<0x0000015A>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet16.png", [620, 101];
+        }
+        sprite_id<0x0000015B>
+        {
+            [85, 48, -42, -24], zin4, c32bpp | chunked, "spritesheet16.png", [738, 101];
+        }
+        sprite_id<0x0000015C>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet16.png", [856, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x0000015E>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet17.png", [30, 30];
+        }
+        sprite_id<0x0000015F>
+        {
+            [81, 61, -40, -30], zin4, c32bpp | chunked, "spritesheet17.png", [116, 30];
+        }
+        sprite_id<0x00000160>
+        {
+            [86, 51, -43, -25], zin4, c32bpp | chunked, "spritesheet17.png", [202, 30];
+        }
+        sprite_id<0x00000161>
+        {
+            [80, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet17.png", [288, 30];
+        }
+        sprite_id<0x00000162>
+        {
+            [67, 63, -33, -31], zin4, c32bpp | chunked, "spritesheet17.png", [374, 30];
+        }
+        sprite_id<0x00000163>
+        {
+            [81, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet17.png", [460, 30];
+        }
+        sprite_id<0x00000164>
+        {
+            [85, 51, -42, -25], zin4, c32bpp | chunked, "spritesheet17.png", [546, 30];
+        }
+        sprite_id<0x00000165>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet17.png", [632, 30];
+        }
+    }
+}
+
+// Record #501
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+
+// Record #502
+properties<RoadVehicles, 0x0089> // Action00
+{
+    // instance_id: 0x0089
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #503
+strings<RoadVehicles, default, 0x0089> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0089 */ "TAZ 1203 valnik bedna";
+}
+// Record #504
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000015D>
+        {
+            [118, 64, -59, -32], zin4, c32bpp | chunked, "spritesheet16.png", [974, 101];
+        }
+    }
+}
+
+// Record #505
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #506
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0089 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #507
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000166>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet18.png", [30, 30];
+        }
+        sprite_id<0x00000167>
+        {
+            [80, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet18.png", [148, 30];
+        }
+        sprite_id<0x00000168>
+        {
+            [86, 57, -43, -28], zin4, c32bpp | chunked, "spritesheet18.png", [266, 30];
+        }
+        sprite_id<0x00000169>
+        {
+            [81, 74, -40, -37], zin4, c32bpp | chunked, "spritesheet18.png", [384, 30];
+        }
+        sprite_id<0x0000016A>
+        {
+            [38, 75, -19, -37], zin4, c32bpp | chunked, "spritesheet18.png", [502, 30];
+        }
+        sprite_id<0x0000016B>
+        {
+            [80, 74, -40, -37], zin4, c32bpp | chunked, "spritesheet18.png", [620, 30];
+        }
+        sprite_id<0x0000016C>
+        {
+            [85, 57, -42, -28], zin4, c32bpp | chunked, "spritesheet18.png", [738, 30];
+        }
+        sprite_id<0x0000016D>
+        {
+            [80, 68, -40, -34], zin4, c32bpp | chunked, "spritesheet18.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000016E>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet18.png", [30, 105];
+        }
+        sprite_id<0x0000016F>
+        {
+            [80, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet18.png", [148, 105];
+        }
+        sprite_id<0x00000170>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet18.png", [266, 105];
+        }
+        sprite_id<0x00000171>
+        {
+            [81, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet18.png", [384, 105];
+        }
+        sprite_id<0x00000172>
+        {
+            [38, 75, -19, -37], zin4, c32bpp | chunked, "spritesheet18.png", [502, 105];
+        }
+        sprite_id<0x00000173>
+        {
+            [80, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet18.png", [620, 105];
+        }
+        sprite_id<0x00000174>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet18.png", [738, 105];
+        }
+        sprite_id<0x00000175>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet18.png", [856, 105];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x00000177>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet19.png", [30, 30];
+        }
+        sprite_id<0x00000178>
+        {
+            [82, 63, -41, -31], zin4, c32bpp | chunked, "spritesheet19.png", [116, 30];
+        }
+        sprite_id<0x00000179>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet19.png", [202, 30];
+        }
+        sprite_id<0x0000017A>
+        {
+            [81, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet19.png", [288, 30];
+        }
+        sprite_id<0x0000017B>
+        {
+            [67, 75, -33, -37], zin4, c32bpp | chunked, "spritesheet19.png", [374, 30];
+        }
+        sprite_id<0x0000017C>
+        {
+            [82, 72, -41, -36], zin4, c32bpp | chunked, "spritesheet19.png", [460, 30];
+        }
+        sprite_id<0x0000017D>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet19.png", [546, 30];
+        }
+        sprite_id<0x0000017E>
+        {
+            [81, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet19.png", [632, 30];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x00000009>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet1X.png", [30, 30];
+        }
+        sprite_id<0x0000000A>
+        {
+            [82, 63, -41, -31], zin4, c32bpp | chunked, "spritesheet1X.png", [116, 30];
+        }
+        sprite_id<0x0000000B>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet1X.png", [202, 30];
+        }
+        sprite_id<0x0000000C>
+        {
+            [81, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet1X.png", [288, 30];
+        }
+        sprite_id<0x0000000D>
+        {
+            [67, 75, -33, -37], zin4, c32bpp | chunked, "spritesheet1X.png", [374, 30];
+        }
+        sprite_id<0x0000000E>
+        {
+            [82, 72, -41, -36], zin4, c32bpp | chunked, "spritesheet1X.png", [460, 30];
+        }
+        sprite_id<0x0000000F>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet1X.png", [546, 30];
+        }
+        sprite_id<0x00000010>
+        {
+            [81, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet1X.png", [632, 30];
+        }
+    }
+}
+
+// Record #508
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #509
+properties<RoadVehicles, 0x0090> // Action00
+{
+    // instance_id: 0x0090
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #510
+strings<RoadVehicles, default, 0x0090> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0090 */ "TAZ 1203 plachta bedna";
+}
+// Record #511
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000176>
+        {
+            [118, 74, -59, -37], zin4, c32bpp | chunked, "spritesheet18.png", [974, 105];
+        }
+    }
+}
+
+// Record #512
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #513
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0090 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #514
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000017F>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet20.png", [30, 30];
+        }
+        sprite_id<0x00000180>
+        {
+            [80, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet20.png", [148, 30];
+        }
+        sprite_id<0x00000181>
+        {
+            [86, 57, -43, -28], zin4, c32bpp | chunked, "spritesheet20.png", [266, 30];
+        }
+        sprite_id<0x00000182>
+        {
+            [81, 74, -40, -37], zin4, c32bpp | chunked, "spritesheet20.png", [384, 30];
+        }
+        sprite_id<0x00000183>
+        {
+            [38, 75, -19, -37], zin4, c32bpp | chunked, "spritesheet20.png", [502, 30];
+        }
+        sprite_id<0x00000184>
+        {
+            [80, 73, -40, -36], zin4, c32bpp | chunked, "spritesheet20.png", [620, 30];
+        }
+        sprite_id<0x00000185>
+        {
+            [85, 57, -42, -28], zin4, c32bpp | chunked, "spritesheet20.png", [738, 30];
+        }
+        sprite_id<0x00000186>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet20.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000187>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet20.png", [30, 105];
+        }
+        sprite_id<0x00000188>
+        {
+            [80, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet20.png", [148, 105];
+        }
+        sprite_id<0x00000189>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet20.png", [266, 105];
+        }
+        sprite_id<0x0000018A>
+        {
+            [81, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet20.png", [384, 105];
+        }
+        sprite_id<0x0000018B>
+        {
+            [38, 75, -19, -37], zin4, c32bpp | chunked, "spritesheet20.png", [502, 105];
+        }
+        sprite_id<0x0000018C>
+        {
+            [80, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet20.png", [620, 105];
+        }
+        sprite_id<0x0000018D>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet20.png", [738, 105];
+        }
+        sprite_id<0x0000018E>
+        {
+            [80, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet20.png", [856, 105];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x00000190>
+        {
+            [67, 71, -33, -35], zin4, c32bpp | chunked, "spritesheet21.png", [30, 30];
+        }
+        sprite_id<0x00000191>
+        {
+            [82, 63, -41, -31], zin4, c32bpp | chunked, "spritesheet21.png", [116, 30];
+        }
+        sprite_id<0x00000192>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet21.png", [202, 30];
+        }
+        sprite_id<0x00000193>
+        {
+            [81, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet21.png", [288, 30];
+        }
+        sprite_id<0x00000194>
+        {
+            [67, 75, -33, -37], zin4, c32bpp | chunked, "spritesheet21.png", [374, 30];
+        }
+        sprite_id<0x00000195>
+        {
+            [82, 72, -41, -36], zin4, c32bpp | chunked, "spritesheet21.png", [460, 30];
+        }
+        sprite_id<0x00000196>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet21.png", [546, 30];
+        }
+        sprite_id<0x00000197>
+        {
+            [81, 66, -40, -33], zin4, c32bpp | chunked, "spritesheet21.png", [632, 30];
+        }
+    }
+}
+
+// Record #515
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+
+// Record #516
+properties<RoadVehicles, 0x0091> // Action00
+{
+    // instance_id: 0x0091
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #517
+strings<RoadVehicles, default, 0x0091> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0091 */ "TAZ 1203 plachta";
+}
+// Record #518
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000018F>
+        {
+            [118, 74, -59, -37], zin4, c32bpp | chunked, "spritesheet20.png", [974, 105];
+        }
+    }
+}
+
+// Record #519
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #520
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0091 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+// Record #521
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000198>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet22.png", [30, 30];
+        }
+        sprite_id<0x00000199>
+        {
+            [79, 63, -39, -31], zin4, c32bpp | chunked, "spritesheet22.png", [148, 30];
+        }
+        sprite_id<0x0000019A>
+        {
+            [86, 57, -43, -28], zin4, c32bpp | chunked, "spritesheet22.png", [266, 30];
+        }
+        sprite_id<0x0000019B>
+        {
+            [80, 74, -40, -37], zin4, c32bpp | chunked, "spritesheet22.png", [384, 30];
+        }
+        sprite_id<0x0000019C>
+        {
+            [38, 74, -19, -37], zin4, c32bpp | chunked, "spritesheet22.png", [502, 30];
+        }
+        sprite_id<0x0000019D>
+        {
+            [79, 73, -39, -36], zin4, c32bpp | chunked, "spritesheet22.png", [620, 30];
+        }
+        sprite_id<0x0000019E>
+        {
+            [85, 57, -42, -28], zin4, c32bpp | chunked, "spritesheet22.png", [738, 30];
+        }
+        sprite_id<0x0000019F>
+        {
+            [79, 67, -39, -33], zin4, c32bpp | chunked, "spritesheet22.png", [856, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001A0>
+        {
+            [38, 71, -19, -35], zin4, c32bpp | chunked, "spritesheet22.png", [30, 104];
+        }
+        sprite_id<0x000001A1>
+        {
+            [79, 63, -39, -31], zin4, c32bpp | chunked, "spritesheet22.png", [148, 104];
+        }
+        sprite_id<0x000001A2>
+        {
+            [86, 55, -43, -27], zin4, c32bpp | chunked, "spritesheet22.png", [266, 104];
+        }
+        sprite_id<0x000001A3>
+        {
+            [80, 72, -40, -36], zin4, c32bpp | chunked, "spritesheet22.png", [384, 104];
+        }
+        sprite_id<0x000001A4>
+        {
+            [38, 74, -19, -37], zin4, c32bpp | chunked, "spritesheet22.png", [502, 104];
+        }
+        sprite_id<0x000001A5>
+        {
+            [79, 72, -39, -36], zin4, c32bpp | chunked, "spritesheet22.png", [620, 104];
+        }
+        sprite_id<0x000001A6>
+        {
+            [85, 55, -42, -27], zin4, c32bpp | chunked, "spritesheet22.png", [738, 104];
+        }
+        sprite_id<0x000001A7>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet22.png", [856, 104];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000001A9>
+        {
+            [61, 71, -30, -35], zin4, c32bpp | chunked, "spritesheet23.png", [30, 30];
+        }
+        sprite_id<0x000001AA>
+        {
+            [79, 63, -39, -31], zin4, c32bpp | chunked, "spritesheet23.png", [116, 30];
+        }
+        sprite_id<0x000001AB>
+        {
+            [86, 57, -43, -28], zin4, c32bpp | chunked, "spritesheet23.png", [202, 30];
+        }
+        sprite_id<0x000001AC>
+        {
+            [81, 74, -40, -37], zin4, c32bpp | chunked, "spritesheet23.png", [288, 30];
+        }
+        sprite_id<0x000001AD>
+        {
+            [61, 74, -30, -37], zin4, c32bpp | chunked, "spritesheet23.png", [374, 30];
+        }
+        sprite_id<0x000001AE>
+        {
+            [79, 73, -39, -36], zin4, c32bpp | chunked, "spritesheet23.png", [460, 30];
+        }
+        sprite_id<0x000001AF>
+        {
+            [85, 57, -42, -28], zin4, c32bpp | chunked, "spritesheet23.png", [546, 30];
+        }
+        sprite_id<0x000001B0>
+        {
+            [80, 67, -40, -33], zin4, c32bpp | chunked, "spritesheet23.png", [632, 30];
+        }
+    }
+}
+
+// Record #522
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+
+// Record #523
+properties<RoadVehicles, 0x0092> // Action00
+{
+    // instance_id: 0x0092
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #524
+strings<RoadVehicles, default, 0x0092> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0092 */ "TAZ 1203 plachta seda";
+}
+// Record #525
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001A8>
+        {
+            [118, 71, -59, -35], zin4, c32bpp | chunked, "spritesheet22.png", [974, 104];
+        }
+    }
+}
+
+// Record #526
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #527
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0092 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #528
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000001B1>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet24.png", [30, 30];
+        }
+        sprite_id<0x000001B2>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet24.png", [149, 30];
+        }
+        sprite_id<0x000001B3>
+        {
+            [87, 48, -43, -24], zin4, c32bpp | chunked, "spritesheet24.png", [268, 30];
+        }
+        sprite_id<0x000001B4>
+        {
+            [79, 61, -39, -30], zin4, c32bpp | chunked, "spritesheet24.png", [387, 30];
+        }
+        sprite_id<0x000001B5>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet24.png", [506, 30];
+        }
+        sprite_id<0x000001B6>
+        {
+            [79, 61, -39, -30], zin4, c32bpp | chunked, "spritesheet24.png", [625, 30];
+        }
+        sprite_id<0x000001B7>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet24.png", [744, 30];
+        }
+        sprite_id<0x000001B8>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet24.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001B9>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet24.png", [30, 101];
+        }
+        sprite_id<0x000001BA>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet24.png", [149, 101];
+        }
+        sprite_id<0x000001BB>
+        {
+            [87, 47, -43, -23], zin4, c32bpp | chunked, "spritesheet24.png", [268, 101];
+        }
+        sprite_id<0x000001BC>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet24.png", [387, 101];
+        }
+        sprite_id<0x000001BD>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet24.png", [506, 101];
+        }
+        sprite_id<0x000001BE>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet24.png", [625, 101];
+        }
+        sprite_id<0x000001BF>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet24.png", [744, 101];
+        }
+        sprite_id<0x000001C0>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet24.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000001C2>
+        {
+            [64, 73, -32, -36], zin4, c32bpp | chunked, "spritesheet25.png", [30, 30];
+        }
+        sprite_id<0x000001C3>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet25.png", [129, 30];
+        }
+        sprite_id<0x000001C4>
+        {
+            [99, 50, -49, -25], zin4, c32bpp | chunked, "spritesheet25.png", [228, 30];
+        }
+        sprite_id<0x000001C5>
+        {
+            [86, 65, -43, -32], zin4, c32bpp | chunked, "spritesheet25.png", [327, 30];
+        }
+        sprite_id<0x000001C6>
+        {
+            [64, 69, -32, -34], zin4, c32bpp | chunked, "spritesheet25.png", [426, 30];
+        }
+        sprite_id<0x000001C7>
+        {
+            [84, 65, -42, -32], zin4, c32bpp | chunked, "spritesheet25.png", [525, 30];
+        }
+        sprite_id<0x000001C8>
+        {
+            [98, 50, -49, -25], zin4, c32bpp | chunked, "spritesheet25.png", [624, 30];
+        }
+        sprite_id<0x000001C9>
+        {
+            [86, 67, -43, -33], zin4, c32bpp | chunked, "spritesheet25.png", [723, 30];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x000001CA>
+        {
+            [63, 72, -31, -36], zin4, c32bpp | chunked, "spritesheet25.png", [30, 103];
+        }
+        sprite_id<0x000001CB>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet25.png", [129, 103];
+        }
+        sprite_id<0x000001CC>
+        {
+            [95, 52, -47, -26], zin4, c32bpp | chunked, "spritesheet25.png", [228, 103];
+        }
+        sprite_id<0x000001CD>
+        {
+            [84, 68, -42, -34], zin4, c32bpp | chunked, "spritesheet25.png", [327, 103];
+        }
+        sprite_id<0x000001CE>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet25.png", [426, 103];
+        }
+        sprite_id<0x000001CF>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet25.png", [525, 103];
+        }
+        sprite_id<0x000001D0>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet25.png", [624, 103];
+        }
+        sprite_id<0x000001D1>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet25.png", [723, 103];
+        }
+    }
+}
+
+// Record #529
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #530
+properties<RoadVehicles, 0x0093> // Action00
+{
+    // instance_id: 0x0093
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #531
+strings<RoadVehicles, default, 0x0093> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0093 */ "TAZ 1500 bus zahradka";
+}
+// Record #511
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001C1>
+        {
+            [119, 67, -59, -33], zin4, c32bpp | chunked, "spritesheet24.png", [982, 101];
+        }
+    }
+}
+
+// Record #532
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #533
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0093 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+
+
+
+
+
+// Record #534
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000001D2>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet26.png", [30, 30];
+        }
+        sprite_id<0x000001D3>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet26.png", [149, 30];
+        }
+        sprite_id<0x000001D4>
+        {
+            [87, 44, -43, -22], zin4, c32bpp | chunked, "spritesheet26.png", [268, 30];
+        }
+        sprite_id<0x000001D5>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet26.png", [387, 30];
+        }
+        sprite_id<0x000001D6>
+        {
+            [36, 61, -18, -30], zin4, c32bpp | chunked, "spritesheet26.png", [506, 30];
+        }
+        sprite_id<0x000001D7>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet26.png", [625, 30];
+        }
+        sprite_id<0x000001D8>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet26.png", [744, 30];
+        }
+        sprite_id<0x000001D9>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet26.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001DA>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet26.png", [30, 101];
+        }
+        sprite_id<0x000001DB>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet26.png", [149, 101];
+        }
+        sprite_id<0x000001DC>
+        {
+            [87, 43, -43, -21], zin4, c32bpp | chunked, "spritesheet26.png", [268, 101];
+        }
+        sprite_id<0x000001DD>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet26.png", [387, 101];
+        }
+        sprite_id<0x000001DE>
+        {
+            [36, 61, -18, -30], zin4, c32bpp | chunked, "spritesheet26.png", [506, 101];
+        }
+        sprite_id<0x000001DF>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet26.png", [625, 101];
+        }
+        sprite_id<0x000001E0>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet26.png", [744, 101];
+        }
+        sprite_id<0x000001E1>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet26.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000001E3>
+        {
+            [63, 72, -31, -36], zin4, c32bpp | chunked, "spritesheet27.png", [30, 30];
+        }
+        sprite_id<0x000001E4>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet27.png", [125, 30];
+        }
+        sprite_id<0x000001E5>
+        {
+            [95, 52, -47, -26], zin4, c32bpp | chunked, "spritesheet27.png", [220, 30];
+        }
+        sprite_id<0x000001E6>
+        {
+            [84, 68, -42, -34], zin4, c32bpp | chunked, "spritesheet27.png", [315, 30];
+        }
+        sprite_id<0x000001E7>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet27.png", [410, 30];
+        }
+        sprite_id<0x000001E8>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet27.png", [505, 30];
+        }
+        sprite_id<0x000001E9>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet27.png", [600, 30];
+        }
+        sprite_id<0x000001EA>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet27.png", [695, 30];
+        }
+    }
+}
+
+// Record #535
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+
+// Record #536
+properties<RoadVehicles, 0x0094> // Action00
+{
+    // instance_id: 0x0094
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #537
+strings<RoadVehicles, default, 0x0094> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0094 */ "TAZ 1500 bus";
+}
+// Record #538
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001E2>
+        {
+            [119, 67, -59, -33], zin4, c32bpp | chunked, "spritesheet26.png", [982, 101];
+        }
+    }
+}
+
+// Record #539
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #540
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0094 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+
+
+// Record #541
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000001EB>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet28.png", [30, 30];
+        }
+        sprite_id<0x000001EC>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet28.png", [149, 30];
+        }
+        sprite_id<0x000001ED>
+        {
+            [87, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet28.png", [268, 30];
+        }
+        sprite_id<0x000001EE>
+        {
+            [79, 62, -39, -31], zin4, c32bpp | chunked, "spritesheet28.png", [387, 30];
+        }
+        sprite_id<0x000001EF>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet28.png", [506, 30];
+        }
+        sprite_id<0x000001F0>
+        {
+            [79, 62, -39, -31], zin4, c32bpp | chunked, "spritesheet28.png", [625, 30];
+        }
+        sprite_id<0x000001F1>
+        {
+            [86, 50, -43, -25], zin4, c32bpp | chunked, "spritesheet28.png", [744, 30];
+        }
+        sprite_id<0x000001F2>
+        {
+            [79, 67, -39, -33], zin4, c32bpp | chunked, "spritesheet28.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001F3>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet28.png", [30, 101];
+        }
+        sprite_id<0x000001F4>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet28.png", [149, 101];
+        }
+        sprite_id<0x000001F5>
+        {
+            [87, 47, -43, -23], zin4, c32bpp | chunked, "spritesheet28.png", [268, 101];
+        }
+        sprite_id<0x000001F6>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet28.png", [387, 101];
+        }
+        sprite_id<0x000001F7>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet28.png", [506, 101];
+        }
+        sprite_id<0x000001F8>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet28.png", [625, 101];
+        }
+        sprite_id<0x000001F9>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet28.png", [744, 101];
+        }
+        sprite_id<0x000001FA>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet28.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x000001FC>
+        {
+            [70, 71, -35, -35], zin4, c32bpp | chunked, "spritesheet29.png", [30, 30];
+        }
+        sprite_id<0x000001FD>
+        {
+            [81, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet29.png", [125, 30];
+        }
+        sprite_id<0x000001FE>
+        {
+            [87, 54, -43, -27], zin4, c32bpp | chunked, "spritesheet29.png", [220, 30];
+        }
+        sprite_id<0x000001FF>
+        {
+            [82, 62, -41, -31], zin4, c32bpp | chunked, "spritesheet29.png", [315, 30];
+        }
+        sprite_id<0x00000200>
+        {
+            [70, 62, -35, -31], zin4, c32bpp | chunked, "spritesheet29.png", [410, 30];
+        }
+        sprite_id<0x00000201>
+        {
+            [81, 62, -40, -31], zin4, c32bpp | chunked, "spritesheet29.png", [505, 30];
+        }
+        sprite_id<0x00000202>
+        {
+            [86, 53, -43, -26], zin4, c32bpp | chunked, "spritesheet29.png", [600, 30];
+        }
+        sprite_id<0x00000203>
+        {
+            [82, 67, -41, -33], zin4, c32bpp | chunked, "spritesheet29.png", [695, 30];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x00000204>
+        {
+            [64, 72, -32, -36], zin4, c32bpp | chunked, "spritesheet29.png", [30, 102];
+        }
+        sprite_id<0x00000205>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet29.png", [125, 102];
+        }
+        sprite_id<0x00000206>
+        {
+            [95, 52, -47, -26], zin4, c32bpp | chunked, "spritesheet29.png", [220, 102];
+        }
+        sprite_id<0x00000207>
+        {
+            [84, 68, -42, -34], zin4, c32bpp | chunked, "spritesheet29.png", [315, 102];
+        }
+        sprite_id<0x00000208>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet29.png", [410, 102];
+        }
+        sprite_id<0x00000209>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet29.png", [505, 102];
+        }
+        sprite_id<0x0000020A>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet29.png", [600, 102];
+        }
+        sprite_id<0x0000020B>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet29.png", [695, 102];
+        }
+    }
+}
+
+// Record #542
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #543
+properties<RoadVehicles, 0x0095> // Action00
+{
+    // instance_id: 0x0095
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #544
+strings<RoadVehicles, default, 0x0095> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0095 */ "TAZ 1500 dodavka zahradka";
+}
+// Record #545
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001FB>
+        {
+            [119, 67, -59, -33], zin4, c32bpp | chunked, "spritesheet28.png", [982, 101];
+        }
+    }
+}
+
+// Record #546
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #547
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0095 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #548
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000020C>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet30.png", [30, 30];
+        }
+        sprite_id<0x0000020D>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet30.png", [149, 30];
+        }
+        sprite_id<0x0000020E>
+        {
+            [87, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet30.png", [268, 30];
+        }
+        sprite_id<0x0000020F>
+        {
+            [79, 62, -39, -31], zin4, c32bpp | chunked, "spritesheet30.png", [387, 30];
+        }
+        sprite_id<0x00000210>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet30.png", [506, 30];
+        }
+        sprite_id<0x00000211>
+        {
+            [79, 62, -39, -31], zin4, c32bpp | chunked, "spritesheet30.png", [625, 30];
+        }
+        sprite_id<0x00000212>
+        {
+            [86, 50, -43, -25], zin4, c32bpp | chunked, "spritesheet30.png", [744, 30];
+        }
+        sprite_id<0x00000213>
+        {
+            [79, 67, -39, -33], zin4, c32bpp | chunked, "spritesheet30.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000214>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet30.png", [30, 101];
+        }
+        sprite_id<0x00000215>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet30.png", [149, 101];
+        }
+        sprite_id<0x00000216>
+        {
+            [87, 47, -43, -23], zin4, c32bpp | chunked, "spritesheet30.png", [268, 101];
+        }
+        sprite_id<0x00000217>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet30.png", [387, 101];
+        }
+        sprite_id<0x00000218>
+        {
+            [36, 62, -18, -31], zin4, c32bpp | chunked, "spritesheet30.png", [506, 101];
+        }
+        sprite_id<0x00000219>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet30.png", [625, 101];
+        }
+        sprite_id<0x0000021A>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet30.png", [744, 101];
+        }
+        sprite_id<0x0000021B>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet30.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x0000021D>
+        {
+            [64, 72, -32, -36], zin4, c32bpp | chunked, "spritesheet31.png", [30, 30];
+        }
+        sprite_id<0x0000021E>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet31.png", [127, 30];
+        }
+        sprite_id<0x0000021F>
+        {
+            [97, 51, -48, -25], zin4, c32bpp | chunked, "spritesheet31.png", [224, 30];
+        }
+        sprite_id<0x00000220>
+        {
+            [84, 66, -42, -33], zin4, c32bpp | chunked, "spritesheet31.png", [321, 30];
+        }
+        sprite_id<0x00000221>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet31.png", [418, 30];
+        }
+        sprite_id<0x00000222>
+        {
+            [84, 66, -42, -33], zin4, c32bpp | chunked, "spritesheet31.png", [515, 30];
+        }
+        sprite_id<0x00000223>
+        {
+            [96, 50, -48, -25], zin4, c32bpp | chunked, "spritesheet31.png", [612, 30];
+        }
+        sprite_id<0x00000224>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet31.png", [709, 30];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x00000225>
+        {
+            [64, 72, -32, -36], zin4, c32bpp | chunked, "spritesheet31.png", [30, 102];
+        }
+        sprite_id<0x00000226>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet31.png", [127, 102];
+        }
+        sprite_id<0x00000227>
+        {
+            [95, 52, -47, -26], zin4, c32bpp | chunked, "spritesheet31.png", [224, 102];
+        }
+        sprite_id<0x00000228>
+        {
+            [84, 68, -42, -34], zin4, c32bpp | chunked, "spritesheet31.png", [321, 102];
+        }
+        sprite_id<0x00000229>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet31.png", [418, 102];
+        }
+        sprite_id<0x0000022A>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet31.png", [515, 102];
+        }
+        sprite_id<0x0000022B>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet31.png", [612, 102];
+        }
+        sprite_id<0x0000022C>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet31.png", [709, 102];
+        }
+    }
+}
+
+// Record #549
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #550
+properties<RoadVehicles, 0x0096> // Action00
+{
+    // instance_id: 0x0096
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #551
+strings<RoadVehicles, default, 0x0096> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0096 */ "TAZ 1500 dodavka zahradka bedna";
+}
+// Record #552
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000021C>
+        {
+            [119, 67, -59, -33], zin4, c32bpp | chunked, "spritesheet30.png", [982, 101];
+        }
+    }
+}
+
+// Record #553
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #554
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0096 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+
+// Record #555
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000022D>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet32.png", [30, 30];
+        }
+        sprite_id<0x0000022E>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet32.png", [149, 30];
+        }
+        sprite_id<0x0000022F>
+        {
+            [87, 45, -43, -22], zin4, c32bpp | chunked, "spritesheet32.png", [268, 30];
+        }
+        sprite_id<0x00000230>
+        {
+            [79, 60, -39, -30], zin4, c32bpp | chunked, "spritesheet32.png", [387, 30];
+        }
+        sprite_id<0x00000231>
+        {
+            [36, 61, -18, -30], zin4, c32bpp | chunked, "spritesheet32.png", [506, 30];
+        }
+        sprite_id<0x00000232>
+        {
+            [79, 59, -39, -29], zin4, c32bpp | chunked, "spritesheet32.png", [625, 30];
+        }
+        sprite_id<0x00000233>
+        {
+            [86, 50, -43, -25], zin4, c32bpp | chunked, "spritesheet32.png", [744, 30];
+        }
+        sprite_id<0x00000234>
+        {
+            [79, 67, -39, -33], zin4, c32bpp | chunked, "spritesheet32.png", [863, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000235>
+        {
+            [36, 71, -18, -35], zin4, c32bpp | chunked, "spritesheet32.png", [30, 101];
+        }
+        sprite_id<0x00000236>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet32.png", [149, 101];
+        }
+        sprite_id<0x00000237>
+        {
+            [87, 43, -43, -21], zin4, c32bpp | chunked, "spritesheet32.png", [268, 101];
+        }
+        sprite_id<0x00000238>
+        {
+            [79, 58, -39, -29], zin4, c32bpp | chunked, "spritesheet32.png", [387, 101];
+        }
+        sprite_id<0x00000239>
+        {
+            [36, 61, -18, -30], zin4, c32bpp | chunked, "spritesheet32.png", [506, 101];
+        }
+        sprite_id<0x0000023A>
+        {
+            [79, 57, -39, -28], zin4, c32bpp | chunked, "spritesheet32.png", [625, 101];
+        }
+        sprite_id<0x0000023B>
+        {
+            [86, 49, -43, -24], zin4, c32bpp | chunked, "spritesheet32.png", [744, 101];
+        }
+        sprite_id<0x0000023C>
+        {
+            [79, 66, -39, -33], zin4, c32bpp | chunked, "spritesheet32.png", [863, 101];
+        }
+    }
+    sprite_set // 0x0002  // **ZASTÁVKA** (nově přidané sprity)
+    {
+        sprite_id<0x0000023E>
+        {
+            [70, 71, -35, -35], zin4, c32bpp | chunked, "spritesheet33.png", [30, 30];
+        }
+        sprite_id<0x0000023F>
+        {
+            [81, 63, -40, -31], zin4, c32bpp | chunked, "spritesheet33.png", [125, 30];
+        }
+        sprite_id<0x00000240>
+        {
+            [87, 54, -43, -27], zin4, c32bpp | chunked, "spritesheet33.png", [220, 30];
+        }
+        sprite_id<0x00000241>
+        {
+            [82, 60, -41, -30], zin4, c32bpp | chunked, "spritesheet33.png", [315, 30];
+        }
+        sprite_id<0x00000242>
+        {
+            [70, 61, -35, -30], zin4, c32bpp | chunked, "spritesheet33.png", [410, 30];
+        }
+        sprite_id<0x00000243>
+        {
+            [81, 59, -40, -29], zin4, c32bpp | chunked, "spritesheet33.png", [505, 30];
+        }
+        sprite_id<0x00000244>
+        {
+            [86, 53, -43, -26], zin4, c32bpp | chunked, "spritesheet33.png", [600, 30];
+        }
+        sprite_id<0x00000245>
+        {
+            [82, 67, -41, -33], zin4, c32bpp | chunked, "spritesheet33.png", [695, 30];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000246>
+        {
+            [64, 72, -32, -36], zin4, c32bpp | chunked, "spritesheet33.png", [30, 102];
+        }
+        sprite_id<0x00000247>
+        {
+            [84, 60, -42, -30], zin4, c32bpp | chunked, "spritesheet33.png", [125, 102];
+        }
+        sprite_id<0x00000248>
+        {
+            [95, 52, -47, -26], zin4, c32bpp | chunked, "spritesheet33.png", [220, 102];
+        }
+        sprite_id<0x00000249>
+        {
+            [84, 68, -42, -34], zin4, c32bpp | chunked, "spritesheet33.png", [315, 102];
+        }
+        sprite_id<0x0000024A>
+        {
+            [64, 70, -32, -35], zin4, c32bpp | chunked, "spritesheet33.png", [410, 102];
+        }
+        sprite_id<0x0000024B>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet33.png", [505, 102];
+        }
+        sprite_id<0x0000024C>
+        {
+            [94, 51, -47, -25], zin4, c32bpp | chunked, "spritesheet33.png", [600, 102];
+        }
+        sprite_id<0x0000024D>
+        {
+            [84, 67, -42, -33], zin4, c32bpp | chunked, "spritesheet33.png", [695, 102];
+        }
+    }
+}
+
+// Record #556
+sprite_groups<RoadVehicles, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0003 0x0002 ];
+}
+
+// Record #557
+properties<RoadVehicles, 0x0097> // Action00
+{
+    // instance_id: 0x0097
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;        long_introduction_date: date(1951/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 0xFF;        non_refittable_cargo_classes: 0x0000;
+        refit_cargo_types: 0x00000000;
+        always_refittable_cargos: [ 0x00 0x01 0x04 0x05 0x06 0x07 0x08 0x0B 0x0C 0x0E 0x0F 0x10 0x12 0x13 0x14 0x15 0x16 0x17 0x18 0x19 0x1A 0x1B 0x1C 0x1D 0x1E 0x1F 0x25 0x27 0x2A 0x2E 0x2F 0x31 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x3B 0x3D 0x3E 0x3F 0x40 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x4A 0x4B 0x4C 0x4D 0x4E 0x4F 0x50 0x51 0x52 0x53 0x54 0x55 0x56 0x57 0x58 0x59 0x5A 0x5B 0x5C 0x5D 0x5F ];
+        refit_cargo_types: 0x00000000;
+        never_refittable_cargos: [ ];
+        refit_cargo_types: 0x00000000;        cost_factor: 0x05;
+        running_cost_factor: 0x05;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x8C;
+        miscellaneous_flags: 0x40;
+        refit_cost: 0x00;
+        running_cost_base: 0x00000000;
+        power_10_hp: 0x09;
+        weight_quarter_tons: 0x04;
+        cargo_capacity: 0x09;
+        sound_effect_type: 0x17;
+    }
+}
+// Record #558
+strings<RoadVehicles, default, 0x0097> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0097 */ "TAZ 1500 dodavka ";
+}
+// Record #559
+sprite_sets<RoadVehicles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000023D>
+        {
+            [119, 67, -59, -33], zin4, c32bpp | chunked, "spritesheet32.png", [982, 101];
+        }
+    }
+}
+
+// Record #560
+sprite_groups<RoadVehicles, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #561
+feature_graphics<RoadVehicles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0097 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0xFF: 0x00FE;
+    };
+}
+
+

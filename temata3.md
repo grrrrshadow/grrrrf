@@ -494,3 +494,88 @@ A tohle ponaučení si nechávám, bylo dobré: **postavit test, který
 odděluje dvě možnosti, místo opakovaného ladění té, kterou zrovna
 podezřívám.** Právě ten `shuttletest.grf` s jiným jménem nakonec
 odhalil, že se kopíruje jinam.
+
+---
+
+## Zarovnání spritů autíček (2026-09-12)
+
+### Jak se pozná, kde má být kotva — bez hádání
+
+Sprite se ve hře kreslí tak, že bod `(−xoffs, −yoffs)` uvnitř obrázku
+padne na polohu vozidla na mapě. Takže „zarovnat" znamená: najít
+v obrázku bod, který je pro všech 8 směrů **týž bod na autě**.
+Jde to změřit, ne odhadovat:
+
+1. **Zrcadlové dvojice.** Při otáčení kolem svislé osy je pohled pod
+   azimutem −φ přesně vodorovné zrcadlo pohledu +φ, a osou toho zrcadlení
+   je právě hledaná kotva. Prakticky: směr `k` a směr `8−k` jsou zrcadla
+   (NE↔NW, E↔W, SE↔SW); směry N a S jsou zrcadlem samy sobě.
+   Registrace (překlopit a posunout na největší IoU) dá **přesně**
+   `kotva_u(k) + kotva_u(8−k)` a `kotva_v(k) − kotva_v(8−k)`.
+   - Pozor: při hledání posunu vyžadovat slušný překryv, jinak vyhraje
+     degenerovaná shoda jednoho sloupce s IoU = 1,0.
+2. **Kola v bočním pohledu.** V bočním pohledu (směry E, W) jsou obě
+   kola bližší strany stejně vysoko a symetricky kolem středu rozvoru.
+   Dvě prohlubně ve spodní hraně siluety → střed mezi nimi je
+   vodorovná poloha středu rozvoru, jejich rozestup je **rozvor v pixelech**.
+3. **Dopočet zbylých směrů.** `pocatek_u(k) − pocatek_u(8−k) = 0,7071·(F − R)`,
+   kde F a R jsou dosah dopředu/dozadu z bočních pohledů. Spolu se součtem
+   z bodu 1 je tím rozdělení jednoznačné.
+4. **Svisle**: promítnutí země je 2:1, takže `v = (Px·cos α + Py·sin α)·0,5`.
+   Spodní hrana siluety je dotyk nejbližšího kola, čili
+   `pocatek_v(k) = dno(k) − 0,5·(a·|cos α| + b·|sin α|)`,
+   a = půl rozvoru, b = půl rozchodu (v px).
+
+**Kontrola, která to celé potvrdí:** nakreslit přes sprite promítnutý
+obdélník rozvor × rozchod se středem v dopočteném počátku. Musí sednout
+na kola ve všech osmi směrech. U VW T1 i u Škody sedl.
+
+### Co se naměřilo
+
+| | VW T1 (0x0080) | Škoda 1203 (0x0082) |
+|---|---|---|
+| offsety | ručně doladěné | `xoffs = −w/2`, `yoffs = −h/2` — pouhý střed obdélníku |
+| svisle proti tuhému modelu | ±5 px | ±6 px houpání |
+| vodorovně | ±3 px u N/E/S/W, ±11 px u diagonál | až 25 px mimo |
+| rozvor v pixelech | 36,0 | 42,5 |
+
+- Škoda má **otevřené dveře a zahrádku**, a ty tahají opsaný obdélník
+  na stranu. Proto je středování obdélníku u ní tak špatné — u hladkého
+  VW T1 by bylo skoro v pořádku.
+- Škoda je vyrenderovaná **o 18 % větší** než VW T1 (stejný skutečný
+  rozvor 2,40 m, ale 42,5 px proti 36,0 px). Nezávisí to na offsetech,
+  je to věc renderu.
+- Stejné `−w/2, −h/2` má i většina ostatních vozidel v tom souboru
+  (`[67, 71, −33, −35]` se opakuje) — nezarovnaná je celá sada, ne jen Škoda.
+
+### Konvence VW T1 (co se přenáší na další auta)
+
+Poloha kotvy proti středu rozvoru na vozovce, v pixelech, směr po směru:
+
+| dir | vodorovně | svisle |
+|---|---|---|
+| N | −2,5 | −23,0 |
+| NE | +17,2 | −28,0 |
+| E | +7,5 | −15,9 |
+| SE | −7,8 | −22,0 |
+| S | −7,5 | −15,0 |
+| SW | −6,2 | −20,0 |
+| W | −13,5 | −15,9 |
+| NW | −23,2 | −30,0 |
+
+**Nepřepisovat to modelem.** Zkoušel jsem to proložit tuhým 3D bodem
+(kotva = pevné místo na autě) a nejde to: čtyři sprity přímého
+silničního směru (NE, SE, SW, NW) mají navíc posun ±11 px, který závisí
+na **ose silnice**, ne na směru jízdy. To odpovídá tomu, že se ručně
+srovnávala kola na bílou čáru silnice — a je to posun v prostoru
+vozovky, ne v prostoru auta. Tuhý model to reprezentovat neumí.
+Takže: přenášet tabulku **přímo, směr po směru, v absolutních pixelech**
+(vozovka je pro všechna auta stejně velká, nemá se škálovat).
+
+### Pravidlo pro příští rendery
+
+Neořezávat a nedopočítávat `−w/2, −h/2`. Offsety brát z rámu renderu:
+`xoffs = levý_okraj_výřezu − šířka_rámu/2`, `yoffs = horní_okraj − výška_rámu/2`.
+Cíl kamery se promítá pořád do stejného pixelu rámu, takže obě osy
+sedí automaticky. Doladění na bílou čáru je pak jedna společná dvojice
+čísel pro celé auto, ne osm.
