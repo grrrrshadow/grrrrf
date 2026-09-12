@@ -22,7 +22,7 @@ Postup a naměřená čísla jsou v `temata3.md`, oddíl „Zarovnání spritů 
 | W | zatáčení | −47 | −29 | −27 | −30 |
 | NW | přímý směr | −41 | −16 | −33 | −23 |
 
-## Složení GRF
+## Složení GRF — správná cesta: rozebrat hotové GRF a přepsat offsety v něm
 
 ```bash
 cd stavba                      # obsahuje sprites/ se spritesheety
@@ -49,3 +49,23 @@ Rozebrat nový i původní GRF a porovnat. Proti `VWT1-S1203modradodavka.grf`
 z release se liší **jen**: popis (novější text hráče), rozšířená
 překladová tabulka nákladů (taky hráčova novější práce, včetně `MARI`),
 `speed_2_kmh` a osm offsetů Škody. Grf_id zůstává `4D 41 58 08`.
+
+## Jak se to nakonec udělalo
+
+Hráč to řekl správně: **rozbalit hotové GRF a zarovnání přepsat do něj.**
+Ne skládat z `.yagl` v release — ten je rozpracovaný (má navíc
+překladovou tabulku nákladů, jiný popis a neplatné `speed_kmh`), takže
+by se do GRF dostaly i věci, o které nikdo nežádal.
+
+```bash
+mkdir z && cp VWT1-S1203modradodavka.grf z/VWT1.grf && cd z
+yagl -d VWT1.grf                 # vznikne sprites/VWT1.yagl + jeden velky spritesheet
+python3 patch2.py                # prepise 8 offsetu Skody
+rm VWT1.grf && yagl -e VWT1.grf sprites
+mv VWT1.grf VWT1-S1203modradodavka.grf
+```
+
+**Kontrola:** nový soubor má stejnou velikost jako původní a liší se
+přesně v **15 bajtech**, všechny uvnitř osmi offsetů Škody. Zpětné
+rozebrání ukáže jen těch osm řádků. Nic jiného se nezměnilo — rychlost,
+náklady, popis ani grf_id.
