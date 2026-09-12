@@ -28,8 +28,8 @@ cd shuttle
 | záznam | co dělá |
 |---|---|
 | Action08 | `grf_id: "GRSH"`, GRF8, jméno a popis |
-| Action01 | jedna sada, 8 spritů, `zin4` 32bpp |
-| Action02 | základní skupina spritů |
+| Action01 | **tři sady po 8 spritech**, `zin4` 32bpp |
+| Action02 | tři základní skupiny + **přepínač na `0xE2`** |
 | Action00 | vlastnosti letadla, instance `0x0029` |
 | Action04 | jméno „Shuttle" |
 | Action03 | napojení grafiky na letadlo |
@@ -50,11 +50,21 @@ if (!e->info.climates.Test(_settings_game.game_creation.landscape)) continue;
 
 Správně se to píše výčtem: `Temperate | Arctic | Tropical | Toyland`.
 
+## Fáze letu
+
+Tři sady spritů, přepíná se podle `0xE2`:
+
+```
+0x0F  = 15  CLIMBING        -> stoupani, cumak nahoru  (HILL_TILT -12)
+0x15  = 21  FLIGHT_DESCENT  -> klesani,  cumak dolu    (HILL_TILT +12)
+ostatni                     -> rovne                   (HILL_TILT   0)
+```
+
+Rovná sada slouží i pro vodorovný let (16, 18) — letadlo v něm opravdu
+rovné je — a pro všechno na zemi.
+
 ## Co zatím NENÍ hotové
 
-- **Žádné rozlišení fáze letu.** Sprity jsou pořád stejné, ať letadlo
-  taxíruje, stoupá nebo klesá. Na to je proměnná `0xE2` — popsáno
-  v `../letadla-stavy.md`.
 - **Žádný stín ani vrtule.**
 - `grf_id: "GRSH"` jsem si vymyslel. Na ostrou verzi si vyber vlastní,
   ať se to nepere s cizím GRF.
