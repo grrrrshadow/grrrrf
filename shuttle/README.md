@@ -34,7 +34,7 @@ cd shuttle
 | Action04 | jméno „Shuttle" |
 | Action03 | napojení grafiky na letadlo |
 
-Vlastnosti: 480 mph, 80 cestujících, 20 pošty, **od roku 2042**,
+Vlastnosti: 320 mph, 80 cestujících, 20 pošty, **od roku 2042**,
 neomezený dolet, všechna klimata.
 
 ## !!! climate_availability !!!
@@ -68,6 +68,12 @@ rovné je — a pro všechno na zemi.
 - **Žádný stín ani vrtule.**
 - `grf_id: "GRSH"` jsem si vymyslel. Na ostrou verzi si vyber vlastní,
   ať se to nepere s cizím GRF.
-- **Ve hře zatím jen načtené.** Hráč potvrdil, že GRF je v seznamu
-  grafik zeleně a bez chyby. Jestli je letadlo v depu vidět a jak
-  vypadá za letu, se teprve ukáže.
+- **Ve hře ověřeno (2026-09-12).** Letadlo je v depu, zvedá čumák při
+  vzletu ve vzduchu a má ho lehce dolů při klesání na přistání.
+
+## Poznámka k rychlosti
+
+`speed_8_mph: 0x28` je 320 mph. Původně tu bylo `0x3C` (480 mph) a
+snížení vzniklo z chybné diagnózy — myslel jsem si, že fáze stoupání
+při vyšší rychlosti probleskne příliš rychle. **Není to pravda**, fáze
+jsou vidět i při 480. Vrátit se dá jedním řádkem.

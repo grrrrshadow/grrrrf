@@ -4,16 +4,13 @@ grf_format: Container2;
 // ====================================================================
 // shuttletest.grf  -- DIAGNOSTICKY BUILD, ne na hrani
 // ====================================================================
-// Prepina se podle 0xE2, po vzoru CZTR, ktery zvedne cumak uz na konci
-// drahy a ve vzduchu pak vic:
+// Prepinac dava cumak NAHORU vsem pozemnim stavum 0-11 (hangar,
+// pojizdeni, terminaly). Slouzilo to k overeni, ze se prepinac na 0xE2
+// vubec vyhodnocuje.
 //
-//   0x0C..0x0D = 12-13  rozjezd po draze   -> cumak lehce nahoru (-5)
-//   0x0F       = 15     CLIMBING           -> cumak nahoru      (-12)
-//   0x15       = 21     FLIGHT_DESCENT     -> cumak dolu        (+12)
-//   vse ostatni                            -> rovne              (0)
-//
-// Proc i 12-13: stav 15 sam o sobe u rychleho letadla probleskne
-// za zlomek vteriny a neni ho videt. Rozjezd po draze trva dlouho.
+// OVERENO VE HRE: zvedá cumak pri pojizdeni u terminalu, tedy prepinac
+// funguje. (Prvni pokus se neprojevil proto, ze se GRF kopirovalo do
+// adresare jineho, starsiho OpenTTD -- ne kvuli obsahu souboru.)
 // ====================================================================
 
 grf // Action08

@@ -12,8 +12,12 @@ grf_format: Container2;
 //   0x15       = 21     FLIGHT_DESCENT     -> cumak dolu        (+12)
 //   vse ostatni                            -> rovne              (0)
 //
-// Proc i 12-13: stav 15 sam o sobe u rychleho letadla probleskne
-// za zlomek vteriny a neni ho videt. Rozjezd po draze trva dlouho.
+// Vsechny ctyri faze ve hre overene. Stav 15 i 21 jsou dost dlouhe na
+// to, aby byly videt -- drivejsi poznamka, ze 15 "probleskne", byla
+// omyl z chybne diagnozy a neplati.
+//
+// Rychlost 0x28 (320 mph) je take pozustatek te diagnozy. Puvodne bylo
+// 0x3C (480 mph) a nic tomu nevadilo; klidne vratit.
 // ====================================================================
 
 grf // Action08
