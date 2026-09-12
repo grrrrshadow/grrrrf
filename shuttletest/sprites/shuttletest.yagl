@@ -1,0 +1,250 @@
+yagl_version: "";
+grf_format: Container2;
+
+// ====================================================================
+// shuttletest.grf  -- DIAGNOSTICKY BUILD, ne na hrani
+// ====================================================================
+// Prepina se podle 0xE2, po vzoru CZTR, ktery zvedne cumak uz na konci
+// drahy a ve vzduchu pak vic:
+//
+//   0x0C..0x0D = 12-13  rozjezd po draze   -> cumak lehce nahoru (-5)
+//   0x0F       = 15     CLIMBING           -> cumak nahoru      (-12)
+//   0x15       = 21     FLIGHT_DESCENT     -> cumak dolu        (+12)
+//   vse ostatni                            -> rovne              (0)
+//
+// Proc i 12-13: stav 15 sam o sobe u rychleho letadla probleskne
+// za zlomek vteriny a neni ho videt. Rozjezd po draze trva dlouho.
+// ====================================================================
+
+grf // Action08
+{
+    grf_id: "GRST";
+    version: GRF8;
+    name: "shuttletest";
+    description: "{orange}Shuttle{new-line}{black}Zkusebni letadlo, ctyri faze letu.{new-line}Licence: GPL v2";
+}
+
+sprite_sets<Aircraft, 0x0000> // Action01
+{
+    sprite_set // 0x0000 - rovne (0 stupnu)
+    {
+        sprite_id<0x00000001>   // N
+        {
+            [70, 114, -35, -57], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [4, 4];
+        }
+        sprite_id<0x00000002>   // NE
+        {
+            [173, 101, -86, -50], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [208, 4];
+        }
+        sprite_id<0x00000003>   // E
+        {
+            [200, 59, -100, -29], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [412, 4];
+        }
+        sprite_id<0x00000004>   // SE
+        {
+            [173, 101, -86, -50], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [616, 4];
+        }
+        sprite_id<0x00000005>   // S
+        {
+            [70, 117, -35, -58], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [820, 4];
+        }
+        sprite_id<0x00000006>   // SW
+        {
+            [173, 102, -86, -51], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1024, 4];
+        }
+        sprite_id<0x00000007>   // W
+        {
+            [200, 59, -100, -29], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1228, 4];
+        }
+        sprite_id<0x00000008>   // NW
+        {
+            [174, 101, -87, -50], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1432, 4];
+        }
+    }
+    sprite_set // 0x0001 - rozjezd (-5, cumak lehce nahoru)
+    {
+        sprite_id<0x00000009>   // N
+        {
+            [70, 127, -35, -63], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [4, 155];
+        }
+        sprite_id<0x0000000A>   // NE
+        {
+            [173, 114, -86, -57], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [208, 155];
+        }
+        sprite_id<0x0000000B>   // E
+        {
+            [200, 62, -100, -31], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [412, 155];
+        }
+        sprite_id<0x0000000C>   // SE
+        {
+            [173, 91, -86, -45], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [616, 155];
+        }
+        sprite_id<0x0000000D>   // S
+        {
+            [70, 102, -35, -51], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [820, 155];
+        }
+        sprite_id<0x0000000E>   // SW
+        {
+            [173, 92, -86, -46], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1024, 155];
+        }
+        sprite_id<0x0000000F>   // W
+        {
+            [200, 62, -100, -31], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1228, 155];
+        }
+        sprite_id<0x00000010>   // NW
+        {
+            [173, 114, -86, -57], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1432, 155];
+        }
+    }
+    sprite_set // 0x0002 - stoupani (-12, cumak nahoru)
+    {
+        sprite_id<0x00000011>   // N
+        {
+            [70, 144, -35, -72], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [4, 306];
+        }
+        sprite_id<0x00000012>   // NE
+        {
+            [171, 130, -85, -65], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [208, 306];
+        }
+        sprite_id<0x00000013>   // E
+        {
+            [199, 76, -99, -38], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [412, 306];
+        }
+        sprite_id<0x00000014>   // SE
+        {
+            [171, 76, -85, -38], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [616, 306];
+        }
+        sprite_id<0x00000015>   // S
+        {
+            [70, 85, -35, -42], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [820, 306];
+        }
+        sprite_id<0x00000016>   // SW
+        {
+            [171, 76, -85, -38], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1024, 306];
+        }
+        sprite_id<0x00000017>   // W
+        {
+            [200, 76, -100, -38], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1228, 306];
+        }
+        sprite_id<0x00000018>   // NW
+        {
+            [171, 131, -85, -65], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1432, 306];
+        }
+    }
+    sprite_set // 0x0003 - klesani (+12, cumak dolu)
+    {
+        sprite_id<0x00000019>   // N
+        {
+            [70, 82, -35, -41], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [4, 457];
+        }
+        sprite_id<0x0000001A>   // NE
+        {
+            [171, 70, -85, -35], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [208, 457];
+        }
+        sprite_id<0x0000001B>   // E
+        {
+            [196, 82, -98, -41], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [412, 457];
+        }
+        sprite_id<0x0000001C>   // SE
+        {
+            [172, 131, -86, -65], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [616, 457];
+        }
+        sprite_id<0x0000001D>   // S
+        {
+            [70, 147, -35, -73], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [820, 457];
+        }
+        sprite_id<0x0000001E>   // SW
+        {
+            [170, 131, -85, -65], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1024, 457];
+        }
+        sprite_id<0x0000001F>   // W
+        {
+            [198, 82, -99, -41], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1228, 457];
+        }
+        sprite_id<0x00000020>   // NW
+        {
+            [172, 70, -86, -35], zin4, c32bpp | chunked, "shuttletest-32bpp-zin4-0.png", [1432, 457];
+        }
+    }
+}
+
+sprite_groups<Aircraft, 0x00F0> // Action02 basic - rovne
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+
+sprite_groups<Aircraft, 0x00F1> // Action02 basic - rozjezd
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+
+sprite_groups<Aircraft, 0x00F2> // Action02 basic - stoupani
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+
+sprite_groups<Aircraft, 0x00F3> // Action02 basic - klesani
+{
+    primary_spritesets: [ 0x0003 ];
+    secondary_spritesets: [ 0x0003 ];
+}
+
+switch<Aircraft, 0x00FF, PrimaryDWord> // Action02 variable - faze letu
+{
+    expression:
+    {
+        value1 = variable[0xE2] & 0x000000FF;
+    };
+    ranges:
+    {
+        // DIAGNOSTIKA: vsechny pozemni stavy dostanou cumak NAHORU.
+        // Stani u terminalu a pojizdeni trva dlouho a je to videt hned.
+        // Kdyz stojici letadlo NEMA cumak nahoru, prepinac se vubec
+        // nevyhodnocuje a chyba je jinde nez v cislech stavu.
+        0x00000000..0x0000000B: 0x00F2;   // hangar, pojizdeni, terminaly
+    };
+    default: 0x00F0;                      // let = rovne
+}
+
+properties<Aircraft, 0x0029> // Action00
+{
+    // instance_id: 0x0029
+    {
+        sprite_id: 0xFF;
+        is_helicopter: false;
+        is_large: false;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        long_introduction_date: date(2042/1/1);
+        model_life_years: 0xFF;
+        vehicle_life_years: 30;
+        reliability_decay_speed: 20;
+        cost_factor: 0x20;
+        running_cost_factor: 0x50;
+        speed_8_mph: 0x28;
+        acceleration: 0x20;
+        passenger_capacity: 0x0050;
+        mail_capacity: 0x14;
+        loading_speed: 0x0A;
+        sound_effect_type: 0x3D;
+        miscellaneous_flags: 0x02;
+        aircraft_range: 0x0000;
+    }
+}
+
+strings<Aircraft, default, 0x0029> // Action04
+{
+    /* 0x0029 */ "ShuttleTEST";
+}
+
+feature_graphics<Aircraft> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0029 ];
+    cargo_types:
+    {
+    };
+}

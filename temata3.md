@@ -463,3 +463,28 @@ ta fáze trvá dlouho a je vidět. A srazit rychlost.
 **Ponaučení: „neprojevuje se to" nemusí znamenat rozbitou strukturu.**
 Než začnu přepisovat, ověřit, jestli se ten stav vůbec na dost dlouho
 nastane.
+
+### Co je u přepínače 0xE2 prověřené a co ne (2026-09-12)
+
+Čtyřfázová verze se taky neprojevila. **Prověřeno a v pořádku:**
+
+| co | jak ověřeno |
+|---|---|
+| Action01 | `01 03 04 FF 08 00` = 4 sady po 8 spritech, tvar jako CZTR |
+| Action02 basic | `02 03 F0 01 01 00 00 00 00`, čtyři skupiny, každá na svou sadu |
+| Action02 switch | bajt po bajtu stejný tvar jako fungující CZTR |
+| Action03 | `03 03 01 29 00 FF 00`, ukazuje na přepínač |
+| proměnná 0xE2 | v `newgrf_engine.cpp` se k letadlům dostane, dřívější switch ji pustí (`case 0x62: break`) |
+| kešování spritu | `vehicle_base.h:1254` překresluje jen při změně směru, **ale** `is_viewport_candidate` to u viditelného letadla obchází |
+| čísla stavů | 15 = CLIMBING, 21 = FLIGHT_DESCENT, ověřeno z výčtu |
+
+**Takže chyba je někde jinde, než jsem hledal.** Místo dalšího hádání
+jsem postavil `shuttletest.grf`: přepínač dává čumák nahoru **všem
+pozemním stavům (0-11)**. Stojící a pojíždějící letadlo je na obrazovce
+dlouho — když to nebude vidět, přepínač se nevyhodnocuje vůbec a chyba
+není v číslech stavů. Když to vidět bude, čísla stavů jsou správně a
+problém je v tom, že 15 a 21 netrvají dost dlouho.
+
+**Ponaučení: dřív si postavit test, který odděluje dvě možnosti, než
+opakovaně ladit tu, kterou zrovna podezřívám.** Stálo to hráče dvě kola
+zkoušení nazdařbůh.
