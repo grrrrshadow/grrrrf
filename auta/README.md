@@ -132,3 +132,66 @@ Konkrétní čísla pro všech 18 aut jsou v `offsety-vse.md`.
 `vse.py` (změří počátek u všech aut), `vse2.py` (spočte nové offsety),
 `patch3.py` (přepíše je v rozbaleném GRF), `overka.py` (obrázek na kontrolu:
 všechna auta vedle sebe s kotvou na společném křížku).
+
+
+---
+
+# Třetí pokus: ono je sad po osmi spritech 58, ne 18
+
+**Tohle je ta chyba, kvůli které hráč neviděl žádnou změnu.**
+
+Každé vozidlo nemá jednu sadu 8 spritů, ale **dvě až čtyři** — podle
+stavu naložení. Action02 to rozděluje:
+
+```
+sprite_groups<RoadVehicles, 0xFF>   // Action02 basic
+{
+    primary_spritesets:   [ 0x0000 0x0001 ];   // prazdne
+    secondary_spritesets: [ 0x0003 0x0002 ];   // nalozene
+}
+```
+
+Celkem je v GRF **58 sad po 8 spritech** na 18 vozidel. Můj parser bral
+„poslední sadu o osmi spritech před jménem vozidla", takže jsem
+přepisoval **jednu sadu z každého vozidla — a byla to ta naložená**.
+Hráč zkoušel nenaložená auta, čili sady `0x0000`, kterých jsem se
+vůbec nedotkl.
+
+**Ponaučení:** než něco přepíšu, spočítat, kolik těch věcí vlastně je,
+a ověřit, že sedí počet. 58 ≠ 18 by mě zastavilo hned.
+
+## Kontrola, že to teď sedí
+
+Vzdálenost linky kol od kotvy v bočním pohledu (= jak daleko je auto
+od krajnice), základní nenaložená sada:
+
+| | rozptyl mezi auty |
+|---|---|
+| před | 19–27 px, čili **8 px** rozdíl |
+| po | 26–27 px, čili **1 px** |
+
+A ve všech osmi směrech:
+
+| dir | před | po |
+|---|---|---|
+| N | 2 px | 3 px |
+| NE | 11 px | 3 px |
+| E | 8 px | 1 px |
+| SE | 8 px | 3 px |
+| S | 13 px | 2 px |
+| SW | 10 px | 2 px |
+| W | 6 px | 2 px |
+| NW | 8 px | 2 px |
+
+Zbylé 1–3 px jsou rozdílné rozchody kol (VW T1 cztrsize je menší, jeho
+kola jsou blíž k ose) a zaokrouhlení na celý pixel.
+
+Druhá kontrola: sady téhož vozidla mají podvozek shodný, takže po
+zarovnání musí sednout na sebe. Zbytkový posun mezi sadami vyšel
+**(0, 0) u všech 18 vozidel** (`kontrola58.py`).
+
+## Skripty
+
+`sady.py` (najde všech 58 sad), `mereni58.py` (změří je), `nove58.py`
+(spočte nové offsety), `patch58.py` (přepíše), `kontrola58.py` a
+`krajnice.py` (kontroly), `overka58.py` (obrázek).
