@@ -432,3 +432,34 @@ tam je klopení nejlíp vidět) a při `-12` jsou trysky dole a červený
 čumák nahoře. U nového modelu se to musí ověřit znovu, ne odvodit.
 
 Sady leží v `glb/render-test/vzlet/` a `glb/render-test/pristani/`.
+
+### Když se přepínač 0xE2 „neprojeví" (2026-09-12)
+
+První pokus se třemi sadami (rovně / stoupání 15 / klesání 21) se ve hře
+neprojevil vůbec — čumák pořád rovně. **Prošel jsem to až na bajty
+a GRF bylo správně:**
+
+```
+nase:  02 03 FF 89 E2 00 FF 00 00 00 02 F1 00 0F.. 0F.. F2 00 15.. 15.. F0 00
+CZTR:  02 03 FA 89 E2 00 FF 00 00 00 03 FA 00 0C.. 0D.. F8 00 0F.. 0F.. F9 00 10.. 15.. FA 00
+```
+
+Stejný tvar. Action03 taky (`03 03 01 29 00 FF 00`). A proměnná je
+v `newgrf_engine.cpp` u letadel dostupná — dřívější `switch` ji pustí
+dál (`case 0x62: break; // vehicle specific, see below`).
+
+**Co z toho plyne:** kdyby se řetěz nerozřešil, hra by spadla na původní
+TTD grafiku a raketoplán by zmizel. On se zobrazoval. Takže přepínač
+běžel a vracel výchozí větev — tedy hra prostě **nebyla ve stavu 15
+ani 21** v okamžiku, kdy se hráč díval.
+
+Nejpravděpodobnější důvod: **stav 15 u rychlého letadla probleskne za
+zlomek vteřiny.** Měli jsme 480 mph.
+
+Řešení převzaté z CZTR (hráč: *„na konci dráhy zvedne čumak jen trošku
+a pak ve vzduchu víc"*): přidat sadu i pro **12-13, rozjezd po dráze** —
+ta fáze trvá dlouho a je vidět. A srazit rychlost.
+
+**Ponaučení: „neprojevuje se to" nemusí znamenat rozbitou strukturu.**
+Než začnu přepisovat, ověřit, jestli se ten stav vůbec na dost dlouho
+nastane.
