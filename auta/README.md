@@ -21,3 +21,31 @@ Postup a naměřená čísla jsou v `temata3.md`, oddíl „Zarovnání spritů 
 | SW | přímý směr | −44 | −35 | −33 | −31 |
 | W | zatáčení | −47 | −29 | −27 | −30 |
 | NW | přímý směr | −41 | −16 | −33 | −23 |
+
+## Složení GRF
+
+```bash
+cd stavba                      # obsahuje sprites/ se spritesheety
+cp VWT1-zarovnano.yagl sprites/VWT1.yagl
+sed -i '1s/.*/yagl_version: "";/' sprites/VWT1.yagl   # nase binarka hlasi prazdnou verzi
+yagl -e VWT1.grf sprites
+mv VWT1.grf VWT1-S1203modradodavka.grf                # jmeno jako mel puvodni soubor
+```
+
+### Na co jsem narazil
+
+- **`speed_kmh: 101;` u VW T1 není vlastnost, kterou yagl zná.** Není
+  ani v naší vendorované kopii, ani v upstreamu. Soubor se s ní nesloží
+  vůbec. Silnice mají jen `speed_2_kmh` (property 0x08) a podle
+  `newgrf_act0_roadvehs.cpp:47` je **1 jednotka = 0,5 km/h**. Takže
+  101 km/h = `speed_2_kmh: 202`. To jsem tam dal; v GRF, který byl
+  v release, bylo `0x8C` = 70 km/h.
+- Varování „non-background pixels in its border" jsou jen varování,
+  na složení nemají vliv.
+
+### Kontrola hotového GRF
+
+Rozebrat nový i původní GRF a porovnat. Proti `VWT1-S1203modradodavka.grf`
+z release se liší **jen**: popis (novější text hráče), rozšířená
+překladová tabulka nákladů (taky hráčova novější práce, včetně `MARI`),
+`speed_2_kmh` a osm offsetů Škody. Grf_id zůstává `4D 41 58 08`.

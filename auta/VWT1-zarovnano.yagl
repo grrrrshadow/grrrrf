@@ -880,7 +880,7 @@ properties<RoadVehicles, 0x0080> // Action00
         refit_cargo_types: 0x00000000;        cost_factor: 0x05;
         running_cost_factor: 0x05;
         sprite_id: 0xFF;
-        speed_kmh: 101;
+        speed_2_kmh: 202;   // 202 * 0,5 km/h = 101 km/h
      //  # speed_2_kmh: 0x8C;
         miscellaneous_flags: 0x40;
         refit_cost: 0x00;
