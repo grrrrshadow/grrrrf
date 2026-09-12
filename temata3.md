@@ -359,3 +359,54 @@ vlastnosti přepisuje za běhu — proto mu `null` nevadí.
 
 **Zelené GRF bez chybové hlášky neznamená, že je vozidlo vidět.**
 Načtení a dostupnost jsou dvě různé věci.
+
+## Fáze letu se fotí zvlášť — CZTR planeset (2026-09-12)
+
+Rozebráno z `CZTR_Plane_set.grf` (58 MB, dekódování 19 s).
+
+**Osm spritů = osm SMĚRŮ jedné fáze. Ne fáze.** CZTR má **398 sad po
+8 spritech**. Každé letadlo má několik sad a přepíná mezi nimi podle
+proměnné `0xE2`. Typický přepínač u nich vypadá takhle:
+
+```
+value1 = variable[0xE2] & 0x000000FF;
+ranges:
+    0x0C..0x0D: 0x00FA    // 12-13 = rozjezd po draze -> sada "na zemi"
+    0x0F:       0x00F8    // 15 = CLIMBING            -> sada "stoupani"
+    0x10..0x15: 0x00F9    // 16-21 = let a klesani    -> sada "let"
+default:        0x00FA
+```
+
+Takže tři sady po osmi spritech na letadlo: **na zemi / stoupání / let**.
+Zvednutý čumák při vzletu je **stav 15 (CLIMBING)** a chce vlastních
+osm spritů, vyrenderovaných s modelem nakloněným nosem vzhůru.
+
+**My máme jen jednu sadu**, proto shuttle letí pořád naplocho. Není to
+chyba úhlů — sprity 2 a 6 jsou směry E a W, ne vzlet.
+
+Jak to dorenderovat: v `glb3letadlo.py` je na to `HILL_TILT_DEGREES`.
+Naklání „gramofon" kolem osy X, což je přesně osa klopení. U aut byl
+`-23` (do kopce), u letadla jsem ho dal na nulu. **Na sadu pro stoupání
+stačí kladná hodnota** a vyrenderovat druhý průchod.
+
+CZTR používá i `0xB4` (rychlost) 20×, `0x44` (výška nad stínem) 3×
+a `0x46`/`0x47`/`0x49` na další rozlišení.
+
+## Real_Aircrafts_Betaf.grf je poškozený, ne chráněný (2026-09-12)
+
+Hráč myslel, že je schválně pokažený proti rozbalení. **Není.** Prošel
+převodem přes text v UTF-8 a to ho zničilo:
+
+- **23 618 444 výskytů `EF BF BD`** — to je U+FFFD „neznámý znak".
+  Zabírá **86 % souboru**. Zdravý CZTR má takový výskyt **jeden**.
+- **Všech 166 130 konců řádku má před sebou CR.** Stoprocentní převod
+  LF → CRLF, jak to dělá textový režim.
+- Na začátku souboru sedí **`# -*- coding: utf-8 -*-\r\n`** — hlavička
+  pythonovského zdrojáku. Někdo zapsal binárku přes `open(..., "w")`.
+- **Poškození začíná už na 30. bajtu**, uprostřed magické hlavičky,
+  a dál je v průměru **každé 4 bajty**. Nejdelší nepoškozený úsek: 372 B.
+
+**Nejde to opravit ničím.** Nahradní znak je jednosměrný: milion různých
+původních bajtů se sloučil do jedné trojice. Data nejsou zamíchaná,
+prostě nejsou. Žádná úprava yaglu s tím nehne — a nemá smysl ji psát.
+Jediná cesta je sehnat nepoškozenou kopii.
