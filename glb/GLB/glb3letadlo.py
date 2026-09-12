@@ -97,8 +97,18 @@ CAMERA_PARALLEL_SCALE = 25  #8.5  7  5  shuttlex25, an224x120, c17x60
 CAMERA_ROTATION_DEGREES_X = 30.0 #26.565  #35.264 #30 autaspravny
 CAMERA_ROTATION_DEGREES_Z = 45.0  #45
 CAMERA_ROLL_DEGREES = 0.0 # 30  Kladne hodnoty = do kopce, zaporne = z kopce
-HILL_TILT_DEGREES = 0.0   # LETADLO: nula. Nekopiruje teren, nenaklani se
-                          # do kopce. (U aut tu bylo -23.)
+# KLOPENI - tim se dela vzlet a klesani.
+#
+#   0    rovny let
+#  -12   CUMAK NAHORU  -> stoupani, stav 0xE2 = 15
+#  +12   CUMAK DOLU    -> klesani,  stav 0xE2 = 21
+#
+# POZOR NA ZNAMENKO. Puvodni komentar u aut rikal "kladne = do kopce",
+# jenze u naseho raketoplanu to vychazi obracene. Zavisi to na tom,
+# kterym koncem model v GLB lezi, ne na skriptu. Overeno renderem:
+# raketoplan ma vzadu modre trysky, a pri -12 jsou dole a cerveny
+# cumak nahore. U jineho modelu si to zase over, nehadej.
+HILL_TILT_DEGREES = 0.0
 
 # Vzdalenost kamery od stredu sceny (nema vliv na velikost v ortho pohledu)
 CAMERA_DISTANCE = 20 #7  #shuttlex20, an224x70, c17x70

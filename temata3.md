@@ -410,3 +410,25 @@ převodem přes text v UTF-8 a to ho zničilo:
 původních bajtů se sloučil do jedné trojice. Data nejsou zamíchaná,
 prostě nejsou. Žádná úprava yaglu s tím nehne — a nemá smysl ji psát.
 Jediná cesta je sehnat nepoškozenou kopii.
+
+### Klopení: znaménko se musí ověřit, ne odvodit (2026-09-12)
+
+Sady na stoupání a klesání se dělají `HILL_TILT_DEGREES`. U raketoplánu
+(`glbobj/Shuttle.glb`) vyšlo:
+
+| hodnota | co to udělá | stav `0xE2` |
+|---|---|---|
+| `0` | rovný let | výchozí |
+| **`-12`** | **čumák nahoru — stoupání** | 15 |
+| **`+12`** | **čumák dolů — klesání** | 21 |
+
+**Je to obráceně, než říká původní komentář u aut** („kladné = do
+kopce"). Nezáleží to na skriptu, ale na tom, kterým koncem model v GLB
+leží — stejně jako u počátečního posunu směrů.
+
+Jak jsem to určil: hráč řekl, že **raketoplán má vzadu modré trysky**.
+Vyrenderoval jsem obě znaménka, podíval se na boční pohledy (směr E a W,
+tam je klopení nejlíp vidět) a při `-12` jsou trysky dole a červený
+čumák nahoře. U nového modelu se to musí ověřit znovu, ne odvodit.
+
+Sady leží v `glb/render-test/vzlet/` a `glb/render-test/pristani/`.
