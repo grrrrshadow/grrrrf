@@ -548,29 +548,64 @@ na kola ve všech osmi směrech. U VW T1 i u Škody sedl.
 - Stejné `−w/2, −h/2` má i většina ostatních vozidel v tom souboru
   (`[67, 71, −33, −35]` se opakuje) — nezarovnaná je celá sada, ne jen Škoda.
 
-### Konvence VW T1 (co se přenáší na další auta)
+### Konvence VW T1 origsize (to, co nakonec vyšlo)
 
-Poloha kotvy proti středu rozvoru na vozovce, v pixelech, směr po směru:
+Referencí je **VW T1 origsize (0x0081)**, ne cztrsize — hráč ho tak
+určil („můžem se řídit linkou mezi koly vwt1 orig size"). Jeho ručně
+doladěné offsety se převedou na polohu kotvy proti středu rozvoru na
+vozovce a **proloží tuhým 3D bodem** — `C + X·sin α + Y·cos α`
+vodorovně, `C + X·cos α + Y·sin α` svisle:
 
 | dir | vodorovně | svisle |
 |---|---|---|
-| N | −2,5 | −23,0 |
-| NE | +17,2 | −28,0 |
-| E | +7,5 | −15,9 |
-| SE | −7,8 | −22,0 |
-| S | −7,5 | −15,0 |
-| SW | −6,2 | −20,0 |
-| W | −13,5 | −15,9 |
-| NW | −23,2 | −30,0 |
+| N | −1,3 | −21,5 |
+| NE | +4,7 | −21,1 |
+| E | +5,0 | −20,5 |
+| SE | −0,6 | −20,1 |
+| S | −8,8 | −20,1 |
+| SW | −14,8 | −20,4 |
+| W | −15,0 | −21,0 |
+| NW | −9,4 | −21,4 |
 
-**Nepřepisovat to modelem.** Zkoušel jsem to proložit tuhým 3D bodem
-(kotva = pevné místo na autě) a nejde to: čtyři sprity přímého
-silničního směru (NE, SE, SW, NW) mají navíc posun ±11 px, který závisí
-na **ose silnice**, ne na směru jízdy. To odpovídá tomu, že se ručně
-srovnávala kola na bílou čáru silnice — a je to posun v prostoru
-vozovky, ne v prostoru auta. Tuhý model to reprezentovat neumí.
-Takže: přenášet tabulku **přímo, směr po směru, v absolutních pixelech**
-(vozovka je pro všechna auta stejně velká, nemá se škálovat).
+**To proložení tam musí být.** Naměřené hodnoty se od něj liší až
+o 11 px vodorovně a 8 px svisle — a právě to by bylo podskočení
+v zatáčce (jeden sprite vzadu, sprite dalšího směru vepředu). Tuhý bod
+podskočit nemůže, protože kotva je pevné místo na autě.
+
+*(Dřív jsem si sem napsal opak — „nepřepisovat to modelem", protože se
+ručně srovnávala kola na čáru a takový posun je v prostoru vozovky.
+Vyzkoušené je, že proložení je správně: hráč potvrdil „jsou v řadě
+u krajnice, zatáčky dobrý".)*
+
+### Jedno vozidlo = 2 až 4 sady po osmi spritech
+
+**Tohle mě stálo dvě kola.** Sprity jsou v GRF podle stavu naložení:
+
+```
+sprite_groups<RoadVehicles, 0xFF>   // Action02 basic
+{
+    primary_spritesets:   [ 0x0000 0x0001 ];   // prázdné
+    secondary_spritesets: [ 0x0003 0x0002 ];   // naložené
+}
+```
+
+V `VWT1-S1203modradodavka.grf` je **58 sad po osmi spritech na 18
+vozidel**. Přepisoval jsem „poslední sadu před jménem vozidla", čili
+jednu z každého auta — a byla to ta naložená. Hráč zkoušel nenaložená
+auta a nic se nezměnilo, dvakrát po sobě.
+
+**Ponaučení: než něco hromadně přepíšu, spočítat, kolik těch věcí je,
+a ověřit, že počet sedí.** 58 ≠ 18 by mě zastavilo hned.
+
+### Čím se ověří, že je to zarovnané
+
+Vzdálenost linky kol od kotvy v bočním pohledu (= jak daleko je auto od
+krajnice). Před: 19–27 px, čili 8 px rozdíl mezi auty. Po: 26–27 px.
+Ve všech osmi směrech spadl rozptyl z 6–13 px na 1–3 px. Zbytek jsou
+rozdílné rozchody kol a zaokrouhlení na celý pixel.
+
+Druhá kontrola: sady téhož vozidla mají podvozek shodný, takže po
+zarovnání musí sednout na sebe — zbytkový posun vyšel (0, 0) u všech 18.
 
 ### Pravidlo pro příští rendery
 
