@@ -195,3 +195,40 @@ zarovnání musí sednout na sebe. Zbytkový posun mezi sadami vyšel
 `sady.py` (najde všech 58 sad), `mereni58.py` (změří je), `nove58.py`
 (spočte nové offsety), `patch58.py` (přepíše), `kontrola58.py` a
 `krajnice.py` (kontroly), `overka58.py` (obrázek).
+
+
+---
+
+# Hráčovo doladění spritů 3 a 5 (2026-09-16)
+
+Hráč sadu projel ve hře a poslal odchylky. Čísla spritů **od nuly**,
+čili stejné pořadí, jaké používám já (0=S, 1=SV, 2=V, 3=JV, 4=J,
+5=JZ, 6=Z, 7=SZ):
+
+| sprite | směr | hráč |
+|---|---|---|
+| 0, 2, 4, 6 | zatáčení | *„zatáčky uděláme nakonec, tak píšu dobrý"* — **neověřené, odložené** |
+| 1, 7 | SV, SZ | dobrý |
+| 3 | **JV** | z `39,27` na `35,31` |
+| 5 | **JZ** | z `24,24` na `28,28` |
+
+Ta čísla jsou **kotva**, čili `−xoffs, −yoffs`. Posun v offsetech:
+
+- sprite 3: `xoffs +4`, `yoffs −4`
+- sprite 5: `xoffs −4`, `yoffs −4`
+
+Obojí zvedne auto o 4 px a posune do stran opačně — souměrné, čili
+posun napříč silnicí. JV a JZ jsou dvě různé osy silnice, proto ta
+opačná znaménka.
+
+**Aplikuje se jako posun, ne jako absolutní hodnota.** Každá sada má
+jiné rozměry spritů a tím i jiné správné offsety; nastavit všem stejné
+číslo by zrušilo zarovnání. Hráčův `fix_sprites.py` to dělá taky
+přičtením (`x += dx`).
+
+Hráč nejdřív řekl „dvanácettrojky", pak upřesnil **„všechny i taz
+a vw"** — takže na všech 18 vozidel a všech 58 sad, 116 spritů.
+
+Skript: `posun1203.py` (jméno zůstalo z prvního zadání). Ověřeno
+zpětným rozebráním: 232 odlišných bajtů proti předchozímu GRF
+(116 spritů × 2 offsety), u všech ostatních spritů změna 0.
