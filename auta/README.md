@@ -212,6 +212,18 @@ Hráč sadu projel ve hře a poslal odchylky. Čísla spritů **od nuly**,
 | 3 | **JV** | z `39,27` na `35,31` |
 | 5 | **JZ** | z `24,24` na `28,28` |
 
+**Kde se to měřilo** (hráč doplnil): sprite 3 na **TAZ 1500 bus
+zahradka** (`0x0093`), sprite 5 na **TAZ 1500 bus** (`0x0094`, ta žlutá).
+Čili dvě různá auta, jedno číslo z každého — proto obě hodnoty nesedí
+na jeden vůz. Že `39,27` vyšlo i na Škodě 1203 Pajda, je shoda náhod.
+(Hráč psal „1503", myslel 1500.)
+
+**A proč to stačí změřit na jednom aute:** po zarovnání jsou všechna
+auta *v jedné rovině podle linky mezi koly*. Jedno měření tedy platí
+pro celou sadu a posune se to všem stejně. To je přesně ta věc, kvůli
+které se to zarovnávalo — hráčovými slovy: *„posun je u všech aut
+stejný, máme je v jedné rovině podle linky mezi koly."*
+
 Ta čísla jsou **kotva**, čili `−xoffs, −yoffs`. Posun v offsetech:
 
 - sprite 3: `xoffs +4`, `yoffs −4`
@@ -227,7 +239,8 @@ jiné rozměry spritů a tím i jiné správné offsety; nastavit všem stejné
 přičtením (`x += dx`).
 
 Hráč nejdřív řekl „dvanácettrojky", pak upřesnil **„všechny i taz
-a vw"** — takže na všech 18 vozidel a všech 58 sad, 116 spritů.
+a vw"** — takže na všech 18 vozidel a všech 58 sad, 116 spritů. Což
+je i technicky správně: v jedné rovině je celá sada, ne jen 1203.
 
 Skript: `posun1203.py` (jméno zůstalo z prvního zadání). Ověřeno
 zpětným rozebráním: 232 odlišných bajtů proti předchozímu GRF
