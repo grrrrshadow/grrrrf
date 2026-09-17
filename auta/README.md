@@ -255,25 +255,44 @@ posunem, posunul jsem x,y -1 +1."*
 Jen **sprite 3**, o pixel dál **stejným směrem** jako to předchozí
 `−4 +4`. Na všech 18 aut a 58 sad, 58 spritů. Ostatních sedm beze změny.
 
-| | v číslech hráče | v offsetech |
+| | zadání hráče | v offsetech |
 |---|---|---|
-| první kolo | −4, +4 | `xoffs +4`, `yoffs −4` |
-| druhé kolo | −1, +1 | `xoffs +1`, `yoffs −1` |
-| celkem od zarovnání | −5, +5 | `xoffs +5`, `yoffs −5` |
+| první kolo | poloha `39,27` → `35,31` | `xoffs +4`, `yoffs −4` |
+| druhé kolo | posun `−1 +1` | `xoffs −1`, `yoffs +1` |
+| celkem od zarovnání | | `xoffs +3`, `yoffs −3` |
 
-**Jak hráč čísla píše** (ověřeno na obou kolech): tak, jak je čte
-v souboru, **bez minusů** — čili `39,27` znamená `xoffs −39, yoffs −27`.
-Vyjde to nastejno, jako by to byla kotva. U posunu je proto znaménko
-**opačné** než to, co se přičítá k offsetu. Pozor na to, u delty se ty
-dva výklady rozcházejí (u absolutních hodnot ne).
+**Jak hráč čísla píše — tohle jsem si spletl a musel to opravovat:**
 
-Kontrolní hodnoty po druhém kole, sprite 3, sada 0:
+| co píše | co to znamená |
+|---|---|
+| **polohu** (`39,27`, `z 35,32 na 36,31`) | hodnoty ze souboru **bez minusů**: `xoffs −39, yoffs −27` |
+| **posun** (`−1 +1`) | přičti **rovnou k offsetům**: `xoffs −1, yoffs +1` |
+
+Čili u posunu se znaménko **neotáčí**. Já si to otočil, protože jsem
+posun četl jako pohyb těch čísel bez minusu — vyšlo mi `34,33` tam, kde
+hráč měl `36,31`. Že první kolo sedělo, mě utvrdilo ve špatném výkladu:
+tam byly zadané **polohy**, a u poloh vyjdou oba výklady nastejno.
+Rozejdou se až u posunu.
+
+**Návyk, který to chytil:** vždycky zpátky napsat **konkrétní výslednou
+hodnotu u pojmenovaného auta** („na 0x0095 je teď 34,33"). Hráč si toho
+všiml obratem. Kdybych napsal jen „posunuto o pixel", jede se dál
+špatně.
+
+Kontrolní hodnoty po druhém kole, sprite 3, prázdná sada `0x0000`
+(sloupec „bylo" je stav po prvním kole):
 
 | auto | bylo | je |
 |---|---|---|
-| TAZ 1500 bus zahradka | 35,31 | **34,32** |
-| Škoda 1203 Pajda | 35,31 | **34,32** |
-| VW T1 origsize | 30,28 | **29,29** |
+| TAZ 1500 dodávka zahradka `0x0095` | 35,32 | **36,31** |
+| TAZ 1500 dodávka zahradka bedna `0x0096` | 35,32 | **36,31** |
+| TAZ 1500 dodávka `0x0097` | 35,30 | **36,29** |
+| Škoda 1203 Pajda `0x0082` | 35,31 | **36,30** |
+| VW T1 origsize `0x0081` | 30,28 | **31,27** |
+
+Prázdné sprity `0x0095` a `0x0096` jsou **na pixel stejné** — bedna je
+až na naloženém spritu. Proto v nákupním menu vypadají dvě auta stejně.
+`0x0097` je bez zahradky, o 2 px nižší (79×60 proti 79×62).
 
 Skript `posun3.py`. Ověřeno rozebráním: 116 odlišných bajtů
 (58 spritů × 2 offsety), u ostatních spritů změna 0.
