@@ -38,6 +38,15 @@ dokumentace projektu ani nic pro nikoho jiného — je to můj zápisník.
    omyl v adresátovi — říct to a nechat to být. Hráč to řekl natvrdo:
    *„už tam nechoď."*
 
+   **A proč**, hráčovými slovy: *„nemáš temata z vedle, tak to dělat
+   nemůžeš."* Ta práce má vlastní zápisník témat, který tady nemám —
+   takže bych na ní dělal naslepo, i kdyby výsledek náhodou k něčemu
+   byl. (A byl: *„použili jsme velkou část toho, co jsi napsal vedle,
+   našel jsi druhou chybu, tak jsme to použili."* Použitelný výsledek
+   ale není důvod, proč jsem tam měl chodit. To je ta past — kdyby to
+   dopadlo špatně, věděl bych to hned; takhle to svádí si myslet,
+   že pravidlo bylo zbytečné.)
+
 ## Poznámky
 
 ### 2026-09-11 — založení

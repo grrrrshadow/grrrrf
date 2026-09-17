@@ -245,3 +245,35 @@ je i technicky správně: v jedné rovině je celá sada, ne jen 1203.
 Skript: `posun1203.py` (jméno zůstalo z prvního zadání). Ověřeno
 zpětným rozebráním: 232 odlišných bajtů proti předchozímu GRF
 (116 spritů × 2 offsety), u všech ostatních spritů změna 0.
+
+
+## Druhé kolo, jen sprite 3 (2026-09-17)
+
+Hráč: *„škoda taz vw, 0 dobrý, 1 dobrý, 2 dobrý, 3 jihovýchod všechny
+posunem, posunul jsem x,y -1 +1."*
+
+Jen **sprite 3**, o pixel dál **stejným směrem** jako to předchozí
+`−4 +4`. Na všech 18 aut a 58 sad, 58 spritů. Ostatních sedm beze změny.
+
+| | v číslech hráče | v offsetech |
+|---|---|---|
+| první kolo | −4, +4 | `xoffs +4`, `yoffs −4` |
+| druhé kolo | −1, +1 | `xoffs +1`, `yoffs −1` |
+| celkem od zarovnání | −5, +5 | `xoffs +5`, `yoffs −5` |
+
+**Jak hráč čísla píše** (ověřeno na obou kolech): tak, jak je čte
+v souboru, **bez minusů** — čili `39,27` znamená `xoffs −39, yoffs −27`.
+Vyjde to nastejno, jako by to byla kotva. U posunu je proto znaménko
+**opačné** než to, co se přičítá k offsetu. Pozor na to, u delty se ty
+dva výklady rozcházejí (u absolutních hodnot ne).
+
+Kontrolní hodnoty po druhém kole, sprite 3, sada 0:
+
+| auto | bylo | je |
+|---|---|---|
+| TAZ 1500 bus zahradka | 35,31 | **34,32** |
+| Škoda 1203 Pajda | 35,31 | **34,32** |
+| VW T1 origsize | 30,28 | **29,29** |
+
+Skript `posun3.py`. Ověřeno rozebráním: 116 odlišných bajtů
+(58 spritů × 2 offsety), u ostatních spritů změna 0.
