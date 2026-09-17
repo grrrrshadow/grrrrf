@@ -671,3 +671,81 @@ když přijde cokoliv o hře (vlaky, náklad ve hře, build #…), první a
 jediná odpověď je jedna věta: „tohle patří vedle, ne?" — a čekat.**
 Ne zkoumat „jen pro jistotu". Zkoumání je právě to, co mě pokaždé
 vtáhne dovnitř.
+
+
+---
+
+## CZTR truck set: rozestupy a oprava yaglu (2026-09-17)
+
+### Zadání
+
+*„koukni na cztr truck set bryle. je potřeba zvětšit rozestupy mezi
+přívěsem a autem které táhne přívěs. sprity grafiky byly zvětšený
+o 20% proto je teď rozestup malý"*
+
+Cestou se ukázalo, že se ten GRF vůbec nedá rozbalit. Hráč:
+*„yagl oprav, ja to taky nerozbalim, jen to umim zabalit"* a pak to
+podstatné: *„jo je to yaglem starší versí pro win"* a *„ten starší
+yagl zabalili ale taky už nerozbalil"*.
+
+To poslední je celá diagnóza v jedné větě. **Nástroj, který soubor
+vyrobil, ho sám nepřečte** — tím pádem chyba není v tom, co jsem
+dělal já, ale je v yaglu, a nejspíš na obou koncích.
+
+### Chyba v yaglu: dvě různá „dlouze"
+
+Rozepsané je to v `yagl/NASE-UPRAVY.md`, kapitola 2. Podstata:
+v chunkovaném spritu jsou **dvě nezávislá rozhodnutí krátce/dlouze**
+a každé se řídí něčím jiným — tabulka řádků délkou dat, hlavička
+úseku šířkou spritu. Do 256 px šířky vyjdou obě stejně a splést je
+nelze. Zvětšení o 20 % dalo popelářskému vozu 260 px a rozešly se.
+
+Balič i rozbalovač si je spletly, každý po svém, a chyby se sčítaly.
+
+### Ponaučení, které stojí za zapamatování
+
+**Opravený rozbalovač zakryje neopravený balič.** Můj rozbalovač
+poznává prázdný řádek podle délky, takže spolkne i tu rozbitou
+značku. Kolečko „zabal a rozbal" tedy prošlo — a nedokázalo nic.
+
+Rozhodl až test, kde se ty dvě opravy oddělily: zvlášť se přeložila
+verze, která měla **opravený jen balič a původní rozbalovač**.
+
+| soubor | rozbalovač | výsledek |
+|---|---|---|
+| původní z Windows yaglu | původní | segmentation fault |
+| nově zabalený | původní | rozbaleno, 3435 záznamů |
+
+První řádek je kontrola, že test chybu vůbec vidí. Bez něj by druhý
+řádek nedokazoval nic.
+
+**Obecně: když opravím obě strany kolečka naráz, kolečko přestane být
+důkazem.** Musí se zlomit — jedna strana nová, druhá stará — a k tomu
+kontrolní běh, o kterém vím, že má selhat.
+
+### Rozestupy
+
+Délka vozidla je `shorten_vehicle` (0x23) po osminách dlaždice:
+délka = (8 − N)/8. Sprit se kreslí celý bez ohledu na ni, takže
+o co sprit povyrostl, o to se nacpal do mezery za sebou.
+
+37 vozidel dostalo délku o 20 % větší, což u N = 1 až 4 vždycky
+vyjde na **N o jedničku menší**. U N = 1 je strop — 8/8 je celá
+dlaždice a delší road vehicle být nemůže, takže jen +14,3 %.
+
+Oba „Neviditelné články" (0x0058 délka 1/8, 0x0059 délka 2/8) jsem
+nechal. 20 % z osminy je pod rozlišením formátu, a hlavně to není
+potřeba: mezeru obnoví už prodloužení tahače a přívěsu, a to přesně
+na původní velikost. Kdybych prodloužil i článek, byla by mezera
+o 20 % větší, než bývala — to hráč nechtěl, on chtěl vrátit, co
+zvětšení sebralo.
+
+### Co si z toho vzít k číslům
+
+Zase to samé co u zarovnání: **napřed spočítat, kolik těch věcí je.**
+První grep na `shorten_vehicle` mi vrátil „39× hodnota 0", protože
+jsem hledal `[0-9]*` a hodnoty jsou psané šestnáctkově (`0x03`).
+Sedl na to `0` z `0x`. Kdybych si nevšiml, přepsal bych nesmysl.
+
+Že vyšlo 39× tatáž hodnota, mělo být samo o sobě podezřelé.
+**Podezřele úhledný výsledek je skoro vždycky chyba měření.**
