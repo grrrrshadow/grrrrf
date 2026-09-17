@@ -17,6 +17,7 @@
 // along with yagl. If not, see <https://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////
 #include "ChunkEncoder.h"
+#include <sstream>
 #include "RealSpriteRecord.h"
 #include "CommandLineOptions.h"
 #include <exception>
@@ -142,7 +143,16 @@ std::vector<uint8_t> decode_tile(const std::vector<uint8_t>& chunks, uint16_t xd
         // further bytes. cinfo should have length zero in this case, but this doesn't seem entirely
         // reliable.
         uint32_t offset = offsets[y];
-        if ((offsets[y+1] - offset) == (long_offset ? sizeof(uint32_t) : sizeof(uint16_t)))
+        // An empty row is a single chunk header and nothing else, so its length
+        // is the size of one header: two bytes in the short format, four in the
+        // long one. That size comes from LAST_CHUNK (which follows the sprite's
+        // width), NOT from long_offset (which follows the size of the whole
+        // chunk data and only governs the row table). Reading it off the wrong
+        // one leaves every empty row of a sprite wider than 256 px unskipped,
+        // and the header that is then parsed sends the reader off the end of
+        // the buffer. See NASE-UPRAVY.md.
+        const uint32_t empty_row = (LAST_CHUNK == LONG_LAST_CHUNK) ? 4u : 2u;
+        if ((offsets[y+1] - offset) == empty_row)
         {
             continue;
         }
@@ -181,7 +191,19 @@ std::vector<uint8_t> decode_tile(const std::vector<uint8_t>& chunks, uint16_t xd
 
             uint32_t imax  = (chunk_len & ~LAST_CHUNK) * pixel_size;
             uint32_t pixel = (y * xdim + chunk_off) * pixel_size;
-            for (uint16_t i = 0; i < imax ; ++i)
+            // Neither index is checked by operator[], and a single bad chunk
+            // header walks off the end of both buffers -- which is a segfault
+            // with nothing said, instead of a file that can be looked at.
+            if ((offset + imax) > chunks.size() || (pixel + imax) > output.size())
+            {
+                std::ostringstream os;
+                os << "Chunked sprite is malformed: " << xdim << "x" << ydim;
+                os << ", row " << y << " asks for " << imax << " bytes at " << offset;
+                os << " of " << chunks.size() << " (chunk length " << chunk_len;
+                os << ", offset in row " << chunk_off << ")";
+                throw RUNTIME_ERROR(os.str());
+            }
+            for (uint32_t i = 0; i < imax ; ++i)
             {
                 uint8_t pix = chunks[offset];
                 output[pixel] = pix;
@@ -392,12 +414,26 @@ std::vector<uint8_t> ChunkEncoder::make_row_data(const std::vector<ChunkEncoder:
     }
     else
     {
-        // There are no chunks in this line of the image.
-        data.push_back(0x80);
+        // There are no chunks in this line of the image: one chunk of zero
+        // length carrying the last-chunk flag, and an offset of zero.
+        //
+        // The flag lives in the top bit of the length, and the length is one
+        // byte in the short format but two in the long one -- so in the long
+        // format the flag belongs in the SECOND byte, little end first, the
+        // same way every other length here is written. Writing 0x80 into the
+        // first byte gives a length of 0x0080 instead of 0x8000: the reader
+        // never sees the end of the row, carries on into the next one and runs
+        // off the end of the buffer. It only shows on sprites wider than 256
+        // px, because narrower ones use the short format where 0x80 in the
+        // first byte is right. See NASE-UPRAVY.md.
+        data.push_back(m_last_chunk & 0xFF);
+        if (m_last_chunk == LONG_LAST_CHUNK)
+        {
+            data.push_back(m_last_chunk >> 8);
+        }
         data.push_back(0x00);
         if (m_last_chunk == LONG_LAST_CHUNK)
         {
-            data.push_back(0x00);
             data.push_back(0x00);
         }
     }
