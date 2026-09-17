@@ -749,3 +749,84 @@ Sedl na to `0` z `0x`. Kdybych si nevšiml, přepsal bych nesmysl.
 
 Že vyšlo 39× tatáž hodnota, mělo být samo o sobě podezřelé.
 **Podezřele úhledný výsledek je skoro vždycky chyba měření.**
+
+
+---
+
+## Co u silničních vozidel NEJDE nastavit z GRF (2026-09-17)
+
+Hráč chtěl o 20 % větší klikací bounding box a větší rozestup mezi
+auty v koloně, když stojí. Myslel, že se bounding box zadává v GRF.
+Nezadává. Ověřeno ve zdrojácích OpenTTD, a to v obou stromech —
+v tom, co hráč hraje, i v aktuálním masteru. Konstanty jsou shodné.
+
+### Klikací bounding box: počítá si ho OpenTTD sám
+
+`RoadVehicle::UpdateDeltaXY()` v `src/roadveh_cmd.cpp`. Základ je
+`bounds = {{-1,-1,0}, {3,3,6}}`. U čtyř hlavních směrů jízdy (ty
+„úhlopříčné", kde auto tráví většinu času) se rozměr **podél jízdy**
+přepíše na `cached_veh_length`:
+
+```cpp
+this->bounds.extent.x = this->gcache.cached_veh_length;
+```
+
+A `cached_veh_length` je podle `GetRoadVehLength()`:
+
+```cpp
+length = VEHICLE_LENGTH;                                  // 8
+length -= Clamp(veh_len, 0, VEHICLE_LENGTH - 1);          // veh_len = shorten_vehicle
+```
+
+Takže **klikací box podél jízdy = 8 − `shorten_vehicle`**, nic víc.
+Žádná vlastnost pro bounding box neexistuje — kompletní seznam
+vlastností silničních vozidel v `newgrf_act0_roadvehs.cpp` jde po
+0x2A (0x29 je cargo classes required, 0x2A badge list) a box mezi
+nimi není.
+
+Napříč silnicí zůstává 3 a na výšku 6. Natvrdo, nezměnitelné.
+U čtyř krátkých zatáčecích směrů (S, V, J, Z) zůstává box 3×3 celý.
+
+**Důsledek: prodloužením vozidla se klikací box zvětší zároveň.**
+Zvětšení rozestupů tahač–přívěs tedy zvětšilo i klikací boxy, o
+přesně stejná procenta. Nic dalšího se s tím dělat nedá.
+
+Strop je 8, tedy půl dlaždice. Sedm vozidel na něm po té úpravě už je.
+
+### Rozestup v koloně: taky natvrdo, a bez vazby na délku
+
+`FindClosestBlockingRoadVeh()` tamtéž:
+
+```cpp
+static constexpr DirectionIndexArray<int8_t> dist_x{-4, -8, -4, -1, 4, 8, 4, 1};
+static constexpr DirectionIndexArray<int8_t> dist_y{-4, -1, 4, 8, 4, 1, -4, -8};
+```
+
+`cached_veh_length` se v té funkci **nevyskytuje vůbec**. Auto se
+zastaví, když by se jeho střed dostal blíž než 8 jednotek ke středu
+auta před ním, ať je kterékoliv z nich jakkoliv dlouhé.
+
+Dlaždice je 16 jednotek, takže auta v koloně stojí vždycky přesně
+půl dlaždice od sebe, střed na střed. A protože plná délka vozidla
+je taky 8, auto na plnou délku stojí přesně na doraz. **Odtud ta
+nalepená auta, a z GRF se s tím nedá hnout.**
+
+### Jediná páka, co zbývá, a proč není dobrá
+
+Blokují i článkované díly cizích souprav — test v té funkci vyřazuje
+jen vlastní soupravu (`rvf->veh->First() == v->First()`). Kdyby každé
+auto dostalo neviditelný článek **za sebe**, následující auto by
+zastavilo za tím článkem, ne za korbou, a mezera by se zvětšila.
+
+Jenže nejmenší článek přidá zhruba půl délky vozidla, tedy kolem
++50 % a víc, ne 20 %. A z každého náklaďáku by se stala článkovaná
+souprava se vším, co k tomu patří v depu, na zastávce a v nákupním
+seznamu. Za 20 % to nestojí — leda by hráč řekl, že chce mnohem víc.
+
+### Ponaučení
+
+**Než začnu něco škálovat, ověřím, že to vůbec je parametr.** Tady
+byly obě věci odvozené nebo natvrdo v enginu, ne v GRF. Kdybych se
+rovnou pustil do hledání vlastnosti, hledám neexistující věc.
+A hráčova domněnka („bound box se nastavuje v grf") byla úplně
+rozumná — vyvrátit ji šlo jen tím, že se otevře zdroják.
