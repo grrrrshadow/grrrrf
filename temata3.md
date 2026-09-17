@@ -830,3 +830,123 @@ byly obě věci odvozené nebo natvrdo v enginu, ne v GRF. Kdybych se
 rovnou pustil do hledání vlastnosti, hledám neexistující věc.
 A hráčova domněnka („bound box se nastavuje v grf") byla úplně
 rozumná — vyvrátit ji šlo jen tím, že se otevře zdroják.
+
+
+---
+
+## Jak se DÁ udělat rozestup v koloně (2026-09-17, druhý pokus)
+
+Předchozí kapitola končila tím, že odstup 8 jednotek je natvrdo a
+nedá se s ním hnout. To platí. Ale hráč dal čtyři cizí sady a zeptal
+se na popeláře, a při hledání se našla páka, kterou jsem předtím
+přehlédl.
+
+### Nejdřív ta otázka na popeláře: ne
+
+*„proto má popelář dlouhý sprit aby měl rozestup za sebou na
+popelnice?"* Není to tak. Sprit má obdélník 260 × 216, ale změřeno
+v pixelech:
+
+| co | kde | kolik |
+|---|---|---|
+| skutečný vůz | sloupce 222 až 256 | 35 px široký |
+| smítko | sloupce 0 až 2 | 12 krycích pixelů celkem |
+| prázdno mezi tím | | ~220 px |
+
+Je to **smítko 3 × 4 px v levém horním rohu**, 220 px od vozu.
+Prázdné místo ve spritu žádný rozestup nedělá — hra kreslí sprit
+tam, kde je kotva, a prázdno nikoho neodtlačí.
+
+Tohle smítko je zároveň příčina toho pádu yaglu: bez něj by měl
+sprit ~38 px a nikdy by nepřelezl hranici 256.
+
+**Stojí za to projet rendery a smítka vyházet.** V sadě je 2657
+spritů z 2746 (96,8 %), kde je deklarovaný obdélník aspoň o 8 px
+větší než hustý obsah.
+
+### Cizí sady žádný trik nemají
+
+| sada | shorten_vehicle | callback 0x16 | callback 0x11 |
+|---|---|---|---|
+| Real Vehicle 1.0 | nepoužívá vůbec | ne | ne |
+| Real Cars 1.5.1 | nepoužívá vůbec | ne | ne |
+| Real Trucks semis | 68× nula, 33× dvojka | 68× | ne |
+| HEQS | 1× | 42× | 45× |
+
+Real Cars a Real Vehicle jedou na plnou délku a nic nechytračí.
+Článkování u Real Trucks a HEQS je na skutečné návěsy, ne na mezery.
+A šířkou spritů CZTR nijak nevyčnívá, ostatní mají sprity širší.
+
+### Páka, která tam je: mezera se řídí délkou VEDOUCÍHO dílu
+
+V `roadveh_cmd.cpp`, kde souprava vyjíždí z depa:
+
+```cpp
+if (v->Next() != nullptr && IsRoadDepotTile(v->tile)) {
+    if (v->frame == v->gcache.cached_veh_length + RVC_DEPOT_START_FRAME) {
+        RoadVehLeaveDepot(v->Next(), false);
+    }
+}
+```
+
+Další díl se pustí, až ten před ním ujede `cached_veh_length` snímků.
+Jeden snímek je na rovné silnici jedna jednotka, a pak už všechny
+díly popojíždějí po jednom za tik, takže **rozestup mezi dvěma
+sousedními díly = délka toho předního**, a drží se napořád.
+
+A blokuje kterýkoliv díl cizí soupravy. Takže:
+
+**rozestup mezi dvěma auty v koloně = 8 + délka vedoucího dílu.**
+
+### Z toho plynou dvě varianty a jedna je zřetelně lepší
+
+**Neviditelný článek VZADU.** Souprava `[auto, ocásek]`. Rozestup
+mezi auty vyjde `délka_auta + 8`. Aby to bylo 9 nebo 10, musí mít
+auto délku 1 nebo 2 — jenže délka auta je zároveň klikací box, ten
+by spadl z 8 na 2. Špatný obchod.
+
+**Neviditelný článek VPŘEDU.** Souprava `[čumák, auto]`. Rozestup
+vyjde `8 + délka_čumáku` a délka auta do toho vůbec nevstupuje,
+takže auto si nechá plnou délku 8 i s plným klikacím boxem.
+
+| délka čumáku | rozestup | proti dnešku |
+|---|---|---|
+| 0 (bez čumáku) | 8 | — |
+| 1 | 9 | +12,5 % |
+| 2 | 10 | +25,0 % |
+
+### Kolik je vlastně potřeba (měřeno na dvanácettrojce)
+
+Inkoust spritu, přepočtený na jednotky délky (při 4× je jednotka 8 px):
+
+| směr | inkoust | jednotek | mezera z 8 |
+|---|---|---|---|
+| čtyři hlavní směry jízdy | 56 px | 7,0 | 1,0 |
+| V a Z (krátké zatáčecí) | 64 px | 8,0 | 0,0 |
+| S a J (krátké zatáčecí) | 26 px | 3,2 | 4,8 |
+
+Před zvětšením o 20 % bylo auto 5,8 jednotky a mezera 2,2. Teď je
+mezera 1,0. **Čumák délky 1 dá rozestup 9, tedy mezeru 2,0 — skoro
+přesně to, co bylo před zvětšením.** Délky 2 by mezera vyšla na 3,0,
+tedy víc než kdy byla.
+
+### Co to stojí
+
+Z každého auta se stane dvoudílná souprava a **kupovaný motor je ten
+neviditelný čumák**, takže na něj musí přejít jméno, cena, rychlost
+a náklad, a viditelné auto se stane přívěsem s grafikou. To je
+přestavba každého vozidla, ne přepsání jednoho čísla, a ve starých
+uložených hrách se to neobejde bez následků.
+
+Taky se viditelné auto kreslí o délku čumáku za místem, kde si hra
+myslí, že vozidlo je. U délky 1 to je jedna jednotka, tedy 8 px
+při 4×.
+
+### Ponaučení
+
+Poprvé jsem uzavřel, že to nejde, protože jsem se díval jen na
+`FindClosestBlockingRoadVeh`, kde délka opravdu není. Páka byla o
+kus dál, v úplně jiné funkci — v tom, jak se pouští díly z depa.
+**„Není to v téhle funkci" není totéž co „nejde to."** Dohledat se
+to dalo jen tím, že jsem si prošel všechna místa, kde se
+`cached_veh_length` vůbec vyskytuje.
