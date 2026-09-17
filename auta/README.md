@@ -279,6 +279,12 @@ hodnotu u pojmenovaného auta** („na 0x0095 je teď 34,33"). Hráč si toho
 všiml obratem. Kdybych napsal jen „posunuto o pixel", jede se dál
 špatně.
 
+Od 2026-09-17 hráč sám nabídl, že bude **psát minusy pořádně** — takže
+čísla by měla být jednoznačná. **Ten návyk s echem si ale nechávám tak
+jako tak**: nestojí nic a chytí i překlep, nejen nedorozumění. Chyba
+byla moje, ne v jeho zápisu — měl jsem se zeptat, když jsem věděl, že
+jsou dva výklady.
+
 Kontrolní hodnoty po druhém kole, sprite 3, prázdná sada `0x0000`
 (sloupec „bylo" je stav po prvním kole):
 
