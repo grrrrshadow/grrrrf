@@ -68,3 +68,48 @@ Kdyby to bylo málo, přední díl délky 2 dá rozestup 10, tedy mezeru 3,0.
 
 Obě verze zabaleny a zase rozbaleny: 876 záznamů, 18 dílů délky 1,
 18 dílů délky 8, 18 článkovacích callbacků, 144 průhledných spritů.
+
+---
+
+## Oprava: náklad musí jet na viditelném dílu
+
+První stavba verze s článkem vpředu měla chybu. Neviditelný čumák si
+nechal `cargo_capacity` a viditelné auto dostalo nulu, takže pro hru
+bylo pořád prázdné.
+
+Projevilo se to dvakrát:
+
+- **nebyla vidět grafika plného auta**
+- **nešla animace na zastávce**
+
+Obojí dělá to samé. Action02 u vozidel má dva seznamy sad spritů:
+
+| seznam v yaglu | co to je | podle čeho se vybírá |
+|---|---|---|
+| `primary_spritesets` | stavy podle naloženosti | kolik nákladu díl veze |
+| `secondary_spritesets` | stavy při nakládání na zastávce | kolik nákladu díl veze |
+
+Například u valníku na dřevo jsou to `[ 0x0000 0x0001 ]` a
+`[ 0x0000 0x0002 ]`, tedy prázdný a plný, a k tomu dvě sady pro
+zastávku. Díl s nulovou kapacitou spadne vždycky do sady 0. Plná
+sada ani ta zastávková se nemají jak ukázat.
+
+Přesunuto na viditelný díl: `cargo_capacity`, `cargo_type`,
+`refittable_cargo_classes`, `non_refittable_cargo_classes`,
+`always_refittable_cargos`, `never_refittable_cargos`,
+`refit_cargo_types`, `refit_cost`, `loading_speed`. Čumák má teď
+kapacitu 0. Součet přes soupravu zůstává stejný, takže v nákupu se
+kapacita nezměnila.
+
+Ověřeno po zpětném rozbalení: u všech 18 má čumák kapacitu 0x00
+a viditelný díl 0x09 s plným refit seznamem. Článkování, průhledné
+sprity i rozcestníky beze změny.
+
+Verze s článkem vzadu tuhle chybu nikdy neměla, tam viditelné auto
+zůstalo vepředu i s nákladem. Má ale ten malý klikací box.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanek-vpredu.grf` | `a258e5cbde833cf318c81b88d3e59e98` |
+| `VWT1-S1203-clanek-vzadu.grf` | `19c944b8bd225168353f61208958a154` |
+
