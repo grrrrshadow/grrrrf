@@ -274,12 +274,14 @@ void SpriteSheetGenerator::create_sprite_sheet_8bpp(const std::string& image_pat
     image.set_palette(palette);
     image.resize(width, height);
 
-    // Set all the pixels to brilliant white - this is the background.
+    // Background. Deliberately NOT white: white is a real colour and any of it that
+    // leaks into a sprite rectangle is drawn in the game as a white fringe. Transparent
+    // black cannot do that, and it matches what the renders come out of Blender with.
     for (uint32_t y = 0; y < height; ++y)
     {
         for (uint32_t x = 0; x < width; ++x)
         {
-            image[y][x] = 0xFF;
+            image[y][x] = 0x00;
         }
     }
 
@@ -331,12 +333,14 @@ void SpriteSheetGenerator::create_sprite_sheet_24bpp(const std::string& image_pa
     png::image<png::rgb_pixel> image;
     image.resize(width, height);
 
-    // Set all the pixels to brilliant white - this is the background.
+    // Background. Deliberately NOT white: white is a real colour and any of it that
+    // leaks into a sprite rectangle is drawn in the game as a white fringe. Transparent
+    // black cannot do that, and it matches what the renders come out of Blender with.
     for (uint32_t y = 0; y < height; ++y)
     {
         for (uint32_t x = 0; x < width; ++x)
         {
-            image[y][x] = png::rgb_pixel{ 0xFF, 0xFF, 0xFF };
+            image[y][x] = png::rgb_pixel{ 0x00, 0x00, 0x00 };
         }
     }
 
@@ -388,12 +392,14 @@ void SpriteSheetGenerator::create_sprite_sheet_32bpp(const std::string& image_pa
     png::image<png::rgba_pixel> image;
     image.resize(width, height);
 
-    // Set all the pixels to brilliant white - this is the background.
+    // Background. Deliberately NOT white: white is a real colour and any of it that
+    // leaks into a sprite rectangle is drawn in the game as a white fringe. Transparent
+    // black cannot do that, and it matches what the renders come out of Blender with.
     for (uint32_t y = 0; y < height; ++y)
     {
         for (uint32_t x = 0; x < width; ++x)
         {
-            image[y][x] = png::rgba_pixel{ 0xFF, 0xFF, 0xFF, 0xFF };
+            image[y][x] = png::rgba_pixel{ 0x00, 0x00, 0x00, 0x00 };
         }
     }
 
@@ -455,12 +461,14 @@ void SpriteSheetGenerator::create_sprite_sheet_mask(const std::string& image_pat
     image.set_palette(palette);
     image.resize(width, height);
 
-    // Set all the pixels to brilliant white - this is the background.
+    // Background. Deliberately NOT white: white is a real colour and any of it that
+    // leaks into a sprite rectangle is drawn in the game as a white fringe. Transparent
+    // black cannot do that, and it matches what the renders come out of Blender with.
     for (uint32_t y = 0; y < height; ++y)
     {
         for (uint32_t x = 0; x < width; ++x)
         {
-            image[y][x] = 0xFF;
+            image[y][x] = 0x00;
         }
     }
 

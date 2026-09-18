@@ -136,3 +136,61 @@ otevře i ten starší yagl pro Windows.
 Kolečko tam a zpět je navíc beze ztráty: skript yagl i všechny čtyři
 spritesheety mají po rozbalení znovu zabaleného souboru **stejný
 kontrolní součet** jako po rozbalení originálu.
+
+---
+
+## 3. Pozadí spritesheetu už není bílé (2026-09-18)
+
+**Soubory:** `records/graphics/SpriteSheetGenerator.cpp`,
+`records/graphics/RealSpriteRecord.cpp`
+
+### Co vadilo
+
+Hráč renderuje na černém pozadí a GRF balí s `#000000`. Po rozbalení
+mu ale z yaglu vylezl spritesheet s **čistě bílým pozadím** mezi
+sprity. Bílá je skutečná barva, takže když je obdélník spritu jen
+o kousek větší, než má být, ta bílá se do spritu zabalí a ve hře je
+z ní **bílý rámeček kolem auta**. S černou se to stát nemůže.
+
+### Co jsme udělali
+
+Generátor listů to měl na čtyřech místech, u všech se stejným
+komentářem „Set all the pixels to brilliant white":
+
+| typ listu | bylo | je |
+|---|---|---|
+| paleta (8bpp), dvakrát | index 0xFF, bílá | **index 0x00**, průhledná |
+| RGB bez alfy | 255,255,255 | **0,0,0** |
+| RGBA | 255,255,255,255 | **0,0,0,0**, průhledná černá |
+
+U RGBA je to přesně to, co hráč renderuje: černá s nulovou alfou.
+Co z ní přeteče do spritu, je neviditelné.
+
+Popisky čísel spritů se kreslí modře, takže na černé zůstaly čitelné.
+U paletového listu se kreslí indexem 0, tedy stejným jako nové
+pozadí, a tam už vidět nejsou. To je jen pomůcka při ladění.
+
+### Musela se rozšířit i kontrola okraje
+
+`is_background()` znala jen dvě věci: plně průhledný pixel u RGBA
+(to je naše úprava č. 1) a čistou bílou. Paletový index 0 mezi ně
+nepatřil, takže po změně pozadí začal yagl hlásit okraj u každého
+osmibitového spritu — z 3029 varování jich bylo **5919**.
+
+Přibyl tedy třetí případ: **u paletového spritu je index 0 pozadí**,
+protože to je průhledná barva TTD. Varování se vrátila na 3029.
+
+### Ověřeno
+
+- Vlastní testy yaglu: 2 685 471 kontrol, 75 případů, vše prošlo.
+- Kolečko tam a zpět je **bajt po bajtu shodné** u obou sad.
+  Rozbalit a zase zabalit dá soubor se **stejným md5** jako vstup:
+  dvanácettrojky `7755dc90c5dc9537c7f08a4be429197c`, CZTR
+  `bcc8126df624803d0842e0ed8a8d6184`.
+- V listu dvanácettrojek zbylo po rozbalení **6 plně krycích bílých
+  pixelů** místo celého pozadí, a to jsou skutečné bílé pixely uvnitř
+  spritů.
+
+Zbylých 3029 varování u CZTR je na jejich vlastních zástupných
+spritech 2×2, které jsou v GRF opravdu bílé. To pozadím listu
+nesouvisí a spravit se to dá jen v té sadě.

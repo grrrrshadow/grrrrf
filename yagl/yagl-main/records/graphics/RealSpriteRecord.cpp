@@ -566,6 +566,14 @@ bool RealSpriteRecord::is_background(const Pixel& pixel)
         return true;
     }
 
+    // In a paletted sprite index 0 is the transparent colour, so it is background
+    // for the same reason. The sprite sheets we write use it for the gaps between
+    // sprites, in place of white.
+    if ((m_colour & HAS_PALETTE) && !(m_colour & HAS_RGB) && (pixel.index == 0x00))
+    {
+        return true;
+    }
+
     return is_pure_white(pixel);
 }
 
