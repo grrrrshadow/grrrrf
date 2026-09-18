@@ -113,3 +113,54 @@ zůstalo vepředu i s nákladem. Má ale ten malý klikací box.
 | `VWT1-S1203-clanek-vpredu.grf` | `a258e5cbde833cf318c81b88d3e59e98` |
 | `VWT1-S1203-clanek-vzadu.grf` | `19c944b8bd225168353f61208958a154` |
 
+
+---
+
+## Druhá oprava: čumák nesmí mít nulovou kapacitu
+
+Předchozí oprava přestřelila. Přesunul jsem náklad na viditelné auto
+a čumáku nechal nulu, jenže **motor s nulovou kapacitou přijde
+o nabídku nákladů**. Projevilo se to takhle:
+
+- v nákupním seznamu se dvanácettrojka neukázala pod filtrem „Dřevo"
+- přestavba dala divnou kapacitu a vozidlo nešlo poslat k lesu
+- po koupi naskočila červená hláška, že se informace o nákladu
+  a přestavbě po nákupu změnily
+
+Ta hláška je kontrola `CheckConsistencyOfArticulatedVehicle`. Hra si
+z nákupního seznamu předpoví, co souprava umí vézt, po koupi to
+porovná se skutečností, a když se to rozejde, nahlásí GRF jako vadný.
+
+### Jak to má CZTR
+
+Místo dalšího hádání jsem se podíval na vydanou sadu, která funguje.
+U článkované soupravy Liaz Plachta+vlek:
+
+| | kupovaný díl 0x0062 | článek 0x0061 |
+|---|---|---|
+| kapacita | 8 | 10 |
+| třídy pro přestavbu | 0x06F4 | 0x06F4 |
+| seznam nákladů | stejný | stejný |
+| climate | plné | null |
+
+Tedy: **oba díly mají nenulovou kapacitu a úplně stejné refit
+vlastnosti.** Kapacity se sčítají.
+
+### Co je teď
+
+| | čumák | viditelné auto | součet |
+|---|---|---|---|
+| kapacita | 1 | 8 | 9 |
+
+Součet zůstal 9 jako v původní sadě, takže se vozidlo nezesílilo.
+Refit seznamy má obojí stejné, u všech 18 ověřeno. Čumák veze jednu
+jednotku neviditelně, viditelné auto osm, takže jeho grafika sleduje
+naloženost skoro přesně.
+
+Ověřeno po zpětném rozbalení: 876 záznamů, 18 dvojic s kapacitami
+1 a 8, shodné refit seznamy, 18 článkovacích callbacků. U valníku na
+dřevo je 0x24 v seznamu na obou dílech.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanek-vpredu.grf` | `7755dc90c5dc9537c7f08a4be429197c` |
