@@ -125,3 +125,63 @@ delšího, jemnější krok formát nedovolí.
 | `0x007C` | Tatra 815 6x6 (Valník) | 2 | 1 | 0.750 | 0.875 | +16.7 % |
 | `0x007D` | Tatra 815 6x6 (Valník+vlek) | 2 | 1 | 0.750 | 0.875 | +16.7 % |
 | `0x007E` | Tatra 815 6x6 (Valník+vlek) | 2 | 1 | 0.750 | 0.875 | +16.7 % |
+
+---
+
+## CZTR_Truck_SetBRYLE1-rozestupy-cisty.grf
+
+To samé co `-rozestupy`, plus vyčištěné sprity.
+
+### Co se čistilo
+
+Rendery mají dvě vrstvy smetí:
+
+1. **Závoj** průhlednosti 1 až 7 přes celý obdélník spritu. Je to
+   2 % plochy listů a je úplně neviditelný, ale drží obdélníky
+   nafouklé, protože podle něj vypadá, že tam obsah je.
+2. **Smítka**, hrstka plně krycích pixelů daleko od vozu. Ta už
+   vidět jsou — při čtyřnásobném přiblížení jsou to tečky na silnici.
+
+Popelář byl nejhorší: obdélník 260 × 216 na vůz široký 35 px, kvůli
+smítku 3 × 4 px ve vzdálenosti 220 px. Právě tohle smítko přehouplo
+sprit přes 256 px a shodilo yagl.
+
+### Jak se hledal vůz
+
+Sloupec po sloupci a řádek po řádku se sečtou neprůhledné pixely,
+a bere se ten souvislý úsek, kde jich je nejvíc. Mezera do 32 px se
+toleruje, aby se neutrhlo rameno jeřábu nebo zrcátko. Postupuje se
+od obou okrajů dovnitř. Pak se přidá jeden pixel čistého lemu, aby
+yagl nehlásil, že se obsah dotýká kraje.
+
+### Výsledek
+
+| | před | po |
+|---|---|---|
+| nejširší sprit | 260 px | 228 px |
+| spritů nad 256 px | 4 | 0 |
+| plocha spritů | 17,2 M px | 16,3 M px |
+| velikost souboru | 38 261 099 B | 36 825 474 B |
+| varování při balení | 3021 | 3021 |
+
+Žádný sprit už nepřelézá 256 px, takže se ten chunkovaný formát ani
+nepřepne do dlouhé varianty.
+
+### Ověřeno pixel po pixelu
+
+Rozbalí-li se výsledek a porovná se s originálem tak, že se každý
+sprit položí podle své kotvy:
+
+| | |
+|---|---|
+| viditelných pixelů, které zmizely | 149 (to jsou ta smítka, ve 20 spritech) |
+| viditelných pixelů, které přibyly | 0 |
+| pixelů na stejném místě s jinou barvou | 0 |
+
+**Nic se nepohnulo.** Zarovnání zůstalo na milimetr stejné, ubyla
+jen ta smetí.
+
+| | |
+|---|---|
+| záznamů | 3435 |
+| md5 | `e094c60267aade095090ab76f685e0f4` |
