@@ -185,3 +185,55 @@ jen ta smetí.
 |---|---|
 | záznamů | 3435 |
 | md5 | `e094c60267aade095090ab76f685e0f4` |
+
+---
+
+## CZTR_Truck_SetBRYLE1-clanek.grf
+
+To předchozí (rozestupy + vyčištěné sprity) **plus neviditelný článek
+vepředu** u všech 26 kupovaných vozidel, stejně jako u dvanácettrojek.
+
+| díl | číslo | délka | co dělá |
+|---|---|---|---|
+| čumák | původní, 0x0058 až 0x007E | 1 | neviditelný, drží jméno, cenu i ikonu v nákupu |
+| auto | nové, 0x0080 až 0x0099 | původní | veze grafiku a náklad |
+| přívěs | beze změny | beze změny | u 11 souprav zůstává jako druhý článek |
+
+Rozestup mezi auty v koloně je **8 + délka čumáku = 9** místo 8.
+Rozestup tahač–přívěs se nemění, ten se řídí délkou auta, a ta
+zůstala tam, kde byla.
+
+### Spritesheet se nezměnil
+
+Průhledný sprit čumáku ukazuje na **volné průhledné místo, které
+v listu už bylo**, souřadnice 224, 6032. Pro osmibitové přiblížení
+se použil ten jejich vlastní dummy 2×2 na 10, 10, tedy přesně ten,
+co mají u svých neaktivních článků. Ani jeden pixel listu se nepřepsal.
+
+### Jejich dva „Neviditelné články" zůstaly, jak byly
+
+0x0058 a 0x0059. Nikdo je nevolá, jsou v souboru mrtvé. Nesahal jsem
+na ně, jen jsem si od nich půjčil tu grafiku.
+
+### Co všechno muselo přejít na viditelný díl
+
+Kromě délky a nákladu hlavně **grafika podle druhu nákladu**. Těch má
+sada hodně, u Škody Sentinel třeba 38 mapování, celkem **129**. Kdyby
+zůstala na čumáku, kreslil by se místo auta on a byl by vidět.
+
+Dál kapacita a všechny refit vlastnosti, podle vzoru, který má CZTR
+u svých vlastních souprav: **oba díly mají shodné refit vlastnosti
+a kapacita se dělí tak, aby součet seděl.** Čumák bere jednu jednotku,
+auto zbytek. Kdo měl nulu (kamionové tahače, náklad veze návěs),
+zůstal na nule.
+
+### Ověřeno po zpětném rozbalení
+
+| | |
+|---|---|
+| záznamů | 3575 |
+| kupovaných s článkovacím příznakem | 26 |
+| délka čumáku | 1 u všech |
+| délky viditelných aut | 5, 6, 7 a 8, tedy původní |
+| článkovacích větví | 52, tedy dvě na vozidlo |
+| md5 | `bcc8126df624803d0842e0ed8a8d6184` |
