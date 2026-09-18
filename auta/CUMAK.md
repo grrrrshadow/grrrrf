@@ -1,68 +1,64 @@
-# Neviditelný čumák: rozestup v koloně
+# Neviditelný článek: rozestup v koloně
 
-`VWT1-S1203-cumak.grf` — všech 18 vozidel sady přestavěno.
-Testovací soubor, jméno GRF a číslo zůstávají stejná, takže se
-nahradí původní `VWT1-S1203modradodavka.grf`.
+`VWT1-S1203-cumak.grf` — všech 18 vozidel sady. Nahrazuje původní
+`VWT1-S1203modradodavka.grf`, číslo GRF je stejné.
 
-## Proč to jinak nejde
+## Proč první pokus zmizel
 
-Odstup, na který auto zastaví za jiným, je v OpenTTD natvrdo 8
-jednotek mezi středy a délka vozidla do něj nevstupuje. Žádná
-vlastnost GRF na to nesahá.
+Napsal jsem to obráceně: grafiku vezl zadní díl a vepředu byl
+neviditelný čumák. Jenže:
 
-Ale díly jedné soupravy se pouštějí z depa po `cached_veh_length`
-snímcích toho **předního** a ten rozestup pak drží. A blokuje
-kterýkoliv díl cizí soupravy. Takže:
+```cpp
+// roadveh_cmd.cpp, uvnitr CmdBuildRoadVehicle
+AddArticulatedParts(v);
+```
 
-> rozestup mezi dvěma auty = 8 + délka vedoucího dílu
+**Článek se připojuje jedině při koupi vozidla.** Auta, která už ve
+hře jezdila, žádný nedostala. Zůstal z nich jen ten neviditelný
+přední díl, a proto jezdila a nebyla vidět.
 
-## Jak je to udělané
+## Jak je to teď
 
-Z každého vozidla je dvoudílná souprava:
+Obráceně, aby to nemohlo zmizet:
 
 | díl | číslo | délka | co dělá |
 |---|---|---|---|
-| čumák | původní, 0x0080 až 0x0097 | 1 | neviditelný, drží jméno, cenu, náklad i ikonu v nákupu |
-| auto | nové, 0x00A0 až 0x00B7 | 8 | veze grafiku, v nákupu se neukazuje |
+| přední | původní, 0x0080 až 0x0097 | 1 | **veze grafiku**, jméno, cenu, náklad i ikonu v nákupu |
+| zadní | nové, 0x00A0 až 0x00B7 | 8 | neviditelný, jen dělá místo |
 
-**Kupované číslo se nemění.** Z původního čísla se stal ten čumák,
-takže uložené hry o motor nepřijdou. Přibylo jen nové číslo pro
-viditelné auto.
+Auto, které ve hře už jezdí, je pořád jen ten přední díl — a ten
+kreslí vůz. **Vidět tedy bude vždycky.** Jenom nedostane ten rozestup
+navíc, dokud se nekoupí znovu.
 
-Délka auta do rozestupu nevstupuje, takže si nechalo plných 8 a s
-tím i plný klikací box.
+## Proč to dává rozestup
 
-## Čísla
+Rozestup, na který auto zastaví za jiným, je natvrdo 8 jednotek mezi
+středy. Díly jedné soupravy se ale pouštějí z depa po délce toho
+předního a ten rozestup pak drží, a blokuje kterýkoliv díl cizí
+soupravy. Takže:
 
-| stav | auto zabírá | mezera z 8 |
+> rozestup mezi dvěma auty = 8 + délka předního dílu = 8 + 1 = 9
+
+| stav | auto zabírá | mezera z odstupu |
 |---|---|---|
 | před zvětšením grafiky o 20 % | 5,8 jednotky | 2,2 |
 | dnes | 7,0 jednotky | 1,0 |
-| **s čumákem délky 1** | 7,0 jednotky | **2,0** |
-
-Měřeno na inkoustu spritů dvanácettrojky ve čtyřech hlavních směrech
-jízdy: 56 px při čtyřnásobném přiblížení, a jedna jednotka délky je
-tam 8 px.
-
-Čumák délky 1 tedy vrací skoro přesně mezeru, jaká byla před
-zvětšením. Kdyby to bylo málo, dvojka dá mezeru 3,0, tedy víc, než
-kdy bývala.
+| **nově koupené s článkem** | 7,0 jednotky | **2,0** |
 
 ## Na co se dívat
 
-1. **Kolona.** Postav pár aut za sebe a nech je zastavit. Mezi nimi
-   má být mezera zhruba jako před zvětšením.
-2. **Nákupní seznam.** Ikona má být jako dřív. Jestli se kreslí dvakrát
-   nebo divně, je to tím, že článkovaná souprava se v seznamu vykresluje
-   po dílech — dá se doladit.
-3. **Kde auto stojí.** Viditelné auto se kreslí o jednu jednotku za
-   místem, kde si hra myslí, že vozidlo je. Na zastávce to může být
-   o 8 px při čtyřnásobném přiblížení.
-4. **Zatáčky.** Souprava je teď o jednotku delší, průjezd zatáčkou se
-   může chovat jinak.
+1. **Kup nové auto.** Staré jen zůstane vidět, rozestup nedostane.
+2. **Kolona.** Postav dvě tři nová za sebe a nech je zastavit.
+3. **Klikání.** Přední díl má box 1 jednotku, zadní 8 za autem.
+   Jestli se do auta bude trefovat blbě, dá se to přerozdělit.
+4. **Zatáčky a zastávka.** Souprava je o jednotku delší než dřív.
+
+Jestli bude mezera pořád malá, přední díl délky 2 dá rozestup 10,
+tedy mezeru 3,0 — víc, než kdy bývala.
 
 ## Ověřeno
 
-Zabaleno a zase rozbaleno: 876 záznamů, 18 čumáků délky 1, 18
-viditelných dílů délky 8, 18 článkovacích callbacků a 144 průhledných
-spritů. Vše přežilo.
+Zabaleno a zase rozbaleno: 876 záznamů, 18 předních dílů délky 1,
+18 neviditelných zadních dílů délky 8, 18 článkovacích callbacků,
+144 průhledných spritů, 18 rozcestníků vracejících se na původní
+grafiku.
