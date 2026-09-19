@@ -164,3 +164,36 @@ dřevo je 0x24 v seznamu na obou dílech.
 | soubor | md5 |
 |---|---|
 | `VWT1-S1203-clanek-vpredu.grf` | `7755dc90c5dc9537c7f08a4be429197c` |
+
+---
+
+## Doladění o pixel, jen jihozápad (2026-09-19)
+
+Kvůli zarovnání na vagonky. Čtyři vozidla, **jen směr 5 jihozápad**,
+všechny čtyři sady spritů (prázdná, plná, dvě zastávkové), posun
+**x−1 y−1** přímo na offsetech. Jiný směr se nikde nezměnil.
+
+| vozidlo | sada 0 | sada 1 | sada 2 | sada 3 |
+|---|---|---|---|---|
+| 0x0082 Škoda 1203 Pajda karavan | −29 −30 → −30 −31 | −29 −31 → −30 −32 | −30 −35 → −31 −36 | −30 −35 → −31 −36 |
+| 0x0095 TAZ 1500 dodávka zahrádka | −28 −31 → −29 −32 | −28 −30 → −29 −31 | −29 −31 → −30 −32 | −27 −36 → −28 −37 |
+| 0x0096 TAZ 1500 dodávka zahrádka bedna | −28 −31 → −29 −32 | −28 −30 → −29 −31 | −27 −35 → −28 −36 | −27 −36 → −28 −37 |
+| 0x0097 TAZ 1500 dodávka | **−28 −28 → −29 −29** | −28 −27 → −29 −28 | −29 −28 → −30 −29 | −27 −36 → −28 −37 |
+
+Tučná hodnota je ta, kterou jsi uvedl jako příklad. Seděla, takže
+jsem mířil na správné sprity.
+
+### Co se kontrolovalo předem
+
+Jeden sprit karavanu má podezřele nízké číslo (0x06), tak jsem
+prověřil, jestli si některý z těch šestnácti spritů nepůjčuje i jiné
+vozidlo. **Nepůjčuje**, všech šestnáct patří jen těmhle čtyřem.
+
+### Ověřeno
+
+Zabaleno a zase rozbaleno: 876 záznamů, **32 rozdílných řádků**, tedy
+přesně těch šestnáct změn a nic jiného. Mimo sprity se nezměnilo nic.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanek-vpredu.grf` | `aeebde590a614220174a2cf66c587923` |
