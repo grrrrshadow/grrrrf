@@ -950,3 +950,36 @@ kus dál, v úplně jiné funkci — v tom, jak se pouští díly z depa.
 **„Není to v téhle funkci" není totéž co „nejde to."** Dohledat se
 to dalo jen tím, že jsem si prošel všechna místa, kde se
 `cached_veh_length` vůbec vyskytuje.
+
+
+---
+
+## Napřed se podívat, co funguje (2026-09-19)
+
+U neviditelného článku na dvanácettrojkách jsem udělal **dvě opravy
+téže vlastnosti za sebou**, než jsem se podíval na vydanou sadu.
+
+1. Náklad jsem nechal na neviditelném čumáku. Viditelné auto pak bylo
+   pro hru pořád prázdné, takže nešla plná grafika ani animace na
+   zastávce.
+2. Přesunul jsem náklad na auto a čumáku nechal nulu. Motor s nulovou
+   kapacitou přijde o nabídku nákladů, takže se auto neukázalo pod
+   filtrem nákladu a po koupi hra hlásila, že se informace změnily.
+
+Teprve pak jsem otevřel CZTR a podíval se na jejich živou článkovanou
+soupravu Liaz Plachta+vlek. Pravidlo tam bylo vidět na první pohled:
+**oba díly mají nenulovou kapacitu a úplně shodné refit vlastnosti**,
+a kapacity se sčítají. Napoprvé by to stačilo.
+
+**Existuje-li vydaná věc, která to samé dělá a funguje, je rychlejší
+ji otevřít než si pravidla odvozovat ze zdrojáků enginu.** Zdroják
+řekne, co se stane; hotová sada řekne, co se osvědčilo.
+
+### A jedna věc, která se vyplatila naopak
+
+Před posunem spritů o pixel jsem prověřil, jestli si některý z nich
+nepůjčuje i jiné vozidlo. Jeden měl podezřele nízké číslo. Nepůjčoval,
+ale ta kontrola stála dva řádky a chránila před tichým posunem u
+někoho, o kom bych se nikdy nedozvěděl.
+
+**Než sáhnu na sdílený zdroj, zjistím, kdo všechno ho používá.**
