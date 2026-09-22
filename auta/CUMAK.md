@@ -420,3 +420,52 @@ a „velkým", je **délka auta mezi nimi**:
 
 Malý je ten soubor, co už je hotový. Velký je jedno číslo navíc,
 `shorten_vehicle` u viditelného auta z 0x07 na 0x06.
+
+### Zadání parametru pro příště
+
+Jméno: **Pevnost nárazníku**. Popisek: *zaručuje odstup mezi vozidly*.
+
+Syntaxi Action14 yagl umí, je v jeho zdrojáku
+`records/actions/Action14Record.cpp`. Kostra k doplnění:
+
+```
+optional_info // Action14
+{
+    INFO:
+    {
+        NPAR: [ 0x01 ];
+        PARA:
+        {
+            0x00000000:
+            {
+                TYPE: [ 0x00 ];
+                MASK: [ 0x00 0x00 0x03 ];
+                NAME: default, "Pevnost narazniku";
+                DESC: default, "Zarucuje odstup mezi vozidly.";
+            }
+        }
+    }
+}
+```
+
+Úrovně, které parametr přepíná:
+
+| hodnota | jméno | sestava | rozestup | proti 8 |
+|---|---|---|---|---|
+| 0 | vypnuto | auto 8 | 8 | 0 % |
+| 1 | mini, jen vepředu | 1, 8 | 9 | +12,5 % |
+| 2 | malý, oba | 1, 1, 1 | 10 | +25,0 % |
+| 3 | velký, oba | 1, 2, 1 | 11 | +37,5 % |
+
+Co parametr musí přepnout:
+
+1. **délku viditelného auta** (`shorten_vehicle` 0x00, 0x07 nebo 0x06)
+2. **jestli článkovací přepínač vrací druhý díl** (`0x00000002: 0x80C0;`)
+
+To první jde jedním Action00 blokem na konci souboru, který tu
+vlastnost přepíše u všech 18 aut najednou. To druhé chce dvě verze
+přepínače a přeskok Action07 mezi nimi, yagl Action07 umí.
+
+Názvy chunků TYPE, MASK, LIMI, VALU jsou ze specifikace NewGRF.
+Yagl je bere jako obecné čtyřpísmenné značky, takže je projede, ale
+**jestli je OpenTTD pochopí, se musí ověřit až na hotovém souboru.**
