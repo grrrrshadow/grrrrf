@@ -266,7 +266,7 @@ zrcadlově kryje nejlíp, ať se párování nehádá:
 | JV | JZ | 0,99 |
 
 Párování tedy sedí a siluety jsou opravdu zrcadla. Při překlopení se
-kotva měří od druhého okraje, .
+kotva se měří od druhého okraje: `sirka - 1 - kotva`.
 
 ### Oprava boků
 
