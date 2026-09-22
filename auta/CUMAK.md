@@ -302,3 +302,74 @@ jsou odsouhlasené a ve hře odzkoušené, a takový posun by byl vidět.
 | soubor | md5 |
 |---|---|
 | `VWT1-S1203-clanek-vpredu.grf` | `cadb1bde0df409fc957b23d7a59cd5e8` |
+
+---
+
+## Články z obou stran (2026-09-22)
+
+### Nejdřív to, co nejde
+
+Článek **nejde zmenšit pod jednu osminu dlaždice**. OpenTTD počítá
+
+```
+delka = 8 - shorten_vehicle,   shorten_vehicle je cele cislo nejvys 7
+```
+
+takže délka je celý počet osmin, 1 až 8. Čtvrtina ani polovina osminy
+neexistuje, není to volba nastavení, je to formát.
+
+### Jak se rozestup vlastně skládá
+
+Díly soupravy se pouštějí z depa po délce toho **předního**, a blokuje
+kterýkoliv díl cizí soupravy. Pro sestavu čumák, auto, ocas tedy:
+
+```
+rozestup auto-auto = delka auta + 8 + delka cumaku
+```
+
+Zadní článek nepřidá svoji délku, ale **délku auta před sebou**. To je
+to podstatné a je to proti intuici.
+
+| sestava | čumák | auto | ocas | rozestup | proti 8 |
+|---|---|---|---|---|---|
+| článek jen vepředu | 1 | 8 | – | 9 | +12,5 % |
+| oba články, auto dlouhé | 1 | 8 | 1 | **17** | +112,5 % |
+| oba články, auto krátké | 1 | 1 | 1 | **10** | **+25,0 %** |
+
+### Dosažitelné kroky
+
+| rozestup | proti 8 |
+|---|---|
+| 9 | +12,5 % |
+| 10 | **+25,0 %** |
+| 11 | +37,5 % |
+| 12 | +50,0 % |
+
+**25 % tedy sedí přesně. 20 % je mezi dvěma kroky a nedá se zapsat.**
+
+### Dva soubory
+
+| soubor | sestava | rozestup |
+|---|---|---|
+| `VWT1-S1203-clanky-oba-dlouhe-auto.grf` | 1, 8, 1 | 17 |
+| `VWT1-S1203-clanky-oba-na-stred.grf` | 1, 1, 1 | 10 |
+
+Ten druhý je těch 25 %. Auto je v soupravě uprostřed, mezi dvěma
+stejně dlouhými články, takže by mělo líp sednout na vagon.
+
+**Co to stojí:** klikací box je u silničního vozidla přesně jeho
+délka, takže u varianty na střed spadne z 8 jednotek na 1. Články po
+stranách mají po jedné, dohromady 3 jednotky kolem auta.
+
+Zadní článek je jedno společné číslo `0x00C0` pro všech 18 vozidel,
+neviditelné, délka 1.
+
+### Ověřeno
+
+Obě varianty zabaleny a zase rozbaleny: 888 záznamů, tři díly na
+soupravu, čumák 1, ocas 1, auto 8 respektive 1.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanky-oba-dlouhe-auto.grf` | `1fc97038aad4463c21494bc5180de597` |
+| `VWT1-S1203-clanky-oba-na-stred.grf` | `43dc34528aae5fb164b7127686bd9a30` |
