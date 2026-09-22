@@ -248,3 +248,57 @@ tedy 116 spritů krát dva, a mimo sprity **nic**.
 | soubor | md5 |
 |---|---|
 | `VWT1-S1203-clanek-vpredu.grf` | `6c24ce81f3f6d9f5e27ab5acb882d06a` |
+
+---
+
+## Zatáčky: i východ a západ (2026-09-22)
+
+Hráč měl pravdu, že protějšek má každý směr, a moje opatrnost u boků
+byla zbytečná. Nechal jsem počítač najít, který sprit se kterým
+zrcadlově kryje nejlíp, ať se párování nehádá:
+
+| zrcadlím | najde | shoda |
+|---|---|---|
+| S sever | sám sebe | 0,99 |
+| J jih | sám sebe | 1,00 |
+| SV | SZ | 0,98 |
+| V východ | Z západ | 0,98 |
+| JV | JZ | 0,99 |
+
+Párování tedy sedí a siluety jsou opravdu zrcadla. Při překlopení se
+kotva měří od druhého okraje, .
+
+### Oprava boků
+
+Dvojice se srovnává tak, že se odchylka rozdělí na půl a **oba**
+sprity se posunou o polovinu ve vlastním rámci. To je v obraze posun
+na opačné strany, takže dvojice zůstane souměrná.
+
+| dvojice | odchylka před | posun | odchylka po |
+|---|---|---|---|
+| V východ ↔ Z západ | +10 až +11 px | **oba xrel −5** | **+0 až +1 px** |
+
+Nasazeno na všech 58 sad. Svisle beze změny, tam byla odchylka −1 až
++1 px už předtím.
+
+### Co zůstává otevřené: jízdní dvojice
+
+Stejný test na jízdních směrech dává:
+
+| dvojice | odchylka |
+|---|---|
+| SV ↔ SZ | +4 až +5 px |
+| JV ↔ JZ | +13 až +15 px |
+
+Souměrné tedy nejsou ani ony. Srovnat by je šlo stejně, posunem o 2
+a o 7 px u každého člena. **Nesáhl jsem na ně**, protože jízdní směry
+jsou odsouhlasené a ve hře odzkoušené, a takový posun by byl vidět.
+Čeká to na rozhodnutí.
+
+### Ověřeno
+
+876 záznamů, 232 rozdílných řádků, mimo sprity nic.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanek-vpredu.grf` | `cadb1bde0df409fc957b23d7a59cd5e8` |
