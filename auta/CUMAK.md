@@ -407,3 +407,16 @@ Pro CZTR by tedy nárazník vzadu musel přijít **za poslední díl
 soupravy**, ne mezi tahač a přívěs, a délky tahačů by zůstaly.
 Rozestup by pak byl `délka posledního dílu + 8 + 1`, tedy podle
 přívěsu, ne podle nastavení. To chce vlastní rozvahu.
+
+### Dvě úrovně, jak je hráč chce: malý a velký
+
+Nárazník sám má vždycky osminu dlaždice. Co dělá rozdíl mezi „malým"
+a „velkým", je **délka auta mezi nimi**:
+
+| parametr | sestava | rozestup | proti 8 | klikací box auta |
+|---|---|---|---|---|
+| **malý nárazníček** | 1, 1, 1 | 10 | +25,0 % | 1 |
+| **velký nárazníček** | 1, 2, 1 | 11 | +37,5 % | 2 |
+
+Malý je ten soubor, co už je hotový. Velký je jedno číslo navíc,
+`shorten_vehicle` u viditelného auta z 0x07 na 0x06.
