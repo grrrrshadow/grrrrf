@@ -373,3 +373,37 @@ soupravu, čumák 1, ocas 1, auto 8 respektive 1.
 |---|---|
 | `VWT1-S1203-clanky-oba-dlouhe-auto.grf` | `1fc97038aad4463c21494bc5180de597` |
 | `VWT1-S1203-clanky-oba-na-stred.grf` | `43dc34528aae5fb164b7127686bd9a30` |
+
+---
+
+## Rozhodnuto (2026-09-22)
+
+Jede se na variantě **s nárazníkem vepředu i vzadu**, tedy
+`VWT1-S1203-clanky-oba-na-stred.grf`, sestava 1, 1, 1 a rozestup 10,
+což je +25 %.
+
+Parametr do nastavení GRF **až příště**. Až na něj dojde, tohle je
+stupnice, která je dosažitelná:
+
+| úroveň | sestava | rozestup | proti 8 | klikací box auta |
+|---|---|---|---|---|
+| vypnuto | auto 8 | 8 | 0 % | 8 |
+| mini, jen vepředu | 1, 8 | 9 | +12,5 % | 8 |
+| normální, oba | 1, 1, 1 | 10 | +25,0 % | 1 |
+| pevný, oba | 1, 2, 1 | 11 | +37,5 % | 2 |
+
+Pozor na to, že „mini" není menší nárazník, ale **jeden místo dvou**.
+Nárazník má vždycky osminu dlaždice, menší formát neumí.
+
+### Na CZTR truck set tahle varianta nejde přenést jen tak
+
+U dvanácettrojek je auto jednodílné, takže mu délku můžu srazit na 1
+bez následků. **U CZTR by to rozbilo rozestup tahač–přívěs**, protože
+ten se řídí právě délkou tahače: přívěs sedí za tahačem přesně o jeho
+délku. Srazit tahače z 5 až 8 jednotek na 1 by přívěs přilepilo na
+kabinu a zahodilo by to celou tu práci s rozestupy.
+
+Pro CZTR by tedy nárazník vzadu musel přijít **za poslední díl
+soupravy**, ne mezi tahač a přívěs, a délky tahačů by zůstaly.
+Rozestup by pak byl `délka posledního dílu + 8 + 1`, tedy podle
+přívěsu, ne podle nastavení. To chce vlastní rozvahu.
