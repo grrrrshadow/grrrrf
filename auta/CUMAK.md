@@ -197,3 +197,54 @@ přesně těch šestnáct změn a nic jiného. Mimo sprity se nezměnilo nic.
 | soubor | md5 |
 |---|---|
 | `VWT1-S1203-clanek-vpredu.grf` | `aeebde590a614220174a2cf66c587923` |
+
+---
+
+## Zatáčky: sever a jih na osu (2026-09-22)
+
+Zatáčecí směry nikdy žádnou odchylku x y nedostaly. Tohle je první.
+
+### Proč to šlo změřit bez hry
+
+Hráčův postřeh: **zrcadlový odraz dvou spritů musí mít křížek na
+stejném místě.** U severu a jihu je auto čelem, takže sprit je
+zrcadlově souměrný **sám v sobě** a křížek musí sedět na jeho vlastní
+ose. To se dá najít proložením siluety s jejím zrcadlem.
+
+| směr | osa proti kotvě před | po |
+|---|---|---|
+| S sever | +1,0 až +1,5 px | **0,0 až +0,5 px** |
+| J jih | +8,5 až +9,0 px | **−0,5 až 0,0 px** |
+
+Shoda siluety se zrcadlem je 0,97 až 1,00, takže osa je určená dobře.
+Jih byl o devět pixelů mimo, sever o jeden a půl.
+
+### Posun
+
+**Jednotný pro všechna auta**, aby zůstala řada, která už je hotová:
+
+| směr | xrel | yrel |
+|---|---|---|
+| S sever | **−1** | beze změny |
+| J jih | **−9** | beze změny |
+
+Nasazeno na **58 sad**, tedy všechny, u všech 18 vozidel. Svisle se
+nesáhlo na nic: sever a jih mají linku kol 32 a 31 px pod kotvou,
+tedy pixel od sebe, a lepší měřítko pro svislou složku nemám.
+
+### Východ a západ zůstaly
+
+Tam auto stojí bokem, takže samo o sobě souměrné není, a zrcadlo se
+musí hledat mezi dvěma sprity. Jenže stejnou odchylku, +4 až +15 px,
+ukazují i **jízdní** dvojice SV/SZ a JV/JZ, o kterých hráč říká, že
+jsou dobře. Zrcadlo napříč levá–pravá tedy není spolehlivé měřítko
+a hádat nebudu.
+
+### Ověřeno
+
+Zabaleno a zase rozbaleno: 876 záznamů, **232 rozdílných řádků**,
+tedy 116 spritů krát dva, a mimo sprity **nic**.
+
+| soubor | md5 |
+|---|---|
+| `VWT1-S1203-clanek-vpredu.grf` | `6c24ce81f3f6d9f5e27ab5acb882d06a` |
