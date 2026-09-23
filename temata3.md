@@ -983,3 +983,52 @@ ale ta kontrola stála dva řádky a chránila před tichým posunem u
 někoho, o kom bych se nikdy nedozvěděl.
 
 **Než sáhnu na sdílený zdroj, zjistím, kdo všechno ho používá.**
+
+
+---
+
+## Kde v enginu sedí to, co z GRF nejde (2026-09-23)
+
+Hráč říká, že když OpenTTD něčemu nerozumí, řeknou mu to vedle. Tohle
+je tedy soupis míst, kde ta hranice opravdu je, ať se to dá předat bez
+hledání. **Všechno je v `src/roadveh_cmd.cpp`.**
+
+### Jemnost délky vozidla
+
+```cpp
+uint length = VEHICLE_LENGTH;                          // 8
+length -= Clamp(veh_len, 0, VEHICLE_LENGTH - 1);       // veh_len = shorten_vehicle
+```
+
+`VEHICLE_LENGTH` je 8, takže délka je celý počet osmin dlaždice, 1 až 8.
+**Odtud plyne, že nárazník nejde udělat menší než osmina a že kroky
+rozestupu jsou násobky 12,5 %.** Kdyby engine počítal po šestnáctinách
+nebo dvaatřicetinách, šly by i jemnější nárazníky a hráčových 20 %
+by najednou existovalo.
+
+Pozor: `shorten_vehicle` je v GRF jeden bajt, takže jemnější dělení
+by chtělo i dohodu, jak se ta hodnota čte.
+
+### Odstup v koloně
+
+```cpp
+static constexpr DirectionIndexArray<int8_t> dist_x{-4, -8, -4, -1, 4, 8, 4, 1};
+static constexpr DirectionIndexArray<int8_t> dist_y{-4, -1, 4, 8, 4, 1, -4, -8};
+```
+
+Ve `FindClosestBlockingRoadVeh`. Osm jednotek natvrdo, bez jakékoliv
+vazby na délku vozidla. **Celá naše práce s nárazníky je obcházení
+téhle konstanty.** Kdyby šla nastavit, nárazníky by nebyly potřeba
+vůbec.
+
+### Klikací box
+
+`RoadVehicle::UpdateDeltaXY`: podél jízdy je to `cached_veh_length`,
+napříč 3 a na výšku 6. Ty dvě natvrdo. **Proto u varianty s krátkým
+autem spadne klikací box na jednu jednotku** a nedá se to vyvážit.
+
+### Kde to není
+
+Není to v GRF. Seznam vlastností silničních vozidel jde po 0x2A
+a žádná z nich se odstupu ani boxu netýká. Proto tohle patří vedle,
+ne sem.
