@@ -89,3 +89,35 @@ odstupu ani klikacího boxu netýká**. Proto to nejde vyřešit u nás.
 
 Když by k něčemu z toho vznikla nová vlastnost nebo callback, rádi to
 z GRF strany nasadíme a otestujeme na obou sadách.
+
+---
+
+## Pozor: naše silniční vozidla už nejsou jednodílná
+
+Tohle je důležité pro cokoliv, co s autem na silnici manipuluje, tedy
+i pro nakládání aut na vlak. Kvůli rozestupům je z **každého
+kupovaného auta článkovaná souprava**:
+
+| sada | kupovaných | dílů na soupravu |
+|---|---|---|
+| Škoda / TAZ / VW | 18 | 2 nebo 3 |
+| CZTR truck set | 26 | 2, u 11 z nich 3 (mají přívěs) |
+
+Sestava je `neviditelný nárazník vepředu`, `viditelné auto`, volitelně
+`neviditelný nárazník vzadu`. Nárazníky mají osminu dlaždice a kreslí
+se jako prázdný sprit.
+
+Z toho plyne pár věcí, které můžou překvapit:
+
+1. **Kupované číslo je ten neviditelný nárazník**, ne auto. Drží jméno,
+   cenu i ikonu v nákupu. Viditelné auto je až druhý díl.
+2. **Kapacita je rozdělená mezi díly.** U dvanácettrojek nese nárazník
+   jednu jednotku a auto zbytek, protože motor s nulovou kapacitou
+   přijde o nabídku nákladů. Součet sedí na původní hodnotu.
+3. **Grafika podle druhu nákladu sedí na viditelném dílu**, ne na
+   kupovaném čísle. U CZTR je takových mapování 129.
+4. Kdo bere auto ze silnice, musí vzít **celou soupravu**, ne jeden
+   `Vehicle`. Viditelné auto samo o sobě je jen prostřední díl.
+
+Jestli by vám to u nakládání překáželo, dá se to z naší strany
+přestavět, jen to chce vědět dopředu, jakou podobu potřebujete.
