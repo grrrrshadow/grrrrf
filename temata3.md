@@ -1032,3 +1032,16 @@ autem spadne klikací box na jednu jednotku** a nedá se to vyvážit.
 Není to v GRF. Seznam vlastností silničních vozidel jde po 0x2A
 a žádná z nich se odstupu ani boxu netýká. Proto tohle patří vedle,
 ne sem.
+
+
+### Potřetí a poprvé dobře (2026-09-23)
+
+Přišlo hlášení o mašince, která po poruše nepřipojila, a k němu konzole
+a ladicí log z buildu Decouple. Tentokrát jsem se nerozjel: odpověděl
+jsem jednou větou, u souborů jsem se podíval **jen na první řádky**,
+abych poznal, čí to je, a tím to skončilo. Hráč: *„jo to je vedle : )"*
+
+Ta hranice, která se osvědčila: **poznat adresáta smím, rozebírat obsah
+ne.** Podívat se na hlavičku souboru, abych věděl, jestli je to yagl
+nebo herní log, je identifikace. Číst dál už je zkoumání, a to je
+přesně to, co mě předtím dvakrát vtáhlo dovnitř.
