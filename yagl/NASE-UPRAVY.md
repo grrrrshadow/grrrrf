@@ -194,3 +194,6 @@ protože to je průhledná barva TTD. Varování se vrátila na 3029.
 Zbylých 3029 varování u CZTR je na jejich vlastních zástupných
 spritech 2×2, které jsou v GRF opravdu bílé. To pozadím listu
 nesouvisí a spravit se to dá jen v té sadě.
+
+## Pozor: sprite_id 0
+Sprite se `sprite_id<0x00000000>` yagl zabalí, ale při rozbalení je prázdný: v kontejneru 2 znamená id 0 konec grafické sekce. Číslovat od 1 (zjištěno u `vagony-mari/`, 25. 9. 2026).
