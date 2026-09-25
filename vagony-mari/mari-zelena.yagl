@@ -3,6 +3,7 @@
 // Sada = 2 * (random_bits vozu & 1) + (plny ? 1 : 0); sprite v sade = smer 0..7.
 // Stav naklady jako OpenTTD: StoredCount * 3 / cargo_cap -> 0 = nic, 1 = napul, 2 = plny.
 // Nahrazuje CZTR sprity nakladu 0x3304-0x3363 (bit0 = 0) a 0x32A4-0x3303 (bit0 = 1).
+// Barva jako herni marihuanove vozy (green_load): palety 0x52-0x57, 0xCF, 0xD0 podle jasu uhli, o stupen svetleji.
 // Verze 1.0.0 (St = 0x00AE) vrstvy nema, tam tahle geometrie neplati.
 sprite_sets<Trains, 0x0000> // MARI zelena ploska pro St (CZTR Wagons - Cargo 1.1.0, 0x011D), vrstva nakladu
 {
