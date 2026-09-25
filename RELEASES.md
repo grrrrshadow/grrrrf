@@ -72,6 +72,10 @@ Sady průmyslů:
 - ECS: Basic vector II, Chemical vector II, Agricultural, Construction,
   Machinery, Basic, Town (dvě verze), Wood, ECSext 2.6, Industry Add-on
 
+Doplnění: **Industries of the Caribbean 2.7 potřebuje ITL Houses.**
+Bez nich skončí fatální chybou. Ty nejsou v releasu, ale přímo v repu
+ve složce `sbirka-grf/`, viz tamní `README.md`.
+
 ---
 
 ## Jak z nich dostat jeden soubor bez stahování celého zipu
