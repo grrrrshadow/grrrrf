@@ -2,7 +2,9 @@
 
 Velké soubory do gitu nepatří, takže je hráč dává do releasů repa
 `grrrrshadow/grrrrf`. Tohle je soupis, ať se příště nemusí hledat.
-Stav k 2026-09-25.
+Stav k 2026-09-26. **Úplný seznam všech souborů**, i s obsahem tarů a md5
+každého GRF, je v `INDEX-RELEASY.md` (generuje `tools/zipindex.py index`).
+Tady je jen souhrn, k čemu co je.
 
 Kódy na začátku jmen jsou GRF ID z BaNaNaS: `4d49....` je CZTR,
 `4d65....` ECS.
@@ -62,13 +64,16 @@ balila chunkované sprity s chybou. A hráčovy skripty `barvy*.py`,
 
 ## par4 — zip4.zip, 9,5 MB
 
-Sady průmyslů:
+Sady průmyslů a budov, 22 tarů:
 
 - `55440100-GIST_German_Industries_Set-0.21.15`
 - `54543230-Industries_of_the_Caribbean-2.7`
 - `524a450b-Fixed_OpenGFX_Mars_Houses-1.1`
-- `f1250009-FIRS_Industries_5-5.2.0`
+- `f1250009-FIRS_Industries_5-5.2.0` a `f1250007-FIRS_Industries_3-3.0.12`
 - `4d471002-CZIS-3.2.1`
+- `4a448807-XIS_Extreme_Industry_Set-0.6.2`
+- `54540202-Beach_as_Industry-1.2.0`, `4a448850-Housing_as_Industries-0.1.1`
+- `41533031-Swedish_Houses-1.1.2`, `43481001-Polish_Buildings_as_Objects-2.0`
 - ECS: Basic vector II, Chemical vector II, Agricultural, Construction,
   Machinery, Basic, Town (dvě verze), Wood, ECSext 2.6, Industry Add-on
 
@@ -78,21 +83,29 @@ ve složce `sbirka-grf/`, viz tamní `README.md`.
 
 ---
 
+## Releasy v `forclaude` (hra, jen číst)
+
+| tag | zip | co v něm je |
+|---|---|---|
+| `newgrf` | `newgrf.zip`, 156 MB | `CZTR_Wagons_cargo.grf` (1.0.0) a `f1250007-FIRS_Industries_3-3.0.12.tar` |
+| `testsave` | `Download.zip`, 104 kB | `test 1.sav`, `testnew.sav`, `test1.txt`, `openttd.cfg` |
+
+V `grrrrf` visí ještě prázdný koncept (draft) `par3` z 19. 9., nic v něm
+není. Skutečný `par3` je ten druhý, se `zip3.zip`.
+
+---
+
 ## Jak z nich dostat jeden soubor bez stahování celého zipu
 
-`par3` má přes půl gigabajtu a většinou z něj stačí jeden tar. Zip má
-na konci adresář, takže:
+```bash
+python3 tools/zipindex.py list https://github.com/grrrrshadow/grrrrf/releases/download/par3/zip3.zip
+python3 tools/zipindex.py get  https://github.com/grrrrshadow/grrrrf/releases/download/par3/zip3.zip Diesel diesel.tar
+```
 
-1. stáhnout jen posledních pár MB (`Range: bytes=...`) a najít záznam
-   `PK\x05\x06`, z něj offset adresáře
-2. projít záznamy `PK\x01\x02`, u hledaného vzít metodu, komprimovanou
-   velikost a offset lokální hlavičky
-3. stáhnout lokální hlavičku (30 B + jméno + extra), za ní začínají data
-4. stáhnout jen ten rozsah
-
-**Pozor na metodu.** `zip2` je uložený bez komprese (metoda 0), ale
-`cztr.zip` v `par` má vagony **zkomprimované (metoda 8)**. To se pak musí
-rozbalit přes `zlib.decompressobj(-15)`, jinak z toho `tar` hlásí, že to
-není archiv.
+Stáhne se jen konec zipu (adresář) a pak jen rozsah toho jednoho souboru.
+Nástroj sám pozná, jestli je soubor zkomprimovaný. **Zkomprimované
+(deflate, metoda 8) jsou soubory ve všech zipech**, uložené bez komprese
+jsou jen složky a pár prázdných souborů. Velikost zipu se bere z odpovědi
+na `GET` s rozsahem, protože `HEAD` na odkaz ke stažení vrací 401.
 
 Proxy tu potřebuje CA `/root/.ccr/ca-bundle.crt`.
