@@ -13,3 +13,9 @@ yagl/yagl-main/build/
 
 # yagl: build se sanitizery, jen na ladeni.
 yagl/yagl-main/build-asan/
+
+# Sergej: model M62 (9 MB) je v releasu par5 (zip5/m62/diesel_locomotive_m62.glb), sem se jen kopiruje.
+sergej/model/
+
+# Python si vedle skriptu uklada bajtkod
+__pycache__/

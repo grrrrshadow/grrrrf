@@ -3,7 +3,8 @@
 
   zipindex.py list URL                 vypise zaznamy zipu
   zipindex.py get URL JMENO VYSTUP     vytahne jeden zaznam (cast jmena staci, musi byt jednoznacna)
-  zipindex.py index VYSTUP.md          projde vsechny releasy grrrrf a forclaude a zapise index:
+  zipindex.py index VYSTUP.md [TAG..]  projde vsechny releasy grrrrf a forclaude a zapise index
+                                       (s tagy jen tyhle releasy a vlozi je do existujiciho indexu):
                                        zaznamy zipu, obsah taru a vnorenych zipu, md5 a jmeno GRF
 
 URL je odkaz ke stazeni assetu, napr.
@@ -51,7 +52,7 @@ def entries(url):
     cd = tail[cdo - base:cdo - base + cds] if cdo >= base else rng(url, cdo, cdo + cds - 1)
     out, p = [], 0
     while p + 46 <= len(cd) and cd[p:p + 4] == b"PK\x01\x02":
-        flags, meth = struct.unpack("<HH", cd[p + 8:p + 12])
+        flags, meth, dtime, ddate = struct.unpack("<HHHH", cd[p + 8:p + 16])
         csz, usz = struct.unpack("<II", cd[p + 20:p + 28])
         nl, el, cl = struct.unpack("<HHH", cd[p + 28:p + 34])
         lho, = struct.unpack("<I", cd[p + 42:p + 46])
@@ -69,7 +70,8 @@ def entries(url):
                 if csz == 0xFFFFFFFF: csz, = struct.unpack("<Q", d[k:k + 8]); k += 8
                 if lho == 0xFFFFFFFF: lho, = struct.unpack("<Q", d[k:k + 8]); k += 8
             q += 4 + hl
-        out.append(dict(name=name, meth=meth, csz=csz, usz=usz, lho=lho))
+        kdy = f"{1980 + (ddate >> 9):04d}-{(ddate >> 5) & 15:02d}-{ddate & 31:02d} {dtime >> 11:02d}:{(dtime >> 5) & 63:02d}"
+        out.append(dict(name=name, meth=meth, csz=csz, usz=usz, lho=lho, kdy=kdy))
         p += 46 + nl + el + cl
     return n, out
 
@@ -221,7 +223,20 @@ def releases(repo):
     return json.loads(curl([f"https://api.github.com/repos/{repo}/releases"], text=True))
 
 
-def index(out):
+def index(out, jen=None):
+    """jen = seznam tagu: preindexovat jen tyhle releasy a vlozit je do existujiciho souboru."""
+    if jen:
+        stary = open(out).read().split("\n## ")
+        hlava, sekce = stary[0], ["## " + s for s in stary[1:]]
+        nove = {}
+        for repo in REPOS:
+            for r in releases(repo):
+                if r["tag_name"] in jen:
+                    for a in r["assets"]:
+                        nove[f"## {repo.split('/')[1]} / {r['tag_name']} — {a['name']}"] = sekce_releasu(repo, r, a)
+        zbyle = [s for s in sekce if s.split("\n")[0].strip() not in nove]
+        open(out, "w").write(hlava.rstrip("\n") + "\n\n" + "\n".join(nove.values()) + "\n".join(zbyle).rstrip("\n") + "\n")
+        return
     L = [f"# Index releasů\n",
          f"Vygenerováno `tools/zipindex.py index` {datetime.date.today()}. Každý zip v releasech",
          "repozitářů `grrrrf` a `forclaude`, u tarů, vnořených zipů a GRF i to, co je uvnitř.",
@@ -231,11 +246,20 @@ def index(out):
     for repo in REPOS:
         for r in releases(repo):
             for a in r["assets"]:
+                L.append(sekce_releasu(repo, r, a))
+    open(out, "w").write("\n".join(L) + "\n")
+
+
+def sekce_releasu(repo, r, a):
+    L = []
+    if True:
+        if True:
+            if True:
                 url = a["browser_download_url"]
                 L.append(f"## {repo.split('/')[1]} / {r['tag_name']} — {a['name']}\n")
                 L.append(f"`{url}`\n")
                 if not a["name"].lower().endswith(".zip"):
-                    L.append(f"{fmt(a['size'])} B, není zip\n"); continue
+                    L.append(f"{fmt(a['size'])} B, není zip\n"); return "\n".join(L) + "\n"
                 n, es = entries(url)
                 L.append(f"{fmt(n).strip()} B, {len(es)} záznamů\n")
                 L.append("```")
@@ -263,7 +287,7 @@ def index(out):
                         L.append(f"{'':>13}    !! obsah nepřečten: {ex}")
                     print(f"{repo} {r['tag_name']} {e['name']}", file=sys.stderr, flush=True)
                 L.append("```\n")
-    open(out, "w").write("\n".join(L) + "\n")
+    return "\n".join(L) + "\n"
 
 
 if __name__ == "__main__":
@@ -272,7 +296,7 @@ if __name__ == "__main__":
         n, es = entries(sys.argv[2])
         print(f"zip {n} B, {len(es)} zaznamu")
         for e in es:
-            print(f"{fmt(e['usz'])} m{e['meth']} {e['name']}")
+            print(f"{fmt(e['usz'])} m{e['meth']} {e['kdy']}  {e['name']}")
     elif cmd == "get":
         url, want, outp = sys.argv[2:5]
         n, es = entries(url)
@@ -284,6 +308,6 @@ if __name__ == "__main__":
                 f.write(b)
         print(f"{hit[0]['name']} -> {outp}")
     elif cmd == "index":
-        index(sys.argv[2])
+        index(sys.argv[2], sys.argv[3:] or None)
     else:
         print(__doc__)

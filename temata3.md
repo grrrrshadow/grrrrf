@@ -338,9 +338,10 @@ Když jsem skládal `shuttle.grf`, spadlo to čtyřikrát za sebou. Pro příšt
    řetězec, takže `yagl_version: "";`. Opsat verzi odjinud = chyba.
 2. **`version: GRF8;`, ne `version: 8;`** v bloku `grf`. Je to výčtová
    hodnota, ne číslo.
-3. **Pozadí spritesheetu musí být neprůhledná bílá** `(255,255,255,255)`.
-   Yagl si kontroluje okraj kolem každého obdélníku; průhledné pozadí
-   hlásí jako „non-white pixels in its border“.
+3. ~~Pozadí spritesheetu musí být neprůhledná bílá.~~ **Už neplatí** (od
+   25. 9. 2026, `yagl/NASE-UPRAVY.md` §3): náš yagl bere jako pozadí i průhlednou
+   a paletový index 0. Rámeček kolem obdélníku ale kontroluje dál, takže sprite
+   nesmí ležet na kraji listu (8bpp atrapa na `[0, 0]` shodila yagl segfaultem).
 4. **Uvnitř obdélníku naopak čistá bílá být nesmí** — znamená „tady
    sprite není“. Průhlednost se dělá alfou; RGB pod ní dávat modrou
    `(0,0,255,0)`, jak to má yagl ve svých 8bpp listech. A kdyby model
@@ -1045,3 +1046,62 @@ Ta hranice, která se osvědčila: **poznat adresáta smím, rozebírat obsah
 ne.** Podívat se na hlavičku souboru, abych věděl, jestli je to yagl
 nebo herní log, je identifikace. Číst dál už je zkoumání, a to je
 přesně to, co mě předtím dvakrát vtáhlo dovnitř.
+
+---
+
+## Sergej M62 (2026-09-26)
+
+Vlastní GRF lokomotivy z hráčova modelu (`par5`), podrobnosti v `sergej/README.md`.
+
+### Témata čtu na začátku práce, ne až když se hráč zeptá
+
+Po zkrácení konverzace jsem `temata3.md` neotevřel, dokud se hráč nezeptal,
+jestli si tu čtu. Byly v něm přesně věci, které jsem pak potřeboval (focení,
+pořadí směrů, posuny z rámu místo `-w/2, -h/2`). **Na začátku každé větší práce
+si témata přečíst.**
+
+### Který skript platí: podle data v zipu
+
+Hráč: *„skripty funguje jen ten nejnovější datum“.* Data jsou v centrálním
+adresáři zipu, `tools/zipindex.py list` je teď vypisuje. Nejnovější `glb3BBC.py`
+v `par5` (24. 1. 2026) byl jiný soubor než stejnojmenný v `glb` (28. 12. 2025).
+
+### Kam hra kreslí sprite vlaku
+
+Ne na polohu vozidla. `AddSortableSpriteToDraw` kreslí na
+`RemapCoords(poloha + bounds.origin + bounds.offset)` a `Train::UpdateDeltaXY`
+ty hodnoty nastavuje podle směru a délky článku. Pro délku 8 je to 8 px nad
+polohou na šikmé koleji a (±16, −16) px na rovné. Vzorec je v `sergej/hra.py`.
+Ověřeno proti CZTR 770: kola v bočním pohledu vyšla 11 px pod kotvou, u nich 12.
+
+### Rovná a šikmá kolej mají jiné měřítko
+
+Osmina je na rovné koleji 8 px (zin4), na šikmé 16 px. Model ve skutečném
+poměru je tedy na rovné koleji o √2 delší, než kolik mu hra dá místa. CZTR
+proto lokomotivy ve směrech 1, 3, 5, 7 fotí podélně stlačené (asi 0,68), já 1/√2.
+Hráčovy staré fotky to neměly a ještě byly ve 17 px/m místo CZTR 12,2 px/m,
+takže v bočním pohledu uříznuté.
+
+### Dlouhá lokomotiva = tři články
+
+Jako CZTR 770: 2 + 8 + 2 osmin (BRÝLE 3 + 8 + 3). Na šikmé koleji kreslí celou
+lokomotivu prostřední článek, na rovné si každý kreslí svůj kus. Kus se určí
+druhým průchodem renderu s materiálem podle souřadnice (Texture Coordinate
+s objektem), žádné stříhání od oka. Odstupy článků: `L_a/2 + (L_b+1)/2`.
+
+### yagl: co tentokrát
+
+- Všechny sady v jednom `sprite_sets` (Action01) musí mít stejný počet spritů.
+  Obrázek do nákupu (1 sprite) patří do vlastního Action01.
+- `sprite_id` od 1, nula se při rozbalení tiše ztratí.
+- 8bpp atrapu (a každý sprite) dát dovnitř listu, ne na okraj.
+
+### Kontrolní skript taky může lhát
+
+První kontrola spojů hlásila rozdíly u 13 % pixelů. Chyba byla v kontrole:
+skládala poloprůhledné pixely s alfou vynásobenou do barvy a porovnávala je
+s nenásobenými. Kusy se nepřekrývají, takže se mají jen vložit. Než podle
+kontroly něco opravím, ověřit, že měří správně. Tady to šlo po krocích:
+round-trip yaglem (0 rozdílů), rozdělení na kusy v rámu (přesné), pak teprve
+chyba ve skládání kontroly.
+

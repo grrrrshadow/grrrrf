@@ -1,6 +1,6 @@
 # Mapa: kde co je
 
-Stav k 26. 9. 2026. Když něco přibude nebo se přesune, patří to sem.
+Stav k 26. 9. 2026 (večer). Když něco přibude nebo se přesune, patří to sem.
 
 ## Tohle repo (`grrrrf`), GRF a sprity
 
@@ -8,6 +8,7 @@ Stav k 26. 9. 2026. Když něco přibude nebo se přesune, patří to sem.
 |---|---|
 | `auta/` | Škoda / TAZ / VW (dvanácettrojky): hotové GRF s neviditelnými nárazníky (vpředu, vzadu, oba), skripty na čištění a zarovnání. Celá historie a zadání parametru „Pevnost nárazníku“ je v `CUMAK.md`. |
 | `cztr/` | CZTR truck set, tvůj zvětšený build BRYLE1: přebalený, s rozestupy, vyčištěný, s články. Popis v `README.md`. |
+| `sergej/` | Vlastní GRF lokomotivy M62: zelená „M62 Tamtam tajgy“ a červená „Sergej ČSD“, v měřítku CZTR i BRÝLE +20 %. Skripty na nátěr, focení, balení a kontroly, popis v `README.md`. |
 | `vagony-mari/` | Zelená ploška MARI na St z CZTR Wagons - Cargo 1.1.0: sprity, zápis v yaglu, náhled. |
 | `shuttle/`, `shuttletest/` | Raketoplán jako GRF, druhý je diagnostický build. |
 | `glb/` | Focení z Blenderu. `GLB/` jsou skripty (modely a HDRI jsou jen v releasu `glb`), `render-test/` vyfocený raketoplán po fázích letu. |
@@ -35,6 +36,7 @@ Stav k 26. 9. 2026. Když něco přibude nebo se přesune, patří to sem.
 - Blender jako modul Pythonu: `bpy` 5.0.1 (render bez okna)
 - Python: Pillow, numpy
 
-## Co tu není
+## Kde je model M62
 
-- **Model M62 „Sergej“.** Není v repu ani v žádném releasu, ani v jiných repech (prohledáno 26. 9. 2026).
+V releasu `par5` (`zip5/m62/diesel_locomotive_m62.glb`, originál `zip5/M62-1675.blend`).
+Do `sergej/model/` se jen kopíruje, v gitu není.

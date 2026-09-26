@@ -7,6 +7,150 @@ U GRF je md5 (podle něj hra pozná GRF v savu) a `grf_id` se jménem z Action08
 Jeden soubor se dá vytáhnout bez stažení celého zipu:
 `python3 tools/zipindex.py get <odkaz na asset> <část jména> <výstup>`
 
+## grrrrf / par5 — zip5.zip
+
+`https://github.com/grrrrshadow/grrrrf/releases/download/par5/zip5.zip`
+
+160 210 074 B, 135 záznamů
+
+```
+               zip5/
+    7 457 708  zip5/M62-1675.blend   (deflate)
+               zip5/zz/
+        1 448  zip5/zz/objtoglb2.py   (deflate)
+        1 543  zip5/zz/blendtoglb.py   (deflate)
+    3 145 782  zip5/zz/2te116g.bmp   (deflate)
+      196 662  zip5/zz/alpha.bmp   (deflate)
+      196 662  zip5/zz/alphaa.bmp   (deflate)
+      786 486  zip5/zz/ca3.bmp   (deflate)
+    7 581 696  zip5/zz/M62-1675.blend   (deflate)
+   12 582 966  zip5/zz/m62.bmp   (deflate)
+    3 145 782  zip5/zz/m62cab.bmp   (deflate)
+    3 145 782  zip5/zz/m62_bog.bmp   (deflate)
+      393 270  zip5/zz/zhaluzi.bmp   (deflate)
+        2 631  zip5/zz/blendtoglb1.py   (deflate)
+               zip5/m62/
+               zip5/m62/hdri/
+    6 149 597  zip5/m62/hdri/sunset.hdr   (deflate)
+   69 068 643  zip5/m62/hdri/overcast.exr   (deflate)
+   71 069 841  zip5/m62/hdri/snow.exr   (deflate)
+               zip5/m62/zz/
+        1 448  zip5/m62/zz/objtoglb2.py   (deflate)
+        1 543  zip5/m62/zz/blendtoglb.py   (deflate)
+    3 145 782  zip5/m62/zz/2te116g.bmp   (deflate)
+      196 662  zip5/m62/zz/alpha.bmp   (deflate)
+      196 662  zip5/m62/zz/alphaa.bmp   (deflate)
+      786 486  zip5/m62/zz/ca3.bmp   (deflate)
+    7 581 696  zip5/m62/zz/M62-1675.blend   (deflate)
+   12 582 966  zip5/m62/zz/m62.bmp   (deflate)
+    3 145 782  zip5/m62/zz/m62cab.bmp   (deflate)
+    3 145 782  zip5/m62/zz/m62_bog.bmp   (deflate)
+      393 270  zip5/m62/zz/zhaluzi.bmp   (deflate)
+        2 631  zip5/m62/zz/blendtoglb1.py   (deflate)
+            0  zip5/m62/error.txt   (uložený)
+          682  zip5/m62/materialyglb.py   (deflate)
+        1 009  zip5/m62/objtoglb.py   (deflate)
+          792  zip5/m62/objtoglb1.py   (deflate)
+        1 448  zip5/m62/objtoglb2.py   (deflate)
+          947  zip5/m62/negatestglb.py   (deflate)
+          999  zip5/m62/matrixtestglb.py   (deflate)
+       15 238  zip5/m62/glb3BB.py   (deflate)
+          846  zip5/m62/příkazy.txt   (deflate)
+       20 029  zip5/m62/glb3B.py   (deflate)
+       21 118  zip5/m62/glb3BBB.py   (deflate)
+        2 631  zip5/m62/blendtoglb1.py   (deflate)
+    9 009 352  zip5/m62/diesel_locomotive_m62.glb   (deflate)
+       20 762  zip5/m62/glb3BBC.py   (deflate)
+        1 344  zip5/m62/blendtoglb.py   (deflate)
+       56 193  zip5/m62/diesel_locomotive_m62_0.png   (deflate)
+       76 923  zip5/m62/diesel_locomotive_m62_1.png   (deflate)
+       64 154  zip5/m62/diesel_locomotive_m62_2.png   (deflate)
+       75 606  zip5/m62/diesel_locomotive_m62_3.png   (deflate)
+       56 474  zip5/m62/diesel_locomotive_m62_4.png   (deflate)
+       75 615  zip5/m62/diesel_locomotive_m62_5.png   (deflate)
+       63 734  zip5/m62/diesel_locomotive_m62_6.png   (deflate)
+       74 758  zip5/m62/diesel_locomotive_m62_7.png   (deflate)
+       63 734  zip5/m62/diesel_locomotive_m62_8.png   (deflate)
+        5 541  zip5/pack18.py   (deflate)
+               zip5/vw3/
+            0  zip5/vw3/error.txt   (uložený)
+        3 928  zip5/vw3/pack1.py   (deflate)
+        2 197  zip5/vw3/pack.py   (deflate)
+        7 079  zip5/vw3/pack7.py   (deflate)
+        6 561  zip5/vw3/pack5.py   (deflate)
+        4 605  zip5/vw3/pack2.py   (deflate)
+               zip5/vw3/primary/
+        2 447  zip5/vw3/primary/barvy9.py   (deflate)
+       56 193  zip5/vw3/primary/diesel_locomotive_m62_0.png   (deflate)
+        2 449  zip5/vw3/primary/barvy8.py   (deflate)
+       76 923  zip5/vw3/primary/diesel_locomotive_m62_1.png   (deflate)
+       64 154  zip5/vw3/primary/diesel_locomotive_m62_2.png   (deflate)
+       75 606  zip5/vw3/primary/diesel_locomotive_m62_3.png   (deflate)
+       56 474  zip5/vw3/primary/diesel_locomotive_m62_4.png   (deflate)
+       75 615  zip5/vw3/primary/diesel_locomotive_m62_5.png   (deflate)
+       63 734  zip5/vw3/primary/diesel_locomotive_m62_6.png   (deflate)
+       74 758  zip5/vw3/primary/diesel_locomotive_m62_7.png   (deflate)
+               zip5/vw3/secondary/
+        2 447  zip5/vw3/secondary/barvy9.py   (deflate)
+       56 193  zip5/vw3/secondary/diesel_locomotive_m62_0.png   (deflate)
+       76 923  zip5/vw3/secondary/diesel_locomotive_m62_1.png   (deflate)
+       64 154  zip5/vw3/secondary/diesel_locomotive_m62_2.png   (deflate)
+        2 449  zip5/vw3/secondary/barvy8.py   (deflate)
+       75 606  zip5/vw3/secondary/diesel_locomotive_m62_3.png   (deflate)
+       56 474  zip5/vw3/secondary/diesel_locomotive_m62_4.png   (deflate)
+       75 615  zip5/vw3/secondary/diesel_locomotive_m62_5.png   (deflate)
+       63 734  zip5/vw3/secondary/diesel_locomotive_m62_6.png   (deflate)
+       74 758  zip5/vw3/secondary/diesel_locomotive_m62_7.png   (deflate)
+       63 734  zip5/vw3/secondary/diesel_locomotive_m62_8.png   (deflate)
+        6 475  zip5/vw3/pack3.py   (deflate)
+        6 561  zip5/vw3/pack4NONE.py   (deflate)
+        7 080  zip5/vw3/pack6NONE.py   (deflate)
+        6 900  zip5/vw3/pack12origHQ.py   (deflate)
+        5 576  zip5/vw3/pack17.py   (deflate)
+        6 268  zip5/vw3/pack9.py   (deflate)
+        6 268  zip5/vw3/pack8NONE.py   (deflate)
+        7 123  zip5/vw3/PACK11.py   (deflate)
+        7 126  zip5/vw3/pack10AUTOMAT.py   (deflate)
+        5 541  zip5/vw3/pack18.py   (deflate)
+        7 791  zip5/vw3/pack14automat.py   (deflate)
+        7 791  zip5/vw3/pack15.py   (deflate)
+        6 549  zip5/vw3/pack15GPT4.py   (deflate)
+               zip5/vw3/p/
+        5 549  zip5/vw3/p/pack18.py   (deflate)
+               zip5/vw3/p/primary/
+        2 447  zip5/vw3/p/primary/barvy9.py   (deflate)
+        2 449  zip5/vw3/p/primary/barvy8.py   (deflate)
+               zip5/vw3/p/secondary/
+        2 447  zip5/vw3/p/secondary/barvy9.py   (deflate)
+        2 449  zip5/vw3/p/secondary/barvy8.py   (deflate)
+        2 408  zip5/vw3/p/sprites.yagl   (deflate)
+        2 408  zip5/vw3/p/xspritess.yagl   (deflate)
+        1 260  zip5/vw3/p/x1sprites.yagl   (deflate)
+        2 408  zip5/vw3/p/x2sprites.yagl   (deflate)
+        2 408  zip5/vw3/p/x3sprites.yagl   (deflate)
+       10 904  zip5/vw3/pack15GPT3.py   (deflate)
+        8 486  zip5/vw3/pack15GPT2.py   (deflate)
+        6 900  zip5/vw3/pack13HQ.py   (deflate)
+        7 941  zip5/vw3/pack15GPT1.py   (deflate)
+        4 664  zip5/vw3/pack16.py   (deflate)
+        2 548  zip5/vw3/xspritess.yagl   (deflate)
+        2 548  zip5/vw3/x1sprites.yagl   (deflate)
+        2 548  zip5/vw3/x2sprites.yagl   (deflate)
+        2 548  zip5/vw3/x3sprites.yagl   (deflate)
+               zip5/vw3/zaloha/
+               zip5/vw4/
+               zip5/vw4/sprites/
+        1 105  zip5/vw4/sprites/m62.yagl   (deflate)
+      883 200  zip5/vw4/yagl.exe   (deflate)
+            0  zip5/vw4/wrap.txt   (uložený)
+           37  zip5/vw4/wdecode.bat   (uložený)
+           38  zip5/vw4/wdropencode.bat   (uložený)
+            0  zip5/vw4/error.txt   (uložený)
+        3 575  zip5/vw4/test.txt   (deflate)
+        4 809  zip5/vw4/gptvariables0xE0atd.txt   (deflate)
+               zip5/vw4/zaloha/
+```
+
 ## grrrrf / par4 — zip4.zip
 
 `https://github.com/grrrrshadow/grrrrf/releases/download/par4/zip4.zip`
@@ -2068,4 +2212,3 @@ Jeden soubor se dá vytáhnout bez stažení celého zipu:
                  md5 79ef4bd078a6774f559b944b3d6a51c2
                  GRF 4d490213 "MI\x02\x13" CZTR Wagons-Cargo 1.0.0
 ```
-

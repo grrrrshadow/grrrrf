@@ -1,0 +1,623 @@
+yagl_version: "";
+grf_format: Container2;
+optional_info // Action14
+{
+    INFO: 
+    {
+        VRSN: [ 0x01 0x00 0x00 0x00 ];
+        MINV: [ 0x00 0x00 0x00 0x00 ];
+        NPAR: [ 0x00 ];
+        PALS: [ 0x44 ];
+        BLTR: [ 0x33 ];
+    }
+}
+grf // Action08
+{
+    grf_id: "MAXb";
+    version: GRF8;
+    name: "Sergej M62";
+    description: "M62 Tamtam tajgy a Sergej ČSD, měřítko CZTR, 12/8 dlaždice.{new-line}3D: renderatnight{new-line}GRF: Karel Mácha";
+}
+strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne
+{
+    /* 0xD001 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}renderatnight";
+    /* 0xD002 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{black}{new-line}Model: {gold}renderatnight";
+}
+// ---------------- M62 Tamtam tajgy
+properties<Trains, 0x0100> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x06;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        speed_kmh: 100;
+        power: 1971;
+        weight_tons: 116;
+        cost_factor: 0x34;
+        running_cost_factor: 0x4C;
+        running_cost_base: 0x00004C36;
+        engine_traction_type: 0x08;
+        coeff_of_tractive_effort: 0x4F;
+        coeff_of_air_drag: 0x14;
+        ai_engine_rank: 0x04;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+        callback_flags_mask: 0x10;
+    }
+}
+strings<Trains, default, 0x0100> // Action04
+{
+    /* 0x0100 */ "M62 Tamtam tajgy";
+}
+properties<Trains, 0x0101> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x00;
+        visual_effect: effect(DieselFumes, 0x08, Enable);
+    }
+}
+strings<Trains, default, 0x0101> // Action04
+{
+    /* 0x0101 */ "M62 Tamtam tajgy (článek)";
+}
+properties<Trains, 0x0102> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x06;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+    }
+}
+strings<Trains, default, 0x0102> // Action04
+{
+    /* 0x0102 */ "M62 Tamtam tajgy (článek)";
+}
+sprite_sets<Trains, 0x0000> // Action01
+{
+    sprite_set // 0x0000 hlava
+    {
+        sprite_id<0x00000001>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000002>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 6];
+        }
+        sprite_id<0x00000003>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000004>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [48, 6];
+        }
+        sprite_id<0x00000005>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000006>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [95, 6];
+        }
+        sprite_id<0x00000007>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000008>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 59, -31, -50], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [141, 6];
+        }
+    }
+    sprite_set // 0x0001 stred
+    {
+        sprite_id<0x00000009>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [44, 144, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [182, 6];
+        }
+        sprite_id<0x0000000A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 90, -60, -54], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [232, 6];
+        }
+        sprite_id<0x0000000B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 62, -109, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [331, 6];
+        }
+        sprite_id<0x0000000C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [95, 87, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [555, 6];
+        }
+        sprite_id<0x0000000D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [44, 145, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [656, 6];
+        }
+        sprite_id<0x0000000E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 89, -60, -53], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [706, 6];
+        }
+        sprite_id<0x0000000F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 157];
+        }
+        sprite_id<0x00000010>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 88, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [230, 157];
+        }
+    }
+    sprite_set // 0x0002 zad
+    {
+        sprite_id<0x00000011>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000012>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [329, 157];
+        }
+        sprite_id<0x00000013>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000014>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [375, 157];
+        }
+        sprite_id<0x00000015>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000016>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [416, 157];
+        }
+        sprite_id<0x00000017>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000018>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [41, 60, -25, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [457, 157];
+        }
+    }
+}
+sprite_groups<Trains, 0x10> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+sprite_groups<Trains, 0x11> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+sprite_groups<Trains, 0x12> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
+{
+    sprite_set // 0x0000 nakup
+    {
+        sprite_id<0x00000019>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [504, 157];
+        }
+    }
+}
+sprite_groups<Trains, 0x13> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+switch<Trains, 0x14, PrimaryDWord> // clanky (callback 0x16)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8101;
+        0x00000002: 0x8102;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x15, PrimaryDWord> // hlava: clanky nebo grafika
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0014;
+    };
+    default: 0x0010;
+}
+switch<Trains, 0x16, PrimaryDWord> // nakup: clanky, popis, obrazek
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0014;
+        0x00000023: 0x8001;
+    };
+    default: 0x0013;
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0015;
+    feature_ids: [ 0x0100 ];
+    cargo_types:
+    {
+        0xFF: 0x0016;
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0011;
+    feature_ids: [ 0x0101 ];
+    cargo_types:
+    {
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0012;
+    feature_ids: [ 0x0102 ];
+    cargo_types:
+    {
+    };
+}
+// ---------------- Sergej ČSD
+properties<Trains, 0x0110> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x06;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        speed_kmh: 100;
+        power: 1971;
+        weight_tons: 116;
+        cost_factor: 0x34;
+        running_cost_factor: 0x4C;
+        running_cost_base: 0x00004C36;
+        engine_traction_type: 0x08;
+        coeff_of_tractive_effort: 0x4F;
+        coeff_of_air_drag: 0x14;
+        ai_engine_rank: 0x04;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+        callback_flags_mask: 0x10;
+    }
+}
+strings<Trains, default, 0x0110> // Action04
+{
+    /* 0x0110 */ "Sergej ČSD";
+}
+properties<Trains, 0x0111> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x00;
+        visual_effect: effect(DieselFumes, 0x08, Enable);
+    }
+}
+strings<Trains, default, 0x0111> // Action04
+{
+    /* 0x0111 */ "Sergej ČSD (článek)";
+}
+properties<Trains, 0x0112> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x06;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+    }
+}
+strings<Trains, default, 0x0112> // Action04
+{
+    /* 0x0112 */ "Sergej ČSD (článek)";
+}
+sprite_sets<Trains, 0x0000> // Action01
+{
+    sprite_set // 0x0000 hlava
+    {
+        sprite_id<0x0000001A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000001B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [728, 157];
+        }
+        sprite_id<0x0000001C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000001D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [770, 157];
+        }
+        sprite_id<0x0000001E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000001F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [817, 157];
+        }
+        sprite_id<0x00000020>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000021>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 59, -31, -50], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [863, 157];
+        }
+    }
+    sprite_set // 0x0001 stred
+    {
+        sprite_id<0x00000022>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [44, 144, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [904, 157];
+        }
+        sprite_id<0x00000023>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 90, -60, -54], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 307];
+        }
+        sprite_id<0x00000024>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 62, -109, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [105, 307];
+        }
+        sprite_id<0x00000025>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [95, 87, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [329, 307];
+        }
+        sprite_id<0x00000026>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [44, 145, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [430, 307];
+        }
+        sprite_id<0x00000027>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 89, -60, -53], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [480, 307];
+        }
+        sprite_id<0x00000028>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [579, 307];
+        }
+        sprite_id<0x00000029>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [93, 88, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [803, 307];
+        }
+    }
+    sprite_set // 0x0002 zad
+    {
+        sprite_id<0x0000002A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000002B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [902, 307];
+        }
+        sprite_id<0x0000002C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000002D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [948, 307];
+        }
+        sprite_id<0x0000002E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000002F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 458];
+        }
+        sprite_id<0x00000030>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000031>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [41, 60, -25, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [47, 458];
+        }
+    }
+}
+sprite_groups<Trains, 0x20> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+sprite_groups<Trains, 0x21> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+sprite_groups<Trains, 0x22> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
+{
+    sprite_set // 0x0000 nakup
+    {
+        sprite_id<0x00000032>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [94, 458];
+        }
+    }
+}
+sprite_groups<Trains, 0x23> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+switch<Trains, 0x24, PrimaryDWord> // clanky (callback 0x16)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8111;
+        0x00000002: 0x8112;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x25, PrimaryDWord> // hlava: clanky nebo grafika
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0024;
+    };
+    default: 0x0020;
+}
+switch<Trains, 0x26, PrimaryDWord> // nakup: clanky, popis, obrazek
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0024;
+        0x00000023: 0x8002;
+    };
+    default: 0x0023;
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0025;
+    feature_ids: [ 0x0110 ];
+    cargo_types:
+    {
+        0xFF: 0x0026;
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0021;
+    feature_ids: [ 0x0111 ];
+    cargo_types:
+    {
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0022;
+    feature_ids: [ 0x0112 ];
+    cargo_types:
+    {
+    };
+}

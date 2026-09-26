@@ -83,6 +83,21 @@ ve složce `sbirka-grf/`, viz tamní `README.md`.
 
 ---
 
+## par5 — zip5.zip, 160 MB
+
+Model a pracovní složky lokomotivy M62 („Sergej“):
+
+- `M62-1675.blend` — model v Blenderu (23. 1. 2026), starší kopie v `zz/`
+- `m62/diesel_locomotive_m62.glb` — převod do glb, **z něj se fotí** (`sergej/`)
+- `m62/glb3BBC.py` (24. 1. 2026) — nejnovější fotící skript, z něj vychází `sergej/render_sergej.py`;
+  starší `glb3B*.py` hráč označil za nefunkční
+- `m62/diesel_locomotive_m62_0-8.png` — staré fotky (17 px/m, v bočním pohledu uříznuté)
+- `m62/hdri/` — stejná HDRI jako v `glb`
+- `vw3/`, `vw4/` — pokusy o balení (`pack*.py`, `m62.yagl`), `vw4/yagl.exe` stará verze
+- textury v `zz/*.bmp`
+
+---
+
 ## Releasy v `forclaude` (hra, jen číst)
 
 | tag | zip | co v něm je |
