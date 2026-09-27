@@ -1,4 +1,4 @@
-M62 Sergej, for ottd decouple by Karel Macha – GRF pro OpenTTD
+M62 Sergej for ottd Decouple by Karel Macha – GRF pro OpenTTD
 ottd Decouple by Karel Mácha
 https://karel-macha.itch.io/openttd-decouple-by-karel-macha
 
@@ -25,7 +25,7 @@ PŘEVZATÉ ČÁSTI
 
 -------------------------------------------------------------------------------
 
-M62 Sergej, for ottd decouple by Karel Macha – GRF for OpenTTD
+M62 Sergej for ottd Decouple by Karel Macha – GRF for OpenTTD
 ottd Decouple by Karel Mácha
 https://karel-macha.itch.io/openttd-decouple-by-karel-macha
 

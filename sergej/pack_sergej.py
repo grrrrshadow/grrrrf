@@ -95,8 +95,9 @@ vse = {n: natier_sprity(os.path.join(FOTKY, f"{VARIANTA}_{n}")) for n in NATERY}
 # Verze: kazde sestaveni, ktere dostane hrac, o jednu vys. Je ve jmenu souboru (hrac: "pis tam verzi
 # do jmena souboru grf") a v Action14 (VRSN), hra ji ukaze v okne GRF. MINV 1: nova verze smi nahradit
 # kteroukoli starsi v ulozene hre (ID vozu se nemeni).
-# 1 prvni sprity, 2 sever o 3 px, 3 prezdivky a licence, 4 troubeni, 5 motor podle rychlosti a barevne jmeno
-VERZE = 5
+# 1 prvni sprity, 2 sever o 3 px, 3 prezdivky a licence, 4 troubeni, 5 motor podle rychlosti a barevne jmeno,
+# 6 jmeno: M62 Sergej cervene, zbytek zelene
+VERZE = 6
 JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA] + f"-v{VERZE}"
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
@@ -177,7 +178,8 @@ GRF_ID = {"orig": "MAXb", "bryle": "MAXc"}[VARIANTA]
 #   {orange} informace, nakonec zelene Karel Macha. Varianta ma svou barvu: BRYLE {lt-blue} jako "Magnificated"
 #   v truck setu, meritko CZTR {gold} jako VW T1. Hrac: "decouple zelene az po Machu".
 BARVA = {"orig": "{gold}", "bryle": "{lt-blue}"}[VARIANTA]
-GRF_JMENO = "M62 Sergej{red}, for ottd{green} decouple by Karel Macha " + BARVA + "{train}"
+# hrac 27. 9.: cervene "M62 Sergej", zbytek zelene "for ottd Decouple by Karel Macha"
+GRF_JMENO = "{red}M62 Sergej{green} for ottd Decouple by Karel Macha " + BARVA + "{train}"
 VARIANTA_POPIS = {"orig": "CZTR scale, 12/8 tiles, for CZTR tracks",
                   "bryle": "BRÝLE, magnified +20 %, 14/8 tiles, for the original game tracks"}[VARIANTA]
 POPIS_GRF = ("{red}M62 Sergej{green}  {train} {new-line}"

@@ -4,8 +4,8 @@ Dvě lokomotivy M62 v jednom GRF, ve dvou velikostech:
 
 | GRF | `grf_id` | měřítko | délka | kolej |
 |---|---|---|---|---|
-| `grf/orig/M62_Sergej-v5.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4) | 12/8 (2 + 8 + 2) | na koleje CZTR |
-| `grf/bryle/M62_Sergej_BRYLE-v5.grf` | `MAXc` | o 20 % větší, 14,64 px/m | 14/8 (3 + 8 + 3) | na původní koleje hry |
+| `grf/orig/M62_Sergej-v6.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4) | 12/8 (2 + 8 + 2) | na koleje CZTR |
+| `grf/bryle/M62_Sergej_BRYLE-v6.grf` | `MAXc` | o 20 % větší, 14,64 px/m | 14/8 (3 + 8 + 3) | na původní koleje hry |
 
 Obě mají `track_type 0`, tedy štítek `RAIL`. Na něm jezdí i lokomotivy a vagony CZTR (v jejich
 převodní tabulce je `RAIL` na indexu 1) a všechny koleje CZTR Rails (RA01–RA13, ELRL, ER01–08)
@@ -13,12 +13,12 @@ mají `RAIL` mezi kompatibilními a napájenými. Takže jezdí obě všude, li�
 
 ## Jméno a popis v seznamu GRF
 
-Podle hráčova řádu zápisu (jeho CZTR Truck set BRYLE, VW T1 a m62 v `par5`): jméno, `{red}` část,
-`{green}` část s decouple, na konci symbol v barvě. Hráč: *„jméno: M62 sergej, for ottd decouple by
-Karel Macha“*, *„decouple zeleně až po Máchu“*, *„brýle má svoji barvu a cztr měřítko má svoji barvu“*.
+Hráč: *„červeně uděláme M62 Sergej a zbytek zeleně for ottd Decouple by Karel Macha“* (verze 6),
+*„brýle má svoji barvu a cztr měřítko má svoji barvu“*. Na konci symbol vláčku v barvě varianty,
+jako u hráčových sad (CZTR Truck set BRYLE, VW T1, m62 v `par5`).
 
-    M62 Sergej{red}, for ottd{green} decouple by Karel Macha {gold}{train}       (měřítko CZTR)
-    M62 Sergej{red}, for ottd{green} decouple by Karel Macha {lt-blue}{train}    (BRÝLE)
+    {red}M62 Sergej{green} for ottd Decouple by Karel Macha {gold}{train}       (měřítko CZTR)
+    {red}M62 Sergej{green} for ottd Decouple by Karel Macha {lt-blue}{train}    (BRÝLE)
 
 BRÝLE má `{lt-blue}` jako „Magnificated“ v truck setu, měřítko CZTR `{gold}` jako symboly ve VW T1
 (to je v měřítku CZTR). Stejnou barvu má ve variantě i řádek s popisem velikosti a symboly v popisu.
@@ -27,11 +27,11 @@ Popis (Action08) jde v hráčově pořadí: `{red}M62 Sergej{green}  {train}`, z
 řádek varianty v její barvě, `{orange}` informace (lokomotivy, 3D model, zvuky) a nakonec zeleně
 `ottd decouple by Karel Mácha`, odkaz na itch a licence.
 
-Soubory se jmenují `M62_Sergej-v5.grf` a `M62_Sergej_BRYLE-v5.grf`, aby šly v seznamu najít podle jména.
+Soubory se jmenují `M62_Sergej-v6.grf` a `M62_Sergej_BRYLE-v6.grf`, aby šly v seznamu najít podle jména.
 Číslo verze (hráč: *„piš tam verzi do jména souboru grf“*) je `VERZE` v `pack_sergej.py`, stejné
 číslo jde do Action14 (`VRSN`) a hra ho ukáže v okně GRF. Každé sestavení pro hráče o jedna výš:
 1 první sprity, 2 sever o 3 px, 3 přezdívky a licence, 4 troubení, 5 motor podle rychlosti a barevné
-jméno. `MINV` je 1, takže nová verze smí v uložené hře nahradit kteroukoli starší.
+jméno, 6 jméno „M62 Sergej“ červeně a zbytek zeleně. `MINV` je 1, takže nová verze smí v uložené hře nahradit kteroukoli starší.
 
 ## Lokomotivy
 
@@ -57,7 +57,7 @@ Popis v nákupním okně je callback 0x23 (texty D001 a D002), znění podle hr�
 3. **Focení** (`render_sergej.py`): z hráčova `glb3BBC.py` z 24. 1. 2026, stejná kamera, HDRI a Cycles.
    `python3 render_sergej.py <zeleny|cerveny> <px_na_m> <osmin> <výstup>`
 4. **Balení** (`pack_sergej.py`): `python3 pack_sergej.py <orig|bryle> <adresář fotek> grf/<orig|bryle>`,
-   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v5.grf` (nebo `M62_Sergej_BRYLE-v5.grf`).
+   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v6.grf` (nebo `M62_Sergej_BRYLE-v6.grf`).
    Zvuky bere ze `zvuky/` (`zvuky.json`), připravuje je `zvuky/priprav_zvuky.py`, viz `zvuky/README.md`.
 5. **Kontroly** na rozbaleném GRF (`yagl -d`):
    - `kontrola_koleje.py` ho postaví na koleje v 8 směrech (obrázky v `kontrola/`);
