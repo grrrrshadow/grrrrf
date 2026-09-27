@@ -92,7 +92,12 @@ def natier_sprity(adr):
 NATERY = ("zeleny", "cerveny")
 vse = {n: natier_sprity(os.path.join(FOTKY, f"{VARIANTA}_{n}")) for n in NATERY}
 # soubor se jmenuje jako GRF v seznamu ve hre, jinak ho hrac nenajde
-JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA]
+# Verze: kazde sestaveni, ktere dostane hrac, o jednu vys. Je ve jmenu souboru (hrac: "pis tam verzi
+# do jmena souboru grf") a v Action14 (VRSN), hra ji ukaze v okne GRF. MINV 1: nova verze smi nahradit
+# kteroukoli starsi v ulozene hre (ID vozu se nemeni).
+# 1 prvni sprity, 2 sever o 3 px, 3 prezdivky a licence, 4 troubeni, 5 motor podle rychlosti a barevne jmeno
+VERZE = 5
+JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA] + f"-v{VERZE}"
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 
@@ -189,7 +194,7 @@ POPIS_GRF = ("{red}M62 Sergej{green}  {train} {new-line}"
 Y = ['yagl_version: "";', "grf_format: Container2;",
      "optional_info // Action14", "{", "    INFO: ", "    {",
      f'        URL_: default, "{ITCH}";',
-     "        VRSN: [ 0x01 0x00 0x00 0x00 ];", "        MINV: [ 0x00 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
+     f"        VRSN: [ 0x{VERZE:02X} 0x00 0x00 0x00 ];", "        MINV: [ 0x01 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
      f'    description: "{POPIS_GRF}";', "}",
