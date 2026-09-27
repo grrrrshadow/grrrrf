@@ -21,7 +21,8 @@ PŘEVZATÉ ČÁSTI
     licence CC BY 4.0
     Úpravy: vyfoceno do spritů pro OpenTTD, červený nátěr ČSD se žlutým pruhem pod čelním oknem.
 
-Zvuky: výchozí zvuky OpenTTD.
+Zvuk M62 Tamtam tajgy (troubení a rozjezd): "Heavy diesel locomotive M62 with a freight train", autor alexdarek,
+https://freesound.org/s/698211/ , licence CC0. Úsek 0:27–0:42, mono, zesíleno.
 
 -------------------------------------------------------------------------------
 
@@ -48,4 +49,5 @@ THIRD-PARTY PARTS
     license CC BY 4.0
     Changes: rendered to OpenTTD sprites, red ČSD livery with a yellow stripe below the front window.
 
-Sounds: OpenTTD default sounds.
+Sound of M62 Tamtam tajgy (horn and start): "Heavy diesel locomotive M62 with a freight train" by alexdarek,
+https://freesound.org/s/698211/ , CC0. Excerpt 0:27–0:42, mono, amplified.

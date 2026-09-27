@@ -1,0 +1,4 @@
+cs: Zvuk M62 Tamtam tajgy (troubení a rozjezd): "Heavy diesel locomotive M62 with a freight train", autor alexdarek,
+cs:     https://freesound.org/s/698211/ , licence CC0. Úsek 0:27–0:42, mono, zesíleno.
+en: Sound of M62 Tamtam tajgy (horn and start): "Heavy diesel locomotive M62 with a freight train" by alexdarek,
+en:     https://freesound.org/s/698211/ , CC0. Excerpt 0:27–0:42, mono, amplified.

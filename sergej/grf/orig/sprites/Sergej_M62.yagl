@@ -24,6 +24,13 @@ strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne
     /* 0xD001 */ "{lt-green}M62, mezinárodní. Dvoutakt z německé ponorky. V SSSR М62 Машка, v Polsku ST44 Gagarin, v Maďarsku Szergej, v Německu (NDR) V 200 / 120 Taigatrommel, tamtam tajgy.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
     /* 0xD002 */ "{lt-green}T 679.1, dieslová. ČSD, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
 }
+sound_effects // Action11, vlastni zvuky od 0x49
+{
+    sprite_id<0x00000001>
+    {
+        binary("sprites/zeleny_start.wav");
+    }
+}
 // ---------------- M62 Tamtam tajgy
 properties<Trains, 0x0100> // Action00
 {
@@ -49,7 +56,7 @@ properties<Trains, 0x0100> // Action00
         coeff_of_air_drag: 0x14;
         ai_engine_rank: 0x04;
         visual_effect: effect(DisableEffect, 0x00, Enable);
-        callback_flags_mask: 0x10;
+        callback_flags_mask: 0x90;
     }
 }
 strings<Trains, default, 0x0100> // Action04
@@ -98,42 +105,42 @@ sprite_sets<Trains, 0x0000> // Action01
 {
     sprite_set // 0x0000 hlava
     {
-        sprite_id<0x00000001>
-        {
-            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
-        }
         sprite_id<0x00000002>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 6];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000003>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 6];
         }
         sprite_id<0x00000004>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [48, 6];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000005>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [48, 6];
         }
         sprite_id<0x00000006>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [95, 6];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000007>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [95, 6];
         }
         sprite_id<0x00000008>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000009>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [35, 59, -31, -50], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [141, 6];
@@ -141,42 +148,42 @@ sprite_sets<Trains, 0x0000> // Action01
     }
     sprite_set // 0x0001 stred
     {
-        sprite_id<0x00000009>
+        sprite_id<0x0000000A>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [44, 144, -19, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [182, 6];
         }
-        sprite_id<0x0000000A>
+        sprite_id<0x0000000B>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 90, -60, -54], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [232, 6];
         }
-        sprite_id<0x0000000B>
+        sprite_id<0x0000000C>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 62, -109, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [331, 6];
         }
-        sprite_id<0x0000000C>
+        sprite_id<0x0000000D>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [95, 87, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [555, 6];
         }
-        sprite_id<0x0000000D>
+        sprite_id<0x0000000E>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [44, 145, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [656, 6];
         }
-        sprite_id<0x0000000E>
+        sprite_id<0x0000000F>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 89, -60, -53], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [706, 6];
         }
-        sprite_id<0x0000000F>
+        sprite_id<0x00000010>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 157];
         }
-        sprite_id<0x00000010>
+        sprite_id<0x00000011>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 88, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [230, 157];
@@ -184,42 +191,42 @@ sprite_sets<Trains, 0x0000> // Action01
     }
     sprite_set // 0x0002 zad
     {
-        sprite_id<0x00000011>
-        {
-            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
-        }
         sprite_id<0x00000012>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [329, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000013>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [329, 157];
         }
         sprite_id<0x00000014>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [375, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000015>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [375, 157];
         }
         sprite_id<0x00000016>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [416, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000017>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [416, 157];
         }
         sprite_id<0x00000018>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000019>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [41, 60, -25, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [457, 157];
@@ -245,7 +252,7 @@ sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
 {
     sprite_set // 0x0000 nakup
     {
-        sprite_id<0x00000019>
+        sprite_id<0x0000001A>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [504, 157];
@@ -270,6 +277,18 @@ switch<Trains, 0x14, PrimaryDWord> // clanky (callback 0x16)
     };
     default: 0xFFFF;
 }
+switch<Trains, 0x17, PrimaryDWord> // zvuky (callback 0x33)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8049;
+    };
+    default: 0xFFFF;
+}
 switch<Trains, 0x15, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
 {
     expression:
@@ -279,6 +298,7 @@ switch<Trains, 0x15, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
     ranges:
     {
         0x00000016: 0x0014;
+        0x00000033: 0x0017;
     };
     default: 0x0010;
 }
@@ -397,42 +417,42 @@ sprite_sets<Trains, 0x0000> // Action01
 {
     sprite_set // 0x0000 hlava
     {
-        sprite_id<0x0000001A>
-        {
-            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
-        }
         sprite_id<0x0000001B>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [728, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x0000001C>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [36, 60, -4, -51], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [728, 157];
         }
         sprite_id<0x0000001D>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [770, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x0000001E>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [41, 61, 23, -25], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [770, 157];
         }
         sprite_id<0x0000001F>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [817, 157];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000020>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [40, 60, -63, -24], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [817, 157];
         }
         sprite_id<0x00000021>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000022>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [35, 59, -31, -50], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [863, 157];
@@ -440,42 +460,42 @@ sprite_sets<Trains, 0x0000> // Action01
     }
     sprite_set // 0x0001 stred
     {
-        sprite_id<0x00000022>
+        sprite_id<0x00000023>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [44, 144, -19, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [904, 157];
         }
-        sprite_id<0x00000023>
+        sprite_id<0x00000024>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 90, -60, -54], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 307];
         }
-        sprite_id<0x00000024>
+        sprite_id<0x00000025>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 62, -109, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [105, 307];
         }
-        sprite_id<0x00000025>
+        sprite_id<0x00000026>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [95, 87, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [329, 307];
         }
-        sprite_id<0x00000026>
+        sprite_id<0x00000027>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [44, 145, -22, -87], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [430, 307];
         }
-        sprite_id<0x00000027>
+        sprite_id<0x00000028>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 89, -60, -53], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [480, 307];
         }
-        sprite_id<0x00000028>
+        sprite_id<0x00000029>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [579, 307];
         }
-        sprite_id<0x00000029>
+        sprite_id<0x0000002A>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [93, 88, -33, -52], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [803, 307];
@@ -483,42 +503,42 @@ sprite_sets<Trains, 0x0000> // Action01
     }
     sprite_set // 0x0002 zad
     {
-        sprite_id<0x0000002A>
-        {
-            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
-        }
         sprite_id<0x0000002B>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [902, 307];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x0000002C>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [40, 60, -15, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [902, 307];
         }
         sprite_id<0x0000002D>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [948, 307];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x0000002E>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [35, 56, 17, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [948, 307];
         }
         sprite_id<0x0000002F>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 458];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
         }
         sprite_id<0x00000030>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
-            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+            [35, 56, -51, -23], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [6, 458];
         }
         sprite_id<0x00000031>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "Sergej_M62-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000032>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [41, 60, -25, -48], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [47, 458];
@@ -544,7 +564,7 @@ sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
 {
     sprite_set // 0x0000 nakup
     {
-        sprite_id<0x00000032>
+        sprite_id<0x00000033>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62-8bpp.png", [4, 4];
             [218, 60, -109, -46], zin4, c32bpp | chunked, "Sergej_M62-32bpp-zin4.png", [94, 458];
