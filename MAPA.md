@@ -8,7 +8,7 @@ Stav k 26. 9. 2026 (večer). Když něco přibude nebo se přesune, patří to s
 |---|---|
 | `auta/` | Škoda / TAZ / VW (dvanácettrojky): hotové GRF s neviditelnými nárazníky (vpředu, vzadu, oba), skripty na čištění a zarovnání. Celá historie a zadání parametru „Pevnost nárazníku“ je v `CUMAK.md`. |
 | `cztr/` | CZTR truck set, tvůj zvětšený build BRYLE1: přebalený, s rozestupy, vyčištěný, s články. Popis v `README.md`. |
-| `sergej/` | Vlastní GRF lokomotivy M62: zelená „M62 Tamtam tajgy“ a červená „Sergej ČSD“, v měřítku CZTR i BRÝLE +20 %. Skripty na nátěr, focení, balení a kontroly, popis v `README.md`. |
+| `sergej/` | Vlastní GRF lokomotivy M62 („M62 Sergej, for ottd decouple by Karel Macha“): zelená „M62 Tamtam tajgy“ a červená „Sergej ČSD“, v měřítku CZTR i BRÝLE +20 %, motor hraje podle rychlosti. Skripty na nátěr, focení, zvuky (`zvuky/`), balení a kontroly, popis v `README.md`. |
 | `vagony-mari/` | Zelená ploška MARI na St z CZTR Wagons - Cargo 1.1.0: sprity, zápis v yaglu, náhled. |
 | `shuttle/`, `shuttletest/` | Raketoplán jako GRF, druhý je diagnostický build. |
 | `glb/` | Focení z Blenderu. `GLB/` jsou skripty (modely a HDRI jsou jen v releasu `glb`), `render-test/` vyfocený raketoplán po fázích letu. |

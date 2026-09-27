@@ -91,7 +91,8 @@ def natier_sprity(adr):
 # ---------------------------------------------------------------- spritesheet
 NATERY = ("zeleny", "cerveny")
 vse = {n: natier_sprity(os.path.join(FOTKY, f"{VARIANTA}_{n}")) for n in NATERY}
-JMENO = {"orig": "Sergej_M62", "bryle": "Sergej_M62_BRYLE"}[VARIANTA]
+# soubor se jmenuje jako GRF v seznamu ve hre, jinak ho hrac nenajde
+JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 
@@ -145,20 +146,45 @@ POPIS = {
                 "vyrobený v Rusku." + PODPIS + "{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}" + TECH +
                 "Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
 }
-# Zvuky (Action11 + callback 0x33): zvuky/<natier>_start.wav a zvuky/<natier>_tunel.wav, pokud existuji.
-# Vlastni zvuky GRF se cisluji od 0x49 v poradi Action11. Udalosti (var 0x10): 1 = rozjezd, 2 = tunel.
+# Zvuky (Action11 + callback 0x33) ze zvuky/zvuky.json (pripravuje zvuky/priprav_zvuky.py).
+# Vlastni zvuky GRF se cisluji od 0x49 v poradi Action11. Udalosti (var 0x10): 1 = odjezd a "zahoukej",
+# 2 = tunel, 7 = kazdych 16 tiku v jizde, 8 = kazdych 16 tiku ve stani a pri brzdeni (vehicle.cpp).
+# Brana pousti kousek jednou za perioda_tiku (nasobek 16, takze kousky jdou presne po sobe).
 ZVUKY_ADR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zvuky")
-ZVUKY = []                                        # (natier, udalost, soubor)
-for n in NATERY:
-    for udalost, jm in ((1, "start"), (2, "tunel")):
-        f = os.path.join(ZVUKY_ADR, f"{n}_{jm}.wav")
-        if os.path.exists(f): ZVUKY.append((n, udalost, f))
-CISLO_ZVUKU = {(n, u): 0x49 + i for i, (n, u, _) in enumerate(ZVUKY)}
+_zj = os.path.join(ZVUKY_ADR, "zvuky.json")
+ZV = json.load(open(_zj)) if os.path.exists(_zj) else {}
+SOUBORY = []                                      # jedinecne wav v poradi Action11
+def cislo_zvuku(f):
+    if f not in SOUBORY: SOUBORY.append(f)
+    return 0x49 + SOUBORY.index(f)
+for _n in NATERY:
+    _z = ZV.get(_n)
+    if not _z: continue
+    cislo_zvuku(_z["1"]); cislo_zvuku(_z["2"])
+    for _p in _z["jizda"]:
+        for _f in _p["zvuky"]: cislo_zvuku(_f)
+    for _f in _z["stani"]: cislo_zvuku(_f)
+ZVUKY = SOUBORY                                   # kvuli licenci: jsou-li nejake zvuky
 
 GRF_ID = {"orig": "MAXb", "bryle": "MAXc"}[VARIANTA]
-GRF_JMENO = {"orig": "Sergej M62", "bryle": "Sergej M62 BRÝLE +20 %"}[VARIANTA]
-POPIS_GRF = {"orig": "M62 Tamtam tajgy a Sergej ČSD, měřítko CZTR, 12/8 dlaždice.",
-             "bryle": "M62 Tamtam tajgy a Sergej ČSD, o 20 % větší (BRÝLE), 14/8 dlaždice."}[VARIANTA]
+# Jmeno a popis v seznamu GRF v hracove radu zapisu (CZTR Truck set BRYLE, VW T1, m62 z par5):
+#   jmeno{red} ...{green} decouple ... {barva}{symbol}; popis {red}jmeno{green} symbol, zelene radky se symboly,
+#   {orange} informace, nakonec zelene Karel Macha. Varianta ma svou barvu: BRYLE {lt-blue} jako "Magnificated"
+#   v truck setu, meritko CZTR {gold} jako VW T1. Hrac: "decouple zelene az po Machu".
+BARVA = {"orig": "{gold}", "bryle": "{lt-blue}"}[VARIANTA]
+GRF_JMENO = "M62 Sergej{red}, for ottd{green} decouple by Karel Macha " + BARVA + "{train}"
+VARIANTA_POPIS = {"orig": "CZTR scale, 12/8 tiles, for CZTR tracks",
+                  "bryle": "BRÝLE, magnified +20 %, 14/8 tiles, for the original game tracks"}[VARIANTA]
+POPIS_GRF = ("{red}M62 Sergej{green}  {train} {new-line}"
+             "{green}M62 Tamtam tajgy, Sergej ČSD  " + BARVA + "{train}  {train}  {train}{new-line}" +
+             BARVA + VARIANTA_POPIS + "{new-line}"
+             "{orange}Two M62 diesels, the green international one and the red ČSD one. The engine roars louder "
+             "with speed, the horn sounds on departure and at a honk waypoint.{new-line}"
+             "{orange}3D: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{new-line}"
+             "{orange}Sounds: alexdarek (CC0), Walking.With.Microphones (CC BY 4.0), freesound.org{new-line}{new-line}"
+             "{green}ottd decouple by Karel Mácha " + BARVA + "{train}{new-line}"
+             "{green}" + ITCH + "{new-line}"
+             "{green}GRF: Karel Mácha, licence CC BY 4.0")
 
 Y = ['yagl_version: "";', "grf_format: Container2;",
      "optional_info // Action14", "{", "    INFO: ", "    {",
@@ -166,21 +192,60 @@ Y = ['yagl_version: "";', "grf_format: Container2;",
      "        VRSN: [ 0x01 0x00 0x00 0x00 ];", "        MINV: [ 0x00 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
-     f'    description: "{POPIS_GRF}{{new-line}}{{green}}{DECOUPLE} {ITCH}{{black}}{{new-line}}'
-     f'Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{{new-line}}'
-     f'GRF: Karel Mácha, licence CC BY 4.0";', "}",
+     f'    description: "{POPIS_GRF}";', "}",
      "strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in NATERY:
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
 Y.append("}")
-if ZVUKY:
+if SOUBORY:
     import shutil
     Y += ["sound_effects // Action11, vlastni zvuky od 0x49", "{"]
-    for n, u, f in ZVUKY:
-        shutil.copy(f, os.path.join(VYSTUP, "sprites", os.path.basename(f)))
-        Y += [f"    sprite_id<0x{sid[0]:08X}>", "    {", f'        binary("sprites/{os.path.basename(f)}");', "    }"]
+    for f in SOUBORY:
+        shutil.copy(os.path.join(ZVUKY_ADR, f), os.path.join(VYSTUP, "sprites", f))
+        Y += [f"    sprite_id<0x{sid[0]:08X}>", "    {", f'        binary("sprites/{f}");', "    }"]
         sid[0] += 1
     Y += ["}"]
+
+def sw(cid, typ, popis, vyraz, rozsahy, default):
+    """switch v yaglu; vyraz = seznam radku vyrazu, rozsahy = [(od, do, cil)]"""
+    r = [f"switch<Trains, 0x{cid:02X}, {typ}> // {popis}", "{", "    expression:", "    {"]
+    r += ["        " + v for v in vyraz] + ["    };", "    ranges:", "    {"]
+    for od, do, cil in rozsahy:
+        r.append(f"        0x{od:08X}: 0x{cil:04X};" if od == do else f"        0x{od:08X}..0x{do:08X}: 0x{cil:04X};")
+    r += ["    };", f"    default: 0x{default:04X};", "}"]
+    return r
+
+def zvukovy_retez(n, base):
+    """switche pro callback 0x33; vraci (radky, id prepinace udalosti) nebo ([], None)"""
+    z = ZV.get(n)
+    if not z: return [], None
+    P = z["perioda_tiku"]; r = []
+    def vyber(cid, popis, soubory):
+        k = len(soubory)
+        return sw(cid, "PrimaryDWord", popis,
+                  [f"value1 = variable[0x0A] & 0x0000FFFF / 0x{P:08X};", f"value2 = variable[0x1A] & 0x{k:08X};",
+                   "value1 = UnsignedMod(value1, value2);"],
+                  [(i, i, 0x8000 | cislo_zvuku(f)) for i, f in enumerate(soubory)], 0x8000 | cislo_zvuku(soubory[0]))
+    pasma = z["jizda"]
+    for i, pas in enumerate(pasma):
+        r += vyber(base + 8 + i, f"jizda, pasmo {i} ({pas['otacky']}x, {pas['lufs']} LUFS)", pas["zvuky"])
+    id_stani = base + 8 + len(pasma); r += vyber(id_stani, "stani, volnobeh", z["stani"])
+    id_rychlost = id_stani + 1
+    rozsahy, od = [], 0
+    for i, pas in enumerate(pasma[:-1]):
+        rozsahy.append((od, pas["do_kmh"], base + 8 + i)); od = pas["do_kmh"] + 1
+    r += sw(id_rychlost, "RelatedDWord", "rychlost cela vlaku (km/h) -> pasmo", ["value1 = variable[0xB4] & 0x0000FFFF;"],
+            rozsahy, base + 8 + len(pasma) - 1)
+    id_brana_j = id_rychlost + 1; id_brana_s = id_rychlost + 2; id_udalost = id_rychlost + 3
+    brana = [f"value1 = variable[0x0A] & 0x0000FFFF % 0x{P:08X};"]
+    r += sw(id_brana_j, "PrimaryDWord", f"jizda: jednou za {P} tiku", brana, [(0, 15, id_rychlost)], 0xFFFF)
+    r += sw(id_brana_s, "PrimaryDWord", f"stani: jednou za {P} tiku", brana, [(0, 15, id_stani)], 0xFFFF)
+    r += sw(id_udalost, "PrimaryDWord", "zvuky (callback 0x33): 1 odjezd a zahoukej, 2 tunel, 7 jizda, 8 stani",
+            ["value1 = variable[0x10] & 0x000000FF;"],
+            [(1, 1, 0x8000 | cislo_zvuku(z["1"])), (2, 2, 0x8000 | cislo_zvuku(z["2"])), (7, 7, id_brana_j), (8, 8, id_brana_s)],
+            0x7FFF)   # ostatni udalosti: callback selze a hra pusti svuj zvuk (porucha); 0xFFFF by byl vysledek
+                      # 0x7FFF, tj. neplatny zvuk = ticho i bez vychoziho (GetGroupFromGroupID, PlayVehicleSound)
+    return r, id_udalost
 
 for n in NATERY:
     h = ID[n]; SP = vse[n]
@@ -199,7 +264,7 @@ for n in NATERY:
                   "        engine_traction_type: 0x08;", "        coeff_of_tractive_effort: 0x4F;",
                   "        coeff_of_air_drag: 0x14;", "        ai_engine_rank: 0x04;",
                   "        visual_effect: effect(DisableEffect, 0x00, Enable);",
-                  f"        callback_flags_mask: 0x{0x10 | (0x80 if any(z[0] == n for z in ZVUKY) else 0):02X};"]
+                  f"        callback_flags_mask: 0x{0x10 | (0x80 if n in ZV else 0):02X};"]
         elif jm == "stred":
             p += ["        visual_effect: effect(DieselFumes, 0x08, Enable);"]
         else:
@@ -209,7 +274,7 @@ for n in NATERY:
                   f'    /* 0x{eid:04X} */ "{NAZEV[n] if jm == "hlava" else NAZEV[n] + " (článek)"}";', "}"]
     # Action01: 0 hlava, 1 stred, 2 zad (po osmi spritech); obrazek do nakupu ma vlastni Action01,
     # protoze vsechny sady v jednom Action01 musi mit stejny pocet spritu
-    base = 0x10 if n == "zeleny" else 0x20
+    base = 0x10 if n == "zeleny" else 0x40
     Y += ["sprite_sets<Trains, 0x0000> // Action01", "{"]
     for si, jm in enumerate(("hlava", "stred", "zad")):
         Y += [f"    sprite_set // 0x{si:04X} {jm}", "    {"]
@@ -226,17 +291,14 @@ for n in NATERY:
           f"sprite_groups<Trains, 0x{base + 3:02X}> // Action02 basic", "{",
           "    primary_spritesets: [ 0x0000 ];", "    secondary_spritesets: [ 0x0000 ];", "}"]
     clan = base + 4; hl = base + 5; nak = base + 6
+    zvuk_radky, id_zvuk = zvukovy_retez(n, base)
     Y += [f"switch<Trains, 0x{clan:02X}, PrimaryDWord> // clanky (callback 0x16)", "{",
           "    expression:", "    {", "        value1 = variable[0x10] & 0x000000FF;", "    };",
           "    ranges:", "    {", f"        0x00000001: 0x{0x8000 | (h + 1):04X};", f"        0x00000002: 0x{0x8000 | (h + 2):04X};",
-          "    };", "    default: 0xFFFF;", "}",
-          ] + ([f"switch<Trains, 0x{base + 7:02X}, PrimaryDWord> // zvuky (callback 0x33)", "{",
-          "    expression:", "    {", "        value1 = variable[0x10] & 0x000000FF;", "    };",
-          "    ranges:", "    {"] + [f"        0x{u:08X}: 0x{0x8000 | CISLO_ZVUKU[(n, u)]:04X};" for (nn, u, _) in ZVUKY if nn == n] +
-          ["    };", "    default: 0xFFFF;", "}"] if any(z[0] == n for z in ZVUKY) else []) + [
+          "    };", "    default: 0xFFFF;", "}"] + zvuk_radky + [
           f"switch<Trains, 0x{hl:02X}, PrimaryDWord> // hlava: clanky, zvuky nebo grafika", "{",
           "    expression:", "    {", "        value1 = variable[0x0C] & 0x0000FFFF;", "    };",
-          "    ranges:", "    {", f"        0x00000016: 0x{clan:04X};"] + ([f"        0x00000033: 0x{base + 7:04X};"] if any(z[0] == n for z in ZVUKY) else []) + [
+          "    ranges:", "    {", f"        0x00000016: 0x{clan:04X};"] + ([f"        0x00000033: 0x{id_zvuk:04X};"] if id_zvuk else []) + [
           "    };", f"    default: 0x{base:04X};", "}",
           f"switch<Trains, 0x{nak:02X}, PrimaryDWord> // nakup: clanky, popis, obrazek", "{",
           "    expression:", "    {", "        value1 = variable[0x0C] & 0x0000FFFF;", "    };",

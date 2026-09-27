@@ -4,12 +4,30 @@ Dvě lokomotivy M62 v jednom GRF, ve dvou velikostech:
 
 | GRF | `grf_id` | měřítko | délka | kolej |
 |---|---|---|---|---|
-| `grf/orig/Sergej_M62.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4) | 12/8 (2 + 8 + 2) | na koleje CZTR |
-| `grf/bryle/Sergej_M62_BRYLE.grf` | `MAXc` | o 20 % větší, 14,64 px/m | 14/8 (3 + 8 + 3) | na původní koleje hry |
+| `grf/orig/M62_Sergej.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4) | 12/8 (2 + 8 + 2) | na koleje CZTR |
+| `grf/bryle/M62_Sergej_BRYLE.grf` | `MAXc` | o 20 % větší, 14,64 px/m | 14/8 (3 + 8 + 3) | na původní koleje hry |
 
 Obě mají `track_type 0`, tedy štítek `RAIL`. Na něm jezdí i lokomotivy a vagony CZTR (v jejich
 převodní tabulce je `RAIL` na indexu 1) a všechny koleje CZTR Rails (RA01–RA13, ELRL, ER01–08)
 mají `RAIL` mezi kompatibilními a napájenými. Takže jezdí obě všude, liší se velikostí.
+
+## Jméno a popis v seznamu GRF
+
+Podle hráčova řádu zápisu (jeho CZTR Truck set BRYLE, VW T1 a m62 v `par5`): jméno, `{red}` část,
+`{green}` část s decouple, na konci symbol v barvě. Hráč: *„jméno: M62 sergej, for ottd decouple by
+Karel Macha“*, *„decouple zeleně až po Máchu“*, *„brýle má svoji barvu a cztr měřítko má svoji barvu“*.
+
+    M62 Sergej{red}, for ottd{green} decouple by Karel Macha {gold}{train}       (měřítko CZTR)
+    M62 Sergej{red}, for ottd{green} decouple by Karel Macha {lt-blue}{train}    (BRÝLE)
+
+BRÝLE má `{lt-blue}` jako „Magnificated“ v truck setu, měřítko CZTR `{gold}` jako symboly ve VW T1
+(to je v měřítku CZTR). Stejnou barvu má ve variantě i řádek s popisem velikosti a symboly v popisu.
+
+Popis (Action08) jde v hráčově pořadí: `{red}M62 Sergej{green}  {train}`, zelený řádek se symboly,
+řádek varianty v její barvě, `{orange}` informace (lokomotivy, 3D model, zvuky) a nakonec zeleně
+`ottd decouple by Karel Mácha`, odkaz na itch a licence.
+
+Soubory se jmenují `M62_Sergej.grf` a `M62_Sergej_BRYLE.grf`, aby šly v seznamu najít podle jména.
 
 ## Lokomotivy
 
@@ -35,9 +53,13 @@ Popis v nákupním okně je callback 0x23 (texty D001 a D002), znění podle hr�
 3. **Focení** (`render_sergej.py`): z hráčova `glb3BBC.py` z 24. 1. 2026, stejná kamera, HDRI a Cycles.
    `python3 render_sergej.py <zeleny|cerveny> <px_na_m> <osmin> <výstup>`
 4. **Balení** (`pack_sergej.py`): `python3 pack_sergej.py <orig|bryle> <adresář fotek> grf/<orig|bryle>`,
-   pak v `grf/<varianta>` spustit `yagl -e Sergej_M62.grf` (nebo `Sergej_M62_BRYLE.grf`).
-5. **Kontroly**: `kontrola_koleje.py` postaví rozbalený GRF na koleje v 8 směrech (obrázky v
-   `kontrola/`), `kontrola_spoju.py` ověří, že kusy na rovné koleji dají přesně původní fotku.
+   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej.grf` (nebo `M62_Sergej_BRYLE.grf`).
+   Zvuky bere ze `zvuky/` (`zvuky.json`), připravuje je `zvuky/priprav_zvuky.py`, viz `zvuky/README.md`.
+5. **Kontroly** na rozbaleném GRF (`yagl -d`):
+   - `kontrola_koleje.py` ho postaví na koleje v 8 směrech (obrázky v `kontrola/`);
+   - `kontrola_spoju.py` ověří, že kusy na rovné koleji dají přesně původní fotku;
+   - `kontrola_zvuku.py` projde callback 0x33 tik po tiku (stání, rozjezd, brzdění) a ověří
+     troubení, pásma podle rychlosti a že kousky motoru jdou přesně po sobě.
 
 ## Co je na tom podstatné
 
@@ -53,3 +75,18 @@ Popis v nákupním okně je callback 0x23 (texty D001 a D002), znění podle hr�
   tak, aby bod na koleji pod středem článku padl přesně na polohu článku.
 - **Odstupy článků** jsou `L_a / 2 + (L_b + 1) / 2` (`CalcNextVehicleOffset`): u 2 + 8 + 2 je hlava
   5 osmin před středem a záď 5 za ním, u 3 + 8 + 3 hlava 5 a záď 6.
+
+## Zvuky
+
+Podrobně v `zvuky/README.md`. Stručně:
+
+- Troubí obě stejnou trumpetkou (alexdarek), při odjezdu, na „zahoukej“ u nádražního směrování
+  a v tunelu.
+- Motor hraje celou cestu. Každé 3 s (112 tiků) pustí další kousek podle rychlosti vlaku. Je šest
+  pásem od 15 do 100 km/h a s rychlostí rostou otáčky, rytmus i řev: zelená −10 → −7 LUFS,
+  ve stání volnoběh.
+- Na plné rychlosti hraje tak nahlas jako nejhlasitější zvuk CZTR diesel setu, jenže pořád.
+- Sergej ČSD má motor přes tlumič: hlubší a o 1,5 LU tišší.
+- Porucha a ostatní události nechají výchozí zvuk hry.
+
+Kopie wav v `grf/*/sprites/` do gitu nejdou (jsou v GRF i v `zvuky/`).

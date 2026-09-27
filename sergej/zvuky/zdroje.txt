@@ -1,4 +1,12 @@
-cs: Zvuk M62 Tamtam tajgy (troubení a rozjezd): "Heavy diesel locomotive M62 with a freight train", autor alexdarek,
-cs:     https://freesound.org/s/698211/ , licence CC0. Úsek 0:27–0:42, mono, zesíleno.
-en: Sound of M62 Tamtam tajgy (horn and start): "Heavy diesel locomotive M62 with a freight train" by alexdarek,
-en:     https://freesound.org/s/698211/ , CC0. Excerpt 0:27–0:42, mono, amplified.
+cs: Zvuky: troubení a část motoru z "Heavy diesel locomotive M62 with a freight train", autor alexdarek,
+cs:     https://freesound.org/s/698211/ , licence CC0.
+cs: Motor z "Freight train. Locomotive - 2M62U (2М62У)", autor Walking.With.Microphones,
+cs:     https://freesound.org/s/557174/ , licence CC BY 4.0.
+cs: Úpravy: nastříhané kousky, přepočítané na otáčky podle rychlosti, mono, ekvalizér, komprese,
+cs:     měkký ořez a zesílení; u Sergeje ČSD navíc tlumič (seříznuté výšky).
+en: Sounds: horn and part of the engine from "Heavy diesel locomotive M62 with a freight train" by alexdarek,
+en:     https://freesound.org/s/698211/ , CC0.
+en: Engine from "Freight train. Locomotive - 2M62U (2М62У)" by Walking.With.Microphones,
+en:     https://freesound.org/s/557174/ , CC BY 4.0.
+en: Changes: cut into short pieces, re-pitched per speed band, mono, EQ, compression,
+en:     soft clipping and amplification; Sergej ČSD also muffled (silencer).

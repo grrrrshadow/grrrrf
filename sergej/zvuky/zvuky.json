@@ -1,0 +1,156 @@
+{
+ "zeleny": {
+  "1": "troubeni.wav",
+  "2": "troubeni_tunel.wav",
+  "jizda": [
+   {
+    "do_kmh": 15,
+    "otacky": 0.78,
+    "lufs": -10.0,
+    "zvuky": [
+     "zeleny_p0_1.wav",
+     "zeleny_p0_2.wav",
+     "zeleny_p0_3.wav",
+     "zeleny_p0_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 30,
+    "otacky": 0.86,
+    "lufs": -9.4,
+    "zvuky": [
+     "zeleny_p1_1.wav",
+     "zeleny_p1_2.wav",
+     "zeleny_p1_3.wav",
+     "zeleny_p1_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 45,
+    "otacky": 0.95,
+    "lufs": -8.8,
+    "zvuky": [
+     "zeleny_p2_1.wav",
+     "zeleny_p2_2.wav",
+     "zeleny_p2_3.wav",
+     "zeleny_p2_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 60,
+    "otacky": 1.04,
+    "lufs": -8.2,
+    "zvuky": [
+     "zeleny_p3_1.wav",
+     "zeleny_p3_2.wav",
+     "zeleny_p3_3.wav",
+     "zeleny_p3_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 80,
+    "otacky": 1.13,
+    "lufs": -7.6,
+    "zvuky": [
+     "zeleny_p4_1.wav",
+     "zeleny_p4_2.wav",
+     "zeleny_p4_3.wav",
+     "zeleny_p4_4.wav"
+    ]
+   },
+   {
+    "do_kmh": null,
+    "otacky": 1.24,
+    "lufs": -7.0,
+    "zvuky": [
+     "zeleny_p5_1.wav",
+     "zeleny_p5_2.wav",
+     "zeleny_p5_3.wav",
+     "zeleny_p5_4.wav"
+    ]
+   }
+  ],
+  "stani": [
+   "zeleny_stani_1.wav",
+   "zeleny_stani_2.wav"
+  ],
+  "perioda_tiku": 112
+ },
+ "cerveny": {
+  "1": "troubeni.wav",
+  "2": "troubeni_tunel.wav",
+  "jizda": [
+   {
+    "do_kmh": 15,
+    "otacky": 0.78,
+    "lufs": -11.5,
+    "zvuky": [
+     "cerveny_p0_1.wav",
+     "cerveny_p0_2.wav",
+     "cerveny_p0_3.wav",
+     "cerveny_p0_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 30,
+    "otacky": 0.86,
+    "lufs": -10.9,
+    "zvuky": [
+     "cerveny_p1_1.wav",
+     "cerveny_p1_2.wav",
+     "cerveny_p1_3.wav",
+     "cerveny_p1_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 45,
+    "otacky": 0.95,
+    "lufs": -10.3,
+    "zvuky": [
+     "cerveny_p2_1.wav",
+     "cerveny_p2_2.wav",
+     "cerveny_p2_3.wav",
+     "cerveny_p2_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 60,
+    "otacky": 1.04,
+    "lufs": -9.7,
+    "zvuky": [
+     "cerveny_p3_1.wav",
+     "cerveny_p3_2.wav",
+     "cerveny_p3_3.wav",
+     "cerveny_p3_4.wav"
+    ]
+   },
+   {
+    "do_kmh": 80,
+    "otacky": 1.13,
+    "lufs": -9.1,
+    "zvuky": [
+     "cerveny_p4_1.wav",
+     "cerveny_p4_2.wav",
+     "cerveny_p4_3.wav",
+     "cerveny_p4_4.wav"
+    ]
+   },
+   {
+    "do_kmh": null,
+    "otacky": 1.24,
+    "lufs": -8.5,
+    "zvuky": [
+     "cerveny_p5_1.wav",
+     "cerveny_p5_2.wav",
+     "cerveny_p5_3.wav",
+     "cerveny_p5_4.wav"
+    ]
+   }
+  ],
+  "stani": [
+   "cerveny_stani_1.wav",
+   "cerveny_stani_2.wav"
+  ],
+  "perioda_tiku": 112
+ }
+}

@@ -19,3 +19,6 @@ sergej/model/
 
 # Python si vedle skriptu uklada bajtkod
 __pycache__/
+
+# Sergej: kopie zvuků vedle GRF dělá pack_sergej.py, zdroj je sergej/zvuky/
+sergej/grf/*/sprites/*.wav

@@ -1105,3 +1105,33 @@ kontroly něco opravím, ověřit, že měří správně. Tady to šlo po krocí
 round-trip yaglem (0 rozdílů), rozdělení na kusy v rámu (přesné), pak teprve
 chyba ve skládání kontroly.
 
+
+### Jméno GRF: hráčův řád zápisu (2026-09-27)
+
+Hráč: *„jméno grf, jak dělám barevný se symboly“*, *„ja mam nějaký řád zápisu, je to barevný hezký
+popis“*. Než GRF pojmenuju, **podívat se do jeho vlastních GRF** (`name:` a `description:` v yaglu):
+
+- CZTR Truck set BRYLE: `CZTR Truck set BETA2.0.0{red} Crippled{green} for decouple {gold}{truck}`
+- VW T1: `VW T1{red} VW T1{green} VWT1 {gold}{truck}`
+- m62 v `par5`: `m62{red} m62{green} m62 {gold}{truck}`
+
+Řád je tedy: jméno, `{red}` část, `{green}` část s decouple, na konci symbol v barvě. V popisu jde
+`{red}jméno{green}  {symbol}`, zelené řádky s řadou symbolů, `{orange}` informace a nakonec zeleně
+Karel Mácha. BRÝLE mají v truck setu vlastní barvu `{lt-blue}` („Magnificated“), zlaté symboly jsou
+běžné (VW T1 v měřítku CZTR). Soubor pojmenovat jako GRF v seznamu (`M62_Sergej.grf`).
+
+### Zvuk: nejhlasitější, ale s rytmem (2026-09-27)
+
+- **Hlasitost měřit v LUFS** (`ebur128` v ffmpeg), ne ve špičkách. Pro srovnání: CZTR diesel −17 až −7,
+  CDset −34 až −17. Rozbalené zvuky jsou ve `scratchpad/zvuky/bananas/dec/`, časem mohou zmizet.
+- **Kompresor a limiter rytmus motoru srovnají**, jedou po obálce. Měkký ořez (`asoftclip=tanh`) uřízne
+  jen špičky vlny. Hlídat si rytmus číslem (modulace obálky po 10 ms), ne jen hlasitost.
+- **Nepřestřelit cíl.** První cíl −6 LUFS nešel bez cihlové zdi. Smyčka hledající zesílení dojela na
+  strop +30 dB a z motoru by byla obdélníková vlna. Cíl je jen přání, hranice musí hlídat zkreslení.
+- **Zjistit vzorkovací frekvenci zdroje.** Freesound náhledy jsou 48 kHz a `asetrate=44100·x` na nich
+  hrálo o 8 % níž a pomaleji, včetně troubení, které hráč vybral podle originálu.
+- ffmpeg bere `6dB` u číselných voleb správně jako decibely (převede na 1,995). Hráči jsem napřed řekl
+  opak. **Než něco vyhlásím za příčinu, vyzkoušet to.**
+- **Periodu zvuků brát jako násobek 16.** Událost 7 a 8 chodí po 16 tících, jinak kousky ujíždějí.
+- **Callback výsledek `0xFFFF` je ticho, `0x7FFF` je selhání.** Selhání pustí výchozí zvuk hry
+  (porucha), `0xFFFF` ho umlčí. Ověřeno v `GetGroupFromGroupID` a `PlayVehicleSound`.
