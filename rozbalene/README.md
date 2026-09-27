@@ -10,8 +10,17 @@ vozí, jaké kódy nákladů sada zná, jak jsou napsané callbacky. Zpátky do 
 | `gets-alpine-0.3.1/` | GETS: Alpine Addon 0.3.1 | `gets_alpine_0.3.1.grf` | 6df3adfa09d57769cf4a721bcd045fcc | BaNaNaS 53411c1c |
 | `firs-5.2.0/` | FIRS Industry Replacement Set 5.2.0 | `firs.grf` | df3c0e7f1cb3f1fdcac37dd22a1b0885 | release `par4`, `zip4.zip` |
 
-Všechny jsou pod GPL v2, licence leží vedle. CZTR 1.1.0 má v rozbalené kopii jen GRF, licence je
-stejná jako u ostatních CZTR sad (22 820 B), vzatá z CZTR Engines Diesel 1.1.0.
+Licence (podle BaNaNaS a přiložených `license.txt`):
+
+| sada | autor | licence |
+|---|---|---|
+| CZTR Wagons-Cargo 1.1.0 | stefino_cz a Couda (CZTR team) | CC BY-SA 3.0 |
+| GETS 0.7 a GETS Alpine Addon 0.3.1 | GarlicBread42 | GPL v2 |
+| FIRS 5.2.0 | andythenorth | GPL v2 |
+
+Výpisy jsou jen převedené do textu yaglem, obsah je beze změny. U CZTR ležel v rozbalené kopii jen
+GRF. Jeho `license.txt` je stejný soubor CC BY-SA 3.0 (22 820 B), vzatý ze CZTR Engines Diesel 1.1.0.
+Co z licencí plyne pro úpravy, je na konci.
 
 CZTR Wagons-Cargo **1.0.0**, kterou má hra kvůli FIRS 5, leží v repu hry jako `CZTR_Wagons_cargo.yagl`.
 Tu tady nekopíruju, patří hře.
@@ -72,3 +81,22 @@ python3 tools/kdo_veze.py rozbalene/gets-0.7/gets0.7.yagl OLSD sypke   # kdo by 
 
 `kdo_veze.py` počítá jako hra (`CalculateRefitMasks`): nejdřív třídy, pak se přidá seznam „vždy“
 a nakonec se ubere seznam „nikdy“, zákaz vyhrává.
+
+## Licence: co smíme (2026-09-27)
+
+Hráč: *„koukni na licenci, jestli můžem“*.
+
+**CZTR Wagons-Cargo, CC BY-SA 3.0:** smíme ji upravit i šířit, třeba přídavek, aby Uacs vozil
+vlákna, nebo upravenou celou sadu. Podmínky:
+
+1. uvést autory a sadu: CZTR Wagons-Cargo, stefino_cz a Couda (CZTR team);
+2. přiložit licenci nebo odkaz https://creativecommons.org/licenses/by-sa/3.0/ ;
+3. napsat, že a co jsme změnili (bod 3b);
+4. úprava musí být zase pod CC BY-SA 3.0 nebo 4.0 a nesmí se přidat žádné další omezení (bod 4b);
+5. nesmí to vypadat, že to autoři CZTR schválili.
+
+**GETS, GETS Alpine, FIRS 5, GPL v2:** taky smíme upravit a šířit. Úprava musí zůstat pod GPL v2,
+s vyznačenými změnami a datem, a k GRF patří zdroják (u nás yagl).
+
+Pozor, CZTR sady nemají všechny stejnou licenci. Truck set a Tram set jsou GPL v2, Narrow gauge
+CC BY 3.0, ostatní CC BY-SA 3.0. Vždycky se kouknout na konkrétní sadu (BaNaNaS, `license.txt`).
