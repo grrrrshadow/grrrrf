@@ -1,0 +1,51 @@
+Sergej M62 – GRF pro OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENCE: Creative Commons Uveďte původ 4.0 Mezinárodní (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/deed.cs
+
+GRF i jeho části (sprity, texty, skripty) smíte šířit a upravovat, i pro jiné sady,
+pokud uvedete autora takto:
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+a zachováte i uvedení převzatých částí níže.
+
+PŘEVZATÉ ČÁSTI
+
+3D model: "Diesel locomotive M62", autor Chicken cutlet
+    https://sketchfab.com/Chicken_Cutlet
+    https://sketchfab.com/3d-models/diesel-locomotive-m62-a923943868db43f382fe8edaab358d75
+    licence CC BY 4.0
+    Úpravy: vyfoceno do spritů pro OpenTTD, červený nátěr ČSD se žlutým pruhem pod čelním oknem.
+
+Zvuky: výchozí zvuky OpenTTD.
+
+-------------------------------------------------------------------------------
+
+Sergej M62 – GRF for OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENSE: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt this GRF and its parts (sprites, texts, scripts), also for other
+sets, as long as you credit the author as
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+and keep the credits of the third-party parts below.
+
+THIRD-PARTY PARTS
+
+3D model: "Diesel locomotive M62" by Chicken cutlet
+    https://sketchfab.com/Chicken_Cutlet
+    https://sketchfab.com/3d-models/diesel-locomotive-m62-a923943868db43f382fe8edaab358d75
+    license CC BY 4.0
+    Changes: rendered to OpenTTD sprites, red ČSD livery with a yellow stripe below the front window.
+
+Sounds: OpenTTD default sounds.

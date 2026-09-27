@@ -4,6 +4,7 @@ optional_info // Action14
 {
     INFO: 
     {
+        URL_: default, "https://karel-macha.itch.io/openttd-decouple-by-karel-macha";
         VRSN: [ 0x01 0x00 0x00 0x00 ];
         MINV: [ 0x00 0x00 0x00 0x00 ];
         NPAR: [ 0x00 ];
@@ -16,12 +17,12 @@ grf // Action08
     grf_id: "MAXc";
     version: GRF8;
     name: "Sergej M62 BRÝLE +20 %";
-    description: "M62 Tamtam tajgy a Sergej ČSD, o 20 % větší (BRÝLE), 14/8 dlaždice.{new-line}Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{new-line}GRF: Karel Mácha";
+    description: "M62 Tamtam tajgy a Sergej ČSD, o 20 % větší (BRÝLE), 14/8 dlaždice.{new-line}{green}ottd Decouple by Karel Mácha https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{new-line}GRF: Karel Mácha, licence CC BY 4.0";
 }
 strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne
 {
-    /* 0xD001 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
-    /* 0xD002 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
+    /* 0xD001 */ "{lt-green}M62, mezinárodní. Dvoutakt z německé ponorky. V SSSR М62 Машка, v Polsku ST44 Gagarin, v Maďarsku Szergej, v Německu (NDR) V 200 / 120 Taigatrommel, tamtam tajgy.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
+    /* 0xD002 */ "{lt-green}T 679.1, dieslová. ČSD, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
 }
 // ---------------- M62 Tamtam tajgy
 properties<Trains, 0x0100> // Action00
@@ -269,7 +270,7 @@ switch<Trains, 0x14, PrimaryDWord> // clanky (callback 0x16)
     };
     default: 0xFFFF;
 }
-switch<Trains, 0x15, PrimaryDWord> // hlava: clanky nebo grafika
+switch<Trains, 0x15, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
 {
     expression:
     {
@@ -568,7 +569,7 @@ switch<Trains, 0x24, PrimaryDWord> // clanky (callback 0x16)
     };
     default: 0xFFFF;
 }
-switch<Trains, 0x25, PrimaryDWord> // hlava: clanky nebo grafika
+switch<Trains, 0x25, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
 {
     expression:
     {

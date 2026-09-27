@@ -131,15 +131,19 @@ ID = {"zeleny": 0x0100, "cerveny": 0x0110}      # hlava; stred +1, zad +2
 TEXT = {"zeleny": 0x01, "cerveny": 0x02}        # D001, D002
 NAZEV = {"zeleny": "M62 Tamtam tajgy", "cerveny": "Sergej ČSD"}
 UVEDENI = {"zeleny": "1965/1/1", "cerveny": "1966/1/1"}
+ITCH = "https://karel-macha.itch.io/openttd-decouple-by-karel-macha"
+DECOUPLE = "ottd Decouple by Karel Mácha"
+PODPIS = "{new-line}{green}" + DECOUPLE + "{new-line}" + ITCH       # za uvodni odstavec, tmavsi zelenou
 TECH = ("Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}"
         "Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}")
 POPIS = {
-    "zeleny": ("Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}" + TECH +
-               "{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, "
-               "tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
-    "cerveny": ("Určení: {gold}nákladní a osobní vlaky{black}{new-line}" + TECH +
-                "{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, "
-                "vyrobený v Rusku.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
+    "zeleny": ("{lt-green}M62, mezinárodní. Dvoutakt z německé ponorky. V SSSR М62 Машка, v Polsku ST44 Gagarin, "
+               "v Maďarsku Szergej, v Německu (NDR) V 200 / 120 Taigatrommel, "
+               "tamtam tajgy." + PODPIS + "{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}"
+               "Výrobce: {gold}Luhansk{black}{new-line}" + TECH + "Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
+    "cerveny": ("{lt-green}T 679.1, dieslová. ČSD, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, "
+                "vyrobený v Rusku." + PODPIS + "{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}" + TECH +
+                "Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
 }
 # Zvuky (Action11 + callback 0x33): zvuky/<natier>_start.wav a zvuky/<natier>_tunel.wav, pokud existuji.
 # Vlastni zvuky GRF se cisluji od 0x49 v poradi Action11. Udalosti (var 0x10): 1 = rozjezd, 2 = tunel.
@@ -158,10 +162,13 @@ POPIS_GRF = {"orig": "M62 Tamtam tajgy a Sergej ČSD, měřítko CZTR, 12/8 dla�
 
 Y = ['yagl_version: "";', "grf_format: Container2;",
      "optional_info // Action14", "{", "    INFO: ", "    {",
+     f'        URL_: default, "{ITCH}";',
      "        VRSN: [ 0x01 0x00 0x00 0x00 ];", "        MINV: [ 0x00 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
-     f'    description: "{POPIS_GRF}{{new-line}}Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{{new-line}}GRF: Karel Mácha";', "}",
+     f'    description: "{POPIS_GRF}{{new-line}}{{green}}{DECOUPLE} {ITCH}{{black}}{{new-line}}'
+     f'Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{{new-line}}'
+     f'GRF: Karel Mácha, licence CC BY 4.0";', "}",
      "strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in NATERY:
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
@@ -242,6 +249,16 @@ for n in NATERY:
               f"    feature_ids: [ 0x{h + off:04X} ];", "    cargo_types:", "    {", "    };", "}"]
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
+# licence vedle GRF; puvod zvuku z zvuky/zdroje.txt (radky "cs:" a "en:"), jinak vychozi zvuky hry
+TU = os.path.dirname(os.path.abspath(__file__))
+lic = open(os.path.join(TU, "licence.txt")).read()
+zdroje = os.path.join(ZVUKY_ADR, "zdroje.txt")
+cs, en = "Zvuky: výchozí zvuky OpenTTD.", "Sounds: OpenTTD default sounds."
+if ZVUKY and os.path.exists(zdroje):
+    radky = open(zdroje).read().splitlines()
+    cs = "\n".join(r[3:].strip() for r in radky if r.startswith("cs:")) or cs
+    en = "\n".join(r[3:].strip() for r in radky if r.startswith("en:")) or en
+open(os.path.join(VYSTUP, "license.txt"), "w").write(lic.replace("@ZVUKY@", cs).replace("@SOUNDS@", en))
 souhrn = {n: {jm: [None if sp is None else [sp[0].width, sp[0].height, sp[1], sp[2]] for sp in vse[n][jm]] for jm in vse[n]} for n in NATERY}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-sprity.json"), "w"), indent=1)
 print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "hlava pred stredem", N_HLAVA, "zad za stredem", N_ZAD)
