@@ -30,6 +30,17 @@ yagl -d neco.grf
 Vznikne `sprites/` a v něm `neco.yagl`, spritesheety `*.png`
 a zvuky `*.wav`.
 
+### Jen výpis, bez obrázků: `-n`
+
+```bash
+yagl -d -n neco.grf
+```
+
+Náš přídavek (2026-09-27, hráč: *„jen soubor yagl, výpis spritů bez spritů“*). Vznikne jen
+`sprites/neco.yagl`, bez spritesheetů a zvuků. Text je stejný jako při plném rozbalení,
+jména listů a pozice spritů v něm zůstanou, jen soubory se nezapíšou. Hodí se na čtení cizích
+sad: GETS (318 MB) se takhle rozbalí za 25 s do 31 MB textu. Zpátky složit se z toho nedá.
+
 ## Složit GRF
 
 ```bash

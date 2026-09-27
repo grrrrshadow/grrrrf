@@ -49,6 +49,7 @@ class CommandLineOptions
         uint8_t            chunk_gap()  const { return m_chunk_gap; }
 
         bool               debug()      const { return m_debug; }
+        bool               no_sprites() const { return m_no_sprites; }
         const std::string& test_args()  const { return m_test_args; }
 
         // A bit of a bodge - see below.
@@ -68,6 +69,7 @@ class CommandLineOptions
         uint16_t    m_height    = 16'000;                 // Max height of spritesheets
         PaletteType m_palette   = PaletteType::Default;
         uint8_t     m_chunk_gap = 3;                      // Join chunks in tiles gaps smaller than is.
+        bool        m_no_sprites = false;                 // Decode the script only, no sprite sheets or binaries.
         std::string m_info_item;
 
         // Calculated from m_grf_file and m_yagl_dir.

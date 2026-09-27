@@ -231,6 +231,21 @@ void SpriteSheetGenerator::create_sprite_sheet(Category category, SpriteVector s
     os << index << ".png";
     const std::string image_path = os.str();
 
+    // With --nosprites the layout above still names the sheets and places the sprites,
+    // so the script refers to them exactly as in a full decode; only the files are skipped.
+    if (CommandLineOptions::options().no_sprites())
+    {
+        const std::string image_file = fs::path(image_path).filename().string();
+        for (const auto& sprite: sprites)
+        {
+            if (category.colour == ColourType::Mask)
+                sprite->set_mask_filename(image_file);
+            else
+                sprite->set_filename(image_file);
+        }
+        return;
+    }
+
     std::cout << "Writing sprite sheet: " << image_path << "..." << std::endl;
 
     // Deal with different colour depths.

@@ -93,6 +93,8 @@ void ActionFFRecord::write_binary_file(const std::string& binary_dir) const
     binary_path.append(m_filename);
 
     const std::string file_path = binary_path.make_preferred().string();
+    if (CommandLineOptions::options().no_sprites())
+        return;
     std::cout << "Writing binary file: " << file_path << "..." << std::endl;
 
     std::ofstream os(binary_path, std::ios::binary);

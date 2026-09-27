@@ -60,6 +60,7 @@ void CommandLineOptions::parse(int argc, char* argv[])
             ("p,palette",   "Choose the initial palette for the GRF", cxxopts::value<uint16_t>(palette), "<idx>")
             ("w,width",     "Maximum width of sprite sheets", cxxopts::value<uint16_t>(m_width), "<num>")
             ("h,height",    "Maximum height of sprite sheets", cxxopts::value<uint16_t>(m_height), "<num>")
+            ("n,nosprites", "Decode the YAGL script only, without writing sprite sheets and binary files", cxxopts::value<bool>(m_no_sprites))
             ("v,version",   "Print version information")
             ("help",        "Print help")
 
