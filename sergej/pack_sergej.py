@@ -23,6 +23,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hra import ROVNE, KROK, remap, kotva_hry, odstupy
 
 N_HLAVA, N_ZAD = odstupy(DELKY)
+# Rucni doladeni podle hry: sever o 3 px doprava (hrac 27. 9.: "severni smer sprity lehce doprava",
+# jih ne). CZTR ma stred lokomotivy v severnim pohledu 2,5 px vpravo od kotvy u vsech 364 sad.
+KOREKCE = {0: (3, 0)}
 
 def rozdel(d, fotka, vlastnik, predni):
     """Pixely fotky -> clanek (0 hlava, 1 stred, 2 zad) podle barevneho pruchodu."""
@@ -75,7 +78,8 @@ def natier_sprity(adr):
         else:
             im, (cx, cy) = orez(foto)
             rx, ry = remap(*kotva_hry(DELKY[1], d))
-            sprity["stred"].append((im, int(round(cx - kx - rx)), int(round(cy - ky - ry))))
+            kx_, ky_ = KOREKCE.get(d, (0, 0))
+            sprity["stred"].append((im, int(round(cx - kx - rx)) + kx_, int(round(cy - ky - ry)) + ky_))
             sprity["hlava"].append(None); sprity["zad"].append(None)
     # obrazek do nakupu: pohled W (d8), posuny jako stred ve smeru W
     s = info["smery"]["8"]; kx, ky = s["kotva"]
@@ -132,11 +136,21 @@ TECH = ("Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}"
 POPIS = {
     "zeleny": ("Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}" + TECH +
                "{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, "
-               "tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}renderatnight"),
+               "tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
     "cerveny": ("Určení: {gold}nákladní a osobní vlaky{black}{new-line}" + TECH +
                 "{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, "
-                "vyrobený v Rusku.{black}{new-line}Model: {gold}renderatnight"),
+                "vyrobený v Rusku.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
 }
+# Zvuky (Action11 + callback 0x33): zvuky/<natier>_start.wav a zvuky/<natier>_tunel.wav, pokud existuji.
+# Vlastni zvuky GRF se cisluji od 0x49 v poradi Action11. Udalosti (var 0x10): 1 = rozjezd, 2 = tunel.
+ZVUKY_ADR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zvuky")
+ZVUKY = []                                        # (natier, udalost, soubor)
+for n in NATERY:
+    for udalost, jm in ((1, "start"), (2, "tunel")):
+        f = os.path.join(ZVUKY_ADR, f"{n}_{jm}.wav")
+        if os.path.exists(f): ZVUKY.append((n, udalost, f))
+CISLO_ZVUKU = {(n, u): 0x49 + i for i, (n, u, _) in enumerate(ZVUKY)}
+
 GRF_ID = {"orig": "MAXb", "bryle": "MAXc"}[VARIANTA]
 GRF_JMENO = {"orig": "Sergej M62", "bryle": "Sergej M62 BRÝLE +20 %"}[VARIANTA]
 POPIS_GRF = {"orig": "M62 Tamtam tajgy a Sergej ČSD, měřítko CZTR, 12/8 dlaždice.",
@@ -147,11 +161,19 @@ Y = ['yagl_version: "";', "grf_format: Container2;",
      "        VRSN: [ 0x01 0x00 0x00 0x00 ];", "        MINV: [ 0x00 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
-     f'    description: "{POPIS_GRF}{{new-line}}3D: renderatnight{{new-line}}GRF: Karel Mácha";', "}",
+     f'    description: "{POPIS_GRF}{{new-line}}Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{{new-line}}GRF: Karel Mácha";', "}",
      "strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in NATERY:
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
 Y.append("}")
+if ZVUKY:
+    import shutil
+    Y += ["sound_effects // Action11, vlastni zvuky od 0x49", "{"]
+    for n, u, f in ZVUKY:
+        shutil.copy(f, os.path.join(VYSTUP, "sprites", os.path.basename(f)))
+        Y += [f"    sprite_id<0x{sid[0]:08X}>", "    {", f'        binary("sprites/{os.path.basename(f)}");', "    }"]
+        sid[0] += 1
+    Y += ["}"]
 
 for n in NATERY:
     h = ID[n]; SP = vse[n]
@@ -170,7 +192,7 @@ for n in NATERY:
                   "        engine_traction_type: 0x08;", "        coeff_of_tractive_effort: 0x4F;",
                   "        coeff_of_air_drag: 0x14;", "        ai_engine_rank: 0x04;",
                   "        visual_effect: effect(DisableEffect, 0x00, Enable);",
-                  "        callback_flags_mask: 0x10;"]
+                  f"        callback_flags_mask: 0x{0x10 | (0x80 if any(z[0] == n for z in ZVUKY) else 0):02X};"]
         elif jm == "stred":
             p += ["        visual_effect: effect(DieselFumes, 0x08, Enable);"]
         else:
@@ -201,9 +223,14 @@ for n in NATERY:
           "    expression:", "    {", "        value1 = variable[0x10] & 0x000000FF;", "    };",
           "    ranges:", "    {", f"        0x00000001: 0x{0x8000 | (h + 1):04X};", f"        0x00000002: 0x{0x8000 | (h + 2):04X};",
           "    };", "    default: 0xFFFF;", "}",
-          f"switch<Trains, 0x{hl:02X}, PrimaryDWord> // hlava: clanky nebo grafika", "{",
+          ] + ([f"switch<Trains, 0x{base + 7:02X}, PrimaryDWord> // zvuky (callback 0x33)", "{",
+          "    expression:", "    {", "        value1 = variable[0x10] & 0x000000FF;", "    };",
+          "    ranges:", "    {"] + [f"        0x{u:08X}: 0x{0x8000 | CISLO_ZVUKU[(n, u)]:04X};" for (nn, u, _) in ZVUKY if nn == n] +
+          ["    };", "    default: 0xFFFF;", "}"] if any(z[0] == n for z in ZVUKY) else []) + [
+          f"switch<Trains, 0x{hl:02X}, PrimaryDWord> // hlava: clanky, zvuky nebo grafika", "{",
           "    expression:", "    {", "        value1 = variable[0x0C] & 0x0000FFFF;", "    };",
-          "    ranges:", "    {", f"        0x00000016: 0x{clan:04X};", "    };", f"    default: 0x{base:04X};", "}",
+          "    ranges:", "    {", f"        0x00000016: 0x{clan:04X};"] + ([f"        0x00000033: 0x{base + 7:04X};"] if any(z[0] == n for z in ZVUKY) else []) + [
+          "    };", f"    default: 0x{base:04X};", "}",
           f"switch<Trains, 0x{nak:02X}, PrimaryDWord> // nakup: clanky, popis, obrazek", "{",
           "    expression:", "    {", "        value1 = variable[0x0C] & 0x0000FFFF;", "    };",
           "    ranges:", "    {", f"        0x00000016: 0x{clan:04X};", f"        0x00000023: 0x{0x8000 | TEXT[n]:04X};",

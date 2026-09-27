@@ -24,7 +24,9 @@ Popis v nákupním okně je callback 0x23 (texty D001 a D002), znění podle hr�
 
 ## Jak to vzniklo
 
-1. **Model**: `diesel_locomotive_m62.glb` z releasu `par5` (autor renderatnight), zkopírovat do `model/`.
+1. **Model**: `diesel_locomotive_m62.glb` z releasu `par5`, zkopírovat do `model/`. Autor je podle metadat glb
+   **Chicken cutlet** (sketchfab.com/Chicken_Cutlet), „Diesel locomotive M62“, licence **CC BY 4.0**,
+   takže musí být uvedený. (renderatnight dělal VW T1, ne tohle.)
 2. **Nátěr** (`nater.py`): červená verze přebarví textury `Image_0`, `Image_6`, `Image_8` z modelu.
    Zelený lak jde na ČSD červenou se zachováním stínů a špíny, krémové linky boků a sovětské pruhy na
    čele na červenou, žlutý pruh na řádky 918–934 textury čela (textura je vzhůru nohama).

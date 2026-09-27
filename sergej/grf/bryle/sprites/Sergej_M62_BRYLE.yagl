@@ -16,12 +16,12 @@ grf // Action08
     grf_id: "MAXc";
     version: GRF8;
     name: "Sergej M62 BRÝLE +20 %";
-    description: "M62 Tamtam tajgy a Sergej ČSD, o 20 % větší (BRÝLE), 14/8 dlaždice.{new-line}3D: renderatnight{new-line}GRF: Karel Mácha";
+    description: "M62 Tamtam tajgy a Sergej ČSD, o 20 % větší (BRÝLE), 14/8 dlaždice.{new-line}Model: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{new-line}GRF: Karel Mácha";
 }
 strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne
 {
-    /* 0xD001 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}renderatnight";
-    /* 0xD002 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{black}{new-line}Model: {gold}renderatnight";
+    /* 0xD001 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}Mezinárodní M62. Dvoutakt z německé ponorky. Jezdila v Německu (NDR) jako Taigatrommel, tamtam tajgy, v Polsku, Maďarsku i Československu.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
+    /* 0xD002 */ "Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}{lt-green}ČSD T 679.1, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
 }
 // ---------------- M62 Tamtam tajgy
 properties<Trains, 0x0100> // Action00
@@ -143,7 +143,7 @@ sprite_sets<Trains, 0x0000> // Action01
         sprite_id<0x00000009>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62_BRYLE-8bpp.png", [4, 4];
-            [51, 172, -25, -106], zin4, c32bpp | chunked, "Sergej_M62_BRYLE-32bpp-zin4.png", [240, 6];
+            [51, 172, -22, -106], zin4, c32bpp | chunked, "Sergej_M62_BRYLE-32bpp-zin4.png", [240, 6];
         }
         sprite_id<0x0000000A>
         {
@@ -442,7 +442,7 @@ sprite_sets<Trains, 0x0000> // Action01
         sprite_id<0x00000022>
         {
             [1, 1, 0, 0], normal, c8bpp, "Sergej_M62_BRYLE-8bpp.png", [4, 4];
-            [51, 172, -25, -106], zin4, c32bpp | chunked, "Sergej_M62_BRYLE-32bpp-zin4.png", [122, 291];
+            [51, 172, -22, -106], zin4, c32bpp | chunked, "Sergej_M62_BRYLE-32bpp-zin4.png", [122, 291];
         }
         sprite_id<0x00000023>
         {
