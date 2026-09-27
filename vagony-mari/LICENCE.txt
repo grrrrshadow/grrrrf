@@ -1,0 +1,19 @@
+Zelené plošky MARI pro vůz St (mari-zelena-zin4.png, mari-zelena.yagl, nahled.png)
+
+Jsou to upravené sprity nákladu (uhlí, vrstva 1 vozu St 0x011D) ze sady
+"CZTR Wagons - Cargo" 1.1.0, autoři stefino_cz a Couda (CZTR team),
+licence Creative Commons Uveďte původ-Zachovejte licenci 3.0 (CC BY-SA 3.0),
+https://creativecommons.org/licenses/by-sa/3.0/deed.cs
+
+Úprava: tvar a jas převzaté z uhlí, přebarveno na zelenou pro náklad MARI
+(Karel Mácha, 2026). Úprava je pod stejnou licencí CC BY-SA 3.0.
+Autoři CZTR tuhle úpravu neschvalovali, není to jejich verze.
+
+---
+
+Green MARI patches for the St wagon: modified cargo-load sprites (coal, layer 1
+of wagon St 0x011D) from "CZTR Wagons - Cargo" 1.1.0 by stefino_cz and Couda
+(CZTR team), licensed CC BY-SA 3.0, https://creativecommons.org/licenses/by-sa/3.0/
+Changes: shape and brightness taken from the coal load, recoloured green for the
+MARI cargo (Karel Mácha, 2026). The changes are under the same CC BY-SA 3.0.
+This is not an official CZTR release and is not endorsed by its authors.
