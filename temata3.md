@@ -1135,3 +1135,21 @@ běžné (VW T1 v měřítku CZTR). Soubor pojmenovat jako GRF v seznamu (`M62_S
 - **Periodu zvuků brát jako násobek 16.** Událost 7 a 8 chodí po 16 tících, jinak kousky ujíždějí.
 - **Callback výsledek `0xFFFF` je ticho, `0x7FFF` je selhání.** Selhání pustí výchozí zvuk hry
   (porucha), `0xFFFF` ho umlčí. Ověřeno v `GetGroupFromGroupID` a `PlayVehicleSound`.
+
+## Kódy nákladů v cizích sadách (2026-09-27)
+
+Hráč chtěl kód pro marihuanová vlákna, aby je vozily vozy CZTR (Uacs). Podrobně
+v `rozbalene/README.md`, tady jen to, co platí obecně:
+
+- **Cizí sadu rozbalit jen jako text:** `yagl -d -n` (náš přídavek). GETS je 318 MB GRF,
+  jako text 31 MB za 25 s. Hráč: *„jen soubor yagl, výpis spritů bez spritů“*.
+- **Zákaz vyhrává.** Hra nejdřív vezme třídy, pak přidá seznam „vždy“ a nakonec ubere seznam
+  „nikdy“ (`CalculateRefitMasks`). GETS má u krytých výsypných vozů FICR v obou seznamech, takže ho
+  nevezou. Počítat to `tools/kdo_veze.py`, ne od oka.
+- **Stejná sada, jiná verze, jiné pravidlo.** CZTR Wagons-Cargo 1.0.0 (hra) vybírá náklad podle
+  tříd, 1.1.0 jen podle pevných seznamů kódů. Kód, který projde v jedné, v druhé projít nemusí.
+- **Před výběrem kódu projít, co zakládá průmysl ve hře** (FIRS 5: 96 kódů v `rozbalene/firs-5.2.0/`).
+  Dva náklady se stejným kódem se ve hře tlučou.
+- **Jméno vozu může dělat callback.** CZTR 1.1.0 „Uacs“ je vůz 0x011E s názvem „Raj (ČD)“ a
+  přepíná se podle roku výroby. V seznamu jmen se hledat nedá, jen přes texty D0xx.
+- **Mluvit normálně.** Hráč: *„mluv normálně robote“*. Průběžné zprávy česky a bez zkratek.

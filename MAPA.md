@@ -15,6 +15,9 @@ Stav k 26. 9. 2026 (večer). Když něco přibude nebo se přesune, patří to s
 | `sbirka-grf/` | ITL Houses 2.3, bez nich spadne Industries of the Caribbean. |
 | `yagl/` | Náš upravený yagl. Zdroj `yagl-main/`, jak přeložit je v `POSTUP.md`, co jsme na něm změnili v `NASE-UPRAVY.md`. |
 | `tools/zipindex.py` | Hledání v zipech v releasech a vytažení jednoho souboru bez stažení celého zipu. |
+| `tools/naklady.py` | Vypíše z rozbaleného yaglu vozy, jejich jména, třídy nákladu a seznamy kódů. |
+| `tools/kdo_veze.py` | Řekne, které vozy by vzaly náklad s daným kódem a třídami, podle pravidla hry. |
+| `rozbalene/` | Rozbalené yagly cizích sad jen jako text (`yagl -d -n`): CZTR Wagons-Cargo 1.1.0, GETS 0.7, GETS Alpine 0.3.1, FIRS 5.2.0. V `README.md` kódy pro rostlinná vlákna a proč OLSD. |
 | `RELEASES.md` | Souhrn releasů: co je v kterém zipu a k čemu. |
 | `INDEX-RELEASY.md` | Úplný index releasů, každý soubor, i obsah tarů, u GRF md5 a jméno. Generuje `tools/zipindex.py index`. |
 | `PRO-HRU.md` | Vzkaz kolegovi, co dělá hru (rozestupy, délka vozidla, klikací box, články). |
