@@ -1,0 +1,256 @@
+diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
+--- a/openttd/src/console_cmds.cpp	2026-09-28 19:39:03.234357643 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-28 19:39:03.237639201 +0000
+@@ -37,6 +37,8 @@
+ #include "fileio_func.h"
+ #include "fontcache.h"
+ #include "screenshot.h"
++#include "video/video_driver.hpp"
++#include "openttd.h"
+ #include "genworld.h"
+ #include "strings_func.h"
+ #include "viewport_func.h"
+@@ -1344,6 +1346,193 @@
+  * the wrong one.
+  * @copydoc IConsoleCmdProc
+  */
++
++/* ZKOUSKA V3S (jen tahle kopie hry): postavi silnicni depo, koupi kazde kupovatelne silnicni vozidlo
++ * z GRF TEST_RV_GRF, prestavi ho na nekolik nakladu a vypise clanky, delky, kapacity a sprite. */
++static bool ConTestV3S(std::span<std::string_view> argv)
++{
++	if (argv.empty()) {
++		IConsolePrint(CC_HELP, "Zkouska silnicnich vozidel z GRF TEST_RV_GRF. Usage: 'testv3s'.");
++		return true;
++	}
++	if (_game_mode != GameMode::Normal) return true;
++	if (Company::GetIfValid(_local_company) == nullptr) {
++		extern Company *DoStartupNewCompany(bool is_ai, CompanyID company);
++		Company *made = DoStartupNewCompany(false, CompanyID::Invalid());
++		if (made == nullptr) return true;
++		SetLocalCompany(made->index);
++	}
++	Command<Commands::MoneyCheat>::Do(DoCommandFlag::Execute, 100000000);
++	const char *want_s = getenv("TEST_RV_GRF");
++	if (want_s == nullptr || strlen(want_s) != 4) {
++		IConsolePrint(CC_ERROR, "V3S: chybi TEST_RV_GRF");
++		return true;
++	}
++	uint32_t want = (uint8_t)want_s[0] | (uint8_t)want_s[1] << 8 | (uint8_t)want_s[2] << 16 | (uint32_t)(uint8_t)want_s[3] << 24;
++	TileIndex depot = INVALID_TILE;
++	for (uint y = 8; y < Map::SizeY() - 8 && depot == INVALID_TILE; y++) {
++		for (uint x = 8; x < Map::SizeX() - 8; x++) {
++			TileIndex t = TileXY(x, y);
++			if ((IsTileType(t, TileType::Clear) || IsTileType(t, TileType::Trees)) && GetTileSlope(t) == SLOPE_FLAT) {
++				depot = t;
++				break;
++			}
++		}
++	}
++	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
++	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU"};
++	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
++		if (e->GetGRFID() != want) continue;
++		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
++				e->company_avail.Test(_local_company) ? 1 : 0, e->info.refit_mask.Count(), e->GetDisplayDefaultCapacity());
++		if (!e->company_avail.Test(_local_company)) continue;
++		auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depot, e->index, true, INVALID_CARGO, ClientID::Invalid);
++		if (bc.Failed() || Vehicle::GetIfValid(vid) == nullptr) {
++			IConsolePrint(CC_ERROR, "V3S: koupe selhala");
++			continue;
++		}
++		for (const char *lab : labels) {
++			uint32_t l = (uint32_t)(uint8_t)lab[0] << 24 | (uint8_t)lab[1] << 16 | (uint8_t)lab[2] << 8 | (uint8_t)lab[3];
++			CargoType ct = GetCargoTypeByLabel(CargoLabel{l});
++			if (!IsValidCargoType(ct)) {
++				IConsolePrint(CC_INFO, "V3S:   {} ve hre neni", lab);
++				continue;
++			}
++			auto [rc, rcap, rmail, rcaps] = Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
++			std::string radek;
++			for (const RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
++				VehicleSpriteSeq seq;
++				u->GetImage(Direction::W, EngineImageType::OnMap, &seq);
++				VehicleSpriteSeq seq_ne;
++				u->GetImage(Direction::NE, EngineImageType::OnMap, &seq_ne);
++				radek += fmt::format(" | dil 0x{:04X} delka {} kapacita {} sprite W {} NE {}", Engine::Get(u->engine_type)->grf_prop.local_id,
++						u->gcache.cached_veh_length, u->cargo_cap, seq.count > 0 ? seq.seq[0].sprite : 0, seq_ne.count > 0 ? seq_ne.seq[0].sprite : 0);
++			}
++			IConsolePrint(CC_INFO, "V3S:   {} prestavba {}{}", lab, rc.Succeeded() ? "ok" : "NE", radek);
++		}
++	}
++	return true;
++}
++
++
++/* ZKOUSKA V3S, fotka (jen tahle kopie hry): silnicni okruh s depem, V3S z GRF v TEST_RV_GRFS (MAXd,MAXe),
++ * modre prestavene na ruzne naklady, nechat jezdit a vyfotit priblizene (screenshot SC_ZOOMEDIN). */
++/* vypis zkousky V3S do konzole i na stderr (s obrazem jde konzole jen do okna) */
++template <typename... T>
++static void V3SLog(fmt::format_string<T...> f, T &&... args)
++{
++	std::string s = fmt::format(f, std::forward<T>(args)...);
++	IConsolePrint(CC_INFO, s);
++	Debug(misc, 0, "{}", s);
++}
++
++static TileIndex _v3s_stred = INVALID_TILE;
++/** Fotka okruhu az hra opravdu bezi (hned po zalozeni hry se jeste netika), pak konec hry. */
++static TimeoutTimer<TimerGameTick> _v3s_foto_timeout({ TimerGameTick::Priority::None, 0 }, []()
++{
++	bool foto = MakeScreenshot(SC_ZOOMEDIN, "v3s_okruh");
++	V3SLog("V3SFOTO: fotka {}", foto ? "ok" : "CHYBA");
++	for (const RoadVehicle *v : RoadVehicle::Iterate()) {
++		if (!v->IsFrontEngine()) continue;
++		V3SLog("V3SFOTO: vuz {} dlazdice ({},{}) smer {} stav {:02X}", v->unitnumber, TileX(v->tile), TileY(v->tile), to_underlying(v->direction), v->state);
++	}
++	/* fotka se dela az ve fronte hlavniho vlakna, konec hry az po ni */
++	VideoDriver::GetInstance()->QueueOnMainThread([] { _exit_game = true; });
++});
++
++static bool ConTestV3SFoto(std::span<std::string_view> argv)
++{
++	if (argv.empty()) {
++		IConsolePrint(CC_HELP, "Fotka V3S na okruhu. Usage: 'testv3sfoto <tiku>'.");
++		return true;
++	}
++	if (_game_mode != GameMode::Normal) return true;
++	if (Company::GetIfValid(_local_company) == nullptr) {
++		extern Company *DoStartupNewCompany(bool is_ai, CompanyID company);
++		Company *made = DoStartupNewCompany(false, CompanyID::Invalid());
++		if (made == nullptr) return true;
++		SetLocalCompany(made->index);
++	}
++	Command<Commands::MoneyCheat>::Do(DoCommandFlag::Execute, 100000000);
++	uint tiku = 400;
++	if (argv.size() > 1) {
++		tiku = 0;
++		for (char c : argv[1]) if (c >= '0' && c <= '9') tiku = tiku * 10 + (c - '0');
++	}
++	/* rovne prazdne misto 14 x 10 dlazdic */
++	const uint W = 14, H = 10;
++	TileIndex zac = INVALID_TILE;
++	for (uint y = 10; y + H < Map::SizeY() - 10 && zac == INVALID_TILE; y++) {
++		for (uint x = 10; x + W < Map::SizeX() - 10; x++) {
++			bool ok = true;
++			int z0 = GetTileZ(TileXY(x, y));
++			for (uint dy = 0; dy < H && ok; dy++) for (uint dx = 0; dx < W && ok; dx++) {
++				TileIndex t = TileXY(x + dx, y + dy);
++				ok = (IsTileType(t, TileType::Clear) || IsTileType(t, TileType::Trees)) && GetTileSlope(t) == SLOPE_FLAT && GetTileZ(t) == z0;
++			}
++			if (ok) { zac = TileXY(x, y); break; }
++		}
++	}
++	if (zac == INVALID_TILE) {
++		V3SLog("V3SFOTO: neni misto");
++		return true;
++	}
++	uint x0 = TileX(zac) + 1, y0 = TileY(zac) + 2, x1 = x0 + 11, y1 = y0 + 6;
++	auto usek = [](TileIndex a, TileIndex b, Axis ax) {
++		return Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, b, a, ROADTYPE_ROAD, ax, DisallowedRoadDirections{}, true, true, false).Succeeded();
++	};
++	bool ok = usek(TileXY(x0, y0), TileXY(x1, y0), Axis::X) && usek(TileXY(x0, y1), TileXY(x1, y1), Axis::X) &&
++			usek(TileXY(x0, y0), TileXY(x0, y1), Axis::Y) && usek(TileXY(x1, y0), TileXY(x1, y1), Axis::Y);
++	TileIndex depot = TileXY(x0 + 5, y0 - 1);
++	ok = ok && Command<Commands::BuildRoad>::Do(DoCommandFlag::Execute, TileXY(x0 + 5, y0), RoadBits{RoadBit::NW}, ROADTYPE_ROAD, DisallowedRoadDirections{}, TownID::Invalid()).Succeeded();
++	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SE).Succeeded();
++	V3SLog("V3SFOTO: okruh ({},{})-({},{}) depo {}", x0, y0, x1, y1, ok ? "ok" : "CHYBA");
++	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
++	struct Nakup { const char *grf; uint16_t local; const char *naklad; };
++	static const Nakup nakupy[] = {
++		{"MAXe", 0x0101, "STEL"}, {"MAXe", 0x0100, ""}, {"MAXe", 0x0101, "LVST"}, {"MAXe", 0x0101, "GOOD"},
++		{"MAXd", 0x0101, "COAL"}, {"MAXd", 0x0100, ""}, {"MAXd", 0x0101, "LVST"}, {"MAXd", 0x0101, "GOOD"},
++	};
++	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
++	int puvodnich = 0;
++	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
++		if (puvodnich >= 2) break;
++		if (e->GetGRF() != nullptr || !e->company_avail.Test(_local_company)) continue;
++		if (IsCargoInClass(e->GetDefaultCargoType(), CargoClass::Passengers)) continue;
++		auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depot, e->index, true, INVALID_CARGO, ClientID::Invalid);
++		if (bc.Failed()) continue;
++		Command<Commands::StartStopVehicle>::Do(DoCommandFlag::Execute, vid, false);
++		V3SLog("V3SFOTO: koupen puvodni nakladak engine {}", e->index.base());
++		puvodnich++;
++	}
++	for (const Nakup &n : nakupy) {
++		uint32_t want = (uint8_t)n.grf[0] | (uint8_t)n.grf[1] << 8 | (uint8_t)n.grf[2] << 16 | (uint32_t)(uint8_t)n.grf[3] << 24;
++		EngineID eid = EngineID::Invalid();
++		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
++			if (e->GetGRFID() == want && e->grf_prop.local_id == n.local) { eid = e->index; break; }
++		}
++		if (eid == EngineID::Invalid()) {
++			V3SLog("V3SFOTO: {} 0x{:04X} nenalezen", n.grf, n.local);
++			continue;
++		}
++		auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depot, eid, true, INVALID_CARGO, ClientID::Invalid);
++		if (bc.Failed()) continue;
++		if (n.naklad[0] != '\0') {
++			uint32_t l = (uint32_t)(uint8_t)n.naklad[0] << 24 | (uint8_t)n.naklad[1] << 16 | (uint8_t)n.naklad[2] << 8 | (uint8_t)n.naklad[3];
++			CargoType ct = GetCargoTypeByLabel(CargoLabel{l});
++			if (IsValidCargoType(ct)) Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
++		}
++		Command<Commands::StartStopVehicle>::Do(DoCommandFlag::Execute, vid, false);
++		V3SLog("V3SFOTO: koupeno {} 0x{:04X} {}", n.grf, n.local, n.naklad);
++	}
++	_v3s_stred = TileXY((x0 + x1) / 2, (y0 + y1) / 2);
++	ScrollMainWindowToTile(_v3s_stred, true);
++	_v3s_foto_timeout.Reset({ TimerGameTick::Priority::None, tiku });
++	V3SLog("V3SFOTO: fotka za {} tiku", tiku);
++	return true;
++}
++
+ static bool _testspoj_active = false;
+ static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
+ 
+@@ -1452,6 +1641,17 @@
+ 		}
+ 		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
+ 	}
++	/* ZKOUSKA ZVUKU: TEST_LOCO_GRF=MAXb vybere lokomotivu z toho GRF. */
++	if (const char *want_s = getenv("TEST_LOCO_GRF"); want_s != nullptr && strlen(want_s) == 4) {
++		uint32_t want = (uint8_t)want_s[0] | (uint8_t)want_s[1] << 8 | (uint8_t)want_s[2] << 16 | (uint32_t)(uint8_t)want_s[3] << 24;
++		for (const Engine *e : Engine::IterateType(VehicleType::Train)) {
++			if (e->GetGRFID() != want) continue;
++			if (RailVehInfo(e->index)->railveh_type == RailVehicleType::Wagon) continue;
++			IConsolePrint(CC_INFO, "ZKOUSKA: lokomotiva z GRF {} engine {} avail {}", want_s, e->index.base(), e->company_avail.Test(_local_company));
++			eid_loco = e->index;
++			break;
++		}
++	}
+ 	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
+ 		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
+ 		return true;
+@@ -7243,6 +7443,8 @@
+ 	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
+ 	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
+ 	IConsole::CmdRegister("testspoj",                ConTestCouple);
++	IConsole::CmdRegister("testv3s",                 ConTestV3S);
++	IConsole::CmdRegister("testv3sfoto",             ConTestV3SFoto);
+ 	IConsole::CmdRegister("testnaklad",              ConTestCargoScene);
+ 	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
+ 	IConsole::CmdRegister("testpauza",               ConTestUnpause);
+diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
+--- a/openttd/src/newgrf_sound.cpp	2026-09-28 19:39:03.234978359 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-28 19:39:03.238107233 +0000
+@@ -152,9 +152,18 @@
+ 	if (file == nullptr) return false;
+ 
+ 	/* Check that the vehicle type uses the sound effect callback */
+-	if (!EngInfo(v->engine_type)->callback_mask.Test(VehicleCallbackMask::SoundEffect)) return false;
++	if (!EngInfo(v->engine_type)->callback_mask.Test(VehicleCallbackMask::SoundEffect)) {
++		if (file->grfid == 0x6258414D || file->grfid == 0x6358414D) Debug(grf, 0, "ZVUK: engine {} udalost {}: callback zvuku neni zapnuty", v->engine_type.base(), (int)event);
++		return false;
++	}
+ 
+ 	callback = GetVehicleCallback(CBID_VEHICLE_SOUND_EFFECT, event, 0, v->engine_type, v);
++	{
++		uint16_t global = callback == CALLBACK_FAILED ? 0xFFFF : GetNewGRFSoundID(file, callback);
++		Debug(grf, 0, "ZVUK: vuz {} engine {} udalost {} rychlost {} callback {:#x} zvuk {:#x} (grf zvuku {} od {})",
++			v->unitnumber, v->engine_type.base(), (int)event, v->First()->cur_speed, callback, global,
++			file->num_sounds, file->sound_offset);
++	}
+ 	/* Play default sound if callback fails */
+ 	if (callback == CALLBACK_FAILED) return false;
+ 

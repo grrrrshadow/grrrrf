@@ -1,0 +1,271 @@
+# -*- coding: utf-8 -*-
+# Balic Pragy V3S "vejtrasky": z fotek (render_v3s.py) udela spritesheet a GRF v yaglu.
+#   python3 pack_v3s.py <mala|velka> <adresar s fotkami> <vystupni adresar>
+# Fotky: <adresar>/<mala|velka>_<nater>/d0-d7.png a kotvy.json, nater = vojenska, modra_A .. modra_D.
+#
+#   mala : meritko CZTR, 12,2 px/m (zin4). Auto ma 7,7 osminy, vejde se do jednoho mista v kolone (8).
+#   velka: BRYLE, o 20 % vetsi, 14,64 px/m, 9,25 osminy. Aby se v kolone neprekryvala, je pred ni
+#          neviditelny cumak delky 2 (rozestup 8 + 2 = 10, viz auta/CUMAK.md). Kupovane cislo je cumak,
+#          drzi jmeno, cenu a obrazek v nakupu; auto je druhy clanek. Clankova auta berou jen
+#          pruchozi zastavky (hra: STR_ERROR_NO_STOP_ARTICULATED_VEHICLE).
+#
+# Kotva spritu (bod -xoffs, -yoffs, ktery hra polozi na RemapCoords(poloha + bounds.origin + bounds.offset)):
+# konvence VW T1 orig size (temata3.md, "Konvence VW T1 origsize"; hrac: "podle linky mezi koly"),
+# zrcadlove srovnana (hrac 28. 9.: "a zrcadlova verifikace stredu"): kotva proti bodu na zemi pod
+# stredem auta je vodorovne 10,0 * sin a, svisle -20,8 - 0,7 * cos a, a = 45 st. * smer. Casti, ktere
+# nebyly zrcadlove (konstanta -5 px a 3,8 * cos a), jsou pryc: sever a jih maji kotvu na ose,
+# dvojice SV/SZ, V/Z a JV/JZ jsou zrcadla. Stred auta = pul delky (V3S ma za zadni napravou dlouhou
+# korbu, stred rozvoru je o metr blize k celu, auto by pak v zastavce a na vagonu stalo o metr dozadu).
+import os, sys, json, math, re
+from PIL import Image
+
+VEL, FOTKY, VYSTUP = sys.argv[1], sys.argv[2], sys.argv[3]
+TU = os.path.dirname(os.path.abspath(__file__))
+CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v osminach, 0 = bez cumaku
+
+# Verze: kazde sestaveni pro hrace o jednu vys, je ve jmenu souboru i v Action14 (VRSN).
+VERZE = 1
+JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
+GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
+PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
+
+def kotva_konvence(d):
+    """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle)"""
+    a = math.radians(45 * d)
+    return 10.0 * math.sin(a), -20.8 - 0.7 * math.cos(a)
+
+def nacti_sadu(nater):
+    adr = os.path.join(FOTKY, f"{VEL}_{nater}")
+    info = json.load(open(os.path.join(adr, "kotvy.json")))
+    out = []
+    for d in range(8):
+        gx, gy = info["smery"][str(d)]["zem_stred"]
+        du, dv = kotva_konvence(d)
+        foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
+        bb = foto.getbbox()
+        out.append((foto.crop(bb), int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))))
+    return out
+
+# ---------------------------------------------------------------- naklady
+# Hrac 28. 9.: "vwt1 vozi vsechno, tam se inspiruj", "skoro vsechno". Zaklad je seznam VW T1 (0x0082, s MARI),
+# bez skla ("stavebni materialy vsechny kody krome skla") a bez jidla (jidlo jen vojenska).
+VW_T1 = ("PASS BEER MAIL GOOD BDMT ENSP FOOD FARM FMSP FRUT LVPT DYES PACK HOPS TEXT GLAS VPTS WDPR WOOL FISH "
+         "PAPR SUGR NUTS JAVA MNSP COAT TYRE PIPE STWR STCB CMNT VENG POWR CIGR TBCO COLA BEAN FURN MPTS TATO "
+         "BATT ELEC NODC TOYS FZDR SWET CTCD SOAP MEAT SEED OLSD CHSE CERA BUBL TOFF CCPR HWAR BRCK STBL FOCA "
+         "PPWK RBAR SEAL STPP STTB TYCO WELD SESP LVST PUMP MARI").split()
+BEZ = {"GLAS", "FOOD"}
+# Pridano podle hrace: srot, ocel, motory, cely zelezny retezec Steeltownu (FIRS 5.2), repa, konopna vlakna,
+# stavebni materialy. Kody z naklady.md nebo z FIRS 5.2 (rozbalene/firs-5.2.0).
+PRIDANO = ("SCMT STEL STAL STST STSE STSH METL STIG STSL STBR STPL STSW "      # srot a ocel
+           "IORE COAL COKE LIME QLME IRON SLAG FEAL CSTI VBOD PLNT "           # zelezny retezec Steeltown
+           "SGBT FICR "                                                       # repa, konopna vlakna
+           "GRVL SAND").split()                                               # stavebni
+JEN_VOJENSKA = ["FOOD", "BOOM"]                   # jidlo a vybusniny jen vojenska
+NAKLADY = {"modra": [k for k in VW_T1 if k not in BEZ] + [k for k in PRIDANO if k not in VW_T1]}
+NAKLADY["vojenska"] = NAKLADY["modra"] + JEN_VOJENSKA
+for _n in NAKLADY:
+    assert len(NAKLADY[_n]) == len(set(NAKLADY[_n])), _n
+
+# Odstin modre podle nakladu (hrac: "staveni C, cement a stavebni; tmava strojirenstvi D, A zbozi,
+# B zemedelstvi"). Co neni v B, C ani D, je A.
+ODSTIN = {}
+for k in "TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS".split(): ODSTIN[k] = "B"
+for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW".split(): ODSTIN[k] = "C"
+for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
+          "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD").split():
+    ODSTIN[k] = "D"
+assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
+
+# prekladova tabulka: poradi z hracova vzoru (prekladova-tabulka-vzor.yagl), co ve vzoru neni, jde za MARI
+vzor = open(os.path.join(TU, "..", "prekladova-tabulka-vzor.yagl"), encoding="utf-8").read()
+blok = vzor[vzor.index("properties<GlobalSettings"):vzor.index("\n}\n")]
+PORADI = re.findall(r'^\s+cargo_translation_table: "([^"]{4})";', blok, re.M)
+assert len(PORADI) == 147 and PORADI[-1] == "MARI", len(PORADI)
+_pouzite = set(NAKLADY["vojenska"])
+TABULKA = [k for k in PORADI if k in _pouzite] + [k for k in NAKLADY["vojenska"] if k not in PORADI]
+INDEX = {k: i for i, k in enumerate(TABULKA)}
+
+KAPACITA = 10                                      # jednotek beznych nakladu
+LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojenska nevim, hodne"
+
+# ---------------------------------------------------------------- sprity a list
+SADY = {"vojenska": ["vojenska"], "modra": ["modra_A", "modra_B", "modra_C", "modra_D"]}
+vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
+os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
+ODST = 6; SIRKA = 1024
+polozky = [((nat, i), vse[nat][i][0]) for nat in vse for i in range(8)]
+x = y = ODST; radek = 0; pozice = {}
+for klic, im in polozky:
+    if x + im.width + ODST > SIRKA: x = ODST; y += radek + ODST; radek = 0
+    pozice[klic] = (x, y); x += im.width + ODST; radek = max(radek, im.height)
+PRAZDNY = (SIRKA - ODST - 1, ODST)                 # 1x1 pruhledny pixel pro neviditelny cumak
+list32 = Image.new("RGBA", (SIRKA, y + radek + ODST), (0, 0, 0, 0))
+for klic, im in polozky: list32.alpha_composite(im, pozice[klic])
+list32.save(os.path.join(VYSTUP, "sprites", PNG32))
+list8 = Image.new("P", (16, 16), 0); list8.putpalette([0, 0, 255] + [0, 0, 0] * 255)
+list8.save(os.path.join(VYSTUP, "sprites", PNG8))
+
+sid = [1]
+def sprite(nat=None, i=None):
+    out = [f"        sprite_id<0x{sid[0]:08X}>", "        {",
+           f'            [1, 1, 0, 0], normal, c8bpp, "{PNG8}", [4, 4];']
+    if nat is None:
+        out.append(f'            [1, 1, 0, 0], zin4, c32bpp, "{PNG32}", [{PRAZDNY[0]}, {PRAZDNY[1]}];')
+    else:
+        im, xo, yo = vse[nat][i]; px, py = pozice[(nat, i)]
+        out.append(f'            [{im.width}, {im.height}, {xo}, {yo}], zin4, c32bpp | chunked, "{PNG32}", [{px}, {py}];')
+    out.append("        }"); sid[0] += 1
+    return out
+
+# ---------------------------------------------------------------- texty
+ITCH = "https://karel-macha.itch.io/openttd-decouple-by-karel-macha"
+DECOUPLE = "ottd Decouple by Karel Mácha"
+PODPIS = "{new-line}{green}" + DECOUPLE + "{new-line}" + ITCH
+NAZEV = {"vojenska": "Praga V3S Vejtřaska (vojenská)", "modra": "Praga V3S Vejtřaska (modrá)"}
+UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S, Praha-Vysocany 20. 2. 1952
+TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
+        "Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}"
+        "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
+        "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
+POPIS = {
+    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6, vozí vojáky na korbě, jídlo, výbušniny "
+                 "a skoro všechno ostatní." + PODPIS + "{black}{new-line}" + TECH),
+    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní valník v komunistické modré, odstín podle nákladu: "
+              "světlá stavby, tmavá strojírenství, zemědělství a zboží. V kabině tři lidi, na korbě skoro všechno."
+              + PODPIS + "{black}{new-line}" + TECH),
+}
+TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
+BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
+GRF_JMENO = "{red}Praga V3S Vejtřaska{green} for ottd Decouple by Karel Macha " + BARVA + "{truck}"
+VARIANTA_POPIS = {"mala": "CZTR scale, 12.2 px/m, one road vehicle slot (8/8)",
+                  "velka": "BRÝLE, magnified +20 %, 14.64 px/m, invisible front bumper keeps the queue "
+                           "spacing (articulated: drive-through stops only)"}[VEL]
+POPIS_GRF = ("{red}Praga V3S Vejtřaska{green}  {truck} {new-line}"
+             "{green}Praga V3S military, Praga V3S communist blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
+             BARVA + VARIANTA_POPIS + "{new-line}"
+             "{orange}Two 6×6 flatbed trucks that carry almost everything. Military: troops, food and explosives too. "
+             "Blue: three people in the cab, the shade follows the cargo (building, engineering, farming, goods). "
+             "Prototype from 1952.{new-line}"
+             "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}{new-line}"
+             "{green}ottd decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
+             "{green}" + ITCH + "{new-line}"
+             "{green}GRF: Karel Mácha, licence CC BY 4.0")
+
+# ---------------------------------------------------------------- yagl
+Y = ['yagl_version: "";', "grf_format: Container2;",
+     "optional_info // Action14", "{", "    INFO: ", "    {",
+     f'        URL_: default, "{ITCH}";',
+     f"        VRSN: [ 0x{VERZE:02X} 0x00 0x00 0x00 ];", "        MINV: [ 0x01 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
+     "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
+     "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
+     f'    description: "{POPIS_GRF}";', "}",
+     "properties<GlobalSettings, 0x0000> // Action00, prekladova tabulka nakladu", "{"]
+for i, k in enumerate(TABULKA):
+    Y += [f"    // instance_id: 0x{i:04X}", "    {", f'        cargo_translation_table: "{k}";', "    }"]
+Y += ["}", "strings<RoadVehicles, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
+for n in ("vojenska", "modra"):
+    Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
+Y.append("}")
+
+def seznam(n):
+    return "[ " + " ".join(f"0x{INDEX[k]:02X}" for k in NAKLADY[n]) + " ]"
+
+def sw(cid, popis, vyraz, rozsahy, default):
+    r = [f"switch<RoadVehicles, 0x{cid:02X}, PrimaryDWord> // {popis}", "{", "    expression:", "    {"]
+    r += ["        " + v for v in vyraz] + ["    };", "    ranges:", "    {"]
+    for od, cil in rozsahy:
+        r.append(f"        0x{od:08X}: 0x{cil:04X};")
+    r += ["    };", f"    default: 0x{default:04X};", "}"]
+    return r
+
+def action3(eid, default, naklady):
+    """naklady: [(index v tabulce, id retezce)], 0xFF = nakup"""
+    r = ["feature_graphics<RoadVehicles> // Action03", "{", "    livery_override: false;", f"    default_set_id: 0x{default:04X};",
+         f"    feature_ids: [ 0x{eid:04X} ];", "    cargo_types:", "    {"]
+    r += [f"        0x{c:02X}: 0x{g:04X};" for c, g in naklady]
+    return r + ["    };", "}"]
+
+CALLBACK = ["value1 = variable[0x0C] & 0x0000FFFF;"]
+ID = {"vojenska": 0x0100, "modra": 0x0101}         # kupovane cislo (u velke cumak)
+ID_AUTO = {"vojenska": 0x0110, "modra": 0x0111}    # u velke viditelne auto, druhy clanek
+for n in ("vojenska", "modra"):
+    h = ID[n]; auto = ID_AUTO[n] if CUMAK else h
+    base = {"vojenska": 0x10, "modra": 0x40}[n]
+    kap_cumak = 1 if CUMAK else 0                  # cumak nese jednu jednotku (CUMAK.md: motor s nulovou
+    kap_auto = KAPACITA - kap_cumak                #  kapacitou prijde o nabidku nakladu), auto zbytek
+    lidi_auto = LIDI[n] - kap_cumak                # osoby: auto dostane zbytek callbackem 0x15
+    Y += [f"// ---------------- {NAZEV[n]}"]
+    dily = [(h, "cumak")] + [(auto, "auto")] if CUMAK else [(h, "auto")]
+    for eid, co in dily:
+        p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
+             f"        long_introduction_date: date({UVEDENI});", "        model_life_years: 255;",
+             "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
+             "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
+             "        refit_cargo_types: 0x00000000;",
+             f"        always_refittable_cargos: {seznam(n)};", "        never_refittable_cargos: [ ];",
+             f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
+             "        sprite_id: 0xFF;", "        miscellaneous_flags: 0x00;",
+             f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
+             f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
+        if eid == h:
+            p += ["        climate_availability: Temperate | Arctic | Tropical | Toyland;",
+                  "        speed_2_kmh: 0x78;",               # 60 km/h
+                  "        power_10_hp: 0x0A;",               # Tatra 912, kolem 100 k
+                  "        weight_quarter_tons: 0x16;",       # 5,5 t (pohotovostni 5,47 t)
+                  "        cost_factor: 0x40;", "        running_cost_factor: 0x2C;",
+                  "        running_cost_base: 0x00004C48;",
+                  "        sound_effect_type: 0x17;"]         # odjezd nakladaku (SND_19_DEPARTURE_OLD_RV_1)
+        maska = 0x10 if co == "cumak" else 0x08            # cumak: clanky (0x16); auto: kapacita (0x15)
+        p += [f"        callback_flags_mask: 0x{maska:02X};"]
+        Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
+                  f'    /* 0x{eid:04X} */ "{NAZEV[n] if eid == h else NAZEV[n] + " (auto)"}";', "}"]
+    # Action01: sady auta (8 smeru, u modre ctyri odstiny) a prazdna sada pro cumak
+    sady = SADY[n]
+    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01", "{"]
+    for si, nat in enumerate(sady):
+        Y += [f"    sprite_set // 0x{si:04X} {nat}", "    {"]
+        for i in range(8): Y += sprite(nat, i)
+        Y += ["    }"]
+    Y += [f"    sprite_set // 0x{len(sady):04X} prazdny cumak", "    {"]
+    for i in range(8): Y += sprite()
+    Y += ["    }", "}"]
+    g = {nat: base + si for si, nat in enumerate(sady)}
+    g_prazdny = base + len(sady)
+    for si, nat in enumerate(sady):
+        Y += [f"sprite_groups<RoadVehicles, 0x{g[nat]:02X}> // Action02 basic, {nat}", "{",
+              f"    primary_spritesets: [ 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
+    Y += [f"sprite_groups<RoadVehicles, 0x{g_prazdny:02X}> // Action02 basic, prazdny cumak", "{",
+          f"    primary_spritesets: [ 0x{len(sady):04X} ];", f"    secondary_spritesets: [ 0x{len(sady):04X} ];", "}"]
+    # obrazek do nakupu: smer W, u modre odstin A (vychozi naklad je zbozi)
+    g_nakup = base + 8
+    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, obrazek do nakupu", "{", "    sprite_set // 0x0000 nakup", "    {"]
+    Y += sprite(sady[0], 6)
+    Y += ["    }", "}", f"sprite_groups<RoadVehicles, 0x{g_nakup:02X}> // Action02 basic, nakup", "{",
+          "    primary_spritesets: [ 0x0000 ];", "    secondary_spritesets: [ 0x0000 ];", "}"]
+    s_clanky, s_lidi, s_nakup, s_cumak = base + 9, base + 10, base + 11, base + 12
+    zaklad = g[sady[0]]                            # vojenska, u modre odstin A
+    # osoby: callback 0x15 vrati kapacitu, jinak grafika (u modre odstin A)
+    Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK, [(0x15, 0x8000 | lidi_auto)], zaklad)
+    popis_nakup = [(0x23, 0x8000 | TEXT[n])]
+    if CUMAK:
+        Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
+                [(1, 0x8000 | auto)], 0xFFFF)
+        Y += sw(s_cumak, "cumak: clanky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)], g_prazdny)
+        Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
+        Y += action3(h, s_cumak, [(0xFF, s_nakup)])
+    else:
+        Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
+    # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback
+    mapa = [(INDEX["PASS"], s_lidi)]
+    if n == "modra":
+        mapa += [(INDEX[k], g["modra_" + o]) for k, o in ODSTIN.items() if o != "A"]
+    if not CUMAK:
+        mapa += [(0xFF, s_nakup)]
+    Y += action3(auto, zaklad, sorted(mapa))
+
+open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
+souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN,
+          "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse}}
+json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-souhrn.json"), "w"), indent=1, ensure_ascii=False)
+print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "tabulka", len(TABULKA), "nakladu",
+      {n: len(v) for n, v in NAKLADY.items()}, "odstiny B/C/D", {o: sum(1 for v in ODSTIN.values() if v == o) for o in "BCD"})

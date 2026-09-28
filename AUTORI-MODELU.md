@@ -14,7 +14,7 @@ musí NC převzít.
 | [Chicken cutlet](https://sketchfab.com/Chicken_Cutlet) | Diesel locomotive M62 (`diesel_locomotive_m62.glb`) | CC-BY-4.0 | par5 (zip5/m62), z něj je Sergej |
 | [DynamicSAV](https://sketchfab.com/dynamicsav) | Car trailer model game ready for free PBR (`car_trailer_model_game_ready_for_free_pbr.glb`) | CC-BY-4.0 | par6 |
 | [Fratzica](https://sketchfab.com/vasilebetivu62) | Opel Movano (`opel_movano.glb`) | CC-BY-4.0 | par6 |
-| [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 | par6 |
+| [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
 | [LarsH.](https://sketchfab.com/LarsH.) | Star Wars A-A5 heavy speeder truck (`star_wars_a-a5_heavy_speeder_truck.glb`); Star Wars Landspeeder Collection (`star_wars_landspeeder_collection.glb`) | CC-BY-4.0 | par6 |
 | [manilov.ap](https://sketchfab.com/manilov.ap) | Mig21 (`mig21.glb`); Yak42 (`yak42.glb`); Tu204 (`tu204.glb`); Tu154 (`tu154.glb`); Tu144 (`tu144.glb`); Tu114 (`tu114.glb`); An225 (`an225.glb`); An10 (`an10.glb`); An124 (`an124.glb`); An74 (`an74.glb`) | CC-BY-4.0 | par6 |
 | [Miguel Adão](https://sketchfab.com/theauditor) | Zeppelin Aircraft (`zeppelin_aircraft.glb`) | CC-BY-4.0 | par6 |

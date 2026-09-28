@@ -1153,3 +1153,44 @@ v `rozbalene/README.md`, tady jen to, co platí obecně:
 - **Jméno vozu může dělat callback.** CZTR 1.1.0 „Uacs“ je vůz 0x011E s názvem „Raj (ČD)“ a
   přepíná se podle roku výroby. V seznamu jmen se hledat nedá, jen přes texty D0xx.
 - **Mluvit normálně.** Hráč: *„mluv normálně robote“*. Průběžné zprávy česky a bez zkratek.
+
+## V3S Vejtřaska: silniční vozidlo od nuly (2026-09-28)
+
+Podrobně v `v3s/README.md`. Obecně platné:
+
+- **Kotva silničního vozidla podle VW T1, ale zrcadlově.** Konvence VW T1 orig size (výš) má
+  v sobě konstantu −5 px a `3,8 · cos a`, a ty zrcadlové nejsou. Hráč chce *„zrcadlovou verifikaci
+  středu“*: kotva proti zemi pod středem auta `10,0 · sin a` vodorovně, `−20,8 − 0,7 · cos a` svisle.
+  Pro S, J, V, Z je to přesně oprava, kterou už dostaly dvanácettrojky. Ověřuje
+  `v3s/kontrola_zrcadla.py` na rozbaleném GRF (má vyjít 0 px).
+- **Zrcadlo platí i pro jízdní směry.** Hra kreslí na `poloha + bounds.origin + bounds.offset`
+  (SV a JZ −2, −1; JV a SZ −1, −2) a jízdní pruhy pravostranného provozu leží na 5 a 9. Když se
+  auto postaví na pruhy 6 a 10 (střed silnice 8, pruh ±2), vyjde kotva pro SV/SZ i JV/JZ zrcadlově.
+  VW T1 se v nich o 4,7 a 15,4 px liší, to je ta otevřená věc z `auta/CUMAK.md`.
+- **Střed auta je půlka délky, ne rozvoru.** U VW T1 je to totéž, u V3S metr rozdíl (dlouhá korba
+  za tandemem). Wiki (PalettesAndCoordinates, NML:Realsprites) říká taky „střed vozidla“.
+- **Linka kol se porovnává v bočním pohledu** (V, Z), tam je vzdálenost od krajnice. Ve šikmých
+  pohledech spodek siluety závisí na délce a šířce auta, srovnávat ho mezi auty nejde.
+- **Silniční vozidla se na rovné silnici nestlačují** (na rozdíl od vlaků). Všech 8 směrů ve stejném
+  px/m.
+- **Náklady vozidla dělá hráč seznamem** a vzorem je VW T1 (*„vozí všechno, tam se inspiruj“*).
+  Kódy jen z `naklady.md` a z rozbaleného FIRS. U FIRS kódů, které tabulka nezná (HWAR, PPWK…),
+  se jméno čte z `strings<Cargos>` v rozbaleném FIRS, ne odhadem. Hráč se ptal *„vymyslel si něco?“*,
+  takže u seznamu vždy rozlišit, co řekl on a co jsem přiřadil já.
+- **Kapacita podle nákladu: násobek z nákladu.** Bez callbacku 0x15 hra přepočítá kapacitu násobkem
+  nákladu proti výchozímu nákladu (`Engine::DetermineCapacity`). Ve výchozí hře má zboží 2, uhlí 1,
+  takže valník na 10 zboží veze 5 uhlí. FIRS 5.2 Steeltown má všech 62 nákladů na 1.
+- **Nátěr podle nákladu je Action 3** (`cargo_types`: index v tabulce → skupina), výchozí sada
+  pro ostatní. Callback 0x15 (lidé) jde přes stejnou mapu, PASS míří na switch s kapacitou.
+- **Článkové silniční auto nesmí do zálivové zastávky** (`STR_ERROR_NO_STOP_ARTICULATED_VEHICLE`).
+  Čumák to s sebou nese vždycky, říkat to hráči.
+- **Fakta o vozidle dohledat** (první prototyp V3S 20. 2. 1952, výroba 1953–1990, 6,91 m, Tatra 912).
+  Hráč: *„určitě jezdila dřív“*, a měl pravdu.
+- **Zkoušet ve vlastní kopii hry.** Ve `scratchpad/ottd/src_tree` (moje kopie, ne forclaude) jsou
+  příkazy `testv3s` (koupí auta z GRF `TEST_RV_GRF`, přestaví a vypíše díly, kapacity a sprity)
+  a `testv3sfoto` (okruh, auta, fotka). **Přeložená hra s obrazem je uložená v `hra/`** (hráč: *„ulož si to
+  v repu, ať nestavíš znova s grafikou“*), jak ji pustit je v `hra/README.md`. Pozor: s obrazem jde
+  konzole jen do okna, výpisy proto i přes `Debug(misc, 0, …)`; `MakeScreenshot` fotí až ve frontě
+  hlavního vlákna, konec hry musí jít do fronty za ni; hned po založení hry se ještě netiká, na
+  fotku se čeká časovačem `TimeoutTimer<TimerGameTick>`.
+- Hráč: *„klidně se všude koukej“* (28. 9., o zkušební hře a fotkách).

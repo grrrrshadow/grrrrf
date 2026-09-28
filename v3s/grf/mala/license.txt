@@ -1,0 +1,92 @@
+Praga V3S Vejtřaska for ottd Decouple by Karel Macha – GRF pro OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+OTTD DECOUPLE BY KAREL MÁCHA
+
+Upravené OpenTTD, ve kterém se vlaky spojují a rozpojují za jízdy a porouchané
+se odtahují. Zdarma ke stažení tady:
+
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+No donations allowed. Dary se nepřijímají.
+
+CO JE V BALÍKU
+
+Praga_V3S-v1.grf        malá, měřítko CZTR (12,2 px/m), na jedno místo v koloně
+Praga_V3S_BRYLE-v1.grf  velká, BRÝLE o 20 % větší (14,64 px/m), s neviditelným
+                        čumákem vepředu, aby auta v koloně nestála přes sebe.
+                        Článkové auto, jezdí jen do průjezdných zastávek.
+
+V každém GRF dvě auta: Praga V3S Vejtřaska vojenská a modrá. Modrá mění odstín
+podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
+skoro všechno, vojenská navíc jídlo a výbušniny, vojáků 20, modrá 3 lidi v kabině.
+Prototyp od 20. 2. 1952, pro všechny o rok později.
+
+LICENCE: Creative Commons Uveďte původ 4.0 Mezinárodní (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/deed.cs
+
+GRF i jeho části (sprity, texty, skripty) smíte šířit a upravovat, i pro jiné sady,
+pokud uvedete autora takto:
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+a zachováte i uvedení převzatých částí níže.
+
+PŘEVZATÉ ČÁSTI
+
+3D model: "Praga-V3S", autor hans1240
+    https://sketchfab.com/hans1240
+    https://sketchfab.com/3d-models/praga-v3s-5593b3ca44cb41adb5a1c6ecb81297d3
+    licence CC BY 4.0
+    Úpravy: vyfoceno do spritů pro OpenTTD ve dvou velikostech, vojenský olivový
+    nátěr beze změny, k tomu modrý nátěr ve čtyřech odstínech přebarvený z olivového.
+
+-------------------------------------------------------------------------------
+
+Praga V3S Vejtřaska for ottd Decouple by Karel Macha – GRF for OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+OTTD DECOUPLE BY KAREL MÁCHA
+
+A modified OpenTTD where trains couple and uncouple on the move and broken-down
+trains get towed. Free download:
+
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+No donations allowed.
+
+WHAT IS IN THE PACKAGE
+
+Praga_V3S-v1.grf        small, CZTR scale (12.2 px/m), fits one queue slot
+Praga_V3S_BRYLE-v1.grf  big, BRÝLE magnified by 20 % (14.64 px/m), with an invisible
+                        front bumper so the trucks do not overlap in a queue.
+                        Articulated, uses drive-through stops only.
+
+Each GRF has two trucks: Praga V3S Vejtřaska military and blue. The blue one changes
+its shade with the cargo (building light, engineering dark, farming, goods). They
+carry almost everything; the military one also food and explosives and 20 troops,
+the blue one 3 people in the cab. Prototype from 20 February 1952, for everyone a
+year later.
+
+LICENSE: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt this GRF and its parts (sprites, texts, scripts), also for other
+sets, as long as you credit the author as
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+and keep the credits of the third-party parts below.
+
+THIRD-PARTY PARTS
+
+3D model: "Praga-V3S" by hans1240
+    https://sketchfab.com/hans1240
+    https://sketchfab.com/3d-models/praga-v3s-5593b3ca44cb41adb5a1c6ecb81297d3
+    license CC BY 4.0
+    Changes: rendered to OpenTTD sprites in two sizes, the military olive livery
+    unchanged, plus a blue livery in four shades recoloured from the olive one.

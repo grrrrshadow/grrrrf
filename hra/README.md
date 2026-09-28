@@ -1,0 +1,53 @@
+# Zkušební hra s obrazem
+
+Moje kopie OpenTTD na zkoušení GRF, **ne hra pro hráče**. Přeložená z kopie zdrojáků hry
+(`forclaude`, `openttd/`, commit `60283b3` z 16. 9. 2026, jen čteno, nic tam neměněno)
+s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minut překládat
+(hráč 28. 9.: *„hlavně si to ulož v repu, ať nestavíš znova s grafikou“*).
+
+| soubor | co to je |
+|---|---|
+| `ottd-zkusebni-gfx.tar.xz` | přeložená hra (SDL2, 32bpp blittery, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a domov `domov/` s OpenGFX 7.1 a čistým `openttd.cfg` |
+| `zkusebni-prikazy.patch` | všechny moje změny proti zdrojákům hry (`patch -p1` v kopii `openttd/` na `60283b3`) |
+
+## Zkušební příkazy
+
+| příkaz | co udělá |
+|---|---|
+| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU a vypíše díly, délky, kapacity a čísla spritů |
+| `testv3sfoto <tiků>` | postaví silniční okruh s depem, dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady), po zadaném počtu tiků vyfotí okruh při plném přiblížení a hru ukončí |
+| `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
+
+Výpisy V3S jdou i na stderr (`dbg: [misc:0] V3S…`), s obrazem by jinak zůstaly jen v okně konzole.
+Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback … zvuk …`.
+
+## Jak pustit
+
+```bash
+apt-get install -y libsdl2-2.0-0        # jednou v novém kontejneru; xvfb-run tam už je
+mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-gfx.tar.xz -C /tmp/hra
+H=/tmp/hra/ottd-zkusebni/domov
+cp v3s/grf/mala/Praga_V3S-v1.grf v3s/grf/velka/Praga_V3S_BRYLE-v1.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nPraga_V3S-v1.grf = \nPraga_V3S_BRYLE-v1.grf = /' $H/.openttd/openttd.cfg
+printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
+printf 'testv3sfoto 1500\n' > $H/.openttd/scripts/game_start.scr
+cd /tmp/hra/ottd-zkusebni
+HOME=$H xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r 800x500 -s null -m null > $H/log 2>&1
+# fotka: $H/.openttd/screenshot/v3s_okruh.png (3200 x 2000, přiblížení 4x)
+```
+
+Bez obrazu, jen výpisy (třeba `testv3s`), stačí `./openttd -vnull:ticks=200 -snull -mnull`
+a v `game_start.scr` příkaz, na konci `quit` není potřeba.
+`-G <číslo>` dá pokaždé stejnou mapu.
+
+## Jak přeložit znova
+
+```bash
+cp -r /home/user/forclaude/openttd /tmp/openttd     # kopie, ve forclaude nic neměnit
+cd /tmp && patch -p1 < /home/user/grrrrf/hra/zkusebni-prikazy.patch   # cesty v patchi jsou openttd/src/…
+apt-get install -y libsdl2-dev
+mkdir /tmp/b && cd /tmp/b && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DOPTION_DEDICATED=OFF /tmp/openttd && ninja openttd
+```
+
+Asi 20 minut na 4 jádrech. Když se zdroják mění během překladu, ninja si to nemusí všimnout
+(soubor se přeloží ze starší verze a objekt je pak novější než zdroják): `touch` a přeložit znova.
