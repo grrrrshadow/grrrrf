@@ -16,6 +16,8 @@
 # nebyly zrcadlove (konstanta -5 px a 3,8 * cos a), jsou pryc: sever a jih maji kotvu na ose,
 # dvojice SV/SZ, V/Z a JV/JZ jsou zrcadla. Stred auta = pul delky (V3S ma za zadni napravou dlouhou
 # korbu, stred rozvoru je o metr blize k celu, auto by pak v zastavce a na vagonu stalo o metr dozadu).
+# K tomu posun napric silnici do stredu pruhu CZTR (posun_do_pruhu), od verze 2: pruhy hry nesedi na
+# cary CZTR stejne ve vsech smerech, JV jezdil po krajnici a JZ po prostredni care (hrac 28. 9.).
 import os, sys, json, math, re
 from PIL import Image
 
@@ -24,15 +26,43 @@ TU = os.path.dirname(os.path.abspath(__file__))
 CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v osminach, 0 = bez cumaku
 
 # Verze: kazde sestaveni pro hrace o jednu vys, je ve jmenu souboru i v Action14 (VRSN).
-VERZE = 1
+# 1 prvni vydani, 2 jmeno "V3S Praga" zlute bez "for", texty bez "communist", zelena kupka na MARI
+VERZE = 2
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 
-def kotva_konvence(d):
-    """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle)"""
+def kotva_zrcadlova(d):
+    """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle), zrcadlove srovnana"""
     a = math.radians(45 * d)
     return 10.0 * math.sin(a), -20.8 - 0.7 * math.cos(a)
+
+# Pruh na silnici CZTR (hrac 28. 9.: "zarovnej to znova na silnici cztr", "nemuze jezdit kolem po prostredni
+# care", "odstup jako od krajnice, par pixelu", "tak neco zkus mezi tim"). Hra vede auto v pruhu na 9 (SV, JV)
+# nebo 5 (JZ, SZ) jednotkach dlazdice a kresli ho na poloha + (-2, -1) (SV, JZ) nebo (-1, -2) (JV, SZ).
+# Stred pruhu mezi bilou krajnici a prostredni carou, zmereny na spritech CZTR RT14 "1. trida - venkov"
+# (hra/cztr_silnice): silnice podel X (SV, JZ) 10,2 a 6,33, silnice podel Y (JV, SZ) 9,66 a 5,79.
+# smer: (osa napric, pruh hry, posun kresleni napric, stred pruhu CZTR)
+PRUH_CZTR = {1: ("y", 9, -1, 10.2), 3: ("x", 9, -1, 9.66), 5: ("y", 5, -1, 6.33), 7: ("x", 5, -1, 5.79)}
+
+def posun_do_pruhu(d):
+    """posun obrazku v px zin4 (vodorovne, svisle), aby zem pod stredem auta byla ve stredu pruhu CZTR"""
+    if d % 2 == 0:
+        # S, V, J, Z jsou jen v zatackach: napul mezi sousednimi smery
+        a, b = posun_do_pruhu((d - 1) % 8), posun_do_pruhu((d + 1) % 8)
+        return (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+    osa, pruh, kresli, stred = PRUH_CZTR[d]
+    du, dv = kotva_zrcadlova(d)
+    # zem pod stredem auta je na obrazovce (-du, -dv) od kotvy; na mape x je (-8, 4) px, y je (8, 4) px (zin4)
+    zx, zy = ((-dv) / 4 - (-du) / 8) / 2, ((-dv) / 4 + (-du) / 8) / 2
+    o = stred - (pruh + kresli + (zx if osa == "x" else zy))      # o kolik jednotek napric posunout
+    return (-8 * o, 4 * o) if osa == "x" else (8 * o, 4 * o)
+
+def kotva_konvence(d):
+    """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle): zrcadlova, posunuta do pruhu"""
+    du, dv = kotva_zrcadlova(d)
+    sx, sy = posun_do_pruhu(d)
+    return du - sx, dv - sy
 
 def nacti_sadu(nater):
     adr = os.path.join(FOTKY, f"{VEL}_{nater}")
@@ -90,7 +120,11 @@ LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojen
 
 # ---------------------------------------------------------------- sprity a list
 SADY = {"vojenska": ["vojenska"], "modra": ["modra_A", "modra_B", "modra_C", "modra_D"]}
+# naložena marihuanou: zelena kupka na korbe (hrac 28. 9.: "udelej tam zelenou kupicku naklad"),
+# u modre v odstinu B jako ostatni zemedelske naklady
+KUPKA = {"vojenska": ("vojenska", "vojenska_kupka"), "modra": ("modra_B", "modra_B_kupka")}
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
+vse.update({k[1]: nacti_sadu(k[1]) for k in KUPKA.values()})
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 ODST = 6; SIRKA = 1024
 polozky = [((nat, i), vse[nat][i][0]) for nat in vse for i in range(8)]
@@ -130,22 +164,24 @@ TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
 POPIS = {
     "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6, vozí vojáky na korbě, jídlo, výbušniny "
                  "a skoro všechno ostatní." + PODPIS + "{black}{new-line}" + TECH),
-    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní valník v komunistické modré, odstín podle nákladu: "
+    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu: "
               "světlá stavby, tmavá strojírenství, zemědělství a zboží. V kabině tři lidi, na korbě skoro všechno."
               + PODPIS + "{black}{new-line}" + TECH),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
-GRF_JMENO = "{red}Praga V3S Vejtřaska{green} for ottd Decouple by Karel Macha " + BARVA + "{truck}"
+# hrac 28. 9.: "ve jmenu vynech for, jen zlute V3S Praga, zelene ottd Decouple by Karel Macha";
+# symbol nakladaku v barve varianty na konci zustal (rozlisuje malou a velkou, jako Sergej)
+GRF_JMENO = "{yellow}V3S Praga{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
 VARIANTA_POPIS = {"mala": "CZTR scale, 12.2 px/m, one road vehicle slot (8/8)",
                   "velka": "BRÝLE, magnified +20 %, 14.64 px/m, invisible front bumper keeps the queue "
                            "spacing (articulated: drive-through stops only)"}[VEL]
-POPIS_GRF = ("{red}Praga V3S Vejtřaska{green}  {truck} {new-line}"
-             "{green}Praga V3S military, Praga V3S communist blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
+POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
+             "{green}Praga V3S military, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
              BARVA + VARIANTA_POPIS + "{new-line}"
              "{orange}Two 6×6 flatbed trucks that carry almost everything. Military: troops, food and explosives too. "
              "Blue: three people in the cab, the shade follows the cargo (building, engineering, farming, goods). "
-             "Prototype from 1952.{new-line}"
+             "Marijuana rides as a green heap. Prototype from 1952.{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}{new-line}"
              "{green}ottd decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
              "{green}" + ITCH + "{new-line}"
@@ -219,23 +255,32 @@ for n in ("vojenska", "modra"):
         p += [f"        callback_flags_mask: 0x{maska:02X};"]
         Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
                   f'    /* 0x{eid:04X} */ "{NAZEV[n] if eid == h else NAZEV[n] + " (auto)"}";', "}"]
-    # Action01: sady auta (8 smeru, u modre ctyri odstiny) a prazdna sada pro cumak
+    # Action01: sady auta (8 smeru, u modre ctyri odstiny), auto se zelenou kupkou (marihuana)
+    # a prazdna sada pro cumak
     sady = SADY[n]
+    lak_mari, sada_kupka = KUPKA[n]
+    i_kupka, i_prazdny = len(sady), len(sady) + 1
     Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01", "{"]
-    for si, nat in enumerate(sady):
+    for si, nat in enumerate(sady + [sada_kupka]):
         Y += [f"    sprite_set // 0x{si:04X} {nat}", "    {"]
         for i in range(8): Y += sprite(nat, i)
         Y += ["    }"]
-    Y += [f"    sprite_set // 0x{len(sady):04X} prazdny cumak", "    {"]
+    Y += [f"    sprite_set // 0x{i_prazdny:04X} prazdny cumak", "    {"]
     for i in range(8): Y += sprite()
     Y += ["    }", "}"]
     g = {nat: base + si for si, nat in enumerate(sady)}
     g_prazdny = base + len(sady)
+    g_mari = base + len(sady) + 1
     for si, nat in enumerate(sady):
         Y += [f"sprite_groups<RoadVehicles, 0x{g[nat]:02X}> // Action02 basic, {nat}", "{",
               f"    primary_spritesets: [ 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
     Y += [f"sprite_groups<RoadVehicles, 0x{g_prazdny:02X}> // Action02 basic, prazdny cumak", "{",
-          f"    primary_spritesets: [ 0x{len(sady):04X} ];", f"    secondary_spritesets: [ 0x{len(sady):04X} ];", "}"]
+          f"    primary_spritesets: [ 0x{i_prazdny:04X} ];", f"    secondary_spritesets: [ 0x{i_prazdny:04X} ];", "}"]
+    # marihuana: prazdne auto, od poloviny nakladu kupka (hra bere sadu naklad * pocet / kapacita)
+    i_lak = sady.index(lak_mari)
+    Y += [f"sprite_groups<RoadVehicles, 0x{g_mari:02X}> // Action02 basic, marihuana: prazdne, kupka", "{",
+          f"    primary_spritesets: [ 0x{i_lak:04X} 0x{i_kupka:04X} ];",
+          f"    secondary_spritesets: [ 0x{i_lak:04X} 0x{i_kupka:04X} ];", "}"]
     # obrazek do nakupu: smer W, u modre odstin A (vychozi naklad je zbozi)
     g_nakup = base + 8
     Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, obrazek do nakupu", "{", "    sprite_set // 0x0000 nakup", "    {"]
@@ -256,12 +301,13 @@ for n in ("vojenska", "modra"):
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
     # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback
-    mapa = [(INDEX["PASS"], s_lidi)]
+    mapa = {INDEX["PASS"]: s_lidi}
     if n == "modra":
-        mapa += [(INDEX[k], g["modra_" + o]) for k, o in ODSTIN.items() if o != "A"]
+        mapa.update({INDEX[k]: g["modra_" + o] for k, o in ODSTIN.items() if o != "A"})
+    mapa[INDEX["MARI"]] = g_mari                    # kupka (u modre v odstinu B)
     if not CUMAK:
-        mapa += [(0xFF, s_nakup)]
-    Y += action3(auto, zaklad, sorted(mapa))
+        mapa[0xFF] = s_nakup
+    Y += action3(auto, zaklad, sorted(mapa.items()))
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN,

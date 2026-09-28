@@ -10,13 +10,14 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 | `ottd-zkusebni-gfx.tar.xz` | přeložená hra (SDL2, 32bpp blittery, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a domov `domov/` s OpenGFX 7.1 a čistým `openttd.cfg` |
 | `zkusebni-prikazy.patch` | všechny moje změny proti zdrojákům hry (`patch -p1` v kopii `openttd/` na `60283b3`) |
 | `cztr_silnice/` | výstřižek silnice CZTR RT14 „1. třída – venkov“ (`CZTR_silnice_RT14.grf`), v domově už je zapsaný, okruh na fotce se staví z ní |
+| `zkusebni_mari/` | zkušební náklad `MARI` (`zkusebni_MARI.grf`): tahle stará verze hry ho nemá, ve hře hráče je zabudovaný |
 
 ## Zkušební příkazy
 
 | příkaz | co udělá |
 |---|---|
-| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU a vypíše díly, délky, kapacity a čísla spritů |
-| `testv3sfoto <tiků>` | postaví silniční okruh s depem (ze silnice CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady), po zadaném počtu tiků vyfotí okruh při plném přiblížení a hru ukončí |
+| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU MARI a vypíše díly, délky, kapacity a čísla spritů; na MARI ho i naloží a vypíše obrázek naložené (zelená kupka) |
+| `testv3sfoto <tiků> [RTxx] [fotek] [tiků mezi fotkami]` | postaví silniční okruh s depem (ze silnice s daným štítkem, jinak CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady, některé naložené MARI), po zadaném počtu tiků vyfotí okruh při plném přiblížení, případně víckrát po sobě, a hru ukončí. U každé fotky vypíše počátek pohledu (`V3SPOHLED`) a polohu, směr a posun kreslení každého dílu (`V3SDIL`), takže se dá každé auto vystřihnout |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
 Výpisy V3S jdou i na stderr (`dbg: [misc:0] V3S…`), s obrazem by jinak zůstaly jen v okně konzole.
@@ -36,6 +37,10 @@ cd /tmp/hra/ottd-zkusebni
 HOME=$H xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r 800x500 -s null -m null > $H/log 2>&1
 # fotka: $H/.openttd/screenshot/v3s_okruh.png (3200 x 2000, přiblížení 4x)
 ```
+
+Víc fotek po sobě: `testv3sfoto 300 RT14 12 100` (první za 300 tiků, pak 11 dalších po 100),
+soubory `v3s_okruh_00.png` až `v3s_okruh_11.png`. Bod fotky, kam hra položí kotvu dílu:
+`8·(y+ky − x−kx) − vlevo`, `4·(x+kx + y+ky − z) − nahoře` (px, `kx ky` = „kresli“ z `V3SDIL`).
 
 Bez obrazu, jen výpisy (třeba `testv3s`), stačí `./openttd -vnull:ticks=200 -snull -mnull`
 a v `game_start.scr` příkaz, na konci `quit` není potřeba.

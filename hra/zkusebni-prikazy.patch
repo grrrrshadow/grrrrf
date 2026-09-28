@@ -1,16 +1,17 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-28 19:39:03.234357643 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-28 20:06:19.902246046 +0000
-@@ -37,6 +37,8 @@
+--- a/openttd/src/console_cmds.cpp	2026-09-28 21:48:28.375788616 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-28 21:48:28.382627755 +0000
+@@ -37,6 +37,9 @@
  #include "fileio_func.h"
  #include "fontcache.h"
  #include "screenshot.h"
++#include "cargopacket.h"
 +#include "video/video_driver.hpp"
 +#include "openttd.h"
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1346,197 @@
+@@ -1344,6 +1347,254 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -49,7 +50,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
 +	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
-+	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU"};
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "MARI"};
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +		if (e->GetGRFID() != want) continue;
 +		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
@@ -78,6 +79,18 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +						u->gcache.cached_veh_length, u->cargo_cap, seq.count > 0 ? seq.seq[0].sprite : 0, seq_ne.count > 0 ? seq_ne.seq[0].sprite : 0);
 +			}
 +			IConsolePrint(CC_INFO, "V3S:   {} prestavba {}{}", lab, rc.Succeeded() ? "ok" : "NE", radek);
++			if (std::string_view(lab) == "MARI") {
++				/* nalozit plne a znovu se podivat na sprite (kupka), pak zase vylozit */
++				std::string plne;
++				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
++					if (u->cargo_cap > 0 && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
++					VehicleSpriteSeq seq;
++					u->GetImage(Direction::W, EngineImageType::OnMap, &seq);
++					plne += fmt::format(" | dil 0x{:04X} nalozeno {} sprite W {}", Engine::Get(u->engine_type)->grf_prop.local_id, u->cargo.StoredCount(), seq.count > 0 ? seq.seq[0].sprite : 0);
++					u->cargo.Truncate();
++				}
++				IConsolePrint(CC_INFO, "V3S:   MARI plne{}", plne);
++			}
 +		}
 +	}
 +	return true;
@@ -96,23 +109,48 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +}
 +
 +static TileIndex _v3s_stred = INVALID_TILE;
-+/** Fotka okruhu az hra opravdu bezi (hned po zalozeni hry se jeste netika), pak konec hry. */
-+static TimeoutTimer<TimerGameTick> _v3s_foto_timeout({ TimerGameTick::Priority::None, 0 }, []()
++/* fotky: kolik jeste, po kolika ticich, cislo dalsi a tik dalsi (hodiny tikaji porad, fotka jen kdyz je co fotit) */
++static uint _v3s_foto_zbyva = 0, _v3s_foto_krok = 100, _v3s_foto_cislo = 0, _v3s_foto_pocet = 1;
++static TimerGameTick::TickCounter _v3s_foto_dalsi = 0;
++/** Fotka okruhu az hra opravdu bezi (hned po zalozeni hry se jeste netika); po posledni konec hry.
++ * Poloha kazdeho dilu a pocatek pohledu se vypisou ve fronte hlavniho vlakna hned za fotkou, mezi nimi hra netika. */
++static void V3SFotoTed()
 +{
-+	bool foto = MakeScreenshot(SC_ZOOMEDIN, "v3s_okruh");
-+	V3SLog("V3SFOTO: fotka {}", foto ? "ok" : "CHYBA");
-+	for (const RoadVehicle *v : RoadVehicle::Iterate()) {
-+		if (!v->IsFrontEngine()) continue;
-+		V3SLog("V3SFOTO: vuz {} dlazdice ({},{}) smer {} stav {:02X}", v->unitnumber, TileX(v->tile), TileY(v->tile), to_underlying(v->direction), v->state);
++	uint cislo = _v3s_foto_cislo++;
++	std::string jmeno = _v3s_foto_pocet == 1 ? std::string("v3s_okruh") : fmt::format("v3s_okruh_{:02}", cislo);
++	bool foto = MakeScreenshot(SC_ZOOMEDIN, jmeno);
++	V3SLog("V3SFOTO: fotka {} {}", jmeno, foto ? "ok" : "CHYBA");
++	VideoDriver::GetInstance()->QueueOnMainThread([cislo] {
++		const Viewport &vp = *GetMainWindow()->viewport;
++		V3SLog("V3SPOHLED: fotka {} vlevo {} nahore {}", cislo, vp.virtual_left, vp.virtual_top);
++		for (const RoadVehicle *v : RoadVehicle::Iterate()) {
++			const Engine *e = v->GetEngine();
++			uint32_t g = e->GetGRFID();
++			std::string grf = e->GetGRF() == nullptr ? std::string("hra") : fmt::format("{:c}{:c}{:c}{:c}", (char)(g & 0xFF), (char)(g >> 8 & 0xFF), (char)(g >> 16 & 0xFF), (char)(g >> 24));
++			V3SLog("V3SDIL: fotka {} vuz {} grf {} dil 0x{:04X} x {} y {} z {} smer {} stav {:02X} delka {} kresli {} {}", cislo, v->First()->unitnumber, grf,
++					e->grf_prop.local_id, v->x_pos, v->y_pos, v->z_pos, to_underlying(v->direction), v->state, v->gcache.cached_veh_length,
++					v->bounds.origin.x + v->bounds.offset.x, v->bounds.origin.y + v->bounds.offset.y);
++		}
++	});
++	if (--_v3s_foto_zbyva == 0) {
++		for (const RoadVehicle *v : RoadVehicle::Iterate()) {
++			if (!v->IsFrontEngine()) continue;
++			V3SLog("V3SFOTO: vuz {} dlazdice ({},{}) smer {} stav {:02X}", v->unitnumber, TileX(v->tile), TileY(v->tile), to_underlying(v->direction), v->state);
++		}
++		/* fotka se dela az ve fronte hlavniho vlakna, konec hry az po ni */
++		VideoDriver::GetInstance()->QueueOnMainThread([] { _exit_game = true; });
 +	}
-+	/* fotka se dela az ve fronte hlavniho vlakna, konec hry az po ni */
-+	VideoDriver::GetInstance()->QueueOnMainThread([] { _exit_game = true; });
++}
++static IntervalTimer<TimerGameTick> _v3s_foto_hodiny({ TimerGameTick::Priority::None, 1 }, [](auto) {
++	if (_v3s_foto_zbyva == 0 || TimerGameTick::counter < _v3s_foto_dalsi) return;
++	_v3s_foto_dalsi = TimerGameTick::counter + _v3s_foto_krok;
++	V3SFotoTed();
 +});
 +
 +static bool ConTestV3SFoto(std::span<std::string_view> argv)
 +{
 +	if (argv.empty()) {
-+		IConsolePrint(CC_HELP, "Fotka V3S na okruhu. Usage: 'testv3sfoto <tiku>'.");
++		IConsolePrint(CC_HELP, "Fotka V3S na okruhu. Usage: 'testv3sfoto <tiku> [RTxx] [fotek] [tiku mezi fotkami]'.");
 +		return true;
 +	}
 +	if (_game_mode != GameMode::Normal) return true;
@@ -148,9 +186,12 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	uint x0 = TileX(zac) + 1, y0 = TileY(zac) + 2, x1 = x0 + 11, y1 = y0 + 6;
 +	/* silnice: CZTR 1. trida venkov (RT14), kdyz je nactena (hra/cztr_silnice), jinak bezna */
-+	RoadType rt = GetRoadTypeByLabel((uint32_t)'R' << 24 | 'T' << 16 | '1' << 8 | '4', false);
++	/* druhy argument: stitek typu silnice (napr. RT06), jinak RT14, kdyz je nactena */
++	std::string stitek = argv.size() > 2 ? std::string(argv[2]) : std::string("RT14");
++	RoadType rt = INVALID_ROADTYPE;
++	if (stitek.size() == 4) rt = GetRoadTypeByLabel((uint32_t)(uint8_t)stitek[0] << 24 | (uint8_t)stitek[1] << 16 | (uint8_t)stitek[2] << 8 | (uint8_t)stitek[3], false);
 +	if (rt == INVALID_ROADTYPE) rt = ROADTYPE_ROAD;
-+	V3SLog("V3SFOTO: silnice {}", rt == ROADTYPE_ROAD ? "bezna (ROAD)" : "CZTR RT14 1. trida venkov");
++	V3SLog("V3SFOTO: silnice {} (typ {})", rt == ROADTYPE_ROAD ? "bezna ROAD" : stitek, to_underlying(rt));
 +	auto usek = [rt](TileIndex a, TileIndex b, Axis ax) {
 +		return Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, b, a, rt, ax, DisallowedRoadDirections{}, true, true, false).Succeeded();
 +	};
@@ -161,10 +202,10 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, rt, DiagDirection::SE).Succeeded();
 +	V3SLog("V3SFOTO: okruh ({},{})-({},{}) depo {}", x0, y0, x1, y1, ok ? "ok" : "CHYBA");
 +	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
-+	struct Nakup { const char *grf; uint16_t local; const char *naklad; };
++	struct Nakup { const char *grf; uint16_t local; const char *naklad; bool plne; };
 +	static const Nakup nakupy[] = {
-+		{"MAXe", 0x0101, "STEL"}, {"MAXe", 0x0100, ""}, {"MAXe", 0x0101, "LVST"}, {"MAXe", 0x0101, "GOOD"},
-+		{"MAXd", 0x0101, "COAL"}, {"MAXd", 0x0100, ""}, {"MAXd", 0x0101, "LVST"}, {"MAXd", 0x0101, "GOOD"},
++		{"MAXe", 0x0101, "MARI", true}, {"MAXe", 0x0100, "MARI", true}, {"MAXe", 0x0101, "STEL", false}, {"MAXe", 0x0101, "GOOD", false},
++		{"MAXd", 0x0101, "MARI", true}, {"MAXd", 0x0100, "MARI", true}, {"MAXd", 0x0101, "LVST", false}, {"MAXd", 0x0101, "GOOD", false},
 +	};
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
@@ -189,26 +230,43 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +			continue;
 +		}
 +		auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depot, eid, true, INVALID_CARGO, ClientID::Invalid);
-+		if (bc.Failed()) continue;
++		if (bc.Failed()) {
++			V3SLog("V3SFOTO: koupe {} 0x{:04X} SELHALA: {}", n.grf, n.local, bc.GetErrorMessage() == INVALID_STRING_ID ? std::string("?") : GetString(bc.GetErrorMessage()));
++			continue;
++		}
 +		if (n.naklad[0] != '\0') {
 +			uint32_t l = (uint32_t)(uint8_t)n.naklad[0] << 24 | (uint8_t)n.naklad[1] << 16 | (uint8_t)n.naklad[2] << 8 | (uint8_t)n.naklad[3];
 +			CargoType ct = GetCargoTypeByLabel(CargoLabel{l});
 +			if (IsValidCargoType(ct)) Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
++			if (IsValidCargoType(ct) && n.plne) {
++				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
++					if (u->cargo_cap > 0 && u->cargo_type == ct && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
++				}
++			}
 +		}
 +		Command<Commands::StartStopVehicle>::Do(DoCommandFlag::Execute, vid, false);
-+		V3SLog("V3SFOTO: koupeno {} 0x{:04X} {}", n.grf, n.local, n.naklad);
++		V3SLog("V3SFOTO: koupeno {} 0x{:04X} {}{}", n.grf, n.local, n.naklad, n.plne ? " nalozeno" : "");
 +	}
 +	_v3s_stred = TileXY((x0 + x1) / 2, (y0 + y1) / 2);
 +	ScrollMainWindowToTile(_v3s_stred, true);
-+	_v3s_foto_timeout.Reset({ TimerGameTick::Priority::None, tiku });
-+	V3SLog("V3SFOTO: fotka za {} tiku", tiku);
++	auto cislo = [&argv](size_t i, uint vychozi) {
++		if (argv.size() <= i) return vychozi;
++		uint n = 0;
++		for (char c : argv[i]) if (c >= '0' && c <= '9') n = n * 10 + (c - '0');
++		return n > 0 ? n : vychozi;
++	};
++	_v3s_foto_pocet = _v3s_foto_zbyva = cislo(3, 1);
++	_v3s_foto_krok = cislo(4, 100);
++	_v3s_foto_cislo = 0;
++	_v3s_foto_dalsi = TimerGameTick::counter + tiku;
++	V3SLog("V3SFOTO: fotka za {} tiku, fotek {}, mezi nimi {} tiku", tiku, _v3s_foto_pocet, _v3s_foto_krok);
 +	return true;
 +}
 +
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1645,17 @@
+@@ -1452,6 +1703,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -226,7 +284,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7447,8 @@
+@@ -7243,6 +7505,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -236,8 +294,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-28 19:39:03.234978359 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-28 19:39:03.238107233 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-28 21:48:28.383788616 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-28 21:48:28.391571395 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

@@ -3,7 +3,7 @@
 # (z hracova glb3BBC.py): ortho, 30 stupnu nad obzorem, azimut 45 stupnu, snow.exr bez stinu.
 # Silnicni vozidla se na rovne silnici nestlacuji (jedna osmina = 1 jednotka mapy ve vsech smerech jizdy),
 # takze vsech 8 smeru je ve stejnem meritku.
-#   python3 render_v3s.py <vojenska|modra_A|modra_B|modra_C|modra_D> <px_na_m> <vystup>
+#   python3 render_v3s.py <vojenska|modra_A|modra_B|modra_C|modra_D>[_kupka] <px_na_m> <vystup>
 # Vystup: d0-d7.png (smery jako vycet Direction: N, NE, E, SE, S, SW, W, NW) a kotvy.json, kde je pro kazdy
 # smer promitnuty bod na zemi pod stredem auta (pul delky, pul sirky) a pod stredem rozvoru.
 import bpy, os, sys, math, json
@@ -69,7 +69,9 @@ stred_rozvoru = (predni_naprava + sum(zadni) / len(zadni)) / 2
 print("model", tuple(round(c, 3) for c in mn), tuple(round(c, 3) for c in mx), "napravy", ys,
       "stred delky", round(stred.y, 3), "stred rozvoru", round(stred_rozvoru, 3))
 
-if NATER.startswith("modra_"):
+KUPKA = NATER.endswith("_kupka")                  # zelena kupka marihuany na korbe (hrac 28. 9.)
+NATER_LAK = NATER[:-len("_kupka")] if KUPKA else NATER
+if NATER_LAK.startswith("modra_"):
     obr = {img.name: img for img in bpy.data.images}
     def cti(img):
         w, h = img.size
@@ -80,9 +82,45 @@ if NATER.startswith("modra_"):
     print("jas laku", round(nater_v3s.nastav_ref(kab), 1))
     for jm in ("Image_0", "Image_1", "Image_2"):
         img = obr[jm]; px, rgb = cti(img)
-        px[..., :3] = np.flipud(nater_v3s.modra(jm, rgb, NATER[-1])).astype(np.float32) / 255
+        px[..., :3] = np.flipud(nater_v3s.modra(jm, rgb, NATER_LAK[-1])).astype(np.float32) / 255
         img.pixels.foreach_set(px.ravel()); img.update()
         print("prebarveno", jm)
+
+if KUPKA:
+    # Korba (namereno paprsky, korba.py): podlaha z = 0,264, uvnitr x +-1,095, y -3,842 az 0,163,
+    # podel boku lavice nahore z = 0,604. Kupka: hromada uprostred, spicka 0,78 m nad podlahou.
+    import bmesh, random
+    random.seed(7)
+    PODLAHA, A, Y0, Y1, VYSKA = 0.264, 1.0, -3.80, 0.12, 0.78
+    B = (Y1 - Y0) / 2; YS = (Y0 + Y1) / 2
+    bm = bmesh.new()
+    NX, NY = 40, 80
+    vrch = {}
+    for i in range(NX + 1):
+        for j in range(NY + 1):
+            x = -A + 2 * A * i / NX; y = YS - B + 2 * B * j / NY
+            s = max(0.0, 1 - (abs(x) / A) ** 2.2 - (abs(y - YS) / B) ** 2.2)
+            z = PODLAHA + VYSKA * s ** 0.6 + (random.uniform(-0.04, 0.04) * s if s > 0 else 0) - 0.02
+            vrch[i, j] = bm.verts.new((x, y, z))
+    for i in range(NX):
+        for j in range(NY):
+            bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
+    me = bpy.data.meshes.new("kupka"); bm.to_mesh(me); bm.free()
+    for f in me.polygons: f.use_smooth = True
+    kupka = bpy.data.objects.new("kupka", me); scene.collection.objects.link(kupka)
+    mat = bpy.data.materials.new("marihuana"); mat.use_nodes = True
+    mn_ = mat.node_tree.nodes; ml = mat.node_tree.links
+    bsdf = mn_["Principled BSDF"]
+    sum_ = mn_.new("ShaderNodeTexNoise"); sum_.inputs["Scale"].default_value = 18.0; sum_.inputs["Detail"].default_value = 6.0
+    rampa = mn_.new("ShaderNodeValToRGB")
+    # zelen jako herni marihuana (vagony-mari: prumer 90, 137, 22 v sRGB)
+    rampa.color_ramp.elements[0].color = (0.045, 0.12, 0.004, 1)     # tmave listi
+    rampa.color_ramp.elements[1].color = (0.11, 0.27, 0.010, 1)      # svetle listi
+    ml.new(sum_.outputs["Fac"], rampa.inputs["Fac"]); ml.new(rampa.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.85
+    kupka.data.materials.append(mat)
+    koreny = koreny + [kupka]
+    print("kupka", round(PODLAHA + VYSKA, 3), "m nahore")
 
 bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); gramofon = bpy.context.object
 for k in koreny:

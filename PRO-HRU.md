@@ -121,3 +121,52 @@ Z toho plyne pár věcí, které můžou překvapit:
 
 Jestli by vám to u nakládání překáželo, dá se to z naší strany
 přestavět, jen to chce vědět dopředu, jakou podobu potřebujete.
+
+---
+
+## 4. Marihuana u vozidel ze sad, která ji mají jménem (2026-09-28)
+
+Hráč: *„vejtřaska nejde přestavět na marihuanu“*. Praga V3S (`v3s/`, GRF `MAXd` a `MAXe`) má
+`MARI` v seznamu vždy povolených nákladů (vlastnost 24, `always_refittable_cargos`) jménem,
+přes překladovou tabulku. Hra ji ale škrtne v `OfferMarijuanaToShipsAndAircraft()`
+(`newgrf.cpp`, na vaší větvi `claude/github-connection-check-m6m898`):
+
+```cpp
+for (Engine *e : Engine::Iterate()) {
+	if (e->GetDefaultCargoType() != marijuana) e->info.refit_mask.Reset(marijuana);
+}
+```
+
+Komentář u ní říká *„no set's vehicle knows the cargo by name“*, jenže tahle už ano (a VW T1
+a dvanácettrojky taky, mají `MARI` v tabulce). Pravidlo má zjevně chránit před uhelnými auty,
+která berou náklad podle **třídy** (komentář cituje hráče: *„the lorries for marijuana are there,
+the coal ones need not carry it“*). U V3S hráč marihuanu chce: *„hlavně ty napiš vejtřasce MARI“*,
+*„to má fungovat ty kódy“*, *„MARI je ve hře zabudovaný“*. Ověřeno na vaší větvi v commitu
+`18fb946` (28. 9. 12:27). Návrh: nechat marihuanu vozidlům, která ji mají v seznamu
+**jménem**. `_gted` v tu chvíli ještě žije (volá se před `_gted.clear()` v `AfterLoadGRFs`):
+
+```cpp
+for (Engine *e : Engine::Iterate()) {
+	if (e->GetDefaultCargoType() == marijuana) continue;
+	if (_gted[e->index].ctt_include_mask.Test(marijuana)) continue;   // sada ji chce jménem
+	e->info.refit_mask.Reset(marijuana);
+}
+```
+
+U článkových aut (velká V3S má neviditelný čumák a auto jako druhý díl) mají oba díly stejný
+seznam, takže podmínka projde u obou.
+
+Grafiku pro to už máme: naložená V3S vozí zelenou kupičku, jakmile ji hra na `MARI` přestavět
+nechá. Konopná vlákna (`FICR`) hra neškrtá, ta V3S vozí už teď.
+
+### Plantáž: MARI i FICR, V3S obojí (hráč 28. 9.)
+
+Hráč: *„napiš mu, že bude používat FICR i to druhý, co používá u plantáže marihuany, a ty budeš
+taky používat obojí“*. Plantáž dává dva náklady: `MARI` (marihuana) a `FICR` (`CT_HEMP_FIBRE`,
+„Konopná vlákna“). Jiný kód na vlákna hra nemá. Hráč chce, aby V3S vozila **obojí**:
+
+- `FICR` vozí už dnes, hra ho neškrtá.
+- `MARI` jí hra škrtá, viz návrh výš (nechat marihuanu vozidlům, která ji mají v seznamu jménem).
+
+(`OLSD` jsou olejniny a vozy na `OLSD` zůstanou na olejniny. Hráč: *„OLSD budou na OLSD, to je olej“*.
+Moje dřívější úvaha dát vláknům `OLSD` kvůli vagonům CZTR tím padá.)

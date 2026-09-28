@@ -49,7 +49,11 @@ Hráč: *„najdi lepší kód pro rostlinná vlákna, ať marihuanová vlákna 
 - **1.0.0 (hra):** vůz 0x00B1 „Uacs (ČSD,ČD)“ bere cokoli **sypkého** kromě výjimek (AORE CLAY
   COAL FERT FLOU FRUT GRAI GRVL HOPS IORE NITR SAND SCMT SGBT SLAG UORE URAN WDPR WSTE).
 
-### Doporučení: OLSD
+### Doporučení: OLSD (neplatí, hráč 28. 9.: *„OLSD budou na OLSD, to je olej“*)
+
+Hráč to zamítl: vozy na `OLSD` zůstanou na olejniny. Hra od kolegy dává konopná vlákna jako `FICR`.
+Níž je původní úvaha, jen pro záznam.
+
 
 Z deseti kódů, které Uacs v 1.1.0 bere, je **OLSD (olejniny) jediný, který FIRS 5 nepoužívá**.
 Ostatní (vápenec, sůl, saze, potaš, síra, pálené vápno, soda, cement, chemikálie) už FIRS 5 má

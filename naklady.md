@@ -180,15 +180,58 @@ v tabulce — jen je dávám vedle sebe, protože splést je je snadné:
 `NUKF` (Nuclear fuel) a `NUKW` (Nuclear waste) mají v tabulce popis
 tříd slovy, ale **chybí jim číselný kód**. Ostatních 144 ho má.
 
-## Labely, které v té tabulce nejsou
+## Naše a hrou přidané náklady
+
+Nejsou ve wiki tabulce, ale ve hře jsou. Odkud je který, je u něj.
+
+| zkratka | náklad | odkud |
+|---|---|---|
+| `MARI` | Marihuana | **hra od kolegy** (`CT_MARIJUANA` v `cargo_type.h`), když je zapnuté `economy.extra_industries`: vyrábí ji marihuanová plantáž, bere coffeeshop. Hráč 28. 9.: *„MARI je kód nákladu“*. |
+
+Pozor: hra marihuanu škrtne ze seznamu nákladů **všem vozidlům ze sad** (funkce
+`OfferMarijuanaToShipsAndAircraft` v `newgrf.cpp`). Nechá ji jen svým vlastním autům a vagonům
+na marihuanu, vozidlům, která ji mají jako výchozí náklad, vagonu St z CZTR a lodím a letadlům,
+která vozí zboží. Vozidlo z GRF, které má MARI v seznamu jménem (V3S, VW T1), ji tedy ve hře
+nedostane, dokud to hra nepovolí. Konopná vlákna téže plantáže jsou `FICR` (Fibre crops, v tabulce výš).
+
+## Kódy z FIRS 5.2 (Steeltown), které wiki tabulka nemá
+
+Jména jsou opsaná přímo z FIRS 5.2.0 (`rozbalene/firs-5.2.0/firs.yagl`, texty `strings<Cargos>`),
+ne domyšlená.
+
+| zkratka | náklad |
+|---|---|
+| `CCPR` | Concrete Products (betonové výrobky) |
+| `FEAL` | Ferroalloys (feroslitiny) |
+| `FOCA` | Forgings & Castings (výkovky a odlitky) |
+| `HWAR` | Hardware (železářské zboží) |
+| `N7__` | Nitrogen (dusík) |
+| `PLNT` | Plant & Machinery (stroje a zařízení) |
+| `PPWK` | Storage Tanks & Pipework (nádrže a potrubí) |
+| `PUMP` | Pumps & Valves (čerpadla a ventily) |
+| `RBAR` | Rebar (betonářská ocel) |
+| `SEAL` | Seals, Hoses & Belts (těsnění, hadice a řemeny) |
+| `STBL` | Billets & Blooms (předvalky) |
+| `STBR` | Merchant Bar (tyčová ocel) |
+| `STIG` | Steel Ingots (ocelové ingoty) |
+| `STPL` | Steel Plate (ocelový plech) |
+| `STPP` | Steel Pipe (ocelové trubky) |
+| `STSL` | Steel Slab (bramy) |
+| `STSW` | Structural Steel (konstrukční ocel) |
+| `STTB` | Steel Tube (ocelové trubky, tenkostěnné) |
+| `TYCO` | Tyre Cord (kord do pneumatik) |
+| `WELD` | Welding Consumables (svařovací materiál) |
+
+Ve FIRS 5.2 Steeltown mají i jiná jména než ve wiki: `GRVL` je tam Aggregates (kamenivo),
+`VENG` Engines & Driveline (motory a pohony), `STSH` Steel Sheet & Strip.
+
+## Labely, které v žádné tabulce nejsou
 
 Viděné v reálném GRF (`VWT1cargo.yagl`, hráč poslal 2026-09-11), ale ve
-vložené wiki tabulce svůj řádek nemají. **Co znamenají, nevím** — neopsal
+vložené wiki tabulce ani ve FIRS 5.2 svůj řádek nemají. **Co znamenají, nevím** — neopsal
 jsem je odnikud, jen jsem je našel v souboru. Netipovat.
 
-`FARM` · `LVPT` · `HOPS` · `ELEC` · `NODC` · `CCPR` · `HWAR` · `STBL` ·
-`FOCA` · `PPWK` · `RBAR` · `SEAL` · `STPP` · `STTB` · `TYCO` · `WELD` ·
-`PUMP` · `NWST` · `FREE`
+`FARM` · `LVPT` · `HOPS` · `ELEC` · `NODC` · `NWST` · `FREE`
 
 Z toho `ELEC` a `NODC` jsou přesně ty dva, na které se odkazovala
 poznámka u `ELTR` („CZIS uses its own labels") a řádek v tabulce neměly.

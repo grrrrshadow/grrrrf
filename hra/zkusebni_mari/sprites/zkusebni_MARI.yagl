@@ -1,0 +1,36 @@
+yagl_version: "";
+grf_format: Container2;
+grf // Action08
+{
+    grf_id: "MAXm";
+    version: GRF8;
+    name: "Zkušební náklad MARI (jen pro zkušební hru)";
+    description: "Náklad s kódem MARI, jen aby šla ve zkušební hře vyzkoušet vozidla na marihuanu. Hra od kolegy má MARI vlastní, tam tenhle GRF nepatří.";
+}
+strings<Cargos, default, 0xDC00*> // Action04
+{
+    /* 0xDC00 */ "Marihuana";
+    /* 0xDC01 */ "MR";
+    /* 0xDC02 */ "{sw} t marihuany";
+}
+properties<Cargos, 0x0014> // Action00, volny slot 20 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0014
+    {
+        cargo_type_name_id: 0xDC00;
+        single_unit_name_id: 0xDC00;
+        cargo_type_abbrev_id: 0xDC01;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC02;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "MARI";
+        bit_number: 0x14;
+    }
+}
