@@ -1,0 +1,2 @@
+cs: Zvuky: umělé, složené podle motoru Tatra 912 (vlastní práce, bez cizích nahrávek).
+en: Sounds: synthesized after the Tatra 912 engine (own work, no third-party recordings).

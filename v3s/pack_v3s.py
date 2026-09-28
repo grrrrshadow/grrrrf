@@ -44,6 +44,9 @@ def kotva_zrcadlova(d):
 # (hra/cztr_silnice): silnice podel X (SV, JZ) 10,2 a 6,33, silnice podel Y (JV, SZ) 9,66 a 5,79.
 # smer: (osa napric, pruh hry, posun kresleni napric, stred pruhu CZTR)
 PRUH_CZTR = {1: ("y", 9, -1, 10.2), 3: ("x", 9, -1, 9.66), 5: ("y", 5, -1, 6.33), 7: ("x", 5, -1, 5.79)}
+# Doladeni od hrace podle nahledu, px zin4 (vodorovne, svisle). Hrac 28. 9.: "velka jihozapad malicko
+# na jihovychod pixelik, mala jihozapad taky" (jihovychod je na obrazovce doprava dolu, 2 : 1).
+DOLADENI = {5: (2, 1)}
 
 def posun_do_pruhu(d):
     """posun obrazku v px zin4 (vodorovne, svisle), aby zem pod stredem auta byla ve stredu pruhu CZTR"""
@@ -56,7 +59,9 @@ def posun_do_pruhu(d):
     # zem pod stredem auta je na obrazovce (-du, -dv) od kotvy; na mape x je (-8, 4) px, y je (8, 4) px (zin4)
     zx, zy = ((-dv) / 4 - (-du) / 8) / 2, ((-dv) / 4 + (-du) / 8) / 2
     o = stred - (pruh + kresli + (zx if osa == "x" else zy))      # o kolik jednotek napric posunout
-    return (-8 * o, 4 * o) if osa == "x" else (8 * o, 4 * o)
+    sx, sy = (-8 * o, 4 * o) if osa == "x" else (8 * o, 4 * o)
+    dx, dy = DOLADENI.get(d, (0, 0))
+    return sx + dx, sy + dy
 
 def kotva_konvence(d):
     """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle): zrcadlova, posunuta do pruhu"""
@@ -169,6 +174,9 @@ POPIS = {
               + PODPIS + "{black}{new-line}" + TECH),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
+ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
+_zj = os.path.join(ZVUKY_ADR, "zvuky.json")
+ZV = json.load(open(_zj)) if os.path.exists(_zj) else {}
 BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
 # hrac 28. 9.: "ve jmenu vynech for, jen zlute V3S Praga, zelene ottd Decouple by Karel Macha";
 # symbol nakladaku v barve varianty na konci zustal (rozlisuje malou a velkou, jako Sergej)
@@ -182,7 +190,9 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{orange}Two 6×6 flatbed trucks that carry almost everything. Military: troops, food and explosives too. "
              "Blue: three people in the cab, the shade follows the cargo (building, engineering, farming, goods). "
              "Marijuana rides as a green heap. Prototype from 1952.{new-line}"
-             "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}{new-line}"
+             "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}" +
+             ("{orange}Sound: synthesized after the Tatra 912 engine, revs up when pulling away{new-line}" if ZV else "") +
+             "{new-line}"
              "{green}ottd decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
              "{green}" + ITCH + "{new-line}"
              "{green}GRF: Karel Mácha, licence CC BY 4.0")
@@ -203,16 +213,69 @@ for n in ("vojenska", "modra"):
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
 Y.append("}")
 
+# ---------------------------------------------------------------- zvuk
+# Umely zvuk motoru (zvuky/syntetizuj_zvuky.py, zvuky.json) pres Action11 a callback 0x33, jako Sergej
+# (sergej/zvuky/README.md). Silnicni auto dostava udalosti (var 0x10): 1 = odjezd ze zastavky a z depa
+# (StartRoadVehSound), 7 = kazdych 16 tiku v jizde, 8 = kazdych 16 tiku ve stani (vehicle.cpp), 3 = porucha.
+# Vola se jen pro prvni dil (u velke cumak). Rychlost (var 0xB4) je u silnicnich aut v polovinach km/h.
+# Bez zvuky.json se GRF zabali bez zvuku (odjezd pak hraje vychozi zvuk hry, vlastnost sound_effect_type).
+SOUBORY = []                                      # jedinecne wav v poradi Action11, cisla od 0x49
+def cislo_zvuku(f):
+    if f not in SOUBORY: SOUBORY.append(f)
+    return 0x49 + SOUBORY.index(f)
+if ZV:
+    import shutil
+    cislo_zvuku(ZV["1"])
+    for _p in ZV["jizda"]:
+        for _f in _p["zvuky"]: cislo_zvuku(_f)
+    for _f in ZV["stani"]: cislo_zvuku(_f)
+    Y += ["sound_effects // Action11, vlastni zvuky od 0x49", "{"]
+    for f in SOUBORY:
+        shutil.copy(os.path.join(ZVUKY_ADR, f), os.path.join(VYSTUP, "sprites", f))
+        Y += [f"    sprite_id<0x{sid[0]:08X}>", "    {", f'        binary("sprites/{f}");', "    }"]
+        sid[0] += 1
+    Y += ["}"]
+
 def seznam(n):
     return "[ " + " ".join(f"0x{INDEX[k]:02X}" for k in NAKLADY[n]) + " ]"
 
 def sw(cid, popis, vyraz, rozsahy, default):
+    """switch v yaglu; rozsahy = [(hodnota, cil)] nebo [(od, do, cil)]"""
     r = [f"switch<RoadVehicles, 0x{cid:02X}, PrimaryDWord> // {popis}", "{", "    expression:", "    {"]
     r += ["        " + v for v in vyraz] + ["    };", "    ranges:", "    {"]
-    for od, cil in rozsahy:
-        r.append(f"        0x{od:08X}: 0x{cil:04X};")
+    for rz in rozsahy:
+        od, do, cil = rz if len(rz) == 3 else (rz[0], rz[0], rz[1])
+        r.append(f"        0x{od:08X}: 0x{cil:04X};" if od == do else f"        0x{od:08X}..0x{do:08X}: 0x{cil:04X};")
     r += ["    };", f"    default: 0x{default:04X};", "}"]
     return r
+
+def zvukovy_retez(cid):
+    """switche pro callback 0x33 od id cid; vraci (radky, id prepinace udalosti, dalsi volne id)"""
+    if not ZV: return [], None, cid
+    P = ZV["perioda_tiku"]; r = []
+    def vyber(popis, soubory):
+        nonlocal cid
+        k = len(soubory); mid = cid; cid += 1
+        r.extend(sw(mid, popis, [f"value1 = variable[0x0A] & 0x0000FFFF / 0x{P:08X};", f"value2 = variable[0x1A] & 0x{k:08X};",
+                                 "value1 = UnsignedMod(value1, value2);"],
+                    [(i, 0x8000 | cislo_zvuku(f)) for i, f in enumerate(soubory)], 0x8000 | cislo_zvuku(soubory[0])))
+        return mid
+    pasma = [vyber(f"jizda, pasmo {i} (do {p['do_kmh']} km/h, {p['otacky']} ot./min)", p["zvuky"]) for i, p in enumerate(ZV["jizda"])]
+    id_stani = vyber("stani, volnobeh", ZV["stani"])
+    id_rychlost, id_brana_j, id_brana_s, id_udalost = cid, cid + 1, cid + 2, cid + 3
+    cid += 4
+    rozsahy, od = [], 0
+    for i, p in enumerate(ZV["jizda"][:-1]):
+        rozsahy.append((od, 2 * p["do_kmh"], pasma[i])); od = 2 * p["do_kmh"] + 1
+    r.extend(sw(id_rychlost, "rychlost (var 0xB4, poloviny km/h) -> pasmo", ["value1 = variable[0xB4] & 0x0000FFFF;"],
+                rozsahy, pasma[-1]))
+    brana = [f"value1 = variable[0x0A] & 0x0000FFFF % 0x{P:08X};"]
+    r.extend(sw(id_brana_j, f"jizda: jednou za {P} tiku", brana, [(0, 15, id_rychlost)], 0xFFFF))
+    r.extend(sw(id_brana_s, f"stani: jednou za {P} tiku", brana, [(0, 15, id_stani)], 0xFFFF))
+    r.extend(sw(id_udalost, "zvuky (callback 0x33): 1 odjezd (rozjezd), 7 jizda, 8 stani", ["value1 = variable[0x10] & 0x000000FF;"],
+                [(1, 0x8000 | cislo_zvuku(ZV["1"])), (7, id_brana_j), (8, id_brana_s)],
+                0x7FFF))   # ostatni udalosti: callback selze a hra pusti svuj zvuk (porucha); 0xFFFF by bylo ticho
+    return r, id_udalost, cid
 
 def action3(eid, default, naklady):
     """naklady: [(index v tabulce, id retezce)], 0xFF = nakup"""
@@ -252,6 +315,7 @@ for n in ("vojenska", "modra"):
                   "        running_cost_base: 0x00004C48;",
                   "        sound_effect_type: 0x17;"]         # odjezd nakladaku (SND_19_DEPARTURE_OLD_RV_1)
         maska = 0x10 if co == "cumak" else 0x08            # cumak: clanky (0x16); auto: kapacita (0x15)
+        if eid == h and ZV: maska |= 0x80                   # prvni dil: zvuky motoru (callback 0x33)
         p += [f"        callback_flags_mask: 0x{maska:02X};"]
         Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
                   f'    /* 0x{eid:04X} */ "{NAZEV[n] if eid == h else NAZEV[n] + " (auto)"}";', "}"]
@@ -289,13 +353,17 @@ for n in ("vojenska", "modra"):
           "    primary_spritesets: [ 0x0000 ];", "    secondary_spritesets: [ 0x0000 ];", "}"]
     s_clanky, s_lidi, s_nakup, s_cumak = base + 9, base + 10, base + 11, base + 12
     zaklad = g[sady[0]]                            # vojenska, u modre odstin A
-    # osoby: callback 0x15 vrati kapacitu, jinak grafika (u modre odstin A)
-    Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK, [(0x15, 0x8000 | lidi_auto)], zaklad)
+    zvuk_radky, id_zvuk, volne = zvukovy_retez(base + 13)
+    Y += zvuk_radky
+    zvuk = [(0x33, id_zvuk)] if id_zvuk else []
+    # osoby: callback 0x15 vrati kapacitu, jinak grafika (u modre odstin A); u male i zvuk
+    Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
+            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), zaklad)
     popis_nakup = [(0x23, 0x8000 | TEXT[n])]
     if CUMAK:
         Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
                 [(1, 0x8000 | auto)], 0xFFFF)
-        Y += sw(s_cumak, "cumak: clanky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)], g_prazdny)
+        Y += sw(s_cumak, "cumak: clanky, zvuky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
         Y += action3(h, s_cumak, [(0xFF, s_nakup)])
     else:
@@ -305,9 +373,20 @@ for n in ("vojenska", "modra"):
     if n == "modra":
         mapa.update({INDEX[k]: g["modra_" + o] for k, o in ODSTIN.items() if o != "A"})
     mapa[INDEX["MARI"]] = g_mari                    # kupka (u modre v odstinu B)
+    vychozi = zaklad
+    if not CUMAK and id_zvuk:
+        # mala: Action 3 vybira podle nakladu a callback 0x33 jde stejnou cestou, tak kazdy cil grafiky
+        # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi)
+        obal = {}
+        for cil in [zaklad] + sorted(set(mapa.values()) - {s_lidi, zaklad}):
+            obal[cil] = volne + len(obal)
+            Y += sw(obal[cil], "zvuk, jinak grafika", CALLBACK, zvuk, cil)
+        mapa = {k: obal.get(v, v) for k, v in mapa.items()}
+        vychozi = obal[zaklad]
+        assert volne + len(obal) <= base + 0x30, "switche se prekryvaji s dalsim autem"
     if not CUMAK:
         mapa[0xFF] = s_nakup
-    Y += action3(auto, zaklad, sorted(mapa.items()))
+    Y += action3(auto, vychozi, sorted(mapa.items()))
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN,

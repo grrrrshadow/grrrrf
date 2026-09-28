@@ -1,0 +1,56 @@
+{
+ "perioda_tiku": 112,
+ "1": "rozjezd.wav",
+ "jizda": [
+  {
+   "do_kmh": 15,
+   "otacky": 1350,
+   "lufs": -10.5,
+   "zvuky": [
+    "jizda_p0_0.wav",
+    "jizda_p0_1.wav",
+    "jizda_p0_2.wav",
+    "jizda_p0_3.wav"
+   ]
+  },
+  {
+   "do_kmh": 30,
+   "otacky": 1550,
+   "lufs": -10.0,
+   "zvuky": [
+    "jizda_p1_0.wav",
+    "jizda_p1_1.wav",
+    "jizda_p1_2.wav",
+    "jizda_p1_3.wav"
+   ]
+  },
+  {
+   "do_kmh": 45,
+   "otacky": 1750,
+   "lufs": -9.5,
+   "zvuky": [
+    "jizda_p2_0.wav",
+    "jizda_p2_1.wav",
+    "jizda_p2_2.wav",
+    "jizda_p2_3.wav"
+   ]
+  },
+  {
+   "do_kmh": 60,
+   "otacky": 1880,
+   "lufs": -9.0,
+   "zvuky": [
+    "jizda_p3_0.wav",
+    "jizda_p3_1.wav",
+    "jizda_p3_2.wav",
+    "jizda_p3_3.wav"
+   ]
+  }
+ ],
+ "stani": [
+  "stani_0.wav",
+  "stani_1.wav",
+  "stani_2.wav",
+  "stani_3.wav"
+ ]
+}
