@@ -1,6 +1,7 @@
 {
  "perioda_tiku": 112,
  "1": "rozjezd.wav",
+ "1_depo": "vyjezd_z_depa.wav",
  "jizda": [
   {
    "do_kmh": 15,

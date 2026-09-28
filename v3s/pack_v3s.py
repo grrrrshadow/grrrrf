@@ -191,7 +191,8 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "Blue: three people in the cab, the shade follows the cargo (building, engineering, farming, goods). "
              "Marijuana rides as a green heap. Prototype from 1952.{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}" +
-             ("{orange}Sound: synthesized after the Tatra 912 engine, revs up when pulling away{new-line}" if ZV else "") +
+             ("{orange}Sound: synthesized after the Tatra 912 engine, roars when pulling away, leaves the depot "
+              "with the starter and a two-tone horn{new-line}" if ZV else "") +
              "{new-line}"
              "{green}ottd decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
              "{green}" + ITCH + "{new-line}"
@@ -226,6 +227,7 @@ def cislo_zvuku(f):
 if ZV:
     import shutil
     cislo_zvuku(ZV["1"])
+    if "1_depo" in ZV: cislo_zvuku(ZV["1_depo"])
     for _p in ZV["jizda"]:
         for _f in _p["zvuky"]: cislo_zvuku(_f)
     for _f in ZV["stani"]: cislo_zvuku(_f)
@@ -272,8 +274,16 @@ def zvukovy_retez(cid):
     brana = [f"value1 = variable[0x0A] & 0x0000FFFF % 0x{P:08X};"]
     r.extend(sw(id_brana_j, f"jizda: jednou za {P} tiku", brana, [(0, 15, id_rychlost)], 0xFFFF))
     r.extend(sw(id_brana_s, f"stani: jednou za {P} tiku", brana, [(0, 15, id_stani)], 0xFFFF))
-    r.extend(sw(id_udalost, "zvuky (callback 0x33): 1 odjezd (rozjezd), 7 jizda, 8 stani", ["value1 = variable[0x10] & 0x000000FF;"],
-                [(1, 0x8000 | cislo_zvuku(ZV["1"])), (7, id_brana_j), (8, id_brana_s)],
+    odjezd = 0x8000 | cislo_zvuku(ZV["1"])
+    if "1_depo" in ZV:
+        # vyjezd z depa: hra zvuk pousti, kdyz je auto jeste schovane v depu (vehstatus bit 0, var 0xB2),
+        # u zastavky ne (roadveh_cmd.cpp, StartRoadVehSound); hrac: "vyjezd z depa motor s klaksonem"
+        id_odjezd = cid; cid += 1
+        r.extend(sw(id_odjezd, "odjezd: z depa startovani a klakson, ze zastavky rozjezd", ["value1 = variable[0xB2] & 0x00000001;"],
+                    [(1, 0x8000 | cislo_zvuku(ZV["1_depo"]))], odjezd))
+        odjezd = id_odjezd
+    r.extend(sw(id_udalost, "zvuky (callback 0x33): 1 odjezd, 7 jizda, 8 stani", ["value1 = variable[0x10] & 0x000000FF;"],
+                [(1, odjezd), (7, id_brana_j), (8, id_brana_s)],
                 0x7FFF))   # ostatni udalosti: callback selze a hra pusti svuj zvuk (porucha); 0xFFFF by bylo ticho
     return r, id_udalost, cid
 

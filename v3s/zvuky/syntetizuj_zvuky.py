@@ -95,7 +95,7 @@ def slozky(ot, zatez, rychlost, seed):
     vyfuk = dolni(vyfuk, 3200)
     # klepání dieselu: krátký šum při každém zapálení, ve volnoběhu je ho slyšet nejvíc
     ik = np.zeros(n)
-    ik[zap] = (0.55 + 0.45 * L) * (1.25 - 0.5 * ot[zap] / MAX_OT) * VALCE_K[valec] * (1 + 0.3 * r.standard_normal(len(zap))).clip(0.2)
+    ik[zap] = (0.55 + 0.45 * L) * (0.9 - 0.15 * ot[zap] / MAX_OT) * VALCE_K[valec] * (1 + 0.3 * r.standard_normal(len(zap))).clip(0.2)
     obal = signal.fftconvolve(ik, np.exp(-np.arange(int(0.012 * SRS)) / (0.0013 * SRS)))[:n]
     klepani = bpas(r.standard_normal(n), 1300, 5200) * obal
     # sání: šum pod 900 Hz v rytmu zapálení
@@ -104,13 +104,15 @@ def slozky(ot, zatez, rychlost, seed):
     sani = dolni(r.standard_normal(n), 900) * (0.3 + ryt) * (0.2 + 0.8 * zatez) * (ot / MAX_OT)
     # ventilátor chlazení: šum a pískání, roste s otáčkami; tóny na násobcích otáček klikovky jako ve vzoru
     # (38,4 a 30,4 s harmonickými 60,8 a 91,2, tedy 1200, 1900 a 2850 Hz při 1880 ot./min)
-    sila = 0.12 + 0.88 * (ot / MAX_OT) ** 2
+    sila = 0.05 + 0.95 * (ot / MAX_OT) ** 2.5        # na volnoběhu ventilátor skoro neslyšet
     vsum = bpas(r.standard_normal(n), 350, 4200) * sila
+    # pískání až od vyšších otáček (hráč 28. 9.: "v nízkých otáčkách tam jsou takové vysoké tóny")
+    pisk = np.clip((ot - 650) / (1880 - 650), 0, 1) ** 1.5
     chveni = 1 + 0.25 * np.sin(2 * np.pi * faze * 3)                  # vibrace motoru v tónu
     piskot = np.zeros(n)
     for nasobek, a_ in ((38.4, 1.0), (30.4, 0.25), (60.8, 2.1), (91.2, 0.8)):
         piskot += a_ * np.sin(2 * np.pi * np.cumsum(ot / 60.0 * nasobek) / SRS + nasobek)
-    piskot *= sila * chveni
+    piskot *= pisk * chveni
     # převodovka a rozvodovka: kvílení podle rychlosti, jen když jede a táhne
     fg = 14.0 * rychlost
     kvileni = np.sin(2 * np.pi * np.cumsum(fg) / SRS) * np.clip(rychlost / 20, 0, 1) * (0.4 + 0.6 * zatez)
@@ -122,8 +124,10 @@ def slozky(ot, zatez, rychlost, seed):
         t += r.exponential(1.0 / (3 + 12 * float(otres[min(int(t * SRS), n - 1)])))
         i = int(t * SRS)
         if i >= n: break
-        if r.random() < 0.8:
-            f, tau, a = r.uniform(1700, 4600), r.uniform(0.002, 0.009), r.uniform(0.3, 1.0)
+        plech = float(np.clip((ot[i] - 800) / 600, 0, 1))     # cinkání plechů až od vyšších otáček
+        if r.random() < 0.8 * plech:             # (hráč: na nízkých otáčkách vysoké tóny vadí)
+            f, tau = r.uniform(1300, 3800), r.uniform(0.002, 0.009)
+            a = r.uniform(0.3, 1.0)
         else:
             f, tau, a = r.uniform(140, 380), r.uniform(0.012, 0.03), r.uniform(0.6, 1.6)
         m = min(n - i, int(6 * tau * SRS))
@@ -157,11 +161,31 @@ def ref_rms():
         _ref = {k: float(np.sqrt((v ** 2).mean())) + 1e-12 for k, v in s.items()}
     return _ref
 
+# Barva podle vzoru platí pro vysoké otáčky (vzor je vytúrování). Na volnoběhu by z ní zbylo syčení
+# a cinkání, tak se pod NIZKE_OT nechává syrová (hluboké bublání a klepání) a mezi tím se prolíná.
+NIZKE_OT, VYSOKE_OT = 700, 1400
+
 def motor(ot, zatez, rychlost, seed, rovnat=True):
     s = slozky(ot, zatez, rychlost, seed)
     ref = ref_rms()
     x = sum(VAHY[k] * s[k] / ref[k] for k in s)
-    return signal.fftconvolve(x, vyrovnani(), mode="same") if rovnat else x
+    if not rovnat: return x
+    w = np.clip((ot - NIZKE_OT) / (VYSOKE_OT - NIZKE_OT), 0, 1)
+    return w * signal.fftconvolve(x, vyrovnani(), mode="same") * zisk_vyrovnani() + (1 - w) * x
+
+_zisk = None
+def zisk_vyrovnani():
+    """srovnaná a syrová verze stejně hlasité při 1000 ot./min, aby prolínání neposkakovalo; hlasitost
+    zhruba jako ucho, bez hlubokých tónů (pod 200 Hz ucho i malé repro slyší slaběji)"""
+    global _zisk
+    if _zisk is None:
+        n = 2 * SRS
+        x = motor(np.full(n, 1000.0), np.full(n, 0.5), np.full(n, 15.0), 3, rovnat=False)
+        y = signal.fftconvolve(x, vyrovnani(), mode="same")
+        hp = signal.butter(2, 200, "highpass", fs=SRS, output="sos")
+        ucho = lambda s: float(np.sqrt((signal.sosfilt(hp, s) ** 2).mean()))
+        _zisk = ucho(x) / ucho(y)
+    return _zisk
 
 # Barva zvuku podle vzoru: průměrné spektrum po třetinách oktávy (dB proti nejsilnějšímu pásmu),
 # změřené na vytúrování 1880 ot./min. Pod 125 Hz nejvýš HLOUBKY_MIN pod vrcholem (telefon hloubky nebere,
@@ -304,7 +328,69 @@ rch_r = krivka([(0, 0), (0.95, 0), (3.5, 14), (D, 15)], D)
 rozjezd = vyrob(motor(ot_r * zivost(len(ot_r), 77, 0.01), pl_r, rch_r, 77), "rozjezd.wav", ROZJEZD_LUFS,
                 fade_in=0.02, fade_out=0.45)
 
-json.dump({"perioda_tiku": PERIODA, "1": rozjezd, "jizda": jizda, "stani": stani},
+# ---------------------------------------------------------------- klakson a výjezd z depa
+# Hráč 28. 9.: "klakson a výjezd z depa motor s klaksonem", "asi klakson z Tatry 148". Elektrický
+# dvoutónový klakson: membránu rozkmitává přerušovač, takže bzučí (pravoúhlá vlna s mnoha vyššími
+# harmonickými), trychtýř zesílí pásma kolem 1,1, 2,3 a 3,4 kHz. Dva tóny o velkou tercii, 352 a 440 Hz.
+def klakson(tony, delka, seed=148):
+    """tony: [(začátek s, konec s)]; signál délky 'delka' s"""
+    r = np.random.default_rng(seed)
+    n = int(delka * SRS); t = np.arange(n) / SRS
+    obal = np.zeros(n); od = np.full(n, 10.0)
+    for z, k in tony:
+        m = (t >= z) & (t < k + 0.1)
+        u = t[m] - z
+        obal[m] = np.maximum(obal[m], np.minimum(1, u / 0.012) * np.where(t[m] > k, np.exp(-(t[m] - k) / 0.02), 1))
+        od[m] = np.minimum(od[m], u)
+    y = np.zeros(n)
+    for f0, a0 in ((352.0, 1.0), (440.0, 0.8)):
+        jit = dolni(r.standard_normal(n), 25); jit /= np.abs(jit).max() + 1e-9
+        f = f0 * (1 - 0.035 * np.exp(-od / 0.025)) * (1 + 0.003 * jit)     # při náběhu o kousek níž
+        faze = np.cumsum(f) / SRS
+        for kk in range(1, int(7000 / f0) + 1):                            # pravoúhlá vlna, střída 0,35
+            y += a0 * (2 / (np.pi * kk)) * np.sin(np.pi * kk * 0.35) * np.cos(2 * np.pi * kk * faze)
+        y += a0 * 0.15 * bpas(r.standard_normal(n), 2000, 6000) * ((faze % 1) < 0.08)   # chrapot kontaktů
+    y = y + 1.2 * rezon(y, 1100, 3) + 0.9 * rezon(y, 2300, 4) + 0.5 * rezon(y, 3400, 5)
+    return y * obal
+
+def startovani(delka, seed=912):
+    """startér protáčí motor kolem 170 ot./min bez zapalování: komprese motor brzdí a pouští (syčení
+    a bouchnutí vzduchu), startér kvílí (věnec setrvačníku 120 zubů, asi 340 Hz a vyšší)"""
+    r = np.random.default_rng(seed)
+    n = int(delka * SRS)
+    f0 = np.cumsum(np.full(n, 170 / 60)) / SRS
+    ot = 170 * (1 + 0.18 * np.sin(2 * np.pi * f0 * 3 - 1.2))
+    faze = np.cumsum(ot / 60) / SRS
+    k = np.floor(faze * 3).astype(np.int64); komp = np.nonzero(np.diff(k) > 0)[0] + 1
+    imp = np.zeros(n); imp[komp] = 1 + 0.15 * r.standard_normal(len(komp))
+    tt = np.arange(int(0.06 * SRS)) / SRS
+    vzduch = signal.fftconvolve(imp, (tt / 0.008) * np.exp(1 - tt / 0.008))[:n]
+    obal = dolni(signal.fftconvolve(imp, np.exp(-tt / 0.03))[:n], 30)
+    syceni = bpas(r.standard_normal(n), 200, 2500) * obal
+    fs = 2 * np.pi * np.cumsum(ot / 60 * 120) / SRS
+    kvil = sum((0.8 / kk) * np.sin(kk * fs + kk) for kk in range(1, 7)) + 0.4 * np.sin(1.4 * fs)
+    kvil = kvil * (0.8 + 0.2 * np.sin(2 * np.pi * faze * 3)) + 0.3 * bpas(r.standard_normal(n), 1000, 4000)
+    norm = lambda s: s / (np.sqrt((s ** 2).mean()) + 1e-12)
+    return norm(vzduch) + 0.6 * norm(syceni) + 0.5 * norm(kvil)
+
+# Výjezd z depa: startér, motor chytne a srovná se na volnoběh, zatroubí "tú-túú", přidá plyn a vyjede.
+# Hra ho pouští jako odjezd (událost 1), jen když je auto ještě schované v depu (pack_v3s.py, var 0xB2).
+DZ, CHYTNE = 5.0, 0.95
+nz = int(DZ * SRS); tz = np.arange(nz) / SRS
+st = np.zeros(nz); s_ = startovani(1.35); st[:len(s_)] = s_ * np.clip((1.3 - tz[:len(s_)]) / 0.3, 0, 1)
+ot_z = krivka([(0, 200), (0.2, 700), (0.45, 1050), (0.9, 700), (1.4, 640), (2.45, 640), (2.55, 680), (3.7, 1300),
+               (DZ - CHYTNE, 1350)], DZ - CHYTNE)
+pl_z = krivka([(0, 0.7), (0.25, 1.0), (0.5, 0.3), (1.2, 0.12), (2.45, 0.12), (2.55, 1.0), (3.75, 1.0), (DZ - CHYTNE, 0.6)],
+              DZ - CHYTNE)
+rch_z = krivka([(0, 0), (2.55, 0), (DZ - CHYTNE, 8)], DZ - CHYTNE)
+mot = motor(ot_z * zivost(len(ot_z), 88, 0.01), pl_z, rch_z, 88)
+mz = np.zeros(nz); i0 = int(CHYTNE * SRS); mz[i0:i0 + len(mot)] = mot[: nz - i0] * np.clip((tz[i0:i0 + len(mot)] - CHYTNE) / 0.05, 0, 1)
+rms_vol = np.sqrt((mz[int(2.0 * SRS):int(3.2 * SRS)] ** 2).mean())    # motor na volnoběh kolem troubení
+kl = klakson([(2.2, 2.42), (2.54, 3.02)], DZ)
+kl *= 1.6 * rms_vol / np.sqrt((kl[int(2.25 * SRS):int(2.95 * SRS)] ** 2).mean())
+vyjezd = vyrob(0.8 * rms_vol * st + mz + kl, "vyjezd_z_depa.wav", ROZJEZD_LUFS, fade_in=0.01, fade_out=0.5)
+
+json.dump({"perioda_tiku": PERIODA, "1": rozjezd, "1_depo": vyjezd, "jizda": jizda, "stani": stani},
           open(os.path.join(TU, "zvuky.json"), "w"), indent=1)
 open(os.path.join(TU, "zdroje.txt"), "w").write(
     "cs: Zvuky: umělé, složené podle motoru Tatra 912 (vlastní práce, bez cizích nahrávek).\n"
@@ -314,13 +400,17 @@ open(os.path.join(TU, "zdroje.txt"), "w").write(
 def cti(f):
     w = wave.open(os.path.join(TU, f)); return np.frombuffer(w.readframes(w.getnframes()), np.int16) / 32768.0
 P = PERIODA * TIK
-plan = [(k * P, stani[k % VARIANT]) for k in range(2)]           # stojí v zastávce
-t0 = 2 * P
-plan.append((t0, rozjezd))                                          # odjede (událost 1)
-poradi = [0, 0, 1, 1, 2, 2, 3, 3, 3]                                # zrychluje přes pásma
-for j, p in enumerate(poradi):
-    plan.append((t0 + 16 * TIK + j * P, jizda[p]["zvuky"][j % VARIANT]))
-konec = t0 + 16 * TIK + len(poradi) * P
+plan = [(0.0, vyjezd)]                                              # vyjede z depa (událost 1 v depu)
+t1 = 16 * TIK
+for j, p in enumerate([0, 0, 1, 1, 2]):                             # jede, zrychluje
+    plan.append((t1 + j * P, jizda[p]["zvuky"][j % VARIANT]))
+t2 = t1 + 5 * P
+plan += [(t2 + k * P, stani[k % VARIANT]) for k in range(2)]        # stojí v zastávce
+t3 = t2 + 2 * P
+plan.append((t3, rozjezd))                                          # odjede ze zastávky (událost 1)
+for j, p in enumerate([0, 1, 2, 3, 3]):
+    plan.append((t3 + 16 * TIK + j * P, jizda[p]["zvuky"][(j + 1) % VARIANT]))
+konec = t3 + 16 * TIK + 5 * P
 plan += [(konec + k * P, stani[(k + 2) % VARIANT]) for k in range(2)]   # zastaví
 mix = np.zeros(int((konec + 2 * P + 1) * SR))
 for t, f in plan:
@@ -335,4 +425,4 @@ os.remove(tmp)
 
 for f, cil, l, g, r in MERENI:
     print(f"{f:18s} cil {cil:6.1f} LUFS  vyslo {l:6.1f}  zesileni {g:+5.1f} dB  rytmus {r * 100:3.0f} %")
-print("hotovo:", sum(len(p["zvuky"]) for p in jizda), "kousku jizdy,", len(stani), "volnobeh, rozjezd", rozjezd)
+print("hotovo:", sum(len(p["zvuky"]) for p in jizda), "kousku jizdy,", len(stani), "volnobeh,", rozjezd, vyjezd)
