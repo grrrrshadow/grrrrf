@@ -324,7 +324,7 @@ for n in ("vojenska", "modra"):
                   "        cost_factor: 0x40;", "        running_cost_factor: 0x2C;",
                   "        running_cost_base: 0x00004C48;",
                   "        sound_effect_type: 0x17;"]         # odjezd nakladaku (SND_19_DEPARTURE_OLD_RV_1)
-        maska = 0x10 if co == "cumak" else 0x08            # cumak: clanky (0x16); auto: kapacita (0x15)
+        maska = 0x18 if co == "cumak" else 0x08            # cumak: clanky (0x16) a lidi (0x15); auto: kapacita (0x15)
         if eid == h and ZV: maska |= 0x80                   # prvni dil: zvuky motoru (callback 0x33)
         p += [f"        callback_flags_mask: 0x{maska:02X};"]
         Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
@@ -374,8 +374,12 @@ for n in ("vojenska", "modra"):
         Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
                 [(1, 0x8000 | auto)], 0xFFFF)
         Y += sw(s_cumak, "cumak: clanky, zvuky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)] + zvuk, g_prazdny)
+        # cumak s lidmi: kapacita 1 (hra by jeho 1 zbozi prepocetla nasobkem na 2 lidi, velka pak vezla 21 a 4)
+        s_cumak_lidi = volne
+        Y += sw(s_cumak_lidi, "cumak, osoby: kapacita 1, clanky, zvuky", CALLBACK,
+                [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
-        Y += action3(h, s_cumak, [(0xFF, s_nakup)])
+        Y += action3(h, s_cumak, [(INDEX["PASS"], s_cumak_lidi), (0xFF, s_nakup)])
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
     # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback

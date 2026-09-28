@@ -5,32 +5,34 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v1.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v1.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v2.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v2.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v1.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“).
+Balík pro hráče je `Praga_V3S_Vejtraska-v2.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Verze 1 (`-v1`) zůstává v repu.
 
 ## Jméno a popis v seznamu GRF
 
-Stejný řád jako Sergej: `{red}Praga V3S Vejtřaska{green} for ottd Decouple by Karel Macha` a na
-konci symbol náklaďáku (`{truck}`) v barvě varianty, měřítko CZTR `{gold}`, BRÝLE `{lt-blue}`.
-Popis: červené jméno, zelený řádek se symboly, řádek varianty v její barvě, `{orange}` informace
-a model, nakonec zeleně ottd decouple, itch a licence.
+Od verze 2 (hráč 28. 9.: *„ve jménu vynech for, jen žlutě V3S Praga, zeleně ottd Decouple by Karel
+Macha“*): `{yellow}V3S Praga{green} ottd Decouple by Karel Macha` a na konci symbol náklaďáku
+(`{truck}`) v barvě varianty, měřítko CZTR `{gold}`, BRÝLE `{lt-blue}`. Popis: žluté jméno, zelený
+řádek se symboly, řádek varianty v její barvě, `{orange}` informace, model a zvuk, nakonec zeleně
+ottd decouple, itch a licence. V textech není „communist“ (hráč: *„nepiš tam comunist blue“*).
 
 ## Auta
 
 | | kupované číslo | viditelné auto (jen velká) | nátěr |
 |---|---|---|---|
 | Praga V3S Vejtřaska (vojenská) | 0x0100 | 0x0110 | model beze změny, olivová |
-| Praga V3S Vejtřaska (modrá) | 0x0101 | 0x0111 | komunistická modrá, 4 odstíny podle nákladu |
+| Praga V3S Vejtřaska (modrá) | 0x0101 | 0x0111 | modrá, 4 odstíny podle nákladu |
 
 - Uvedení **20. 2. 1952**, první funkční prototyp V3S (Praha-Vysočany). Hra dá v ten den prototyp
   jedné firmě na zkoušku, všem o rok později, jako sériová výroba od dubna 1953. Hra k datu přičte
   náhodně až 511 dní, když hra nezačala dřív než dva roky předtím.
 - 60 km/h, 100 k (Tatra 912), 5,5 t, kapacita 10 jednotek. Lidé: vojenská 20 (vojáci na korbě,
-  hráč: „hodně“), modrá 3 (kabina). Lidi dělá callback 0x15, jen pro PASS.
-- Zvuk odjezdu náklaďáku (0x17), cena a provoz mezi Avií A31 a Tatrou 815 z CZTR.
+  hráč: „hodně“), modrá 3 (kabina). Lidi dělá callback 0x15, jen pro PASS. U velké má callback 0x15
+  i čumák (vrátí 1): hra by jeho 1 zboží přepočetla násobkem na 2 lidi a velká ve verzi 1 vezla 21 a 4.
+- Vlastní zvuk (níž), cena a provoz mezi Avií A31 a Tatrou 815 z CZTR.
 - Na trhu do konce hry (`model_life_years 255`).
 
 ### Velká: neviditelný čumák
@@ -57,6 +59,11 @@ hráč dělá (`temata3.md`, „Jak hráč dělá GRF“).
   řepa SGBT, konopná vlákna FICR, stavební GRVL SAND.
 - **Jen vojenská:** FOOD (*„jídlo jenom vojenský“*) a BOOM (*„vojenská explosives, modrá ne“*).
 - Modrá 96 kódů, vojenská 98. Pivo, tabák, marihuana a cigára (BEER TBCO MARI CIGR) vozí obě.
+- **Marihuana (MARI) jede jako zelená kupka** na korbě (hráč: *„udělej tam zelenou kupičku
+  náklad“*): Action 2 s prázdným autem a kupkou, od půlky nákladu kupka, u modré v odstínu B.
+  Hra ale MARI škrtá všem vozidlům kromě svých marihuanových náklaďáků (`OfferMarijuanaToShipsAndAircraft`),
+  takže se na ni V3S zatím přestavět nedá; pro kolegu `PRO-HRU.md`, bod 4. Zkoušeno se zkušebním
+  nákladem `hra/zkusebni_mari/`.
 - Jména kódů z `naklady.md` a z FIRS 5.2 (`rozbalene/firs-5.2.0`), nic domyšleného. Neznámé
   labely z VW T1 (FARM LVPT HOPS ELEC NODC) zůstaly, jak je hráč má.
 - Překladová tabulka: jen použité kódy v pořadí z `prekladova-tabulka-vzor.yagl`, co ve vzoru
@@ -90,6 +97,24 @@ v `auta/CUMAK.md`).
 Střed auta je v půlce délky, ne v půlce rozvoru. V3S má za zadní nápravou dlouhou korbu, střed
 rozvoru je o metr blíž k čelu, auto by pak v zastávce i na vagonu stálo o metr dozadu.
 
+### Pruh na silnici CZTR (verze 2)
+
+Hráč 28. 9.: *„jihovýchodní sprite doprava lehce od krajnice“*, *„zarovnej to znova na silnici CZTR“*,
+*„nemůže jezdit kolem po prostřední čáře … odstup jako od krajnice, pár pixelů“*. Hra vede auto
+v pruhu na 9 (SV, JV) nebo 5 (JZ, SZ) jednotkách dlaždice a kreslí ho na poloha + (−2, −1) (SV, JZ)
+nebo (−1, −2) (JV, SZ). Se zrcadlovou kotvou vycházela zem pod středem auta napříč na 10,2 (SV),
+11,0 (JV), 7,0 (JZ) a 6,2 (SZ), kdežto střed pruhu mezi bílou krajnicí a prostřední čárou CZTR RT14
+(změřeno na spritech silnice) je 10,2, 9,66, 6,33 a 5,79. JV tak jezdil po krajnici a velká JZ po
+prostřední čáře. `posun_do_pruhu` v `pack_v3s.py` posune obrázek napříč silnicí do středu pruhu
+(JV o 10,6 px doprava a 5,3 nahoru, JZ o 5,2 doleva a 2,6 nahoru, SZ o 3,4 doprava, SV skoro nic),
+směry v zatáčkách (S, V, J, Z) napůl mezi sousedy. K tomu hráčovo doladění podle náhledu: JZ o pixel
+na jihovýchod (*„maličko pixelík“*, 2 a 1 px). Kola (vnější hrany zadních dvojmontáží, 2,17 m) mají
+pak z obou stran odstup asi 3 px (velká) a 5 px (malá) při zin4. Zrcadlová kontrola platí pro
+kotvu před posunem, pruhy hry zrcadlové nejsou.
+
+Ověřeno ve zkušební hře na silnici CZTR RT14 ve všech osmi případech (dvě velikosti, čtyři směry):
+`kontrola/hra_smery_v2.png`.
+
 Kontroly na rozbaleném GRF (`yagl -d`):
 - `kontrola_zrcadla.py`: zrcadlo spritu 8 − k položené podle offsetů na sprite k. Obě velikosti,
   všech 5 sad: sever a jih kotva na ose, dvojice odchylka **0 px**, shoda siluet 0,95 až 1,00.
@@ -107,7 +132,9 @@ Kontroly na rozbaleném GRF (`yagl -d`):
    (silniční vozidla se na rovné silnici nestlačují), kabina natočená po směru jízdy (kontroluje se).
    `python3 render_v3s.py <vojenska|modra_A..D> <px_na_m> <výstup>`
 4. **Balení** (`pack_v3s.py`): `python3 pack_v3s.py <mala|velka> <adresář fotek> grf/<mala|velka>`,
-   pak v `grf/<varianta>` `yagl -e Praga_V3S-v1.grf` (nebo `Praga_V3S_BRYLE-v1.grf`).
+   pak v `grf/<varianta>` `yagl -e Praga_V3S-v2.grf` (nebo `Praga_V3S_BRYLE-v2.grf`). Fotky
+   s kupkou: `render_v3s.py vojenska_kupka` a `modra_B_kupka`. Zvuky předem
+   `python3 zvuky/syntetizuj_zvuky.py` (bez `zvuky/zvuky.json` se GRF zabalí bez zvuku).
 5. **Zkouška ve hře** (`hra/`, moje kopie hry, ne forclaude): příkaz `testv3s` koupí každé auto
    z GRF, přestaví ho na náklady a vypíše články, délky, kapacity a sprity. Ověřeno: načte se bez
    chyby, velká čumák 2 + auto 8, malá 8, lidi 3 a 20, zboží 10, modrá má jiný sprite pro ocel,
@@ -120,6 +147,35 @@ Na silnici CZTR RT14 „1. třída – venkov“ (hráč: *„fotit s CZTR silni
 pruhu mezi středovou přerušovanou čárou a krajnicí a nepřejíždí ani jednu (`kontrola/hra_cztr_silnice.png`).
 
 Obrázky v `kontrola/`: `porovnani_vw.png` (srovnání s VW T1 na společném křížku), `vyber_modre.png`
-(odstíny A až D, jak si je hráč vybral), `hra_*.png` (fotky ze zkušební hry).
+(odstíny A až D, jak si je hráč vybral), `hra_*.png` (fotky ze zkušební hry), `hra_smery_v2.png`
+(verze 2 na silnici CZTR, všechny směry).
 
-Verze (`VERZE` v `pack_v3s.py`, je ve jménu souboru i v Action14): 1 první vydání.
+## Zvuk (verze 2)
+
+Hráč: *„to bude troubit a vrčet jak vejtřaska“*, *„musíš si poslechnout originál V3S jako vzor
+a udělat umělý zvuk, jak se rozjíždí“*. Videa s V3S (YouTube, Facebook) nemají volnou licenci,
+proto je zvuk umělý: `zvuky/syntetizuj_zvuky.py` ho skládá z toho, jak motor Tatra 912 funguje
+(šest ran výfuku za dvě otáčky, klepání dieselu, ventilátor, dunění cyklu, mechanika rozvodu,
+kvílení převodovky, drnčení kabiny a korby). Hráč pak poslal nahrávku V3S z inzerátu; ta posloužila
+jen k rozboru (v repu ani v GRF není): vytúrování na 1880 ot./min, čáry po otáčky / 120 stejně silné
+jako zapalovací (nestejné válce), pískání na 38,4, 60,8 a 91,2násobku otáček, průměrná barva po
+třetinách oktávy. Podle toho je syntéza vyladěná (barva v průměru 1,2 dB od vzoru).
+
+| událost (callback 0x33) | kdy | zvuk |
+|---|---|---|
+| 1, auto ještě schované v depu (var 0xB2 bit 0) | výjezd z depa | startér, motor chytne, klakson „tú-túú“ (dvoutónový 352 a 440 Hz jako Tatra 148), plyn |
+| 1, jinak | odjezd ze zastávky | rozjezd: plyn, spojka, řev v jedničce do 1880 ot./min, přeřazení |
+| 7 | za jízdy po 16 tících | kousek podle rychlosti (do 15, 30, 45, nad 45 km/h; var 0xB4 je v polovinách km/h), jeden za 112 tiků |
+| 8 | ve stání | volnoběh |
+| ostatní | porucha … | výchozí zvuk hry |
+
+Hlasitost jako Sergej: jízda −10,5 až −9 LUFS, volnoběh −12, rozjezd a výjezd −7,5. U malé jde
+callback přes Action 3 podle nákladu, tak každý cíl grafiky dostal obal „zvuk, jinak grafika“,
+u velké stačí čumák. Hráč: *„od 0:26 super“*; na nízkých otáčkách vadily vysoké tóny (pískání,
+ventilátor, cinkání plechů a zvonění filtru barvy), pod 700 ot./min je proto barva vyhlazená.
+Ověřeno ve zkušební hře (`testv3s` vypíše, co callback vrátí): depo 0x4A, zastávka 0x49, pásma
+podle rychlosti, stání, porucha výchozí, mimo takt ticho. `zvuky/poslech.mp3` hraje, jak to zní ve hře.
+
+Verze (`VERZE` v `pack_v3s.py`, je ve jménu souboru i v Action14): 1 první vydání; 2 jméno „V3S Praga“
+bez „for“, texty bez „communist“, zelená kupka na MARI, pruhy na silnici CZTR, umělý zvuk s klaksonem,
+velká veze správně 20 a 3 lidi.
