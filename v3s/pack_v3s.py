@@ -26,8 +26,9 @@ TU = os.path.dirname(os.path.abspath(__file__))
 CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v osminach, 0 = bez cumaku
 
 # Verze: kazde sestaveni pro hrace o jednu vys, je ve jmenu souboru i v Action14 (VRSN).
-# 1 prvni vydani, 2 jmeno "V3S Praga" zlute bez "for", texty bez "communist", zelena kupka na MARI
-VERZE = 2
+# 1 prvni vydani, 2 jmeno "V3S Praga" zlute bez "for", texty bez "communist", zelena kupka na MARI, pruhy CZTR, zvuk,
+# 3 tmava leskla okna a bile reflektory, prikladaci naklady (vrstva nad autem, barva podle nakladu, klady, prkna)
+VERZE = 3
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -78,6 +79,8 @@ def nacti_sadu(nater):
         du, dv = kotva_konvence(d)
         foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
         bb = foto.getbbox()
+        if bb is None:                             # naklad v tomhle smeru cely za bocnici
+            out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); continue
         out.append((foto.crop(bb), int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))))
     return out
 
@@ -94,8 +97,16 @@ BEZ = {"GLAS", "FOOD"}
 PRIDANO = ("SCMT STEL STAL STST STSE STSH METL STIG STSL STBR STPL STSW "      # srot a ocel
            "IORE COAL COKE LIME QLME IRON SLAG FEAL CSTI VBOD PLNT "           # zelezny retezec Steeltown
            "SGBT FICR "                                                       # repa, konopna vlakna
-           "GRVL SAND").split()                                               # stavebni
+           "GRVL SAND "                                                       # stavebni
+           "WOOD "                                                            # drevo (hrac 28. 9.: "a drevo udelej")
+           "SULP RUBR").split()                                               # sira a kaucuk (pevne, viz TRIDY)
 JEN_VOJENSKA = ["FOOD", "BOOM"]                   # jidlo a vybusniny jen vojenska
+# Od verze 3 vozi vsechno krome tekutin (hrac 28. 9.: "napis vsechno vozi", "co nevozi vyjmenuj krom tekutin",
+# "alkohol vozime, pivo v base"): tridy vsechny krome tekutin (0x0040) a zvlastnich (0x8000, auta na ROLU),
+# k tomu seznam vyse (i tekutiny z VW T1 jako pivo, barvy, cistidla) a zakazane NIKDY. Hra pak v nakupu pise
+# kratce "vse krome ...", kdyz chybi nejvys 7 nakladu (vehicle_gui.cpp, ShowRefitOptionsList).
+TRIDY, TRIDY_NE = 0xFFFF, 0x8040
+NIKDY = {"vojenska": ["GLAS"], "modra": ["GLAS", "FOOD", "BOOM"]}
 NAKLADY = {"modra": [k for k in VW_T1 if k not in BEZ] + [k for k in PRIDANO if k not in VW_T1]}
 NAKLADY["vojenska"] = NAKLADY["modra"] + JEN_VOJENSKA
 for _n in NAKLADY:
@@ -104,10 +115,11 @@ for _n in NAKLADY:
 # Odstin modre podle nakladu (hrac: "staveni C, cement a stavebni; tmava strojirenstvi D, A zbozi,
 # B zemedelstvi"). Co neni v B, C ani D, je A.
 ODSTIN = {}
-for k in "TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS".split(): ODSTIN[k] = "B"
+for k in "TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS WOOD".split(): ODSTIN[k] = "B"
 for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW".split(): ODSTIN[k] = "C"
 for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
-          "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD").split():
+          "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD "
+          "SULP RUBR").split():
     ODSTIN[k] = "D"
 assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
 
@@ -116,8 +128,9 @@ vzor = open(os.path.join(TU, "..", "prekladova-tabulka-vzor.yagl"), encoding="ut
 blok = vzor[vzor.index("properties<GlobalSettings"):vzor.index("\n}\n")]
 PORADI = re.findall(r'^\s+cargo_translation_table: "([^"]{4})";', blok, re.M)
 assert len(PORADI) == 147 and PORADI[-1] == "MARI", len(PORADI)
-_pouzite = set(NAKLADY["vojenska"])
+_pouzite = set(NAKLADY["vojenska"]) | {k for v in NIKDY.values() for k in v}
 TABULKA = [k for k in PORADI if k in _pouzite] + [k for k in NAKLADY["vojenska"] if k not in PORADI]
+TABULKA += [k for k in sorted(_pouzite) if k not in TABULKA]
 INDEX = {k: i for i, k in enumerate(TABULKA)}
 
 KAPACITA = 10                                      # jednotek beznych nakladu
@@ -125,11 +138,14 @@ LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojen
 
 # ---------------------------------------------------------------- sprity a list
 SADY = {"vojenska": ["vojenska"], "modra": ["modra_A", "modra_B", "modra_C", "modra_D"]}
-# naložena marihuanou: zelena kupka na korbe (hrac 28. 9.: "udelej tam zelenou kupicku naklad"),
-# u modre v odstinu B jako ostatni zemedelske naklady
-KUPKA = {"vojenska": ("vojenska", "vojenska_kupka"), "modra": ("modra_B", "modra_B_kupka")}
+# Prikladaci naklady (hrac 28. 9.: "kupku prikladaci, udelame cernou kupku uhli a zlutou pisek a vsechny barvy a drevo
+# udelej"): fotky render_v3s.py naklad_<KOD>, jen naklad, auto neviditelne, ale zakryva, co je za bocnicemi.
+# Sypke naklady jako kupka v barve nakladu, drevo klady, drevarske vyrobky prkna.
+VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "TATO", "SGBT", "SEED", "OLSD",
+          "BEAN", "NUTS", "MARI", "SULP", "WOOD", "WDPR"]
+assert all(k in NAKLADY["modra"] for k in VRSTVY), [k for k in VRSTVY if k not in NAKLADY["modra"]]
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
-vse.update({k[1]: nacti_sadu(k[1]) for k in KUPKA.values()})
+vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}") for k in VRSTVY})
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 ODST = 6; SIRKA = 1024
 polozky = [((nat, i), vse[nat][i][0]) for nat in vse for i in range(8)]
@@ -167,11 +183,10 @@ TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
         "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
 POPIS = {
-    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6, vozí vojáky na korbě, jídlo, výbušniny "
-                 "a skoro všechno ostatní." + PODPIS + "{black}{new-line}" + TECH),
-    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu: "
-              "světlá stavby, tmavá strojírenství, zemědělství a zboží. V kabině tři lidi, na korbě skoro všechno."
-              + PODPIS + "{black}{new-line}" + TECH),
+    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6. Všechno vozí kromě tekutin a skla, "
+                 "vojáky na korbě." + PODPIS + "{black}{new-line}" + TECH),
+    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu. Všechno vozí kromě "
+              "tekutin, skla, jídla a výbušnin, v kabině tři lidi." + PODPIS + "{black}{new-line}" + TECH),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
@@ -187,9 +202,10 @@ VARIANTA_POPIS = {"mala": "CZTR scale, 12.2 px/m, one road vehicle slot (8/8)",
 POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}Praga V3S military, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
              BARVA + VARIANTA_POPIS + "{new-line}"
-             "{orange}Two 6×6 flatbed trucks that carry almost everything. Military: troops, food and explosives too. "
-             "Blue: three people in the cab, the shade follows the cargo (building, engineering, farming, goods). "
-             "Marijuana rides as a green heap. Prototype from 1952.{new-line}"
+             "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass. Military: troops, food and "
+             "explosives too. Blue: three people in the cab, the shade follows the cargo. "
+             "Loose cargo rides on the bed in its colour (coal black, sand yellow, ore, stone, lime, potatoes, "
+             "beet, marijuana green...), wood as logs, wood products as planks. Prototype from 1952.{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}" +
              ("{orange}Sound: synthesized after the Tatra 912 engine, roars when pulling away, leaves the depot "
               "with the starter and a two-tone horn{new-line}" if ZV else "") +
@@ -297,9 +313,42 @@ def action3(eid, default, naklady):
 CALLBACK = ["value1 = variable[0x0C] & 0x0000FFFF;"]
 ID = {"vojenska": 0x0100, "modra": 0x0101}         # kupovane cislo (u velke cumak)
 ID_AUTO = {"vojenska": 0x0110, "modra": 0x0111}    # u velke viditelne auto, druhy clanek
+
+# Prikladaci naklady: hra kresli auto z vic obrazku pres sebe (sprite stack, bit 7 vlastnosti miscellaneous_flags).
+# Graficky retez prochazi pro kazdou vrstvu zvlast, cislo vrstvy je v promenne 0x10 (bity 8-15); kdyz ma prijit
+# dalsi vrstva, zapise GRF do docasneho registru 0x100 bit 31 (newgrf_engine.cpp, GetCustomEngineSprite; registry
+# se pred kazdou vrstvou nuluji). Vrstva 0 je auto, vrstva 1 naklad. Sady nakladu jsou spolecne pro obe auta
+# (skupiny 0xC0 a dal), naklad je videt od poloviny nakladu (hra bere sadu naklad * pocet / kapacita).
+G_VRSTVA = {}
+if VRSTVY:
+    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, prikladaci naklady (spolecne pro obe auta)", "{"]
+    for si, k in enumerate(VRSTVY):
+        Y += [f"    sprite_set // 0x{si:04X} naklad {k}", "    {"]
+        for i in range(8): Y += sprite(f"naklad_{k}", i)
+        Y += ["    }"]
+    i_nic = len(VRSTVY)
+    Y += [f"    sprite_set // 0x{i_nic:04X} bez nakladu", "    {"]
+    for i in range(8): Y += sprite()
+    Y += ["    }", "}"]
+    for si, k in enumerate(VRSTVY):
+        G_VRSTVA[k] = 0xC0 + si
+        Y += [f"sprite_groups<RoadVehicles, 0x{G_VRSTVA[k]:02X}> // Action02 basic, naklad {k}: prazdno, naklad", "{",
+              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];",
+              f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
+VRSTVY_VYRAZ = ["value1 = variable[0x1A] & 0x00000001;", "value2 = variable[0x10] >> 8 & 0x000000FF;",
+                "value1 = Subtraction(value1, value2);",                                          # 1 - vrstva
+                "value2 = variable[0x1A] & 0x0000001F;", "value1 = ShiftLeft(value1, value2);",    # vrstva 0: bit 31
+                "value2 = variable[0x1A] & 0x00000100;", "value1 = TempStore(value1, value2);",    # do registru 0x100
+                "value2 = variable[0x10] >> 8 & 0x000000FF;", "value1 = Assign(value1, value2);"]  # vyber podle vrstvy
+
 for n in ("vojenska", "modra"):
     h = ID[n]; auto = ID_AUTO[n] if CUMAK else h
-    base = {"vojenska": 0x10, "modra": 0x40}[n]
+    # cisla skupin a switchu: kazde auto znova od 0x10 (Action 3 predchoziho auta uz je hotova), naklady 0xC0 a dal
+    dalsi = [0x10]
+    def nove():
+        i = dalsi[0]; dalsi[0] += 1
+        assert i < 0xC0, "switche narazily na spolecne vrstvy nakladu"
+        return i
     kap_cumak = 1 if CUMAK else 0                  # cumak nese jednu jednotku (CUMAK.md: motor s nulovou
     kap_auto = KAPACITA - kap_cumak                #  kapacitou prijde o nabidku nakladu), auto zbytek
     lidi_auto = LIDI[n] - kap_cumak                # osoby: auto dostane zbytek callbackem 0x15
@@ -309,11 +358,13 @@ for n in ("vojenska", "modra"):
         p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
              f"        long_introduction_date: date({UVEDENI});", "        model_life_years: 255;",
              "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
-             "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
+             f"        refittable_cargo_classes: 0x{TRIDY:04X};", f"        non_refittable_cargo_classes: 0x{TRIDY_NE:04X};",
              "        refit_cargo_types: 0x00000000;",
-             f"        always_refittable_cargos: {seznam(n)};", "        never_refittable_cargos: [ ];",
+             f"        always_refittable_cargos: {seznam(n)};",
+             "        never_refittable_cargos: [ " + " ".join(f"0x{INDEX[k]:02X}" for k in NIKDY[n]) + " ];",
              f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
-             "        sprite_id: 0xFF;", "        miscellaneous_flags: 0x00;",
+             "        sprite_id: 0xFF;",
+             f"        miscellaneous_flags: 0x{0x80 if (co == 'auto' and VRSTVY) else 0:02X};",   # 0x80: vrstvy (sprite stack)
              f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
              f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
         if eid == h:
@@ -329,41 +380,34 @@ for n in ("vojenska", "modra"):
         p += [f"        callback_flags_mask: 0x{maska:02X};"]
         Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
                   f'    /* 0x{eid:04X} */ "{NAZEV[n] if eid == h else NAZEV[n] + " (auto)"}";', "}"]
-    # Action01: sady auta (8 smeru, u modre ctyri odstiny), auto se zelenou kupkou (marihuana)
-    # a prazdna sada pro cumak
+    # Action01: sady auta (8 smeru, u modre ctyri odstiny) a prazdna sada pro cumak
     sady = SADY[n]
-    lak_mari, sada_kupka = KUPKA[n]
-    i_kupka, i_prazdny = len(sady), len(sady) + 1
+    i_prazdny = len(sady)
     Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01", "{"]
-    for si, nat in enumerate(sady + [sada_kupka]):
+    for si, nat in enumerate(sady):
         Y += [f"    sprite_set // 0x{si:04X} {nat}", "    {"]
         for i in range(8): Y += sprite(nat, i)
         Y += ["    }"]
     Y += [f"    sprite_set // 0x{i_prazdny:04X} prazdny cumak", "    {"]
     for i in range(8): Y += sprite()
     Y += ["    }", "}"]
-    g = {nat: base + si for si, nat in enumerate(sady)}
-    g_prazdny = base + len(sady)
-    g_mari = base + len(sady) + 1
+    g = {nat: nove() for nat in sady}
+    g_prazdny = nove()
     for si, nat in enumerate(sady):
         Y += [f"sprite_groups<RoadVehicles, 0x{g[nat]:02X}> // Action02 basic, {nat}", "{",
               f"    primary_spritesets: [ 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
     Y += [f"sprite_groups<RoadVehicles, 0x{g_prazdny:02X}> // Action02 basic, prazdny cumak", "{",
           f"    primary_spritesets: [ 0x{i_prazdny:04X} ];", f"    secondary_spritesets: [ 0x{i_prazdny:04X} ];", "}"]
-    # marihuana: prazdne auto, od poloviny nakladu kupka (hra bere sadu naklad * pocet / kapacita)
-    i_lak = sady.index(lak_mari)
-    Y += [f"sprite_groups<RoadVehicles, 0x{g_mari:02X}> // Action02 basic, marihuana: prazdne, kupka", "{",
-          f"    primary_spritesets: [ 0x{i_lak:04X} 0x{i_kupka:04X} ];",
-          f"    secondary_spritesets: [ 0x{i_lak:04X} 0x{i_kupka:04X} ];", "}"]
     # obrazek do nakupu: smer W, u modre odstin A (vychozi naklad je zbozi)
-    g_nakup = base + 8
+    g_nakup = nove()
     Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, obrazek do nakupu", "{", "    sprite_set // 0x0000 nakup", "    {"]
     Y += sprite(sady[0], 6)
     Y += ["    }", "}", f"sprite_groups<RoadVehicles, 0x{g_nakup:02X}> // Action02 basic, nakup", "{",
           "    primary_spritesets: [ 0x0000 ];", "    secondary_spritesets: [ 0x0000 ];", "}"]
-    s_clanky, s_lidi, s_nakup, s_cumak = base + 9, base + 10, base + 11, base + 12
+    s_clanky, s_lidi, s_nakup, s_cumak = nove(), nove(), nove(), nove()
     zaklad = g[sady[0]]                            # vojenska, u modre odstin A
-    zvuk_radky, id_zvuk, volne = zvukovy_retez(base + 13)
+    zvuk_radky, id_zvuk, dalsi[0] = zvukovy_retez(dalsi[0])
+    assert dalsi[0] < 0xC0
     Y += zvuk_radky
     zvuk = [(0x33, id_zvuk)] if id_zvuk else []
     # osoby: callback 0x15 vrati kapacitu, jinak grafika (u modre odstin A); u male i zvuk
@@ -375,32 +419,36 @@ for n in ("vojenska", "modra"):
                 [(1, 0x8000 | auto)], 0xFFFF)
         Y += sw(s_cumak, "cumak: clanky, zvuky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)] + zvuk, g_prazdny)
         # cumak s lidmi: kapacita 1 (hra by jeho 1 zbozi prepocetla nasobkem na 2 lidi, velka pak vezla 21 a 4)
-        s_cumak_lidi = volne
+        s_cumak_lidi = nove()
         Y += sw(s_cumak_lidi, "cumak, osoby: kapacita 1, clanky, zvuky", CALLBACK,
                 [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
         Y += action3(h, s_cumak, [(INDEX["PASS"], s_cumak_lidi), (0xFF, s_nakup)])
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
-    # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback
+    # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback, naklady jako vrstva
+    telo = lambda k: g["modra_" + ODSTIN.get(k, "A")] if n == "modra" else zaklad
     mapa = {INDEX["PASS"]: s_lidi}
     if n == "modra":
         mapa.update({INDEX[k]: g["modra_" + o] for k, o in ODSTIN.items() if o != "A"})
-    mapa[INDEX["MARI"]] = g_mari                    # kupka (u modre v odstinu B)
+    for k in VRSTVY:
+        sv = nove()
+        Y += sw(sv, f"vrstvy {k}: 0 auto a dalsi vrstva, 1 naklad", VRSTVY_VYRAZ, [(1, G_VRSTVA[k])], telo(k))
+        mapa[INDEX[k]] = sv
     vychozi = zaklad
     if not CUMAK and id_zvuk:
         # mala: Action 3 vybira podle nakladu a callback 0x33 jde stejnou cestou, tak kazdy cil grafiky
         # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi)
         obal = {}
         for cil in [zaklad] + sorted(set(mapa.values()) - {s_lidi, zaklad}):
-            obal[cil] = volne + len(obal)
+            obal[cil] = nove()
             Y += sw(obal[cil], "zvuk, jinak grafika", CALLBACK, zvuk, cil)
         mapa = {k: obal.get(v, v) for k, v in mapa.items()}
         vychozi = obal[zaklad]
-        assert volne + len(obal) <= base + 0x30, "switche se prekryvaji s dalsim autem"
     if not CUMAK:
         mapa[0xFF] = s_nakup
     Y += action3(auto, vychozi, sorted(mapa.items()))
+    print(n, "switchu a skupin do", hex(dalsi[0] - 1))
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN,

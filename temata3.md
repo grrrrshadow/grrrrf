@@ -1265,3 +1265,28 @@ na všechny čtyři směry je potřeba víc sérií (jinak tiky, jinak začátek
   (rozdíl souborů −76 dB).
 - **Hráč poslouchá s časem v ukázce** („od 0:18 to ne“), takže ukázka `poslech.mp3` musí mít
   pevné pořadí a já musím vědět, co v kterou sekundu hraje.
+
+## Náklad jako vrstva nad vozidlem (sprite stack, 2026-09-28)
+
+Hráč: *„kupku přikládací, uděláme černou kupku uhlí a žlutou písek a všechny barvy a dřevo udělej“*.
+Místo celého auta s nákladem pro každý náklad (ve verzi 2 V3S dvě celé sady jen kvůli marihuaně)
+se náklad kreslí jako druhý obrázek přes auto:
+
+- Vozidlo potřebuje `miscellaneous_flags` bit 7 (`EngineMiscFlag::SpriteStack`, 0x80). Hra pak
+  grafický řetěz prochází až čtyřikrát (`GetCustomEngineSprite` v `newgrf_engine.cpp`), číslo vrstvy
+  je v proměnné 0x10 bity 8–15 (dolní bajt je typ obrázku). Další vrstva přijde, jen když GRF zapíše
+  do dočasného registru 0x100 bit 31; dolních 16 bitů je paleta (0 = výchozí). Registry se před
+  každou vrstvou nulují (`DoResolve` → `temp_store.ClearChanges`), takže náklad bez vrstvy zůstane
+  u jednoho obrázku.
+- V yaglu: `value1 = TempStore(value1, value2);` (do registru `value2`), `Subtraction`, `ShiftLeft`,
+  `Assign`. Switch vrstev: `(1 − vrstva) << 31` do registru 0x100, pak výběr podle vrstvy
+  (`v3s/pack_v3s.py`, `VRSTVY_VYRAZ`). Callbacky jdou stejnou cestou, mají v bitech 8–15 nulu,
+  takže skončí u auta (vrstva 0).
+- Fotka vrstvy v Blenderu: náklad normálně, auto `is_holdout = True`. Auto je v obrázku průhledné,
+  ale zakryje, co je za bočnicemi, a vrstva se pak přesně položí na auto (stejná kamera, stejné
+  kotvy). Jedna vrstva jde na všechny nátěry. Fotka nákladu trvá kolem 12 s na 8 směrů.
+- Sady vrstev stačí mít v GRF jednou (společný Action 1 a skupiny 0xC0 a dál) pro všechna auta.
+  Čísla switchů pro další auto můžou začít znova od 0x10: Action 3 předchozího auta už je
+  zpracovaná a ukazuje na své skupiny.
+- Ověřeno ve zkušební hře: `testv3s` naloží uhlí, dřevo a marihuanu a vypíše vrstvy obrázku
+  (auto + náklad, u modré v odstínu podle nákladu).

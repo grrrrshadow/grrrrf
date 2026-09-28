@@ -5,11 +5,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v2.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v2.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v3.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v3.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v2.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Verze 1 (`-v1`) zůstává v repu.
+Balík pro hráče je `Praga_V3S_Vejtraska-v3.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1`, `-v2`)
+zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 
@@ -59,8 +60,17 @@ hráč dělá (`temata3.md`, „Jak hráč dělá GRF“).
   řepa SGBT, konopná vlákna FICR, stavební GRVL SAND.
 - **Jen vojenská:** FOOD (*„jídlo jenom vojenský“*) a BOOM (*„vojenská explosives, modrá ne“*).
 - Modrá 96 kódů, vojenská 98. Pivo, tabák, marihuana a cigára (BEER TBCO MARI CIGR) vozí obě.
-- **Marihuana (MARI) jede jako zelená kupka** na korbě (hráč: *„udělej tam zelenou kupičku
-  náklad“*): Action 2 s prázdným autem a kupkou, od půlky nákladu kupka, u modré v odstínu B.
+- **Od verze 3 vozí všechno kromě tekutin** (hráč: *„napiš všechno vozí“*, *„co nevozí vyjmenuj krom
+  tekutin“*, *„alkohol vozíme, pivo v báse“*): třídy nákladu všechny kromě tekutin (0x0040)
+  a zvláštních (0x8000, auta na ROLU), k tomu seznam výš (i pivo, barvy, čistidla a svařovací
+  materiál, které FIRS značí jako tekutiny), přidaná síra a kaučuk (obojí se vozí i pevné) a zakázané
+  sklo, u modré i jídlo a výbušniny. Hra v okně nákupu píše krátce „vše kromě …“, jen když chybí
+  nejvýš 7 nákladů (`ShowRefitOptionsList` ve `vehicle_gui.cpp`). Ve FIRS 5.2 Steeltown s náklady
+  hry chybí vojenské 6 (kyselina, dehet, sklo, louh, marihuana, auta na ROLU), modré 8 (navíc jídlo
+  a výbušniny), takže modrá tam ukáže dlouhý seznam; až hra pustí marihuanu, bude jich 7.
+- **Náklad na korbě jako přikládací vrstva** (od verze 3, hráč: *„kupku přikládací, uděláme
+  černou kupku uhlí a žlutou písek a všechny barvy a dřevo udělej“*), popsané níž. Marihuana je
+  zelená kupka (ve verzi 2 celé auto s kupkou, hráč: *„udělej tam zelenou kupičku náklad“*).
   Hra ale MARI škrtá všem vozidlům kromě svých marihuanových náklaďáků (`OfferMarijuanaToShipsAndAircraft`),
   takže se na ni V3S zatím přestavět nedá; pro kolegu `PRO-HRU.md`, bod 4. Zkoušeno se zkušebním
   nákladem `hra/zkusebni_mari/`.
@@ -132,8 +142,8 @@ Kontroly na rozbaleném GRF (`yagl -d`):
    (silniční vozidla se na rovné silnici nestlačují), kabina natočená po směru jízdy (kontroluje se).
    `python3 render_v3s.py <vojenska|modra_A..D> <px_na_m> <výstup>`
 4. **Balení** (`pack_v3s.py`): `python3 pack_v3s.py <mala|velka> <adresář fotek> grf/<mala|velka>`,
-   pak v `grf/<varianta>` `yagl -e Praga_V3S-v2.grf` (nebo `Praga_V3S_BRYLE-v2.grf`). Fotky
-   s kupkou: `render_v3s.py vojenska_kupka` a `modra_B_kupka`. Zvuky předem
+   pak v `grf/<varianta>` `yagl -e Praga_V3S-v3.grf` (nebo `Praga_V3S_BRYLE-v3.grf`). Fotky
+   nákladů: `render_v3s.py naklad_<KÓD>` pro každý kód z `VRSTVY`. Zvuky předem
    `python3 zvuky/syntetizuj_zvuky.py` (bez `zvuky/zvuky.json` se GRF zabalí bez zvuku).
 5. **Zkouška ve hře** (`hra/`, moje kopie hry, ne forclaude): příkaz `testv3s` koupí každé auto
    z GRF, přestaví ho na náklady a vypíše články, délky, kapacity a sprity. Ověřeno: načte se bez
@@ -149,6 +159,48 @@ pruhu mezi středovou přerušovanou čárou a krajnicí a nepřejíždí ani je
 Obrázky v `kontrola/`: `porovnani_vw.png` (srovnání s VW T1 na společném křížku), `vyber_modre.png`
 (odstíny A až D, jak si je hráč vybral), `hra_*.png` (fotky ze zkušební hry), `hra_smery_v2.png`
 (verze 2 na silnici CZTR, všechny směry).
+
+## Okna a reflektory (verze 3)
+
+Hráč: *„nemáš lepší okna? U vojenský mi to ani nevadí, ale ta modrá, to vůbec nesedí šedý okna“*,
+*„světla bíle bílý“*. Materiál skla (`v3s_glass__da__spec`, textura `Image_3`) má model
+neprůhledný a matný (drsnost 0,9) a skla v textuře šedá, pod světlou oblohou HDRI vycházela šedá
+a placatá. `render_v3s.py` (proměnná `OKNA`, výchozí `tmave`) přebarví skla v textuře na tmavou
+(0,030, 0,040, 0,055 lineárně), materiál dá lesklý (drsnost 0,15) a reflektor v téže textuře
+(kruh v pravém dolním rohu, kde jsou i odrazka, blinkr a zadní světlo) zesvětlí a nechá svítit
+(emise 1,5 tam, kde je textura skoro bílá). `OKNA=puvodni` vrátí model, jak byl. Hráč vybíral ze
+čtyř variant (šedá, tmavá lesklá, tmavá matnější, modravá).
+
+## Náklad jako vrstva (verze 3)
+
+Hra umí kreslit vozidlo z až čtyř obrázků přes sebe, když má vlastnost `miscellaneous_flags` bit 7
+(`SpriteStack`). Grafický řetěz se prochází pro každou vrstvu zvlášť, číslo vrstvy je v proměnné
+0x10 (bity 8–15), a když má přijít další vrstva, zapíše GRF do dočasného registru 0x100 bit 31
+(`GetCustomEngineSprite` v `newgrf_engine.cpp`; registry se před každou vrstvou nulují). Vrstva 0
+je auto (u modré v odstínu podle nákladu), vrstva 1 náklad. Switch `vrstvy <kód>` spočítá
+`(1 − vrstva) << 31`, uloží do registru 0x100 (`TempStore`) a podle vrstvy vybere auto nebo
+náklad. Náklad je vidět od poloviny nákladu (hra bere sadu naklad · počet / kapacita).
+
+Fotky nákladu: `render_v3s.py naklad_<KÓD>` nafotí jen náklad, auto je neviditelné, ale zakrývá,
+co je za bočnicemi (`is_holdout`). Stejná vrstva pak jde na vojenskou i všechny odstíny modré,
+v GRF je jednou (skupiny 0xC0 a dál), auto má switche od 0x10.
+
+| náklad | vrstva |
+|---|---|
+| COAL uhlí | černá hromada, lesklejší |
+| COKE koks, SLAG struska | tmavě šedá |
+| IORE železná ruda, SCMT šrot | rezavě hnědá (šrot hrubší) |
+| LIME vápenec, QLME pálené vápno | světle šedá, bílá |
+| GRVL kámen | šedá |
+| SAND písek | žlutá, jemná |
+| TATO brambory, SGBT cukrová řepa | hnědá a béžová, hrudkovitá |
+| SEED osivo, BEAN fazole, NUTS ořechy, OLSD olejniny | zlatá, béžová, světle hnědá, tmavě hnědá |
+| MARI marihuana | zelená |
+| SULP síra | žlutá |
+| WOOD dřevo | klády ve třech vrstvách, kůra a světlá čela |
+| WDPR dřevařské výrobky | hranice prken |
+
+Dřevo (WOOD) vejtřaska ve verzi 2 nevozila, od verze 3 ho má obě auta (modrá v odstínu B).
 
 ## Zvuk (verze 2)
 
@@ -178,4 +230,5 @@ podle rychlosti, stání, porucha výchozí, mimo takt ticho. `zvuky/poslech.mp3
 
 Verze (`VERZE` v `pack_v3s.py`, je ve jménu souboru i v Action14): 1 první vydání; 2 jméno „V3S Praga“
 bez „for“, texty bez „communist“, zelená kupka na MARI, pruhy na silnici CZTR, umělý zvuk s klaksonem,
-velká veze správně 20 a 3 lidi.
+velká veze správně 20 a 3 lidi; 3 tmavá lesklá okna a bílé reflektory, náklad jako přikládací vrstva
+(18 nákladů), dřevo v seznamu nákladů.
