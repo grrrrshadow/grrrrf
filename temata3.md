@@ -1194,3 +1194,38 @@ Podrobně v `v3s/README.md`. Obecně platné:
   hlavního vlákna, konec hry musí jít do fronty za ni; hned po založení hry se ještě netiká, na
   fotku se čeká časovačem `TimeoutTimer<TimerGameTick>`.
 - Hráč: *„klidně se všude koukej“* (28. 9., o zkušební hře a fotkách).
+
+## Focení ve zkušební hře (2026-09-28)
+
+Hráč: *„zapiš si focení do témat, ať se to příště neučíš znova“*, *„fotit s CZTR silnicí příště“*.
+Všechno potřebné je v `hra/` (návod `hra/README.md`), nic se nepřekládá.
+
+**Postup:**
+1. `apt-get install -y libsdl2-2.0-0` (jednou za kontejner), rozbalit `hra/ottd-zkusebni-gfx.tar.xz`.
+2. Do `domov/.openttd/newgrf/` dát zkoušené GRF a zapsat je do `openttd.cfg` pod `[newgrf]`.
+   **Silnice CZTR RT14 „1. třída – venkov“** (`hra/cztr_silnice/`) tam už zapsaná je: auta se fotí
+   na ní, ne na výchozí silnici. Na ní je hned vidět pruh: bílá krajnice, uprostřed tenká
+   přerušovaná čára.
+3. `autoexec.scr`: `setting starting_year 1990` a `newgame`. `game_start.scr`: `testv3sfoto 1500`.
+4. Pustit `HOME=… xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r 800x500
+   -s null -m null`, `-G <číslo>` pro stejnou mapu (mapa se ale změní se sadou GRF).
+5. Fotka `domov/.openttd/screenshot/v3s_okruh.png`, 3200 × 2000 při 4× přiblížení (celé okno).
+   Pak vystřihnout auta (`PIL crop`) a dívat se zblízka.
+
+**Na co se dívat:** auto má jet v pravém pruhu (vpravo ve směru jízdy), mezi středovou čarou
+a krajnicí, a nepřejíždět ani jednu. Ověřeno na fotce: šikmo vpravo nahoru (SV) jede auto dolním
+pruhem, šikmo vlevo dolů (JZ) horním. Ve frontě mají stát za sebou, ne přes sebe (malá těsně za
+velkou se o kousek překryje). Vedle nechat jezdit původní náklaďáky hry, ty jsou měřítko pruhu.
+
+**Pasti, na které jsem narazil (každá stála jedno kolo):**
+- Hra s obrazem píše výpisy konzole jen do okna. Proto vlastní výpisy i přes `Debug(misc, 0, …)`,
+  ty jdou na stderr. `fprintf` zakazuje `safeguards.h`.
+- `MakeScreenshot` fotí až ve frontě hlavního vlákna. Když se hned po něm nastaví `_exit_game`,
+  hra skončí dřív, než fotka vznikne. Konec hry dát do fronty za fotku (`QueueOnMainThread`).
+- Hned po `newgame` se ještě netiká (`StateGameLoop` volaný ručně nic neudělá). Na fotku se čeká
+  časovačem `TimeoutTimer<TimerGameTick>`, hra mezitím normálně běží.
+- Když se zdroják změní během překladu, ninja si nevšimne (objekt je novější než zdroják) a do hry
+  se dostane stará verze. Po úpravě během překladu `touch` a přeložit znova. Kontrola:
+  `strings openttd | grep <nový text>`.
+- Build bez obrazu (`OPTION_DEDICATED=ON`) má jen blitter `null`, fotit neumí.
+- Tečky napříč silnicí na švech dlaždic RT14 jsou ze spritů CZTR (má je i celá sada), ne z aut.

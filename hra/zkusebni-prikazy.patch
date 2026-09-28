@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 --- a/openttd/src/console_cmds.cpp	2026-09-28 19:39:03.234357643 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-28 19:39:03.237639201 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-28 20:06:19.902246046 +0000
 @@ -37,6 +37,8 @@
  #include "fileio_func.h"
  #include "fontcache.h"
@@ -10,7 +10,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1346,193 @@
+@@ -1344,6 +1346,197 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -147,14 +147,18 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		return true;
 +	}
 +	uint x0 = TileX(zac) + 1, y0 = TileY(zac) + 2, x1 = x0 + 11, y1 = y0 + 6;
-+	auto usek = [](TileIndex a, TileIndex b, Axis ax) {
-+		return Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, b, a, ROADTYPE_ROAD, ax, DisallowedRoadDirections{}, true, true, false).Succeeded();
++	/* silnice: CZTR 1. trida venkov (RT14), kdyz je nactena (hra/cztr_silnice), jinak bezna */
++	RoadType rt = GetRoadTypeByLabel((uint32_t)'R' << 24 | 'T' << 16 | '1' << 8 | '4', false);
++	if (rt == INVALID_ROADTYPE) rt = ROADTYPE_ROAD;
++	V3SLog("V3SFOTO: silnice {}", rt == ROADTYPE_ROAD ? "bezna (ROAD)" : "CZTR RT14 1. trida venkov");
++	auto usek = [rt](TileIndex a, TileIndex b, Axis ax) {
++		return Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, b, a, rt, ax, DisallowedRoadDirections{}, true, true, false).Succeeded();
 +	};
 +	bool ok = usek(TileXY(x0, y0), TileXY(x1, y0), Axis::X) && usek(TileXY(x0, y1), TileXY(x1, y1), Axis::X) &&
 +			usek(TileXY(x0, y0), TileXY(x0, y1), Axis::Y) && usek(TileXY(x1, y0), TileXY(x1, y1), Axis::Y);
 +	TileIndex depot = TileXY(x0 + 5, y0 - 1);
-+	ok = ok && Command<Commands::BuildRoad>::Do(DoCommandFlag::Execute, TileXY(x0 + 5, y0), RoadBits{RoadBit::NW}, ROADTYPE_ROAD, DisallowedRoadDirections{}, TownID::Invalid()).Succeeded();
-+	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SE).Succeeded();
++	ok = ok && Command<Commands::BuildRoad>::Do(DoCommandFlag::Execute, TileXY(x0 + 5, y0), RoadBits{RoadBit::NW}, rt, DisallowedRoadDirections{}, TownID::Invalid()).Succeeded();
++	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, rt, DiagDirection::SE).Succeeded();
 +	V3SLog("V3SFOTO: okruh ({},{})-({},{}) depo {}", x0, y0, x1, y1, ok ? "ok" : "CHYBA");
 +	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
 +	struct Nakup { const char *grf; uint16_t local; const char *naklad; };
@@ -204,7 +208,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1641,17 @@
+@@ -1452,6 +1645,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -222,7 +226,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7443,8 @@
+@@ -7243,6 +7447,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);

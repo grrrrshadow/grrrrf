@@ -9,13 +9,14 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 |---|---|
 | `ottd-zkusebni-gfx.tar.xz` | přeložená hra (SDL2, 32bpp blittery, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a domov `domov/` s OpenGFX 7.1 a čistým `openttd.cfg` |
 | `zkusebni-prikazy.patch` | všechny moje změny proti zdrojákům hry (`patch -p1` v kopii `openttd/` na `60283b3`) |
+| `cztr_silnice/` | výstřižek silnice CZTR RT14 „1. třída – venkov“ (`CZTR_silnice_RT14.grf`), v domově už je zapsaný, okruh na fotce se staví z ní |
 
 ## Zkušební příkazy
 
 | příkaz | co udělá |
 |---|---|
 | `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU a vypíše díly, délky, kapacity a čísla spritů |
-| `testv3sfoto <tiků>` | postaví silniční okruh s depem, dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady), po zadaném počtu tiků vyfotí okruh při plném přiblížení a hru ukončí |
+| `testv3sfoto <tiků>` | postaví silniční okruh s depem (ze silnice CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady), po zadaném počtu tiků vyfotí okruh při plném přiblížení a hru ukončí |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
 Výpisy V3S jdou i na stderr (`dbg: [misc:0] V3S…`), s obrazem by jinak zůstaly jen v okně konzole.

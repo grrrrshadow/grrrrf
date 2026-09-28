@@ -116,6 +116,9 @@ Kontroly na rozbaleném GRF (`yagl -d`):
    (`kontrola/hra_kolona.png`, `kontrola/hra_detail.png`). Malá těsně za velkou se překryje asi
    o půl osminy (velká je delší, čumák chrání jen její čelo), stane se jen při míchání velikostí.
 
+Na silnici CZTR RT14 „1. třída – venkov“ (hráč: *„fotit s CZTR silnicí“*) jede V3S ve svém
+pruhu mezi středovou přerušovanou čárou a krajnicí a nepřejíždí ani jednu (`kontrola/hra_cztr_silnice.png`).
+
 Obrázky v `kontrola/`: `porovnani_vw.png` (srovnání s VW T1 na společném křížku), `vyber_modre.png`
 (odstíny A až D, jak si je hráč vybral), `hra_*.png` (fotky ze zkušební hry).
 
