@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-28 21:48:28.375788616 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-28 21:48:28.382627755 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-28 23:12:09.897321793 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-28 23:12:09.905839619 +0000
 @@ -37,6 +37,9 @@
  #include "fileio_func.h"
  #include "fontcache.h"
@@ -11,7 +11,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1347,254 @@
+@@ -1344,6 +1347,277 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -91,6 +91,29 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +				}
 +				IConsolePrint(CC_INFO, "V3S:   MARI plne{}", plne);
 +			}
++		}
++		/* zvuky (callback 0x33): odjezd v depu (auto schovane) a venku, jizda v ruznych rychlostech, stani;
++		 * brana pousti kousek jen v prvnich 16 ticich z kazdych 112, tak se citac tiku na chvili posune */
++		if (e->info.callback_mask.Test(VehicleCallbackMask::SoundEffect)) {
++			RoadVehicle *rv = RoadVehicle::From(Vehicle::Get(vid));
++			auto puvodni = TimerGameTick::counter;
++			TimerGameTick::counter -= (TimerGameTick::counter & 0xFFFF) % 112;
++			auto zvuk = [&](int ud) { return GetVehicleCallback(CBID_VEHICLE_SOUND_EFFECT, ud, 0, rv->engine_type, rv); };
++			std::string z = fmt::format("depo {:#x}", zvuk(1));
++			bool schovane = rv->vehstatus.Test(VehState::Hidden);
++			rv->vehstatus.Reset(VehState::Hidden);
++			z += fmt::format(" zastavka {:#x}", zvuk(1));
++			if (schovane) rv->vehstatus.Set(VehState::Hidden);
++			for (int kmh : {0, 10, 20, 35, 50, 60}) {
++				rv->cur_speed = kmh * 2;
++				z += fmt::format(" jizda{} {:#x}", kmh, zvuk(7));
++			}
++			rv->cur_speed = 0;
++			z += fmt::format(" stani {:#x} porucha {:#x}", zvuk(8), zvuk(3));
++			TimerGameTick::counter += 20;
++			z += fmt::format(" | mimo branu jizda {:#x} stani {:#x}", zvuk(7), zvuk(8));
++			TimerGameTick::counter = puvodni;
++			IConsolePrint(CC_INFO, "V3S:   zvuky (schovane v depu {}) {}", schovane ? 1 : 0, z);
 +		}
 +	}
 +	return true;
@@ -266,7 +289,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1703,17 @@
+@@ -1452,6 +1726,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -284,7 +307,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7505,8 @@
+@@ -7243,6 +7528,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -294,8 +317,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-28 21:48:28.383788616 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-28 21:48:28.391571395 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-28 23:12:09.905839619 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-28 23:12:09.911426532 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

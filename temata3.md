@@ -1229,3 +1229,39 @@ velkou se o kousek překryje). Vedle nechat jezdit původní náklaďáky hry, t
   `strings openttd | grep <nový text>`.
 - Build bez obrazu (`OPTION_DEDICATED=ON`) má jen blitter `null`, fotit neumí.
 - Tečky napříč silnicí na švech dlaždic RT14 jsou ze spritů CZTR (má je i celá sada), ne z aut.
+
+**Víc fotek a vystřihování po autech (od verze 2 V3S):** `testv3sfoto <tiků> RT14 <fotek> <tiků mezi>`
+udělá sérii `v3s_okruh_NN.png` a ke každé vypíše `V3SPOHLED` (počátek pohledu) a `V3SDIL` (poloha,
+směr, stav a posun kreslení každého dílu). Bod, kam hra položí kotvu dílu, je na fotce
+`8·(y+ky − x−kx) − vlevo`, `4·(x+kx + y+ky − z) − nahoře`. Tak se dá každé auto vystřihnout
+automaticky; vybírat jen stav 0/1/8/9 (rovinka) a bez souseda do 40 jednotek. Auta jezdí v koloně,
+na všechny čtyři směry je potřeba víc sérií (jinak tiky, jinak začátek).
+
+## V3S verze 2: pruhy CZTR, zvuk, kupka (2026-09-28)
+
+- **Pruhy hry nesedí na čáry CZTR stejně ve všech směrech.** Hra vede auto na 9 (SV, JV) a 5 (JZ, SZ)
+  jednotkách dlaždice a kreslí na poloha + (−2, −1) / (−1, −2); střed pruhu CZTR RT14 je 10,2 (SV),
+  9,66 (JV), 6,33 (JZ), 5,79 (SZ). Zrcadlová kotva pak jezdí JV po krajnici a JZ po prostřední
+  čáře. Posun napříč silnicí se počítá pro každý směr zvlášť (`v3s/pack_v3s.py`, `posun_do_pruhu`),
+  zatáčky napůl. Hráč: *„odstup jako od krajnice, pár pixelů“*, *„tak něco zkus mezi tím, to není tak
+  přesný“*. Náhled bez GRF (sprity auta a silnice složené přesně jako hra) ušetří balení.
+- **Hráč řekne „ještě nebal GRF“**, když chce do verze dát ještě něco (tady zvuk). Pak jen náhledy.
+- **Výjezd z depa pozná zvukový callback podle var 0xB2 bit 0** (vehstatus Hidden): hra volá odjezd
+  (událost 1) z depa, dokud je auto schované, u zastávky ne (`StartRoadVehSound`). Rychlost silničního
+  auta ve var 0xB4 je v polovinách km/h.
+- **U malé (bez čumáku) jde zvukový callback přes Action 3 podle nákladu**, takže každý cíl grafiky
+  potřebuje obal „0x33 → zvuk, jinak grafika“. U velké stačí čumák (je první).
+- **Čumák veze 1 zboží, ale 2 lidi**: hra přepočte kapacitu násobkem nákladu. Čumák potřebuje callback
+  0x15 pro PASS (vrátí 1), jinak velká veze o člověka víc. Kontrolovat součet dílů, ne jen auto.
+- **Zvuk z videa (YouTube, Facebook) do volně šířeného GRF nejde**, patří tomu, kdo natočil. YouTube
+  a Facebook se odsud stáhnout nedají (přihlášení, 403). Hráč: *„udělej umělý zvuk“*, pak poslal
+  nahrávku jen jako vzor. Vzor se rozebere (otáčky z rozestupu čar, pískání, barva po třetinách
+  oktávy), do repa ani GRF nejde, zůstanou jen čísla.
+- **Pasti umělého zvuku** (každá jedno kolo s hráčem): barva srovnaná na vysoké otáčky dělá na
+  volnoběhu syčení a cinkání („vysoké tóny“); syrový volnoběh bez barvy kolébal dunění cyklu
+  („to tam nebylo“); úzký hrb filtru barvy a zamrzlý náhodný šum dozvánějí mezi ranami volnoběhu jako
+  tón. Řešení: barva podle otáček (nad 1400 přesná, pod 700 vyhlazená a krátký filtr), zamrzlý šum
+  s rovnou barvou. Co hráč schválil („od 0:26 super“), už neměnit a ověřit, že se opravdu nezměnilo
+  (rozdíl souborů −76 dB).
+- **Hráč poslouchá s časem v ukázce** („od 0:18 to ne“), takže ukázka `poslech.mp3` musí mít
+  pevné pořadí a já musím vědět, co v kterou sekundu hraje.

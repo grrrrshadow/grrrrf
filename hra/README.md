@@ -16,7 +16,7 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 
 | příkaz | co udělá |
 |---|---|
-| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU MARI a vypíše díly, délky, kapacity a čísla spritů; na MARI ho i naloží a vypíše obrázek naložené (zelená kupka) |
+| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU MARI a vypíše díly, délky, kapacity a čísla spritů; na MARI ho i naloží a vypíše obrázek naložené (zelená kupka); u aut se zvukovým callbackem vypíše, co GRF vrátí pro výjezd z depa, odjezd ze zastávky, jízdu v 0–60 km/h, stání a poruchu (čítač tiků na chvíli posune do taktu zvuku) |
 | `testv3sfoto <tiků> [RTxx] [fotek] [tiků mezi fotkami]` | postaví silniční okruh s depem (ze silnice s daným štítkem, jinak CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady, některé naložené MARI), po zadaném počtu tiků vyfotí okruh při plném přiblížení, případně víckrát po sobě, a hru ukončí. U každé fotky vypíše počátek pohledu (`V3SPOHLED`) a polohu, směr a posun kreslení každého dílu (`V3SDIL`), takže se dá každé auto vystřihnout |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
@@ -29,8 +29,8 @@ Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback �
 apt-get install -y libsdl2-2.0-0        # jednou v novém kontejneru; xvfb-run tam už je
 mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-gfx.tar.xz -C /tmp/hra
 H=/tmp/hra/ottd-zkusebni/domov
-cp v3s/grf/mala/Praga_V3S-v1.grf v3s/grf/velka/Praga_V3S_BRYLE-v1.grf $H/.openttd/newgrf/
-sed -i 's/^\[newgrf\]$/[newgrf]\nPraga_V3S-v1.grf = \nPraga_V3S_BRYLE-v1.grf = /' $H/.openttd/openttd.cfg
+cp v3s/grf/mala/Praga_V3S-v2.grf v3s/grf/velka/Praga_V3S_BRYLE-v2.grf hra/zkusebni_mari/zkusebni_MARI.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nPraga_V3S-v2.grf = \nPraga_V3S_BRYLE-v2.grf = /' $H/.openttd/openttd.cfg
 printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
 printf 'testv3sfoto 1500\n' > $H/.openttd/scripts/game_start.scr
 cd /tmp/hra/ottd-zkusebni
