@@ -7,6 +7,278 @@ U GRF je md5 (podle něj hra pozná GRF v savu) a `grf_id` se jménem z Action08
 Jeden soubor se dá vytáhnout bez stažení celého zipu:
 `python3 tools/zipindex.py get <odkaz na asset> <část jména> <výstup>`
 
+## grrrrf / par6 — zip6.zip
+
+`https://github.com/grrrrshadow/grrrrf/releases/download/par6/zip6.zip`
+
+328 573 098 B, 60 záznamů
+
+```
+               zip6/
+               zip6/aviafurgonvb/
+    2 483 515  zip6/aviafurgonvb/Avia Furgon VB.crp   (deflate)
+          257  zip6/aviafurgonvb/Readme.txt   (deflate)
+               zip6/gggg/
+      693 054  zip6/gggg/skylinetex.bmp   (deflate)
+      385 782  zip6/gggg/trabantbacklightexture.bmp   (deflate)
+       82 038  zip6/gggg/trabantblinkertexture.bmp   (deflate)
+      949 094  zip6/gggg/trabantextured.c4d   (deflate)
+      471 278  zip6/gggg/trabantfrontlighttexture.bmp   (deflate)
+      444 862  zip6/gggg/trabantgridtexture.bmp   (deflate)
+    1 081 854  zip6/gggg/trabantoldcolor.bmp   (deflate)
+    2 014 854  zip6/gggg/trabanttiretexture2.bmp   (deflate)
+               zip6/bar/
+    3 696 130  zip6/bar/1589313069_FSO Warszawa 223 Sedan Pickup.zip   (deflate)
+                 ↳           0  Model, Tekstury i Data/
+                 ↳   1 679 360  Model, Tekstury i Data/bobcat.dff
+                 ↳   1 529 256  Model, Tekstury i Data/bobcat.txd
+                 ↳         388  Model, Tekstury i Data/data.txt
+                 ↳   2 220 032  Model, Tekstury i Data/oceanic.dff
+                 ↳   1 496 360  Model, Tekstury i Data/oceanic.txd
+                 ↳           0  Zdjecia/
+                 ↳     199 656  Zdjecia/1.jpg
+                 ↳     181 157  Zdjecia/2.jpg
+                 ↳     161 153  Zdjecia/3.jpg
+                 ↳     159 758  Zdjecia/4.jpg
+                 ↳     137 409  Zdjecia/5.jpg
+                 ↳     103 733  Zdjecia/6.jpg
+                 ↳     125 619  Zdjecia/7.jpg
+                 ↳       1 892  ReadMe!.txt
+    6 630 462  zip6/bar/1453936363_FSO_Warszawa_M20_KAFAROS.rar   (deflate)
+    6 776 739  zip6/bar/v3s_praga.rar   (deflate)
+    1 817 556  zip6/bar/v3s_praga.glb   (deflate)
+    3 696 130  zip6/bar/1589313069_FSO_Warszawa_223_Sedan_Pickup.zip   (deflate)
+                 ↳           0  Model, Tekstury i Data/
+                 ↳   1 679 360  Model, Tekstury i Data/bobcat.dff
+                 ↳   1 529 256  Model, Tekstury i Data/bobcat.txd
+                 ↳         388  Model, Tekstury i Data/data.txt
+                 ↳   2 220 032  Model, Tekstury i Data/oceanic.dff
+                 ↳   1 496 360  Model, Tekstury i Data/oceanic.txd
+                 ↳           0  Zdjecia/
+                 ↳     199 656  Zdjecia/1.jpg
+                 ↳     181 157  Zdjecia/2.jpg
+                 ↳     161 153  Zdjecia/3.jpg
+                 ↳     159 758  Zdjecia/4.jpg
+                 ↳     137 409  Zdjecia/5.jpg
+                 ↳     103 733  Zdjecia/6.jpg
+                 ↳     125 619  Zdjecia/7.jpg
+                 ↳       1 892  ReadMe!.txt
+    6 203 928  zip6/bar/cannabis_sativa_plant.glb   (deflate)
+    1 680 628  zip6/bar/zeppelin_aircraft.glb   (deflate)
+    2 136 060  zip6/bar/mig21.glb   (deflate)
+    2 576 512  zip6/bar/yak42.glb   (deflate)
+      672 996  zip6/bar/tu204.glb   (deflate)
+    2 956 696  zip6/bar/tu154.glb   (deflate)
+      985 380  zip6/bar/tu144.glb   (deflate)
+    3 213 644  zip6/bar/tu114.glb   (deflate)
+  117 440 696  zip6/bar/bsg_shuttle_mk_ii_olympic_carriers_fanon.glb   (deflate)
+   16 090 668  zip6/bar/bsg__shuttle_mk._ii.glb   (deflate)
+   27 407 820  zip6/bar/bsg__rising_star-type.glb   (deflate)
+    8 789 544  zip6/bar/bsg__caprica_clipper.glb   (deflate)
+    9 221 580  zip6/bar/bsg__pyxis__chrion.glb   (deflate)
+    8 979 984  zip6/bar/bsg__olympic_carrier.glb   (deflate)
+    6 960 448  zip6/bar/bsg__gemenon_liner_1701.glb   (deflate)
+    8 736 736  zip6/bar/bsg__colonial_liner.glb   (deflate)
+    6 172 720  zip6/bar/tatra-148-akt-3-3.glb   (deflate)
+    1 909 496  zip6/bar/vehicle_-_ural_truck_44202.glb   (deflate)
+    4 858 260  zip6/bar/praga-v3s.glb   (deflate)
+    5 013 836  zip6/bar/tatra-815.glb   (deflate)
+    6 309 856  zip6/bar/zil-4514.glb   (deflate)
+    2 309 304  zip6/bar/zil-164.glb   (deflate)
+    3 224 928  zip6/bar/car_trailer_model_game_ready_for_free_pbr.glb   (deflate)
+    1 061 872  zip6/bar/space_shuttle_buran.glb   (deflate)
+      168 500  zip6/bar/energia_rocket_untextured.glb   (deflate)
+    2 002 368  zip6/bar/large_caravan.glb   (deflate)
+    2 198 428  zip6/bar/small_caravan.glb   (deflate)
+       98 436  zip6/bar/small_cannabis_plant.glb   (deflate)
+      195 160  zip6/bar/cannabis_plant.glb   (deflate)
+      288 244  zip6/bar/fat_joint.glb   (deflate)
+   10 364 988  zip6/bar/zukvalnik.glb   (deflate)
+    3 151 992  zip6/bar/star_wars_a-a5_heavy_speeder_truck.glb   (deflate)
+   36 054 864  zip6/bar/star_wars_landspeeder_collection.glb   (deflate)
+    7 446 384  zip6/bar/opel_movano.glb   (deflate)
+   12 835 688  zip6/bar/zukpavloholubov.glb   (deflate)
+   31 266 043  zip6/bar/FS25_Tatra_T_148_S1_S3_TN_converted.zip   (deflate)
+                 ↳           0  beaconLights/
+                 ↳       6 573  beaconLights/beaconLight09.i3d
+                 ↳      65 016  beaconLights/beaconLight09.i3d.shapes
+                 ↳       1 960  beaconLights/beaconLight09.xml
+                 ↳           0  KolaT148/
+                 ↳           0  KolaT148/FS19_MITAS/
+                 ↳   5 592 560  KolaT148/FS19_MITAS/bktMP585_normal.dds
+                 ↳     699 192  KolaT148/FS19_MITAS/mitasMPT05_specular.dds
+                 ↳           0  KolaT148/Kola/
+                 ↳     699 192  KolaT148/Kola/PneuP.dds
+                 ↳     699 192  KolaT148/Kola/PneuP2.dds
+                 ↳     699 192  KolaT148/Kola/PneuP2_Nor.dds
+                 ↳     699 192  KolaT148/Kola/PneuP2_Spec.dds
+                 ↳     699 192  KolaT148/Kola/PneuP_Nor.dds
+                 ↳     699 192  KolaT148/Kola/PneuP_Spec.dds
+                 ↳           0  KolaT148/Pneumatiky/
+                 ↳   2 796 344  KolaT148/Pneumatiky/Pneumatika1_AO.dds
+                 ↳     699 192  KolaT148/Pneumatiky/Pneumatika1_Nor.dds
+                 ↳   2 796 344  KolaT148/Pneumatiky/Pneumatika2_AO.dds
+                 ↳   2 796 344  KolaT148/Pneumatiky/Pneumatika2_Nor.dds
+                 ↳   2 796 344  KolaT148/Pneumatiky/Pneumatika3_AO.dds
+                 ↳     699 192  KolaT148/Pneumatiky/Pneumatika3_Nor.dds
+                 ↳   2 796 344  KolaT148/Pneumatiky/Pneumatika_AO.dds
+                 ↳     699 192  KolaT148/Pneumatiky/Pneumatika_Nor.dds
+                 ↳     699 192  KolaT148/Pneumatiky/Podvozek_Osa.dds
+                 ↳     699 192  KolaT148/Pneumatiky/Podvozek_Osa_AO.dds
+                 ↳           0  KolaT148/RafekT148/
+                 ↳     699 192  KolaT148/RafekT148/Rafek1_AO.dds
+                 ↳   1 398 256  KolaT148/RafekT148/Rafek1_Diff.dds
+                 ↳      43 832  KolaT148/RafekT148/Rafek1_Nor.dds
+                 ↳      13 859  KolaT148/TatraKola.i3d
+                 ↳   7 176 360  KolaT148/TatraKola.i3d.shapes
+                 ↳           0  Korba_S1/
+                 ↳      11 299  Korba_S1/Korba_S1.i3d
+                 ↳     167 612  Korba_S1/Korba_S1.i3d.shapes
+                 ↳      12 656  Korba_S1/Korba_S1.xml
+                 ↳     349 680  Korba_S1/store.dds
+                 ↳     262 272  Korba_S1/store_Korba_S1.dds
+                 ↳           0  Korba_S1/T2/
+                 ↳     699 192  Korba_S1/T2/KorbaS1.dds
+                 ↳     699 192  Korba_S1/T2/KorbaS1_Spec.dds
+                 ↳     699 192  Korba_S1/T2/RamKorbaS1a.dds
+                 ↳     699 192  Korba_S1/T2/RamKorbaS1a_AO.dds
+                 ↳           0  Korba_S3/
+                 ↳      17 617  Korba_S3/Korba_S3.i3d
+                 ↳     439 568  Korba_S3/Korba_S3.i3d.shapes
+                 ↳      19 628  Korba_S3/Korba_S3.xml
+                 ↳     349 680  Korba_S3/store.dds
+                 ↳     262 272  Korba_S3/store_Korba_S3.dds
+                 ↳           0  Korba_S3/T2/
+                 ↳     174 904  Korba_S3/T2/drevo.dds
+                 ↳     699 192  Korba_S3/T2/KorbaS3.dds
+                 ↳     699 192  Korba_S3/T2/KorbaS3_ao.dds
+                 ↳     699 192  Korba_S3/T2/RamS3.dds
+                 ↳     699 192  Korba_S3/T2/RamS3_ao.dds
+                 ↳           0  KorbaSilaz/
+                 ↳      14 131  KorbaSilaz/KorbaSilaz.i3d
+                 ↳     411 336  KorbaSilaz/KorbaSilaz.i3d.shapes
+                 ↳      14 948  KorbaSilaz/KorbaSilaz.xml
+                 ↳     349 680  KorbaSilaz/store.dds
+                 ↳     262 272  KorbaSilaz/store_KorbaSilaz.dds
+                 ↳           0  KorbaSilaz/T2/
+                 ↳     699 192  KorbaSilaz/T2/KorbaSilazS3.dds
+                 ↳     699 192  KorbaSilaz/T2/KorbaSilazS3Nastavba.dds
+                 ↳     699 192  KorbaSilaz/T2/KorbaSilazS3Nastavba_ao.dds
+                 ↳     699 192  KorbaSilaz/T2/KorbaSilazS3_ao.dds
+                 ↳   1 398 256  KorbaSilaz/T2/pletivo.dds
+                 ↳           0  KORBY1/
+                 ↳     174 904  KORBY1/DrzakPistu.dds
+                 ↳     174 904  KORBY1/DrzakPistu_AO.dds
+                 ↳     174 904  KORBY1/NORMALOVKA.dds
+                 ↳     131 200  KORBY1/Packy.dds
+                 ↳     174 904  KORBY1/Pistnice_Dif.dds
+                 ↳     174 904  KORBY1/Pistnice_Spec.dds
+                 ↳           0  Shader/
+                 ↳      30 460  Shader/VehicleShader.xml
+                 ↳           0  sounds/
+                 ↳       8 083  sounds/tatra148.xml
+                 ↳           0  Stopy/
+                 ↳         680  Stopy/TatraStopaA.xml
+                 ↳         699  Stopy/TatraStopaA1.xml
+                 ↳         680  Stopy/TatraStopaB.xml
+                 ↳         717  Stopy/TatraStopaB1.xml
+                 ↳         684  Stopy/TatraStopaC.xml
+                 ↳         721  Stopy/TatraStopaC1.xml
+                 ↳         778  Stopy/TatraStopaD.xml
+                 ↳         684  Stopy/TatraStopaE.xml
+                 ↳         721  Stopy/TatraStopaE1.xml
+                 ↳         684  Stopy/TatraStopaF.xml
+                 ↳         721  Stopy/TatraStopaF1.xml
+                 ↳         684  Stopy/TatraStopaG.xml
+                 ↳         723  Stopy/TatraStopaG1.xml
+                 ↳         684  Stopy/TatraStopaH.xml
+                 ↳         722  Stopy/TatraStopaH1.xml
+                 ↳         685  Stopy/TatraStopaI.xml
+                 ↳         723  Stopy/TatraStopaI1.xml
+                 ↳           0  T148/
+                 ↳     699 192  T148/DillyT.dds
+                 ↳     699 192  T148/DillyT_Spec.dds
+                 ↳     699 192  T148/Dily_Ao.dds
+                 ↳     174 904  T148/Dily_Spec.dds
+                 ↳     699 192  T148/Drobnosti_AO.dds
+                 ↳     699 192  T148/DrzakZrckatka.dds
+                 ↳     699 192  T148/DrzakZrckatka_spec.dds
+                 ↳     699 192  T148/DvereT148.dds
+                 ↳   2 796 344  T148/DvereT148_Nor.dds
+                 ↳     699 192  T148/DvereT148_Spec.dds
+                 ↳           0  T148/interier148/
+                 ↳     699 192  T148/interier148/Budiky.dds
+                 ↳     699 192  T148/interier148/Budiky138A.dds
+                 ↳   2 796 368  T148/interier148/Budiky138B.dds
+                 ↳   1 398 256  T148/interier148/Budiky2.dds
+                 ↳     699 192  T148/interier148/Budiky_AO.dds
+                 ↳     699 192  T148/interier148/Budiky_Nor.dds
+                 ↳     699 192  T148/interier148/Deska.dds
+                 ↳     699 192  T148/interier148/Deska_nor.dds
+                 ↳     699 192  T148/interier148/interier.dds
+                 ↳     699 192  T148/interier148/interier148_AO.dds
+                 ↳     699 192  T148/interier148/KlaksobTatra_AO.dds
+                 ↳      43 832  T148/interier148/NORMALOVKA.dds
+                 ↳     699 192  T148/interier148/Prepinac.dds
+                 ↳     699 192  T148/KabinaNTB.dds
+                 ↳     174 904  T148/KabinaNTB_Nor.dds
+                 ↳   2 796 344  T148/KabinaNTB_Spec.dds
+                 ↳     699 192  T148/Maska0.dds
+                 ↳   2 796 344  T148/Maska0_Nor.dds
+                 ↳     699 192  T148/Maska0_Spec.dds
+                 ↳     699 192  T148/Maska1.dds
+                 ↳     349 680  T148/MaskaL.dds
+                 ↳      87 536  T148/Okno.dds
+                 ↳       5 616  T148/Okno1.dds
+                 ↳     699 192  T148/Okno148_ao.dds
+                 ↳           0  T148/Pedali/
+                 ↳     699 192  T148/Pedali/PedalTatra_AO.dds
+                 ↳     699 192  T148/Pedali/PedalTatra_Nor.dds
+                 ↳     699 192  T148/PeroH.dds
+                 ↳     699 192  T148/PeroH_Nor.dds
+                 ↳     699 192  T148/PeroH_Spec.dds
+                 ↳     699 192  T148/PoloOsa138.dds
+                 ↳     699 192  T148/PoloOsa138_ao.dds
+                 ↳     699 192  T148/PoloOsa138_nor.dds
+                 ↳     699 192  T148/PoloOsaPr.dds
+                 ↳     699 192  T148/PoloOsaPr_ao.dds
+                 ↳     699 192  T148/PrRam.dds
+                 ↳     699 192  T148/PrRam_Spec.dds
+                 ↳     174 904  T148/Radicka.dds
+                 ↳     699 192  T148/RamPneu.dds
+                 ↳     699 192  T148/RamPneu_Spec.dds
+                 ↳     699 192  T148/RamS1.dds
+                 ↳     699 192  T148/RamS1_ao.dds
+                 ↳     699 192  T148/RamS3.dds
+                 ↳     699 192  T148/RamS3_ao.dds
+                 ↳     699 192  T148/T148_Svetlo.dds
+                 ↳     699 192  T148/TRam138.dds
+                 ↳     699 192  T148/TRam138_AO.dds
+                 ↳     699 192  T148/Volant.dds
+                 ↳     174 904  T148/Zrcatko.dds
+                 ↳     699 192  T148/Zrcatko_spec.dds
+                 ↳           0  Zvuk/
+                 ↳      34 856  Zvuk/TatraB.ogg
+                 ↳     138 564  Zvuk/TatraJ.ogg
+                 ↳     138 564  Zvuk/TatraJ1.ogg
+                 ↳      88 088  Zvuk/TatraS.ogg
+                 ↳      95 590  Zvuk/TatraS2.ogg
+                 ↳      60 045  Zvuk/TatraV.ogg
+                 ↳     131 200  brand_Tatra.dds
+                 ↳      11 064  dirt_normal.dds
+                 ↳     131 200  icon_Tatra148.dds
+                 ↳       2 207  modDesc.xml
+                 ↳     262 272  store_Tatra148.dds
+                 ↳      85 621  Tatra148.i3d
+                 ↳   3 348 832  Tatra148.i3d.shapes
+                 ↳      65 532  Tatra148.xml
+    1 828 368  zip6/bar/an225.glb   (deflate)
+    3 143 400  zip6/bar/an10.glb   (deflate)
+    8 450 040  zip6/bar/an124.glb   (deflate)
+    2 853 384  zip6/bar/an74.glb   (deflate)
+    3 321 552  zip6/bar/amur.glb   (deflate)
+```
+
 ## grrrrf / par5 — zip5.zip
 
 `https://github.com/grrrrshadow/grrrrf/releases/download/par5/zip5.zip`

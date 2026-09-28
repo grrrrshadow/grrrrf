@@ -20,6 +20,7 @@ Stav k 26. 9. 2026 (večer). Když něco přibude nebo se přesune, patří to s
 | `rozbalene/` | Rozbalené yagly cizích sad jen jako text (`yagl -d -n`): CZTR Wagons-Cargo 1.1.0, GETS 0.7, GETS Alpine 0.3.1, FIRS 5.2.0. V `README.md` kódy pro rostlinná vlákna a proč OLSD. |
 | `RELEASES.md` | Souhrn releasů: co je v kterém zipu a k čemu. |
 | `INDEX-RELEASY.md` | Úplný index releasů, každý soubor, i obsah tarů, u GRF md5 a jméno. Generuje `tools/zipindex.py index`. |
+| `AUTORI-MODELU.md` | Kdo udělal který 3D model a pod jakou licencí (z metadat glb), plus opis hráčova lístku s modely a autory. |
 | `PRO-HRU.md` | Vzkaz kolegovi, co dělá hru (rozestupy, délka vozidla, klikací box, články). |
 | `temata3.md` | Moje poznámky a poučení. |
 | `naklady.md`, `cargo-classes.md`, `prekladova-tabulka-vzor.yagl` | Slovník labelů nákladu, třídy nákladu, vzor překladové tabulky. |

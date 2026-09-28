@@ -98,6 +98,28 @@ Model a pracovní složky lokomotivy M62 („Sergej“):
 
 ---
 
+## par6 — zip6.zip, 329 MB
+
+Modely 3D (hlavně glb ze Sketchfabu), autoři a licence jsou v `AUTORI-MODELU.md`:
+
+- **letadla od manilov.ap:** An-10, An-74, An-124, An-225, MiG-21, Jak-42, Tu-114, Tu-144, Tu-154, Tu-204
+- **Buran a raketa:** `space_shuttle_buran.glb` (tashtego, **CC BY-NC 4.0**) a
+  `energia_rocket_untextured.glb` (Soviet Model Magic, bez textur)
+- **nákladní auta od hans1240:** Tatra 148 a 815, Praga V3S, ZiL-164 a 4514, Amur. Dále Ural
+  (Thcyrax), Žuk (Pavlo_Holubov), Žuk valník (Shonan), Opel Movano (Fratzica)
+- **přívěsy a karavany:** car trailer (DynamicSAV), small a large caravan (rhcreations)
+- **sci-fi:** BSG lodě (3D Sci-Fi), Star Wars (LarsH.), Zeppelin (Miguel Adão)
+- **konopí:** cannabis plant, small cannabis plant a fat joint (streetpharmacy), cannabis sativa
+  (Zbrojmistrz)
+- **ostatní:**
+  - `aviafurgonvb/` je Avia do Cities: Skylines;
+  - `gggg/` je Trabant v Cinema 4D;
+  - FSO Warszawa jsou modely do GTA;
+  - Tatra 148 je mod do FS25;
+  - `v3s_praga.rar/.glb` je bez autora.
+
+---
+
 ## Releasy v `forclaude` (hra, jen číst)
 
 | tag | zip | co v něm je |
