@@ -38,7 +38,8 @@ MAX_OT = 2100                                     # jmenovité otáčky Tatry 91
 VALCE_A = 1 + np.array([0.30, -0.25, 0.15, -0.32, 0.22, -0.10])  # síla rány každého válce (pořadí zapalování)
 VALCE_BARVA = 2.5                                                  # jak moc má každý válec vlastní barvu rány
 VALCE_K = 1 + np.array([-0.35, 0.40, -0.10, 0.25, -0.45, 0.30])   # klepání každého válce jinak silné
-CYKLUS = None                                                      # rozvod a vstřikovací čerpadlo (poloviční otáčky)
+CYKLUS = CYKLUS_STARY = None                                       # rozvod a vstřikovací čerpadlo (poloviční otáčky)
+NIZKE_OT, VYSOKE_OT = 700, 1400                                    # prolnutí volnoběhu a vysokých otáček
 PULSY = None
 
 def _pulsy():
@@ -70,13 +71,25 @@ def dolni(x, f, rad=2):
 
 def slozky(ot, zatez, rychlost, seed):
     """ot (ot./min), zatez (0-1), rychlost (km/h): pole po vzorcích SRS. Vrací slovník složek."""
-    global PULSY, CYKLUS
+    global PULSY, CYKLUS, CYKLUS_STARY
     if PULSY is None: PULSY = _pulsy()
+    if CYKLUS_STARY is None:
+        # vysoké otáčky: zamrzlý šum s cvaknutími, jak se hráči líbil ("od 0:26 super")
+        rs = np.random.default_rng(1953)
+        CYKLUS_STARY = rs.standard_normal(8192) * (1 + 1.5 * (rs.random(8192) < 0.04))
     if CYKLUS is None:
         # hluk, který se opakuje jednou za cyklus (dvě otáčky): ventily, vačky a čerpadlo, pro každou
         # polohu v cyklu pořád stejný, takže dělá čáry po otáčky / 120 jako ve vzoru
-        rc = np.random.default_rng(1953)
-        CYKLUS = rc.standard_normal(8192) * (1 + 1.5 * (rc.random(8192) < 0.04))
+        # s rovnou barvou (náhodné fáze, stejná síla všech čar): obyčejný zamrzlý šum má náhodná silná
+        # místa, která se opakují každý cyklus a ucho z nich slyší tón (na volnoběhu kolem 640 Hz);
+        # k tomu 12 cvaknutí ventilů za cyklus (dva na válec) v pevných polohách
+        rc = np.random.default_rng(1954)
+        N = 8192
+        CYKLUS = np.fft.irfft(np.exp(1j * rc.uniform(0, 2 * np.pi, N // 2 + 1)) * (np.arange(N // 2 + 1) > 0), N)
+        CYKLUS /= CYKLUS.std()
+        for v_ in range(12):
+            i_ = (int((v_ + rc.uniform(-0.15, 0.15)) / 12 * N) + np.arange(60)) % N
+            CYKLUS[i_] += np.exp(-np.arange(60) / 12.0) * rc.uniform(2.0, 3.5) * np.sign(rc.standard_normal(60))
     r = np.random.default_rng(seed)
     n = len(ot)
     faze = np.cumsum(ot / 60.0) / SRS             # otáčky klikovky
@@ -91,7 +104,8 @@ def slozky(ot, zatez, rychlost, seed):
         imp = np.zeros(n); m = valec == c
         imp[zap[m]] = sila[m]
         vyfuk += signal.fftconvolve(imp, PULSY[c])[:n]
-    vyfuk = vyfuk + 0.7 * rezon(vyfuk, 92, 2.5) + 0.5 * rezon(vyfuk, 235, 3.5) + 0.35 * rezon(vyfuk, 610, 4.5)
+    # rezonance potrubí; ta nejvyšší by na volnoběhu po každé ráně zvonila (tón kolem 640 Hz), tak roste s otáčkami
+    vyfuk = vyfuk + 0.7 * rezon(vyfuk, 92, 2.5) + 0.5 * rezon(vyfuk, 235, 3.5) + 0.35 * np.clip((ot - 500) / 1000, 0.1, 1) * rezon(vyfuk, 610, 4.5)
     vyfuk = dolni(vyfuk, 3200)
     # klepání dieselu: krátký šum při každém zapálení, ve volnoběhu je ho slyšet nejvíc
     ik = np.zeros(n)
@@ -124,10 +138,9 @@ def slozky(ot, zatez, rychlost, seed):
         t += r.exponential(1.0 / (3 + 12 * float(otres[min(int(t * SRS), n - 1)])))
         i = int(t * SRS)
         if i >= n: break
-        plech = float(np.clip((ot[i] - 800) / 600, 0, 1))     # cinkání plechů až od vyšších otáček
-        if r.random() < 0.8 * plech:             # (hráč: na nízkých otáčkách vysoké tóny vadí)
-            f, tau = r.uniform(1300, 3800), r.uniform(0.002, 0.009)
-            a = r.uniform(0.3, 1.0)
+        if r.random() < 0.8:                     # cinknutí plechu, až od vyšších otáček
+            f, tau = r.uniform(1300, 3800), r.uniform(0.002, 0.009)   # (hráč: na nízkých vysoké tóny vadí)
+            a = r.uniform(0.3, 1.0) * float(np.clip((ot[i] - 800) / 600, 0, 1))
         else:
             f, tau, a = r.uniform(140, 380), r.uniform(0.012, 0.03), r.uniform(0.6, 1.6)
         m = min(n - i, int(6 * tau * SRS))
@@ -142,7 +155,10 @@ def slozky(ot, zatez, rychlost, seed):
         if kk % 6 == 0: continue
         dun += rh.uniform(0.5, 1.0) / (1 + kk / 12) * np.cos(2 * np.pi * kk * poloha + rh.uniform(0, 6.3))
     dun *= (0.3 + 0.7 * zatez) * (0.5 + 0.5 * ot / MAX_OT)
-    mech = CYKLUS[(poloha * len(CYKLUS)).astype(np.int64)]
+    N = len(CYKLUS)
+    w = np.clip((ot - NIZKE_OT) / (VYSOKE_OT - NIZKE_OT), 0, 1)
+    mech = (w * CYKLUS_STARY[(poloha * N).astype(np.int64)]
+            + (1 - w) * np.interp(poloha * N, np.arange(N + 1), np.append(CYKLUS, CYKLUS[0])))
     mech = bpas(mech, 120, 3000) * (0.35 + 0.65 * ot / MAX_OT) * (0.6 + 0.4 * zatez)
     return {"vyfuk": vyfuk, "klepani": klepani, "sani": sani, "ventilator": vsum, "piskot": piskot,
             "kvileni": kvileni, "drnceni": drnceni, "mechanika": mech, "duneni": dun}
@@ -161,31 +177,18 @@ def ref_rms():
         _ref = {k: float(np.sqrt((v ** 2).mean())) + 1e-12 for k, v in s.items()}
     return _ref
 
-# Barva podle vzoru platí pro vysoké otáčky (vzor je vytúrování). Na volnoběhu by z ní zbylo syčení
-# a cinkání, tak se pod NIZKE_OT nechává syrová (hluboké bublání a klepání) a mezi tím se prolíná.
-NIZKE_OT, VYSOKE_OT = 700, 1400
-
+# Barva podle vzoru na všech otáčkách. Zkoušel jsem pod 700 ot./min syrovou (hlubší volnoběh), ale
+# dunění cyklu (4,7 Hz na volnoběhu) pak kolébalo a hráč to nechtěl ("od 0:18 to ne, to tam nebylo");
+# vysoké tóny na nízkých otáčkách dělalo pískání, ventilátor a cinkání plechů, ty jsou tam teď slabé.
+# Nad VYSOKE_OT přesný filtr podle vzoru (zvuk, který hráč schválil), pod NIZKE_OT vyhlazený a krátký:
+# přesný má úzký hrb a díru (500-630 a 800 Hz) a na volnoběhu mezi ranami dozvání jako tón.
 def motor(ot, zatez, rychlost, seed, rovnat=True):
     s = slozky(ot, zatez, rychlost, seed)
     ref = ref_rms()
     x = sum(VAHY[k] * s[k] / ref[k] for k in s)
     if not rovnat: return x
     w = np.clip((ot - NIZKE_OT) / (VYSOKE_OT - NIZKE_OT), 0, 1)
-    return w * signal.fftconvolve(x, vyrovnani(), mode="same") * zisk_vyrovnani() + (1 - w) * x
-
-_zisk = None
-def zisk_vyrovnani():
-    """srovnaná a syrová verze stejně hlasité při 1000 ot./min, aby prolínání neposkakovalo; hlasitost
-    zhruba jako ucho, bez hlubokých tónů (pod 200 Hz ucho i malé repro slyší slaběji)"""
-    global _zisk
-    if _zisk is None:
-        n = 2 * SRS
-        x = motor(np.full(n, 1000.0), np.full(n, 0.5), np.full(n, 15.0), 3, rovnat=False)
-        y = signal.fftconvolve(x, vyrovnani(), mode="same")
-        hp = signal.butter(2, 200, "highpass", fs=SRS, output="sos")
-        ucho = lambda s: float(np.sqrt((signal.sosfilt(hp, s) ** 2).mean()))
-        _zisk = ucho(x) / ucho(y)
-    return _zisk
+    return w * signal.fftconvolve(x, vyrovnani(), mode="same") + (1 - w) * signal.fftconvolve(x, vyrovnani(hladke=True), mode="same")
 
 # Barva zvuku podle vzoru: průměrné spektrum po třetinách oktávy (dB proti nejsilnějšímu pásmu),
 # změřené na vytúrování 1880 ot./min. Pod 125 Hz nejvýš HLOUBKY_MIN pod vrcholem (telefon hloubky nebere,
@@ -204,31 +207,37 @@ def tretiny(x, sr=SRS):
     mx = max(out.values())
     return {k: v - mx for k, v in out.items()}
 
-def cil_barvy():
-    return {k: (max(v, HLOUBKY_MIN) if k <= 125 else v) for k, v in CIL_BARVA.items()}
+def cil_barvy(hladke=False):
+    """cíl; hladký je vyhlazený přes sousední pásma (úzký hrb a díra ze vzoru, nejspíš telefon a místnost,
+    by ve filtru zvonily a na volnoběhu, kde je mezi ranami ticho, je slyšet tón)"""
+    fc = sorted(CIL_BARVA)
+    c = np.array([max(CIL_BARVA[k], HLOUBKY_MIN) if k <= 125 else CIL_BARVA[k] for k in fc])
+    for _ in range(2 if hladke else 0):
+        c = np.convolve(np.pad(c, 1, mode="edge"), [0.25, 0.5, 0.25], "valid")
+    return dict(zip(fc, c))
 
-_fir = None
-def vyrovnani():
-    """FIR, které srovná barvu syntézy (plný plyn 1880 ot./min) na cíl; dvakrát, druhé kolo dorovná zbytek"""
-    global _fir
-    if _fir is not None: return _fir
+_fir = {}
+def vyrovnani(hladke=False):
+    """FIR, které srovná barvu syntézy (plný plyn 1880 ot./min) na cíl; tři kola, další dorovnává zbytek"""
+    if hladke in _fir: return _fir[hladke]
     n = 3 * SRS
     x = motor(np.full(n, 1880.0), np.full(n, 0.85), np.full(n, 40.0), 5, rovnat=False)
-    fc = np.array(sorted(CIL_BARVA)); cil = cil_barvy()
+    fc = np.array(sorted(CIL_BARVA)); cil = cil_barvy(hladke)
+    taps = 1023 if hladke else 4095                # krátký filtr zvoní méně
     d = np.zeros(len(fc))
     for _ in range(3):
-        y = signal.fftconvolve(x, _navrh(fc, d), mode="same") if d.any() else x
+        y = signal.fftconvolve(x, _navrh(fc, d, taps), mode="same") if d.any() else x
         moje = tretiny(y)
         d = d + np.array([cil[k] - moje[k] for k in fc])
-    _fir = _navrh(fc, d)
-    return _fir
+    _fir[hladke] = _navrh(fc, d, taps)
+    return _fir[hladke]
 
-def _navrh(fc, d):
+def _navrh(fc, d, taps):
     dd = np.convolve(np.pad(d, 1, mode="edge"), [0.25, 0.5, 0.25], "valid")      # vyhladit sousední pásma
     dd = np.clip(dd - dd.max(), -45, 0)
     f = np.concatenate([[0], fc, [SRS / 2]]) / (SRS / 2)
     g = 10 ** (np.concatenate([[dd[0]], dd, [dd[-1]]]) / 20)
-    return signal.firwin2(4095, f, g)
+    return signal.firwin2(taps, f, g)
 
 def krivka(body, delka):
     """lomená čára [(čas s, hodnota)] po vzorcích SRS, mezi body kosinem (plynulé přechody)"""
