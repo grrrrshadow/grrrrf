@@ -39,7 +39,6 @@ Bez metadat v par6:
 - `gggg/` (Trabant v Cinema 4D) je bez autora.
 - FSO Warszawa (`1589313069_…zip`, `…_KAFAROS.rar`) jsou modely do GTA (`.dff/.txd`), autor je nejspíš
   v jejich `ReadMe!.txt`.
-- `FS25_Tatra_T_148_…zip` je mod do Farming Simulator 25.
 
 ## Opis hráčova lístku (2026-09-28)
 
@@ -93,18 +92,13 @@ Tučně jsou autoři, které potvrzují metadata v souborech (tabulka nahoře).
 ## Tatry na focení (2026-09-29)
 
 Hráč: *„jaké máme Tatry 148, 138 objekty na focení?“*, *„tam je asi velkej soubor tater a pár jednotlivých“*.
-V releasech (stav k 29. 9., poslední je `par6`) jsou tři:
+V releasech (stav k 29. 9., poslední je `par6`) jsou dvě:
 
 - **`tatra-148-akt-3-3.glb`** (par6, 6,2 MB), hans1240, CC BY 4.0. Tatra 148 jako hasičská cisterna s nádrží
   a zábradlím na střeše, 3,2 × 9,25 × 3,6 m. **Bez barev a textur**, všech 39 materiálů je bílých nebo šedých,
   díly mají jména (`kabina`, `rama`, `otboynik` = nárazník, kola), takže se dá nabarvit po dílech jako vejtřaska.
 - **`tatra-815.glb`** (par6, 5,0 MB), hans1240, CC BY 4.0. Tatra 815 sklápěč, 3,0 × 6,9 × 3,0 m, s texturami
   (zimní bílošedá kamufláž a špína).
-- **`FS25_Tatra_T_148_S1_S3_TN_converted.zip`** (par6, 31 MB), to je ten „velký soubor tater“: mod do Farming
-  Simulator 25, autoři EmikMODelStudio a Milan #82 (převod FS25). Tatra 148 s korbami S1 (sklápění dozadu),
-  S3 (na tři strany), siláž a rámem TN, textury i části z T 138 (budíky, poloosy, rám). Model je ve formátu hry
-  (`Tatra148.i3d` a binární `.i3d.shapes`) a **licence v modu není žádná**, takže bez svolení autorů ho do GRF
-  převádět nesmíme.
 - **Tatra 138** jako samostatný model v releasech není.
 
 Náhled obou GLB: `scratchpad` (nahled.py, kamera jako u vejtřasky), do repa se neukládá.
@@ -124,13 +118,9 @@ ke stažení přihlášení).
 ## Pozor na modely od hans1240 (2026-09-29)
 
 hans1240 má na Sketchfabu 160 modelů (hlavně sovětská nákladní auta a autobusy, pár amerických tahačů), všechny
-s CC BY a popisem jako „This is an old soviet truck …“. U tří, které máme, jsou přímo v souborech stopy, že jsou
+s CC BY a popisem jako „This is an old soviet truck …“. U dvou, které máme, jsou přímo v souborech stopy, že jsou
 převzaté z herních modů. Pak je hans1240 nejspíš pod CC BY dávat nesměl.
 
-- **Tatra-148, sklápěč S1** (`tatra-148.glb`, nahráno 12. 9. 2026, hráč ho poslal 29. 9.): díly se jmenují
-  `Kabina`, `KorbaS1`, `TG_POLOOSA`, `TG_T148`, `PneuP`, `PneuP2`, přesně jako v modu Tatry 148 do Farming
-  Simulatoru od EmikMODelStudio (`Tatra148.i3d`, `Korba_S1.i3d` v par6; `TG_` je tamní značení skupin).
-  Rozvor náprav je jiný než v modu FS25 (372 + 133 cm proti 393 + 140 cm), takže asi ze starší verze modu.
 - **Tatra-148-AKT-3-3, cisterna** (`tatra-148-akt-3-3.glb`): díly `door_lf_ok`, `door_rf_ok`, `windscreen_ok`,
   `misc_a`, `wheel_lf` … `wheel_rm`, `steringok` jsou přesně stavba aut do GTA San Andreas, zbytek je pojmenovaný
   rusky (`otboynik` nárazník, `primochki` doplňky, `salon` interiér). Autor původního modu neznámý.
@@ -141,4 +131,4 @@ převzaté z herních modů. Pak je hans1240 nejspíš pod CC BY dávat nesměl.
 Hráč to 29. 9. rozhodl: *„to je problém hanse a Sketchfabu, oni nám to dali takhle s licencí a zbytek není naše
 starost. Zmenšíme to tak, že nebudou vidět malé součástky … i po zvětšení to bude 120 × 60 pixelů … bereme si model
 jako vzor a ne model.“* Modely od hans1240 tedy používáme podle licence, kterou uvádí (CC BY 4.0), a v GRF ho
-uvádíme jako autora. Připsat k Tatře i EmikMODelStudio jako pravděpodobného původního autora nic nestojí.
+uvádíme jako autora.

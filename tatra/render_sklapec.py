@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Nahled sklapece T148 S1 (hans1240 "Tatra-148", Sketchfab). Jmena dilu (KorbaS1, TG_POLOOSA, TG_T148, PneuP) jsou
-# stejna jako v modu Tatry 148 pro Farming Simulator od EmikMODelStudio, takze je to nejspis jeho model.
+# Nahled sklapece T148 S1 (hans1240 "Tatra-148", Sketchfab, CC BY 4.0).
 # Hrac 29. 9. rozhodl: bereme podle licence, kterou hans1240 uvadi (CC BY), model jako predlohu, auto je ve hre
 # asi 120 x 60 px. Kamera a smery jako vejtraska (render_v3s.py), svetlo silnejsi zleva shora (SVETLO).
 # Hrac 29. 9.: "co vozime kupy a pytle by slo asi na tuhle". KUPA=GRVL|SAND|COAL nasype do korby kupu.
@@ -57,8 +56,7 @@ M = {"lak": mat("lak", NATERY[NATER]), "ram": mat("ram", (22, 22, 22)), "naprava
      "podvozek": mat("podvozek", (58, 58, 56)), "pneu": mat("pneu", (26, 26, 26), 0.85),
      "sklo": mat("sklo", (8, 10, 14), 0.15), "zrcatko": mat("zrcatko", (30, 36, 44), 0.1, 0.8),
      "zadni": mat("zadni", (150, 26, 18), 0.4, 0.0, 0.6), "svetlo": mat("svetlo", (255, 255, 250), 0.2, 0.0, 1.5),
-     "blinkr": mat("blinkr", (255, 170, 60), 0.3, 0.0, 0.8), "mrizka": mat("mrizka", (14, 14, 14), 0.8),
-     "napis": mat("napis", (200, 16, 16), 0.35)}
+     "blinkr": mat("blinkr", (255, 170, 60), 0.3, 0.0, 0.8), "mrizka": mat("mrizka", (14, 14, 14), 0.8)}
 if SVETLO == "slunce":
     M["lak"].node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = float(os.environ.get("LESK", "0.42"))
 def obarvi(o, m):
@@ -111,23 +109,32 @@ def kvadr(m, x0, x1, y0, y1, z0, z1):
     o.data.materials.append(m); o.parent = koren; o.matrix_parent_inverse = koren.matrix_world.inverted()
     return o
 
-# Mrizka chladice (hrac 29. 9.: "musime zlepsit chladic mrizku, ted tam neni zadnej"). Model ma na masce jen hladkou
-# plochu (predni strana y = -0,48, x +-0,54, z 0,995 az 1,53, stitek na napis z 1,29 az 1,35). Skutecna T148 ma
-# 3 sloupce x 6 rad vodorovnych otvoru, dve rady nad napisem TATRA a ctyri pod nim, dole o kus sirsi. Otvory jsou
-# o neco vyssi nez ve skutecnosti, aby mrizka byla ve hre videt i v malem.
+# Mrizka chladice (hrac 29. 9.: "musime zlepsit chladic mrizku, ted tam neni zadnej"; k fotkam skutecne T148:
+# "tam ma byt napis tatra a nakonec to splyne s temi mrizkami", "tam udelej mrizku vsude a je to jak napis").
+# Model ma na masce jen hladkou plochu: predni strana y = -0,477, x +-0,54, z 0,995 az 1,53, okraj masky o 1 cm
+# vpredu. Skutecna T148 ma uprostred masky mrizku 7 rad: 2 rady otvoru, napis TATRA pres pul mrizky, 4 rady otvoru,
+# 3 sloupce (prostredni o kus sirsi) a po stranach masky 3 vodorovna zebra. Nahore uprostred ma skutecna plech,
+# tady jsou otvory vsude. Pismena jsou tmava jako otvory, v malem je z napisu dalsi rada mrizky.
 MRIZKA = os.environ.get("MRIZKA", "148")
 if MRIZKA == "148":
-    YM, RADY, VOTVOR, MEZ = -0.480, [1.468, 1.402, 1.262, 1.196, 1.130, 1.064], 0.044, 0.028
+    YM, VOTVOR, PUL, DELIC = -0.477, 0.045, 0.378, 0.022
+    RADY, ZNAPIS = [1.472, 1.404, 1.256, 1.188, 1.120, 1.052], 1.330
+    a_ = (2 * PUL - 2 * DELIC) / 3.15; c_ = 1.15 * a_
+    SLOUPCE = [(-PUL, -PUL + a_), (-PUL + a_ + DELIC, PUL - a_ - DELIC), (PUL - a_, PUL)]
     for zc in RADY:
-        pol = 0.330 + (0.362 - 0.330) * (RADY[0] - zc) / (RADY[0] - RADY[-1])       # polovina sirky rady
-        w = (2 * pol - 2 * MEZ) / 3
-        for k in range(3):
-            x0 = -pol + k * (w + MEZ)
-            kvadr(M["mrizka"], x0, x0 + w, YM - 0.006, YM + 0.004, zc - VOTVOR / 2, zc + VOTVOR / 2)
-    bpy.ops.object.text_add(location=(0, YM - 0.004, 1.320), rotation=(math.radians(90), 0, 0))
+        for x0, x1 in SLOUPCE:
+            kvadr(M["mrizka"], x0, x1, YM - 0.004, YM + 0.004, zc - VOTVOR / 2, zc + VOTVOR / 2)
+    for str_ in (-1, 1):                                                   # zebra po stranach masky
+        for zc in (1.35, 1.24, 1.13):
+            x0, x1 = sorted((str_ * 0.400, str_ * 0.515))
+            kvadr(M["mrizka"], x0, x1, YM - 0.003, YM + 0.003, zc - 0.006, zc + 0.006)
+    bpy.ops.object.text_add(location=(0, YM - 0.006, ZNAPIS), rotation=(math.radians(90), 0, 0))
     t = bpy.context.object; t.data.body = "TATRA"; t.data.align_x = 'CENTER'; t.data.align_y = 'CENTER'
     t.data.font = bpy.data.fonts.load("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
-    t.data.size = 0.080; t.data.extrude = 0.002; t.data.materials.append(M["napis"])
+    t.data.size = 0.08; t.data.extrude = 0.002; t.data.materials.append(M["mrizka"])
+    bpy.context.view_layer.update()
+    t.scale = (0.39 / t.dimensions.x, 0.062 / t.dimensions.y, 1.0)          # napis 39 cm siroky, 6,2 cm vysoky
+    bpy.context.view_layer.update()
     t.parent = koren; t.matrix_parent_inverse = koren.matrix_world.inverted()
 
 # naklad na ukazku: kupa jako u vejtrasky (render_v3s.py kupka), korba S1 namerena paprsky (rez.py):

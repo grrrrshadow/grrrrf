@@ -26,16 +26,15 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   rozdělí na samostatné kusy a skla, zrcátka, reflektory a blinkry najde podle polohy a velikosti.
   Korba S1 změřená paprsky: podlaha z = 1,46 m (u bočnic zaoblená nahoru, vzadu od y 5,9 stoupá na 1,66),
   bočnice x ±1,13, nahoře z 2,39 až 2,61, přední čelo y 2,75, štítek nad kabinou y 1,25 až 2,5.
-  `KUPA=GRVL|SAND|COAL` nasype kupu jako u vejtřasky (okraj kupy musí zůstat nad podlahou, jinak vykukuje pod
-  korbou). Pytle: bočnice jsou metr vysoké, pytle by byly vidět jen shora, musely by se skládat nad bočnice.
-- **Původ modelů:** oba modely od hans1240 jsou nejspíš převzaté (sklápěč z Emikova modu do Farming Simulatoru,
-  cisterna AKT z GTA San Andreas), podrobně v `AUTORI-MODELU.md`, oddíl „Pozor na modely od hans1240“.
-  Hráč 29. 9. rozhodl, že je bereme podle licence od hanse (CC BY) jako předlohu, auto je ve hře asi 120 × 60 px.
+  `KUPA=GRVL|SAND|COAL` nasype kupu jako u vejtřasky (kupa vyplní korbu až pod okraj bočnic, viz Kupa níže). Pytle: bočnice jsou metr vysoké, pytle by byly vidět jen shora, musely by se skládat nad bočnice.
+- **Licence:** hráč 29. 9. rozhodl, že modely od hans1240 bereme podle licence, kterou uvádí (CC BY), jako předlohu,
+  auto je ve hře asi 120 × 60 px (`AUTORI-MODELU.md`, oddíl „Pozor na modely od hans1240“).
   Cisternu na tekutiny uděláme vlastní na podvozku sklápěče (bez hasičského hrbu).
 - **Mřížka chladiče 148** (hráč 29. 9.: *„musíme zlepšit chladič mřížku, teď tam není žádnej“*): model má na masce
-  jen hladkou plochu (y −0,48, x ±0,54, z 0,995 až 1,53). `render_sklapec.py` na ni dá 3 sloupce × 6 řad tmavých
-  otvorů jako skutečná T148 (dvě řady nad nápisem, čtyři pod ním, dole o kus širší) a červený nápis TATRA na štítek.
-  Otvory jsou o něco vyšší než ve skutečnosti (4,4 cm), aby byla mřížka ve hře vidět i v malém. `MRIZKA=zadna` ji vypne
+  jen hladkou plochu (y −0,48, x ±0,54, z 0,995 až 1,53). `render_sklapec.py` na ni dá mřížku podle hráčových fotek
+  skutečné T148: 6 řad × 3 sloupce tmavých otvorů všude (hráč: *„tam udělej mřížku všude a je to jak nápis“*;
+  skutečná má nahoře uprostřed plech), uprostřed tmavý nápis TATRA přes půl mřížky (39 × 6,2 cm, v malém z něj
+  je další řada mřížky) a po stranách masky 3 žebra. Otvory 4,5 cm, aby byla mřížka ve hře vidět i v malém. `MRIZKA=zadna` ji vypne
   (pro 138 bude jiná).
 - **Světlo** (hráč: *„lépe osvětlit, ať vynikne zaoblení kolem mřížky chladiče směrem ke kabině, asi víc stínu“*):
   `SVETLO=slunce` (výchozí) zapne stíny od okolí a přidá slunce zleva shora, pevné vůči kameře (auto se točí,

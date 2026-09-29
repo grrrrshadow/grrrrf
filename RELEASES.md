@@ -115,7 +115,6 @@ Modely 3D (hlavně glb ze Sketchfabu), autoři a licence jsou v `AUTORI-MODELU.m
   - `aviafurgonvb/` je Avia do Cities: Skylines;
   - `gggg/` je Trabant v Cinema 4D;
   - FSO Warszawa jsou modely do GTA;
-  - Tatra 148 je mod do FS25;
   - `v3s_praga.rar/.glb` je bez autora.
 
 ---
