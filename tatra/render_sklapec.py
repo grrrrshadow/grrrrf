@@ -41,6 +41,11 @@ koren = [o for o in scene.objects if o.parent is None][0]
 koren.scale = (0.01, 0.01, 0.01)                     # model je v centimetrech
 bpy.context.view_layer.update()
 meshe = [o for o in scene.objects if o.type == 'MESH']
+# Stred kamery je pro vsechny nastavby a naklady stejny (podvozek s kabinou bez korby S1), aby vrstva nakladu sedela
+# presne na obrazek auta a vsechny nastavby mely stejne umisteni.
+_pts = [o.matrix_world @ v.co for o in meshe if not o.name.startswith("KorbaS1") for v in o.data.vertices]
+REF_MN = Vector((min(p.x for p in _pts), min(p.y for p in _pts), min(p.z for p in _pts)))
+REF_MX = Vector((max(p.x for p in _pts), max(p.y for p in _pts), max(p.z for p in _pts)))
 
 def srgb(c):
     return tuple(((v / 255) ** 2.2) for v in c) + (1.0,)
@@ -291,12 +296,13 @@ if KORBA in ("valnik", "plachta"):
         kvadr(m_klanice, xm - 0.02, xm + 0.02, Y0N, Y0N + 0.04, ZP_ + CELO, ZP_ + CELO + 0.30)
     kvadr(m_klanice, -XV, XV, Y0N, Y0N + 0.04, ZP_ + CELO + 0.27, ZP_ + CELO + 0.31)
     print("valnik: podlaha z", ZP_, "y", Y0N, "az", Y1N, "bocnice", BOK)
-if KORBA == "plachta":
+def plachta_tatra(barva):
     # Plachta na plny valnik (hrac 29. 9.: "pro plny valnik plachta"), jako u vejtrasky: boky svisle kousek pres
     # bocnice, strecha 1,6 m nad podlahou (z 2,96), podelne hrany zaoblene jako oblouky, vpredu u cela a vzadu rovne.
+    import bmesh
     PLACHTY = {"vojenska": ((58, 64, 40), (100, 106, 70)), "seda": ((86, 88, 86), (136, 138, 134)), "zluta": ((168, 136, 36), (224, 190, 74)),
                "sedobila": ((168, 168, 160), (222, 222, 214)), "rezna": ((170, 160, 128), (220, 212, 178))}
-    tm_, sv_ = PLACHTY[os.environ.get("PLACHTA", "vojenska" if NATER == "vojenska" else "seda")]
+    tm_, sv_ = PLACHTY[barva]
     m_pl = mat_sum("plachta", tm_, sv_, 0.95, 7.0); nt_ = m_pl.node_tree; bs_ = nt_.nodes["Principled BSDF"]
     vr = nt_.nodes.new("ShaderNodeTexNoise"); vr.inputs["Scale"].default_value = 3.0; vr.inputs["Detail"].default_value = 4.0
     hb = nt_.nodes.new("ShaderNodeBump"); hb.inputs["Strength"].default_value = 0.25
@@ -308,7 +314,6 @@ if KORBA == "plachta":
     for k in range(9):
         a_ = math.radians(90 - 90 * k / 8); profil.append((X_ - R_ + R_ * math.cos(a_), Z1_ - R_ + R_ * math.sin(a_)))
     profil.append((X_, Z0_))
-    import bmesh
     bm = bmesh.new()
     pr_ = [bm.verts.new((x, Y0N + 0.045, z)) for x, z in profil]; za_ = [bm.verts.new((x, Y1N + 0.02, z)) for x, z in profil]
     for i in range(len(profil) - 1):
@@ -316,7 +321,10 @@ if KORBA == "plachta":
     bm.faces.new(pr_[::-1]); bm.faces.new(za_); bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new("plachta"); bm.to_mesh(me); bm.free()
     pl = bpy.data.objects.new("plachta", me); scene.collection.objects.link(pl); pl.data.materials.append(m_pl)
-    pl.parent = koren; pl.matrix_parent_inverse = koren.matrix_world.inverted()
+    return pl
+if KORBA == "plachta":
+    _pl = plachta_tatra(os.environ.get("PLACHTA", "vojenska" if NATER == "vojenska" else "seda"))
+    _pl.parent = koren; _pl.matrix_parent_inverse = koren.matrix_world.inverted()
 
 if KORBA == "cisterna":
     # Cisterna na tekutiny (hrac 29. 9.: "cisterna na tekutiny"; hasicska z modelu AKT mela nahore hrb). Vlastni,
@@ -385,49 +393,98 @@ if KORBA == "cisterna":
         x0, x1 = sorted((str_ * 1.27, str_ * 1.30)); kvadr(M["ram"], x0, x1, 3.60, 6.20, 1.00, 1.14)
     print("cisterna: y", Y0T, "az", Y1T, "dno z 1.30 vrch z", round(ZV, 2))
 
-# naklad na ukazku: kupa jako u vejtrasky (render_v3s.py kupka), korba S1 namerena paprsky (rez.py):
-# podlaha z 1,46 (u bocnic zaoblena nahoru, vzadu od y 5,9 stoupa na 1,66), bocnice x +-1,13, nahore z 2,39 az 2,61,
-# predni celo y 2,75, zadni celo y 6,75 nahore z 2,59.
-KUPA = os.environ.get("KUPA")
-NAKLAD = {"GRVL": ((112, 109, 105), (172, 167, 160), 0.85, 1.2, 24), "SAND": ((184, 148, 88), (226, 196, 132), 0.95, 0.7, 14),
-          "COAL": ((16, 16, 18), (58, 58, 62), 0.45, 1.3, 26)}
-if KUPA:
+# ---------------------------------------------------------------- naklad (hrac 29. 9.: "naklady bude mit jako vejtraska")
+# Stavitele nakladu jsou z vejtrasky (v3s/render_v3s.py, oddil od "naklad na korbe" po NAKLAD_KOD), aby oba vozy mely
+# stejne pytle, bedny, sudy, cihly, zvirata, seno, klady a barvy kup; spousti se tady s rozmery korby Tatry, vejtraska
+# se tim nemeni. NAKLAD=<kod> je vrstva jako u vejtrasky (auto neviditelne, jen zakryva naklad), KUPA=<kod> je tentyz
+# naklad na ukazku i s autem. Kupy (kody z NAKLAD vejtrasky) umi sklapec (rudy a jine nerosty) i valnik (zemedelske
+# plodiny), kusovy naklad a plachta jsou na valniku. Ktery naklad pojede na cem, se urci pri skladani GRF.
+NAKLAD_KOD = os.environ.get("NAKLAD") or os.environ.get("KUPA")
+nalozeno = []
+if NAKLAD_KOD:
     import bmesh, random
-    tm, sv, drs, hrubost, mer = NAKLAD[KUPA]
-    mk = bpy.data.materials.new("kupa"); mk.use_nodes = True
-    n_ = mk.node_tree.nodes; l_ = mk.node_tree.links; bs = n_["Principled BSDF"]
-    sum_ = n_.new("ShaderNodeTexNoise"); sum_.inputs["Scale"].default_value = mer; sum_.inputs["Detail"].default_value = 6.0
-    ra = n_.new("ShaderNodeValToRGB"); ra.color_ramp.elements[0].color = srgb(tm); ra.color_ramp.elements[1].color = srgb(sv)
-    l_.new(sum_.outputs["Fac"], ra.inputs["Fac"]); l_.new(ra.outputs["Color"], bs.inputs["Base Color"]); bs.inputs["Roughness"].default_value = drs
-    # hrac 29. 9.: "kupicku vetsi o 20 % na vysku, celou kupicku vys". Kupa ted korbu vyplni az tesne pod okraj bocnic
-    # (DNO_KUPY, okraj kupy je schovany za bocnicemi a celem) a nad bocnice kouka o 20 % vys a cela o 0,2 m vys nez
-    # na prvnim nahledu: vrchol 2,83 -> 3,07 m. Kdyz byla kupa na podlaze a jen vysoka, vypadala v korbe jako vejce.
-    KX, KY0, KY1 = 1.135, 2.77, 6.73
-    DNO_KUPY = float(os.environ.get("DNO_KUPY", "2.28")); VRCH_KUPY = float(os.environ.get("VRCH_KUPY", "3.07"))
-    random.seed(7); B = (KY1 - KY0) / 2; YS = (KY0 + KY1) / 2
-    bm = bmesh.new(); NX, NY = 40, 80; vrch = {}
-    hr = [[random.uniform(-1, 1) for _ in range(NY // 4 + 2)] for _ in range(NX // 4 + 2)]
-    for i in range(NX + 1):
-        for j in range(NY + 1):
-            x = -KX + 2 * KX * i / NX; y = YS - B + 2 * B * j / NY
-            sk = max(0.0, 1 - (abs(x) / KX) ** 2.2 - (abs(y - YS) / B) ** 2.2)
-            hrudka = hr[i // 4][j // 4] * 0.035 * max(0.0, hrubost - 0.7) * sk
-            z = DNO_KUPY + (VRCH_KUPY - DNO_KUPY) * sk ** 0.6 + (random.uniform(-0.04, 0.04) * sk * hrubost if sk > 0 else 0) + hrudka - 0.02
-            vrch[i, j] = bm.verts.new((x, y, z))
-    for i in range(NX):
-        for j in range(NY):
-            bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
-    me = bpy.data.meshes.new("kupa"); bm.to_mesh(me); bm.free()
-    for f in me.polygons: f.use_smooth = True
-    ob = bpy.data.objects.new("kupa", me); scene.collection.objects.link(ob); ob.data.materials.append(mk)
-    ob.parent = koren; ob.matrix_parent_inverse = koren.matrix_world.inverted()
+    zdroj = open(os.path.join(TU, "..", "v3s", "render_v3s.py"), encoding="utf-8").read()
+    V3 = {"bpy": bpy, "math": math, "np": np, "os": os, "scene": scene, "Vector": Vector, "mn": Vector((0.0, 0.0, 0.0))}
+    exec(compile(zdroj[zdroj.index("# ---------------------------------------------------------------- naklad na korbe"):
+                       zdroj.index("NAKLAD_KOD = ")], "v3s/render_v3s.py", "exec"), V3)
+    auto = [o for o in scene.objects if o.type in ('MESH', 'FONT') and not o.hide_render]
+    if KORBA == "sklapec":
+        # Kupa v korbe S1 (namereno paprsky, rez.py a bok.py): podlaha z 1,46 (u bocnic zaoblena nahoru, vzadu od y 5,9
+        # stoupa na 1,66), bocnice x +-1,13, nahore z 2,39 az 2,61, predni celo y 2,75, zadni y 6,75 nahore z 2,59.
+        # Hrac 29. 9.: "kupicku vetsi o 20 % na vysku, celou kupicku vys". Kupa korbu vyplni az tesne pod okraj bocnic
+        # (DNO_KUPY, okraj je schovany za bocnicemi a cely) a nad bocnice kouka o 20 % vys a cela o 0,2 m vys nez
+        # na prvnim nahledu: vrchol 2,83 -> 3,07 m. Kdyz byla kupa na podlaze a jen vysoka, vypadala v korbe jako vejce.
+        tm, sv, drs, hrubost, mer = V3["NAKLAD"][NAKLAD_KOD]
+        mk = V3["material"]("kupa", V3["srgb"](tm), V3["srgb"](sv), drs, mer)
+        KX, KY0, KY1 = 1.135, 2.77, 6.73
+        DNO_KUPY = float(os.environ.get("DNO_KUPY", "2.28")); VRCH_KUPY = float(os.environ.get("VRCH_KUPY", "3.07"))
+        random.seed(7); B = (KY1 - KY0) / 2; YS = (KY0 + KY1) / 2
+        bm = bmesh.new(); NX, NY = 40, 80; vrch = {}
+        hr = [[random.uniform(-1, 1) for _ in range(NY // 4 + 2)] for _ in range(NX // 4 + 2)]
+        for i in range(NX + 1):
+            for j in range(NY + 1):
+                x = -KX + 2 * KX * i / NX; y = YS - B + 2 * B * j / NY
+                sk = max(0.0, 1 - (abs(x) / KX) ** 2.2 - (abs(y - YS) / B) ** 2.2)
+                hrudka = hr[i // 4][j // 4] * 0.035 * max(0.0, hrubost - 0.7) * sk
+                z = DNO_KUPY + (VRCH_KUPY - DNO_KUPY) * sk ** 0.6 + (random.uniform(-0.04, 0.04) * sk * hrubost if sk > 0 else 0) + hrudka - 0.02
+                vrch[i, j] = bm.verts.new((x, y, z))
+        for i in range(NX):
+            for j in range(NY):
+                bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
+        me = bpy.data.meshes.new("kupa"); bm.to_mesh(me); bm.free()
+        for f in me.polygons: f.use_smooth = True
+        ob = bpy.data.objects.new("kupa", me); scene.collection.objects.link(ob); ob.data.materials.append(mk)
+        nalozeno = [ob]
+    elif KORBA in ("valnik", "plachta"):
+        # valnik: podlaha z 1,36, vnitrek bocnic x +-1,20, cela y 2,74 a 6,96; okraje jako u vejtrasky (asi 8 cm)
+        V3.update(PODLAHA=ZP_, KX=1.12, KY0=Y0N + 0.10, KY1=Y1N - 0.10)
+        if NAKLAD_KOD == "WOOD": nalozeno = V3["klady"]()
+        elif NAKLAD_KOD == "WDPR": nalozeno = V3["prkna"]()
+        elif NAKLAD_KOD.startswith("plachta_"): nalozeno = [plachta_tatra(NAKLAD_KOD[len("plachta_"):])]
+        elif NAKLAD_KOD in V3["KUSOVE"]: nalozeno = V3["KUSOVE"][NAKLAD_KOD]()
+        elif NAKLAD_KOD in V3["NAKLAD"]:
+            # Hrac 29. 9.: "kupy rudy na sklapec, kupy zemedelskych plodin na valnik". Kupa vejtrasky (bochnik) na valniku
+            # vypadala nepritozene (hrac: "je to jak bochnik chleba, rozsypej to, jako kdyz zadrnca"). Proto rozsypana:
+            # korba plna skoro po okraj bocnic (DNO 0,08 pod hornim okrajem) a nad tim tri nizke nepravidelne hrbolky
+            # (0,30 az 0,42 m) jako sesednuta hromada po ceste, povrch zvlneny a hrudkovity podle hrubosti nakladu.
+            tm, sv, drs, hrubost, mer = V3["NAKLAD"][NAKLAD_KOD]
+            mk = V3["material"]("naklad", V3["srgb"](tm), V3["srgb"](sv), drs, mer)
+            random.seed(11)
+            KX_, KY0_, KY1_ = XV - 0.035, Y0N + 0.04, Y1N - 0.04               # az k vnitrku bocnic a cel
+            DNO = ZP_ + BOK - 0.08
+            B_ = (KY1_ - KY0_) / 2; YS_ = (KY0_ + KY1_) / 2
+            hrby = [(random.uniform(-0.35, 0.35), KY0_ + (KY1_ - KY0_) * f_ + random.uniform(-0.2, 0.2),
+                     random.uniform(0.30, 0.42), random.uniform(0.5, 0.7), random.uniform(0.6, 0.9)) for f_ in (0.2, 0.5, 0.8)]
+            vlny = [(random.uniform(0, 6.3), random.uniform(0, 6.3), random.uniform(1.5, 3.0), random.uniform(1.0, 2.2)) for _ in range(4)]
+            bm = bmesh.new(); NX, NY = 48, 96; vrch = {}
+            hr = [[random.uniform(-1, 1) for _ in range(NY // 4 + 2)] for _ in range(NX // 4 + 2)]
+            for i in range(NX + 1):
+                for j in range(NY + 1):
+                    x = -KX_ + 2 * KX_ * i / NX; y = KY0_ + (KY1_ - KY0_) * j / NY
+                    okraj = (1 - (abs(x) / KX_) ** 6) * (1 - (abs(y - YS_) / B_) ** 6)
+                    h = sum(a * math.exp(-((x - hx) / sx) ** 2 - ((y - hy) / sy) ** 2) for hx, hy, a, sx, sy in hrby)
+                    h += sum(0.025 * math.sin(fx * x + px_) * math.sin(fy * y + py_) for px_, py_, fx, fy in vlny)
+                    z = DNO + max(0.0, h) * okraj + hr[i // 4][j // 4] * 0.03 * max(0.0, hrubost - 0.6) + random.uniform(-0.02, 0.02) * hrubost
+                    vrch[i, j] = bm.verts.new((x, y, z))
+            for i in range(NX):
+                for j in range(NY):
+                    bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
+            me = bpy.data.meshes.new("kupa_valnik"); bm.to_mesh(me); bm.free()
+            for f in me.polygons: f.use_smooth = True
+            ob = bpy.data.objects.new("kupa_valnik", me); scene.collection.objects.link(ob); ob.data.materials.append(mk)
+            nalozeno = [ob]
+        else: raise SystemExit(f"naklad {NAKLAD_KOD} na valnik neumim")
+    else:
+        raise SystemExit(f"naklad na korbu {KORBA} neni (tekutiny jsou barvou cisterny)")
+    for o in nalozeno:
+        if o.parent is None:
+            o.parent = koren; o.matrix_parent_inverse = koren.matrix_world.inverted()
+    if os.environ.get("NAKLAD"):
+        for o in auto: o.is_holdout = True
+    print("naklad", NAKLAD_KOD, "na", KORBA, "objektu", len(nalozeno))
 
-meshe = [o for o in scene.objects if o.type == 'MESH' and not o.hide_render]
-pts = [o.matrix_world @ v.co for o in meshe for v in o.data.vertices]
-mn = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
-mx = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
-stred = (mn + mx) / 2
-print("model", tuple(round(c, 3) for c in mn), tuple(round(c, 3) for c in mx), "delka", round(mx.y - mn.y, 2))
+mn, mx = REF_MN, REF_MX; stred = (mn + mx) / 2
+print("podvozek (stred kamery)", tuple(round(c, 3) for c in mn), tuple(round(c, 3) for c in mx), "delka", round(mx.y - mn.y, 2))
 bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); gramofon = bpy.context.object
 koren.parent = gramofon; koren.matrix_parent_inverse = gramofon.matrix_world.inverted()
 ax = math.radians(90 - 30.0); az = math.radians(45.0); DIST = 30.0
@@ -450,3 +507,13 @@ for d in SMERY:
     bpy.ops.render.render(write_still=True)
     print("smer", d, flush=True)
 print("hotovo")
+
+# ---------------------------------------------------------------- cerna cara kolem pytlu (jako u vejtrasky)
+# Konec v3s/render_v3s.py od "cerna cara kolem pytlu" po zapis kotvy.json: druhy render s barvou kazdeho pytle a cernym autem, z nej cara
+# kolem pytlu ve vrstve (OBRYSY, jen bile a hnede pytle). Bezi jen pro vrstvu NAKLAD=<kod>.
+if os.environ.get("NAKLAD"):
+    V3.update(NAKLAD_KOD=NAKLAD_KOD, nalozeno=nalozeno, meshe=auto, SMERY=SMERY, gramofon=gramofon,
+              ROTATION_ANGLES=ROTATION_ANGLES, cam=cam, VYSTUP=VYSTUP, scene=scene)
+    exec(compile(zdroj[zdroj.index("# ---------------------------------------------------------------- cerna cara kolem pytlu"):
+                       zdroj.index("json.dump(info, open(")],
+                 "v3s/render_v3s.py (obrysy)", "exec"), V3)

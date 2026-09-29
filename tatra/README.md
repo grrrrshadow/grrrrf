@@ -86,6 +86,22 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   je to dobrý“*): u zelené je štítek skříňky v barvě auta a oranžové jen sklíčko (11 × 6 cm), u oranžové a červené
   zůstává oranžový celý štítek. Pak *„tu zelenou jsi dobarvil dobře, udělej tak oranžovou a červenou“*: štítek je
   u všech v barvě auta, oranžové je jen sklíčko. Náhled `nahledy/blinkry.png`.
-- **Náklady** (hráč: *„náklady bude mít jako vejtřaska, jen tekutiny budou v cisterně“*): na valník stejné vrstvy jako
-  u vejtřasky, tekutiny místo sudů v cisterně. Ještě neuděláno.
+- **Náklady** (hráč: *„náklady bude mít jako vejtřaska, jen tekutiny budou v cisterně“*). `render_sklapec.py` bere
+  stavitele nákladu přímo z `v3s/render_v3s.py` (oddíl od „naklad na korbe“ po `NAKLAD_KOD`, spuštěný s rozměry korby
+  Tatry), takže pytle, bedny, sudy, cihly, zvířata, seno, klády, prkna, brambory, ovoce a barvy kup jsou stejné jako
+  u vejtřasky a vejtřaska se tím nemění. Černé obrysy pytlů taky z vejtřasky (konec skriptu, `OBRYSY`).
+  - `NAKLAD=<kód>` je vrstva jako u vejtřasky (auto neviditelné, jen zakrývá náklad), `KUPA=<kód>` totéž i s autem na
+    ukázku. Kamera má pro všechny nástavby a náklady stejný střed (podvozek s kabinou bez korby S1), vrstva sedí přesně.
+  - **Co na čem pojede** (hráč 29. 9.): *„kupy rudy na sklápěč, kupy zemědělských plodin na valník“*, *„minerály, uhlí
+    sklápěč, a valník ocel hotovou a výrobky z oceli pod plachtu“*, *„valník ovoce, řepa, beans, zvířátka, marihuanu,
+    marihuanové seno, seno, vlákna, co roste, to na valník“*. Tedy sklápěč: rudy, uhlí a ostatní nerosty; valník: co
+    roste, zvířata, kusový náklad; valník s plachtou: ocel a výrobky z oceli (a co u vejtřasky jede pod plachtou);
+    cisterna: tekutiny. Kódy se přiřadí při skládání GRF.
+  - **Pivo** (hráč: *„pivo uděláme sudy a taky livery i cisterny, Plzeň bílou a Budvar modrou, v Čechách vozí pivo
+    cisterny do hospod, teď už moc ne, ale tenkrát jo“*): sudy na valníku a přestavby Plzeň (bílá cisterna) a Budvar
+    (modrá cisterna).
+  - **Kupa na valníku** (hráč: *„trochu tu kupu rozsypej, je to jak bochník chleba, rozsypej to jako když zadrncá“*,
+    *„kupa nevadila ve sklápěčce, ale na valníku to vypadá nepřirozeně“*): korba plná skoro po okraj bočnic a nad tím
+    tři nízké nepravidelné hrbolky (0,30 až 0,42 m), povrch zvlněný. Na sklápěči zůstává kupa jako dřív.
+  - Přehled všech nákladů: `nahledy/naklady.png`.
 - Náhled barev: `nahledy/barvy.png`.
