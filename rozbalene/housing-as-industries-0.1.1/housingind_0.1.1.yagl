@@ -1,0 +1,765 @@
+yagl_version: "";
+grf_format: Container2;
+// Record #1
+optional_info // Action14
+{
+    INFO: 
+    {
+        NAME: de_DE, "Wohngebiete als Industrie 0.1.1"; // German
+        DESC: de_DE, "Wohngebiete bebaubar als Industrien, für erhöhte Passagier- und Postproduktion in Städten. Coded von Emperor Jake, Grafiken von die TTRS-Team."; // German
+        VRSN: [ 0x03 0x00 0x00 0x00 ];
+        MINV: [ 0x00 0x00 0x00 0x00 ];
+        NPAR: [ 0x01 ];
+        PARA: 
+        {
+            0x00000000: 
+            {
+                NAME: default, "Allow apartment complexes to be built away from towns"; // Default
+                NAME: de_DE, "Erlaubt Wohngebiete weiter von Städten"; // German
+                DESC: default, "Disables placement restrictions, allowing apartment complexes to be built anywhere"; // Default
+                DESC: de_DE, "Deaktiviert Platzierungsbeschränkungen, sodass Wohngebiete überall erstellt werden können"; // German
+                TYPE: [ 0x01 ];
+                MASK: [ 0x00 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+        }
+        PALS: [ 0x57 ];
+        BLTR: [ 0x38 ];
+    }
+}
+// Record #2
+grf // Action08
+{
+    grf_id: "JD\x88P";
+    version: GRF8;
+    name: "Housing as Industry 0.1.1 ";
+    description: "Apartment complexes buildable as industries which can boost passenger and mail production in towns. Now with parameter to remove placement restrictions. Coded by Emperor Jake, graphics by the TTRS Team.";
+}
+// Record #3
+strings<Industries, default, 0xDC00*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC00 */ "Apartment Block";
+}
+// Record #4
+strings<Industries, de_DE, 0xDC00*> // <feature, language, first_id> Action04, German
+{
+    /* 0xDC00 */ "Wohnblock";
+}
+// Record #5
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        cargo_translation_table: "PASS";
+    }
+    // instance_id: 0x0001
+    {
+        cargo_translation_table: "MAIL";
+    }
+    // instance_id: 0x0002
+    {
+        cargo_translation_table: "GOOD";
+    }
+}
+// Record #6
+sprite_sets<IndustryTiles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x00000008>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [10, 10];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x00000009>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [84, 10];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x0000000A>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [158, 10];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x0000000B>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [232, 10];
+        }
+    }
+    sprite_set // 0x0004
+    {
+        sprite_id<0x0000000C>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [306, 10];
+        }
+    }
+    sprite_set // 0x0005
+    {
+        sprite_id<0x0000000D>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [380, 10];
+        }
+    }
+    sprite_set // 0x0006
+    {
+        sprite_id<0x0000000E>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [454, 10];
+        }
+    }
+    sprite_set // 0x0007
+    {
+        sprite_id<0x0000000F>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [528, 10];
+        }
+    }
+    sprite_set // 0x0008
+    {
+        sprite_id<0x00000010>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [602, 10];
+        }
+    }
+    sprite_set // 0x0009
+    {
+        sprite_id<0x00000011>
+        {
+            [64, 128, -30, -97], normal, c8bpp | chunked | no_crop, "housingind_0.1.1-8bpp-normal-0.png", [676, 10];
+        }
+    }
+}
+// Record #7
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    child_sprite<0xC0000000>
+    {
+        offset: 0x00, 0x00;
+    }
+    building_sprite<0x80000001>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #8
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000002>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #9
+sprite_layout<IndustryTiles, 0xFD> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000003>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #10
+sprite_layout<IndustryTiles, 0xFC> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000004>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #11
+sprite_layout<IndustryTiles, 0xFB> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000005>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #12
+sprite_layout<IndustryTiles, 0xFA> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000006>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #13
+sprite_layout<IndustryTiles, 0xF9> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000007>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #14
+sprite_layout<IndustryTiles, 0xF8> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000008>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #15
+sprite_layout<IndustryTiles, 0xF7> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000009>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #16
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x00;
+    }
+}
+// Record #17
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #18
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x00;
+    }
+}
+// Record #19
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #20
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x02;
+    }
+}
+// Record #21
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FD;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #22
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x06;
+    }
+}
+// Record #23
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FC;
+    feature_ids: [ 0x0003 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #24
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x04;
+    }
+}
+// Record #25
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FB;
+    feature_ids: [ 0x0004 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #26
+properties<IndustryTiles, 0x0005> // Action00
+{
+    // instance_id: 0x0005
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x02;
+    }
+}
+// Record #27
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F9;
+    feature_ids: [ 0x0005 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #28
+properties<IndustryTiles, 0x0006> // Action00
+{
+    // instance_id: 0x0006
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x03;
+    }
+}
+// Record #29
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F8;
+    feature_ids: [ 0x0006 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #30
+properties<IndustryTiles, 0x0007> // Action00
+{
+    // instance_id: 0x0007
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x01;
+    }
+}
+// Record #31
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F7;
+    feature_ids: [ 0x0007 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #32
+properties<IndustryTiles, 0x0008> // Action00
+{
+    // instance_id: 0x0008
+    {
+        substitute_building_id: 0x02;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0402;
+        land_shape_flags: 0x09;
+    }
+}
+// Record #33
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FA;
+    feature_ids: [ 0x0008 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #34
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0xFFFFFFFF;
+}
+// Record #35
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #36
+if_act9 (is_bit_clear(param[0x00] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #37
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #38
+if_act9 (is_not_equal(param[0x7E] & 0xFFFFFFFF, 0x00000001)) // Action09
+{
+    skip_sprites: 0x02;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #39
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #40
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_industry_id: 0x00;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+                new_tile(2, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+                new_tile(2, 0, 0x0000);
+                new_tile(3, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(2, 2, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(1, 1, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(1, 1, 0x0001);
+                new_tile(2, 2, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(3, 0, 0x0004);
+                new_tile(4, 0, 0x0003);
+                new_tile(5, 0, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(0, 2, 0x0004);
+                new_tile(1, 2, 0x0003);
+                new_tile(2, 2, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(3, 0, 0x0004);
+                new_tile(4, 0, 0x0003);
+                new_tile(5, 0, 0x0002);
+                new_tile(0, 2, 0x0004);
+                new_tile(1, 2, 0x0003);
+                new_tile(2, 2, 0x0002);
+                new_tile(3, 2, 0x0004);
+                new_tile(4, 2, 0x0003);
+                new_tile(5, 2, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 1, 0x0007);
+                new_tile(1, 0, 0x0005);
+                new_tile(1, 1, 0x0006);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0008);
+                new_tile(0, 2, 0x0007);
+                new_tile(1, 1, 0x0005);
+                new_tile(1, 2, 0x0006);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0006);
+                new_tile(0, 0, 0x0007);
+                new_tile(0, 2, 0x0008);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0008);
+                new_tile(1, 1, 0x0006);
+                new_tile(0, 1, 0x0007);
+                new_tile(0, 2, 0x0008);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0008);
+                new_tile(0, 1, 0x0008);
+            }
+        };
+        production_flags: 0x00;
+        production_cargo_types: [ 0x00 0x01 ];
+        acceptance_cargo_types: [ 0x00 0x01 0x02 0x00 ];
+        special_flags: 0x00000200;
+        industry_name_id: 0xDC00;
+        production_multipliers_1: 0x28;
+        production_multipliers_2: 0x08;
+        random_probability: 0x00;
+        gameplay_probability: 0x00;
+        fund_cost_multiplier: 0x14;
+        map_colour: 0x8F;
+    }
+}
+// Record #41
+if_act7 (is_equal(param[0x7F] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #42
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_industry_id: 0x00;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+                new_tile(2, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(1, 0, 0x0000);
+                new_tile(2, 0, 0x0000);
+                new_tile(3, 0, 0x0000);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(2, 2, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(1, 1, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(1, 1, 0x0001);
+                new_tile(2, 2, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(3, 0, 0x0004);
+                new_tile(4, 0, 0x0003);
+                new_tile(5, 0, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(0, 2, 0x0004);
+                new_tile(1, 2, 0x0003);
+                new_tile(2, 2, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0002);
+                new_tile(3, 0, 0x0004);
+                new_tile(4, 0, 0x0003);
+                new_tile(5, 0, 0x0002);
+                new_tile(0, 2, 0x0004);
+                new_tile(1, 2, 0x0003);
+                new_tile(2, 2, 0x0002);
+                new_tile(3, 2, 0x0004);
+                new_tile(4, 2, 0x0003);
+                new_tile(5, 2, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 1, 0x0007);
+                new_tile(1, 0, 0x0005);
+                new_tile(1, 1, 0x0006);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0008);
+                new_tile(0, 2, 0x0007);
+                new_tile(1, 1, 0x0005);
+                new_tile(1, 2, 0x0006);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0006);
+                new_tile(0, 0, 0x0007);
+                new_tile(0, 2, 0x0008);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0008);
+                new_tile(1, 1, 0x0006);
+                new_tile(0, 1, 0x0007);
+                new_tile(0, 2, 0x0008);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0008);
+                new_tile(0, 1, 0x0008);
+            }
+        };
+        production_flags: 0x00;
+        production_cargo_types: [ 0x00 0x01 ];
+        acceptance_cargo_types: [ 0x00 0x01 0x02 0x00 ];
+        special_flags: 0x00000220;
+        industry_name_id: 0xDC00;
+        production_multipliers_1: 0x28;
+        production_multipliers_2: 0x08;
+        random_probability: 0x00;
+        gameplay_probability: 0x00;
+        fund_cost_multiplier: 0x14;
+        map_colour: 0x8F;
+    }
+}

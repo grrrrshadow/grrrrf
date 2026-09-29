@@ -1,0 +1,78 @@
+Open Industries: Temperate - Changelog
+
+0.4.3 - 2026-07-31
+- Corrected mirrored pixel-to-map-tile ownership in all 15 custom sites.
+- Aligned artwork to the real four-by-four footprint and 64-pixel tile bounds.
+- Fixed camera-movement fragments and neighbouring trees cutting through art.
+- Restored canonical base-set icons for retained vanilla cargoes and Food.
+- Added pixel-level ownership, footprint, and base-icon regression checks.
+
+0.4.2 - 2026-07-30
+- Split every custom industry into 16 camera-safe tile sprites.
+- Preserved all published tile IDs and upgraded existing 0.4.x sites in place.
+- Integrated supplied Food Market, Department Store, and Office Building art.
+- Renamed Newsagent / Office to Office Building without changing house ID 2.
+- Added tile reconstruction and town-building artwork validation.
+
+0.4.1 - 2026-07-30
+- Redrew all 15 custom industries in a restrained base-game-style 8bpp look.
+- Removed the raised square terrain plates from custom sites.
+- Added deterministic crop, scale, hard-alpha, and palette conversion.
+- Added full four-by-four sorting bounds to prevent scenery cutting through sites.
+- Verified the final art in an OpenTTD 15.3 fixed-seed full-map render.
+
+0.4.0 - 2026-07-30
+- Assigned complete vanilla layouts to all 13 original industries.
+- Added the 15 supplied custom industry designs as four-by-four 8bpp sites.
+- Added safe OpenTTD palette conversion and transparent sprite handling.
+- Corrected composite draw order so ground tiles cannot cover the artwork.
+- Reserved stable custom tile IDs 113-128 and verified a fixed-seed visual map.
+
+0.3.1 - 2026-07-30
+- Restored original layouts and base-set graphics for replaced Temperate industries.
+- Rebuilt new sites from compatible original industry tiles.
+- Remapped 0.3.0 tile IDs so existing saves lose the oversized grey prototype art.
+- Corrected custom sprite sorting footprints from 48x48 to 16x16.
+- Verified OpenTTD 15.3 new-game, reload, 0.3.0 upgrade, and graphical render tests.
+
+0.3.0 - 2026-07-30
+
+- Added a complete German translation for the whole NewGRF interface.
+- Added short and long quantity strings for all cargoes, fixing undefined text.
+- Replaced generic industry boxes with 28 distinct 8bpp isometric designs.
+- Redesigned all three cargo-accepting town buildings.
+- Preserved cargo-reactive states and short equipment animations.
+- Added automated translation and sprite quality checks.
+
+0.2.1 - 2026-07-29
+
+- Added direct vanilla Goods and Temperate-chain monetary benchmarks.
+- Added completed-tree, rewarded-recipe, and primary-supply progression checks.
+- Rebalanced Food, Building Materials, Vehicles, and Fuel so completed industry
+  trees provide a noticeable but bounded reward.
+- Preserved all public IDs, recipes, and save compatibility.
+
+0.2.0 - 2026-07-29
+
+- Added cargo-reactive idle, stockpiled-input, waiting-output, and high-output
+  industry graphics.
+- Added service-responsive production to seven primary industries, ranging
+  from 50% to 200%.
+- Added a neutral service band and gradual monthly production reviews.
+- Added live production, service, recipe, stockpile, bonus, and pickup status.
+- Added translated zone and role badges.
+- Added explicit magic-bulldozer removal costs.
+- Added optional automatic town-encroachment clearance that protects the final
+  instance of each rural primary industry.
+- Preserved save compatibility with version 0.1.0.
+
+0.1.0 - 2026-07-29
+
+- Initial OIT1 Temperate replacement economy.
+- Added 28 cargoes, 28 industries, and three town-building destinations.
+- Added 14 priority-ordered stockpiled processing recipes.
+- Added optional Engineering Supplies, Fuel, Lubricants, Leather, and material
+  production bonuses.
+- Added population-scaled urban Waste production.
+- Added original indexed 8bpp cargo and industry graphics.
+- Added monetary simulation, validation, packaging, and OpenTTD smoke tests.

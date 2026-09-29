@@ -313,6 +313,89 @@ def bedny(seed=19):
                                  math.radians(random.uniform(-3, 3)), 0.015))
     return obs
 
+# Cihly (hrac 29. 9.: "cihly udelej, kdyz to je stavebni auto, musi mit peknej naklad cihly, livery cerveny a sedy
+# cihly", "sedy cihly trochu vetsi nez cerveny"): kostky cihel na paletach, dve rady po ctyrech. Cihly jsou proti
+# skutecnosti zvetsene, aby vazba byla videt i v malem obrazku (cervene 36 x 18 cm, sede 46 x 24 cm).
+#   druh: (tmava a svetla sRGB, spara sRGB, delka a vyska cihly v m, vyska kostky v m)
+CIHLY = {"cervene": ((148, 54, 34), (186, 84, 54), (64, 30, 22), 0.36, 0.18, 0.66),
+         "sede": ((138, 138, 132), (178, 178, 172), (70, 70, 68), 0.46, 0.24, 0.72)}
+
+def cihly(druh="cervene", seed=71):
+    """kostky cihel na drevenych paletach; vazba cihel je textura Brick na UV v metrech (bok podle osy, vrch shora)"""
+    import bmesh, random
+    random.seed(seed)
+    tm, sv, spara, dc, vc, V = CIHLY[druh]
+    mat = bpy.data.materials.new("cihly_" + druh); mat.use_nodes = True
+    n_ = mat.node_tree.nodes; l_ = mat.node_tree.links; bsdf = n_["Principled BSDF"]
+    uv = n_.new("ShaderNodeUVMap"); cih = n_.new("ShaderNodeTexBrick")
+    cih.inputs["Color1"].default_value = srgb(tm); cih.inputs["Color2"].default_value = srgb(sv)
+    cih.inputs["Mortar"].default_value = srgb(spara); cih.inputs["Scale"].default_value = 1.0
+    cih.inputs["Mortar Size"].default_value = 0.035; cih.inputs["Bias"].default_value = 0.0
+    cih.inputs["Brick Width"].default_value = dc; cih.inputs["Row Height"].default_value = vc
+    l_.new(uv.outputs["UV"], cih.inputs["Vector"]); l_.new(cih.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.9
+    paleta = material("paleta", srgb((118, 88, 56)), srgb((160, 126, 84)), 0.85, 20.0)
+    SX, SY, P = 0.92, 0.84, 0.10                    # kostka a vyska palety
+    obs = []
+    for i in range(2):
+        for j in range(4):
+            x = (i - 0.5) * (SX + 0.06) + random.uniform(-0.02, 0.02)
+            y = KY0 + 0.1 + (j + 0.5) * (KY1 - KY0 - 0.2) / 4 + random.uniform(-0.02, 0.02)
+            rot = math.radians(random.uniform(-1.5, 1.5))
+            obs.append(kvadr(paleta, x, y, PODLAHA + P / 2, SX + 0.04, SY + 0.04, P, rot, 0.01))
+            bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
+            for v in bm.verts: v.co.x *= SX; v.co.y *= SY; v.co.z *= V
+            bm.normal_update(); uvl = bm.loops.layers.uv.new("UVMap")
+            posun = random.uniform(0, dc)           # at vazba na kazde palete zacina jinde
+            for f in bm.faces:
+                n = f.normal
+                for lp in f.loops:
+                    c = lp.vert.co
+                    if abs(n.x) > 0.5: u, w = c.y, c.z
+                    elif abs(n.y) > 0.5: u, w = c.x, c.z
+                    else: u, w = c.x, c.y
+                    lp[uvl].uv = (u + posun, w + V / 2)
+            me = bpy.data.meshes.new("cihly"); bm.to_mesh(me); bm.free()
+            o = bpy.data.objects.new("cihly", me); scene.collection.objects.link(o)
+            o.location = (x, y, PODLAHA + P + V / 2); o.rotation_euler = (0, 0, rot)
+            o.data.materials.append(mat)
+            obs.append(o)
+    return obs
+
+# Brambory a ovoce (hrac 29. 9.: "brambory kupa", "ovoce a zelenina cerveny zluty zeleny oranzovy jablicka, jako
+# brambor jen pestre barevny"): kupka jako u sypkych nakladu, tmava jako stiny mezi kusy, a po jejim povrchu kusy,
+# kazdy nahodne jednou z barev. Kusy jsou zvetsene (brambory 26 cm, ovoce 20 cm), aby byly videt i v malem obrazku.
+KULATE = {"brambory": ([((140, 100, 54), (190, 146, 90)), ((168, 128, 72), (214, 174, 114)), ((120, 84, 46), (170, 128, 78)),
+                        ((176, 140, 80), (222, 188, 124))], ((46, 32, 20), (78, 56, 34)), 0.9, 1.35, 0.26),
+          "ovoce": ([((150, 18, 14), (206, 44, 32)), ((198, 166, 26), (240, 212, 66)), ((82, 136, 28), (134, 184, 58)),
+                     ((206, 104, 14), (246, 148, 40))], ((58, 42, 28), (88, 64, 42)), 0.4, 1.0, 0.2)}
+
+def kulata_kupa(druh="brambory", seed=67, vyska=0.72):
+    """hromada kulatych kusu: tmava kupka pod nimi a kusy (koule, trochu zplostele a protazene) po jejim povrchu"""
+    import random
+    barvy, podklad, drsnost, protazeni, prumer = KULATE[druh]
+    obs = kupka(material(druh + "_podklad", srgb(podklad[0]), srgb(podklad[1]), 0.9, 20.0), hrubost=0.7, seed=seed,
+                vyska=vyska - prumer * 0.35)
+    random.seed(seed)
+    mats = [material(f"{druh}_{i}", srgb(a), srgb(b), drsnost, 6.0) for i, (a, b) in enumerate(barvy)]
+    B = (KY1 - KY0) / 2; YS = (KY0 + KY1) / 2; krok = prumer * 0.9
+    for i in range(int(2 * KX / krok) + 1):
+        for j in range(int(2 * B / krok) + 1):
+            x = -KX + (i + random.uniform(-0.3, 0.3)) * krok
+            y = YS - B + (j + random.uniform(-0.3, 0.3)) * krok
+            s = max(0.0, 1 - (abs(x) / KX) ** 2.2 - (abs(y - YS) / B) ** 2.2)
+            if s <= 0.02: continue
+            r = prumer / 2 * random.uniform(0.8, 1.15)
+            bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=r,
+                                                  location=(x, y, PODLAHA + vyska * s ** 0.6 - r * 0.25))
+            o = bpy.context.object
+            o.scale = (protazeni * random.uniform(0.9, 1.1), random.uniform(0.9, 1.1), random.uniform(0.8, 0.95))
+            o.rotation_euler = (random.uniform(-0.3, 0.3), random.uniform(-0.3, 0.3), random.uniform(0, math.pi))
+            for f in o.data.polygons: f.use_smooth = True
+            o.data.materials.append(random.choice(mats))
+            obs.append(o)
+    return obs
+
 # Sudy (hrac 29. 9.: "alkohol sudy", "vojenska seda plachta vsechny benziny, ropu, tak udelej sudy, jako ze veze.
 # protoze ropa je v kazdy hre v zakladnim prumyslu, tak to musi nejak vozit", "vodu vozit v sudech, modry sudy
 # a cerny sudy"): drevene pivni sudy s brichem, plechove sudy 200 l modre (voda) a cerne (ropa a benzin).
@@ -521,6 +604,8 @@ def seno(barva="vlakna", seed=31):
     return [ob]
 
 KUSOVE = {"CMNT": pytle, "pytle_hnede": lambda: pytle("hnede", 59), "GOOD": bedny, "BEER": sudy,
+          "cihly_cervene": lambda: cihly("cervene", 71), "cihly_sede": lambda: cihly("sede", 73),
+          "brambory": lambda: kulata_kupa("brambory", 67), "ovoce": lambda: kulata_kupa("ovoce", 79),
           "sudy_bile": lambda: sudy("bile", 41), "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
           "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno,
           "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute")}

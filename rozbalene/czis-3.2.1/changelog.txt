@@ -1,0 +1,57 @@
+1.0.0 (2023-03-05)
+Initial release to public 
+
+1.0.1 (2023-03-05)
+Fixes mostly related to fish
+
+1.0.2 (2023-03-07)
+Attempt to fix bugs.
+
+1.0.3 (2023-03-09)
+Remove fish farm and fish.
+
+1.0.4 (2023-03-09)
+Beans changed to Potatoes, fix steel mills switched graphics.
+Fix Power Plant closing in February after start
+
+1.1.0 (2023-03-11)
+Reattempt to fix fish by removing them
+
+1.1.1 (2023-03-18)
+Fix coke oven not producing stuff
+
+1.2.0 (2023-10-13)
+Fix various Stone bugs
+
+1.2.1 (2023-10-14)
+Tweak prod rates of primaries
+
+1.3.0 (2023-12-20)
+Make this compatible with CZTR locomotive sets, as their refit system is about to be fixed.
+
+1.4.0 (2024-05-08)
+Finish Czech translation
+
+1.5.0 (2024-05-18)
+Fix Czech
+
+1.6.0 (2024-07-04)
+Balance Power Plants
+
+1.7.0 (2024-07-16)
+Fix some cargos missing
+
+2.0.0 (2024-11-30)
+Remove electricity chain due to impossible balancing
+
+3.0.0 (2026-07-06)
+Fix bugs
+
+3.1.0 (2026-07-06)
+Add Waste and fix more bugs
+
+3.2.0 (2026-07-06)
+Fix more bugs and unbalancement
+
+3.2.1 (2026-07-08)
+Even more bugs fixed and electricity properly gone

@@ -35,7 +35,9 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 6 v nakupu jen zeleny radek ottd Decouple (dlouhy text zvetsoval okno nakupu a schoval tlacitko Koupit),
 # 7 v nakupu zelene "for ottd Decouple by Karel Macha" a autor modelu, pytle bile a hnede s cernou carou, bedny i na
 #   zasoby, obili, rudy a jil jako kupky, bile sudy misto modrych, podtypy pradnych plodin (vlakna, seno)
-VERZE = 7
+# 8 vzorova tabulka 221 kodu (lide STUD PRIS WORK PLAY a kody ze sad v hracove hre), cihly cervene a sede (BRCK,
+#   BDMT), kupa brambor a brambory v pytlich, pestra kupa ovoce, alkohol rum, pivo Plzen, pivo Budvar, chmel, vino
+VERZE = 8
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -109,23 +111,10 @@ JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi 
                 "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
                 "NUKW": "jaderný odpad"}                      # "vojenska radioaktivni veci, modra ne")
 JEN_MODRA = {"TOYS": "hračky"}                               # vojenska je nevozi (hrac 29. 9.: "vojenska ne hracky")
-# Kody vejtrasky, ktere ve vzoru nejsou: nezname labely ze seznamu VW T1 (naklady.md, "Labely, ktere v zadne tabulce
-# nejsou"; hrac je ma, tak zustaly) a FIRS 5.2 Steeltown (naklady.md). Jdou do tabulky za MARI.
-NAVIC = {
-    "FARM": "? (z VW T1, význam neznámý)", "LVPT": "? (z VW T1, význam neznámý)", "HOPS": "? (z VW T1, význam neznámý)",
-    "ELEC": "? (z VW T1, význam neznámý)", "NODC": "? (z VW T1, význam neznámý)",
-    "CCPR": "betonové výrobky  [Concrete Products]", "HWAR": "železářské zboží  [Hardware]",
-    "STBL": "předvalky  [Billets & Blooms]", "FOCA": "výkovky a odlitky  [Forgings & Castings]",
-    "PPWK": "nádrže a potrubí  [Storage Tanks & Pipework]", "RBAR": "betonářská ocel  [Rebar]",
-    "SEAL": "těsnění, hadice a řemeny  [Seals, Hoses & Belts]", "STPP": "ocelové trubky  [Steel Pipe]",
-    "STTB": "ocelové trubky, tenkostěnné  [Steel Tube]", "TYCO": "kord do pneumatik  [Tyre Cord]",
-    "WELD": "svařovací materiál  [Welding Consumables]", "PUMP": "čerpadla a ventily  [Pumps & Valves]",
-    "STIG": "ocelové ingoty  [Steel Ingots]", "STSL": "bramy  [Steel Slab]", "STBR": "tyčová ocel  [Merchant Bar]",
-    "STPL": "ocelový plech  [Steel Plate]", "STSW": "konstrukční ocel  [Structural Steel]",
-    "FEAL": "feroslitiny  [Ferroalloys]", "PLNT": "stroje a zařízení  [Plant & Machinery]",
-    # od verze 5 (hrac 29. 9.: "budem vozit i chemikalie, to je dulezity v prumyslu. plachta jako ze veze chemikalie
-    # v kanystrech pod plachtou"); FIRS ho ma v ekonomikach 0, 3 a 4
-    "CHEM": "chemikálie  [Chemicals] (FIRS), vejtřaska je veze v kanystrech pod plachtou"}
+# Kody vejtrasky, ktere ve vzoru nejsou. Od verze 8 zadne: hrac 29. 9.: "budem muset aktualizovat vzorovou tabulku,
+# ja si ji pak stahnu od tebe", takze kody z VW T1, FIRS 5.2 Steeltown a CHEM jsou ve vzoru (na stejnych cislech jako
+# dosud), za nimi kody ze sad v hracove hre (save v3s2: Real Industries, AXIS, GIST, Open Industries, Apollo) a CHME a WINE.
+NAVIC = {}
 
 # prekladova tabulka: cely hracuv vzor (i s jeho poznamkami a nadpisy oddilu), za MARI kody NAVIC
 vzor = open(os.path.join(TU, "..", "prekladova-tabulka-vzor.yagl"), encoding="utf-8").read()
@@ -137,9 +126,9 @@ for _r in blok.split("\n"):
         PORADI.append(_m.group(1)); POZNAMKA[_m.group(1)] = _m.group(2)
     elif _r.strip().startswith("// ----"):
         ODDIL[len(PORADI)] = _r.strip()
-assert len(PORADI) == 147 and PORADI.index("MARI") == 0x92, len(PORADI)
+assert len(PORADI) == 221 and PORADI.index("MARI") == 0x92 and PORADI.index("CHEM") == 0xAB, len(PORADI)
 assert not set(NAVIC) & set(PORADI), set(NAVIC) & set(PORADI)
-ODDIL[len(PORADI)] = "// ---- NAVÍC PRO VEJTŘASKU — ve vzoru nejsou ----"
+if NAVIC: ODDIL[len(PORADI)] = "// ---- NAVÍC PRO VEJTŘASKU — ve vzoru nejsou ----"
 POZNAMKA.update(NAVIC)
 TABULKA = PORADI + list(NAVIC)
 INDEX = {k: i for i, k in enumerate(TABULKA)}
@@ -147,7 +136,8 @@ assert all(k in INDEX for k in list(NEVOZI) + list(JEN_VOJENSKA) + list(JEN_MODR
 NAKLADY = {"vojenska": [k for k in TABULKA if k not in NEVOZI and k not in JEN_MODRA],
            "modra": [k for k in TABULKA if k not in NEVOZI and k not in JEN_VOJENSKA]}
 # lide: cestujici, turiste, delnici; kapacitu jim dava callback 0x15 (vojenska 20, modra 3)
-LIDE = ["PASS", "TOUR", "OTI1", "OTI2", "YETI", "YETY"]
+LIDE = ["PASS", "TOUR", "OTI1", "OTI2", "YETI", "YETY",
+        "WORK", "STUD", "PRIS", "PLAY"]      # od verze 8 (hrac: "students, prisoners, workers vojenska hodne, modra zase 3")
 
 # Odstin modre podle nakladu (hrac: "staveni C, cement a stavebni; tmava strojirenstvi D, A zbozi,
 # B zemedelstvi"). Co neni v B, C ani D, je A. Od verze 4 i naklady, ktere prisly s celou tabulkou
@@ -163,6 +153,10 @@ for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL
 # od verze 5 tekutiny: ropa, benzin, dehet a chemie D (u zelene tim i seda plachta na ropu a benzin), mleko B
 for k in "OIL_ OILD OILI PETR RFPR CTAR ACID LYE_ CHLO NH3_ O2__ FUEL".split(): ODSTIN[k] = "D"
 ODSTIN["MILK"] = "B"
+# od verze 8 kody ze sad v hracove hre (Real Industries, AXIS, GIST, Open Industries, Apollo) a hracovy CHME a WINE
+for k in ("ACET ALO_ COCO C2H4 HYAC H2__ MPAR MEOH NAPH N7__ N2__ PHAC C3H6 RAMT SUAC TINP LUBR APOL LNDR RSTG RENG "
+          "SILC HVEH").split(): ODSTIN[k] = "D"
+for k in "BIOM UREA CHME".split(): ODSTIN[k] = "B"
 assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
 
 KAPACITA = 10                                      # jednotek beznych nakladu
@@ -189,9 +183,12 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene",
           "CORE", "seno_mari", "seno_zlute",                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
           "pytle_hnede",                                                       # od verze 7 kava (hrac: "kafe budem vozit v hnedym pytli")
-          "CLAY"]                                                              # od verze 7 jil (hrac: "jil kupu")
+          "CLAY",                                                              # od verze 7 jil (hrac: "jil kupu")
+          # od verze 8 cihly, brambory a ovoce (hrac 29. 9.: "cihly udelej ... livery cerveny a sedy cihly", "brambory kupa
+          # a livery brambor pytle hnedy", "ovoce a zelenina cerveny zluty zeleny oranzovy jablicka, jako brambor")
+          "cihly_cervene", "cihly_sede", "brambory", "ovoce"]
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
-VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
+VRSTVA.update({"TWOD": "WOOD", "SCRP": "SCMT"})   # brambory (TATO, BEAN) od verze 8 s podtypy, viz PODTYPY
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
 VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
 # rudy od verze 7 jako kupy podobne barvy: bauxit rezavy jako zelezna ruda, niklova a pyritova ruda sede, mangan
@@ -203,16 +200,26 @@ VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "
 # (hrac: "kaolin do pytlu a nehasene vapno do pytlu", "soda muze do pytle"); kupka nehaseneho vapna od verze 7 neni.
 # Plasty, mouka, hnojivo a saze zustavaji pod plachtou (hrac: "plasty pod plachtou, mouka plachta, hnojivo plachta,
 # saze plachta").
-VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL BDMT KAOL QLME SASH".split()})
+VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL KAOL QLME SASH".split()})   # BDMT od verze 8 s podtypy
 VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
 VRSTVA["JAVA"] = "pytle_hnede"
-VRSTVA["SGCN"] = "FICR"             # cukrova trtina s obrazkem vlaken, bez podtypu (hrac: "sugarcane grafiku nakladu rostlina vlakna")
+VRSTVA["SGCN"] = "FICR"
+# od verze 8: kyseliny a plyny ze sad v hracove hre v cervenych sudech jako ostatni chemie (hrac: "prostě udělej
+# i tekutiny, barevný sudy a je to"), medeny koncentrat jako medena ruda (hrac: "vsechny ore kupu"), chmel
+# s obrazkem marihuanoveho sena (hrac: "uz dej naklad chmel kod chme, grafika marihuanove seno"), vino v drevenych
+# sudech jako rum (hrac: "alkohol wine hnedy sudy z rumu")
+VRSTVA.update({k: "sudy_cervene" for k in "ACET HYAC PHAC SUAC MEOH C2H4 C3H6 H2__ N7__ N2__".split()})
+VRSTVA["COCO"] = "CORE"
+VRSTVA["CHME"] = "seno_mari"
+VRSTVA["WINE"] = "BEER"
+VRSTVA.update({k: "ovoce" for k in "FRUT FRVG".split()})             # ovoce a zelenina: pestra kupa jablicek             # cukrova trtina s obrazkem vlaken, bez podtypu (hrac: "sugarcane grafiku nakladu rostlina vlakna")
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
 VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
 # (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
 VRSTVA.update({k: "sudy_cervene" for k in "ACID LYE_ CHLO NH3_ O2__ FUEL".split()})  # chemie a plyny
 # ropa a benzin: modra v cernych sudech, zelena pod sedou plachtou (hrac: "vojenska seda plachta vsechny benziny, ropu")
-VRSTVA_MODRA = {k: "sudy_cerne" for k in "OIL_ OILD OILI PETR RFPR".split()}
+VRSTVA_MODRA = {k: "sudy_cerne" for k in "OIL_ OILD OILI PETR RFPR NAPH LUBR".split()}   # od verze 8 i primarni benzin
+                                                                                     # a maziva (AXIS, Open Industries)
 assert all(k in NAKLADY["modra"] or k in NAKLADY["vojenska"] for k in list(VRSTVA) + list(VRSTVA_MODRA)), \
     [k for k in list(VRSTVA) + list(VRSTVA_MODRA) if k not in NAKLADY["modra"] and k not in NAKLADY["vojenska"]]
 # Dobytek (LVST) ma dva podtypy nakladu, vybira se v okne prestavby (callback 0x19, promenna 0xF2 cargo_subtype):
@@ -220,7 +227,16 @@ assert all(k in NAKLADY["modra"] or k in NAKLADY["vojenska"] for k in list(VRSTV
 # Od verze 7 i rostlinna vlakna (hrac 29. 9.: "rostlina vlakna livery jako ovecky prasatka. marihuanove seno zeleny
 # z grafiky rostlina vlakna a seno taky jako rostlina vlakna ale zlutejsi"). Naklad: [(obrazek, jmeno podtypu), ...].
 PODTYPY = {"LVST": [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce", " (ovečky)")],     # hrac: "ovce tam jsou"
-           "FICR": [("FICR", " (vlákna)"), ("seno_mari", " (marihuanové seno)"), ("seno_zlute", " (seno)")]}
+           "FICR": [("FICR", " (vlákna)"), ("seno_mari", " (marihuanové seno)"), ("seno_zlute", " (seno)")],
+           # od verze 8 (hrac 29. 9.): "alkohol liveries prestavby, rum tam je, udelej pivo Plzen bile sudy, pivo Budvar
+           # seda plachta"; "cihly ... livery cerveny a sedy cihly. a building materials taky tohle livery cerveny a sedy
+           # cihly dostanou" (stavebni material ma dal i bile pytle); "brambory kupa a livery brambor pytle hnedy" (BEAN ma
+           # CZIS jako brambory)
+           "BEER": [("BEER", " (rum)"), ("sudy_bile", " (pivo Plzeň)"), ("plachta_seda", " (pivo Budvar)")],
+           "BRCK": [("cihly_cervene", " (červené)"), ("cihly_sede", " (šedé)")],
+           "BDMT": [("cihly_cervene", " (červené cihly)"), ("cihly_sede", " (šedé cihly)"), ("CMNT", " (pytle)")],
+           "TATO": [("brambory", " (na kupě)"), ("pytle_hnede", " (v pytlích)")],
+           "BEAN": [("brambory", " (na kupě)"), ("pytle_hnede", " (v pytlích)")]}
 # Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
 # plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou
 # sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede

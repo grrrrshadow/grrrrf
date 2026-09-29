@@ -1,0 +1,10 @@
+-- Housing as Industry Set Changelog --
+
+Version 0.1.0, Nov 2017
+
+- Fixed conflict with other industry sets which prevented it from being placed near certain industries
+- Added readme and documentation
+
+Version 0.1.1, Jun 2018
+
+- Added parameter to disable placement restrictions

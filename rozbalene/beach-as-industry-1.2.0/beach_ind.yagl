@@ -1,0 +1,1377 @@
+yagl_version: "";
+grf_format: Container2;
+// Record #1
+optional_info // Action14
+{
+    INFO: 
+    {
+        DESC: de_DE, "{orange}Strände werden Passagiere produzieren und akzeptieren.{new-line}{new-line}{black}Das {dq}Beach Objects set{dq} ist für die Dekoration empfohlen.{new-line}{new-line}Gezeichnet durch Quast65 und programmiert von 2TallTyler.{new-line}{new-line}Lizens: GPL v3"; // German
+        DESC: fr_FR, "{orange}Des plages qui produisent et acceptent les passagers.{new-line}{new-line}{black}Le NewGRF {dq}Beach Objects set{dq} est fortement recommandé pour la décoration.{new-line}{new-line}Dessiné par Quast65 et codé par 2TallTyler.{new-line}{new-line}License: GPL v3"; // French
+        DESC: es_ES, "{orange}Playas que producen y aceptan pasajeros..{new-line}{new-line}{black}Se recomienda encarecidamente el set de objetos de playa (Beach Objects set) para decoraciones.{new-line}{new-line}Dibujado por Quast65 y el código por 2TallTyler.{new-line}{new-line}Licencia: GPL v3"; // Spanish
+        DESC: sv_SE, "{orange}Stränder som producerar och accepterar passagerare.{new-line}{new-line}{black}NewGRFen {dq}Beach Objects set{dq} rekommenderas starkt för dekoration.{new-line}{new-line}Ritad av Quast65 och kodad av 2TallTyler.{new-line}{new-line}Licens: GPL v3"; // Swedish
+        DESC: gl_ES, "{orange}Praias que producen e aceptan pasaxeiros..{new-line}{new-line}{black}Recoméndase encarecidamente o set de obxectos de praia (Beach Objects set) para decoracións.{new-line}{new-line}Debuxado por Quast65 e o código por 2TallTyler.{new-line}{new-line}Licencia: GPL v3"; // Galician
+        DESC: es_MX, "{orange}Playas que producen y aceptan pasajeros..{new-line}{new-line}{black}Se recomienda encarecidamente el set de objetos de playa (Beach Objects set) para decoraciones.{new-line}{new-line}Dibujado por Quast65 y el código por 2TallTyler.{new-line}{new-line}Licencia: GPL v3"; // Mexican Spanish
+        VRSN: [ 0x06 0x00 0x00 0x00 ];
+        MINV: [ 0x03 0x00 0x00 0x00 ];
+        NPAR: [ 0x01 ];
+        PARA: 
+        {
+            0x00000000: 
+            {
+                NAME: default, "Beaches generate during game"; // Default
+                NAME: de_DE, "Generiere Strände während des Spielens"; // German
+                NAME: fr_FR, "De nouvelles plages sont générées pendant le jeu"; // French
+                NAME: es_ES, "Las Playas se generan durante el juego"; // Spanish
+                NAME: sv_SE, "Stränder genereras under spelets gång"; // Swedish
+                NAME: gl_ES, "As Praias xeranse durante o xogo"; // Galician
+                NAME: es_MX, "Las Playas se generan durante el juego"; // Mexican Spanish
+                DESC: default, "{white}Off:{black} Beaches generate only during map generation.{new-line}{new-line}{white}On:{black} Beaches generate both during map generation and during the game."; // Default
+                DESC: de_DE, "{white}Aus:{black} Strände werden nur während der Spielfeld-Erschaffung gebaut.{new-line}{new-line}{white}An:{black} Strände werden sowohl während der Spielfeld-Erschaffung, als auch während des Spielens gebaut."; // German
+                DESC: fr_FR, "{white}Désactivé:{black} Les plages sont uniquement générées pendant la génération de la carte.{new-line}{new-line}{white}Activé:{black} Les plages sont générées pendant la génération de la carte et pendant le jeu."; // French
+                DESC: es_ES, "{white}No:{black} Las playas se generan solo durante la generación del mapa.{new-line}{new-line}{white}Si:{black} Las playas se generan durante la generación del mapa y durante el juego"; // Spanish
+                DESC: sv_SE, "{white}Av:{black} Stränder genereras bara under världsgenereringen.{new-line}{new-line}{white}På:{black} Stränder genereras både under världsgenereringen och under spelets gång."; // Swedish
+                DESC: gl_ES, "{white}Non:{black} As praias xeraranse só durante a xeración do mapa.{new-line}{new-line}{white}Si:{black} As Praias xerarase durante a xeración do mapa e durante o xogo"; // Galician
+                DESC: es_MX, "{white}No:{black} Las playas se generan solo durante la generación del mapa.{new-line}{new-line}{white}Si:{black} Las playas se generan durante la generación del mapa y durante el juego"; // Mexican Spanish
+                TYPE: [ 0x01 ];
+                MASK: [ 0x00 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+        }
+        PALS: [ 0x44 ];
+        BLTR: [ 0x38 ];
+    }
+}
+// Record #2
+grf // Action08
+{
+    grf_id: "TT\x02\x02";
+    version: GRF8;
+    name: "Beach as Industry 1.2.0";
+    description: "{orange}Beaches which produce and accept passengers.{new-line}{new-line}{black}Beach Objects set strongly recommended for decoration.{new-line}{new-line}Drawn by Quast65 and coded by 2TallTyler.{new-line}{new-line}License: GPL v3";
+}
+// Record #3
+strings<Industries, default, 0xDC00*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC00 */ "Beach";
+    /* 0xDC01 */ "{substring1} Beach";
+}
+// Record #4
+strings<Industries, de_DE, 0xDC00*> // <feature, language, first_id> Action04, German
+{
+    /* 0xDC00 */ "Strand";
+    /* 0xDC01 */ "{substring1} Strand";
+}
+// Record #5
+strings<Industries, fr_FR, 0xDC00*> // <feature, language, first_id> Action04, French
+{
+    /* 0xDC00 */ "Plage";
+    /* 0xDC01 */ "{substring1} Plage";
+}
+// Record #6
+strings<Industries, es_ES, 0xDC00*> // <feature, language, first_id> Action04, Spanish
+{
+    /* 0xDC00 */ "Playa";
+    /* 0xDC01 */ "Playa de {substring1}";
+}
+// Record #7
+strings<Industries, sv_SE, 0xDC00*> // <feature, language, first_id> Action04, Swedish
+{
+    /* 0xDC00 */ "Strand";
+    /* 0xDC01 */ "{substring1} Strand";
+}
+// Record #8
+strings<Industries, gl_ES, 0xDC00*> // <feature, language, first_id> Action04, Galician
+{
+    /* 0xDC00 */ "Praia";
+    /* 0xDC01 */ "Praia de {substring1}";
+}
+// Record #9
+strings<Industries, es_MX, 0xDC00*> // <feature, language, first_id> Action04, Mexican Spanish
+{
+    /* 0xDC00 */ "Playa";
+    /* 0xDC01 */ "Playa de {substring1}";
+}
+// Record #10
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        cargo_translation_table: "PASS";
+    }
+    // instance_id: 0x0001
+    {
+        cargo_translation_table: "SAND";
+    }
+}
+// Record #11
+sprite_sets<IndustryTiles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000000D>
+        {
+            [64, 26, -31, -3], normal, c8bpp | chunked, "beach_ind-8bpp-normal-0.png", [10, 10];
+        }
+        sprite_id<0x0000000E>
+        {
+            [64, 23, -31, 0], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [84, 10];
+        }
+        sprite_id<0x0000000F>
+        {
+            [64, 23, -31, 0], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [158, 10];
+        }
+        sprite_id<0x00000010>
+        {
+            [64, 26, -31, -3], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [232, 10];
+        }
+        sprite_id<0x00000011>
+        {
+            [64, 23, -31, 0], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [306, 10];
+        }
+        sprite_id<0x00000012>
+        {
+            [64, 23, -31, 0], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [380, 10];
+        }
+        sprite_id<0x00000013>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [454, 10];
+        }
+        sprite_id<0x00000014>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [528, 10];
+        }
+        sprite_id<0x00000015>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [602, 10];
+        }
+        sprite_id<0x00000016>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [676, 10];
+        }
+        sprite_id<0x00000017>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [10, 59];
+        }
+        sprite_id<0x00000018>
+        {
+            [64, 39, -31, -8], normal, c8bpp, "beach_ind-8bpp-normal-0.png", [84, 59];
+        }
+    }
+}
+// Record #12
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F57>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #13
+switch<IndustryTiles, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000000;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FF;
+}
+// Record #14
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F57>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #15
+switch<IndustryTiles, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000001;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FE;
+    };
+    default: 0x00FE;
+}
+// Record #16
+sprite_layout<IndustryTiles, 0xFD> // Action02 sprite layout
+{
+    ground_sprite<0x00000F57>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #17
+switch<IndustryTiles, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000002;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FD;
+    };
+    default: 0x00FD;
+}
+// Record #18
+sprite_layout<IndustryTiles, 0xFC> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5A>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #19
+switch<IndustryTiles, 0xFC, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000003;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FC;
+    };
+    default: 0x00FC;
+}
+// Record #20
+sprite_layout<IndustryTiles, 0xFB> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5A>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #21
+switch<IndustryTiles, 0xFB, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000004;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FB;
+    };
+    default: 0x00FB;
+}
+// Record #22
+sprite_layout<IndustryTiles, 0xFA> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5A>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #23
+switch<IndustryTiles, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000005;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FA;
+    };
+    default: 0x00FA;
+}
+// Record #24
+sprite_layout<IndustryTiles, 0xF9> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5D>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #25
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000006;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F9;
+    };
+    default: 0x00F9;
+}
+// Record #26
+sprite_layout<IndustryTiles, 0xF8> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5D>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #27
+switch<IndustryTiles, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000007;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F8;
+    };
+    default: 0x00F8;
+}
+// Record #28
+sprite_layout<IndustryTiles, 0xF7> // Action02 sprite layout
+{
+    ground_sprite<0x00000F5D>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #29
+switch<IndustryTiles, 0xF7, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000008;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+    };
+    default: 0x00F7;
+}
+// Record #30
+sprite_layout<IndustryTiles, 0xF6> // Action02 sprite layout
+{
+    ground_sprite<0x00000F60>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #31
+switch<IndustryTiles, 0xF6, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000009;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F6;
+    };
+    default: 0x00F6;
+}
+// Record #32
+sprite_layout<IndustryTiles, 0xF5> // Action02 sprite layout
+{
+    ground_sprite<0x00000F60>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #33
+switch<IndustryTiles, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x0000000A;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F5;
+    };
+    default: 0x00F5;
+}
+// Record #34
+sprite_layout<IndustryTiles, 0xF4> // Action02 sprite layout
+{
+    ground_sprite<0x00000F60>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x80;
+        }
+    }
+}
+// Record #35
+switch<IndustryTiles, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x0000000B;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F4;
+    };
+    default: 0x00F4;
+}
+// Record #36
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x66, 0x00] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x00000190: 0x8400;
+    };
+    default: 0x8401;
+}
+// Record #37
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001: 0x00F3;
+    };
+    default: 0x8400;
+}
+// Record #38
+switch<IndustryTiles, 0xF2, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] >> 13 & 0x00000003;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001: 0x8400;
+    };
+    default: 0x8401;
+}
+// Record #39
+switch<IndustryTiles, 0xF1, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] & 0x0000001F;
+
+        value2 = variable[0x1A] & 0x0000000C;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8401;
+    };
+    default: 0x00F2;
+}
+// Record #40
+switch<IndustryTiles, 0xF0, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] & 0x0000001F;
+
+        value2 = variable[0x1A] & 0x00000006;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8401;
+    };
+    default: 0x00F2;
+}
+// Record #41
+switch<IndustryTiles, 0xEF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] & 0x0000001F;
+
+        value2 = variable[0x1A] & 0x00000009;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8401;
+    };
+    default: 0x00F2;
+}
+// Record #42
+switch<IndustryTiles, 0xF2, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] & 0x0000001F;
+
+        value2 = variable[0x1A] & 0x00000003;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8401;
+    };
+    default: 0x00F2;
+}
+// Record #43
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #44
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #45
+switch<IndustryTiles, 0xF6, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F1;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F6;
+}
+// Record #46
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F6;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #47
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #48
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #49
+switch<IndustryTiles, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F1;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F5;
+}
+// Record #50
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F5;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #51
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #52
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #53
+switch<IndustryTiles, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F1;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F4;
+}
+// Record #54
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F4;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #55
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #56
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #57
+switch<IndustryTiles, 0xFC, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F0;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FC;
+}
+// Record #58
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FC;
+    feature_ids: [ 0x0003 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #59
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #60
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #61
+switch<IndustryTiles, 0xFB, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F0;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FB;
+}
+// Record #62
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FB;
+    feature_ids: [ 0x0004 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #63
+properties<IndustryTiles, 0x0005> // Action00
+{
+    // instance_id: 0x0005
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #64
+properties<IndustryTiles, 0x0005> // Action00
+{
+    // instance_id: 0x0005
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #65
+switch<IndustryTiles, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F0;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FA;
+}
+// Record #66
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FA;
+    feature_ids: [ 0x0005 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #67
+properties<IndustryTiles, 0x0006> // Action00
+{
+    // instance_id: 0x0006
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #68
+properties<IndustryTiles, 0x0006> // Action00
+{
+    // instance_id: 0x0006
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #69
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00EF;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F9;
+}
+// Record #70
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F9;
+    feature_ids: [ 0x0006 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #71
+properties<IndustryTiles, 0x0007> // Action00
+{
+    // instance_id: 0x0007
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #72
+properties<IndustryTiles, 0x0007> // Action00
+{
+    // instance_id: 0x0007
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #73
+switch<IndustryTiles, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00EF;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F8;
+}
+// Record #74
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F8;
+    feature_ids: [ 0x0007 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #75
+properties<IndustryTiles, 0x0008> // Action00
+{
+    // instance_id: 0x0008
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #76
+properties<IndustryTiles, 0x0008> // Action00
+{
+    // instance_id: 0x0008
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #77
+switch<IndustryTiles, 0xF7, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00EF;
+        0x00000030: 0x8000;
+    };
+    default: 0x00F7;
+}
+// Record #78
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F7;
+    feature_ids: [ 0x0008 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #79
+properties<IndustryTiles, 0x0009> // Action00
+{
+    // instance_id: 0x0009
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #80
+properties<IndustryTiles, 0x0009> // Action00
+{
+    // instance_id: 0x0009
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #81
+switch<IndustryTiles, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F2;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FF;
+}
+// Record #82
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0009 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #83
+properties<IndustryTiles, 0x000A> // Action00
+{
+    // instance_id: 0x000A
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #84
+properties<IndustryTiles, 0x000A> // Action00
+{
+    // instance_id: 0x000A
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #85
+switch<IndustryTiles, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F2;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #86
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x000A ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #87
+properties<IndustryTiles, 0x000B> // Action00
+{
+    // instance_id: 0x000B
+    {
+        substitute_building_id: 0x02;
+        special_flags: 0x02;
+    }
+}
+// Record #88
+properties<IndustryTiles, 0x000B> // Action00
+{
+    // instance_id: 0x000B
+    {
+        callback_flags: 0x30;
+    }
+}
+// Record #89
+switch<IndustryTiles, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F2;
+        0x00000030: 0x8000;
+    };
+    default: 0x00FD;
+}
+// Record #90
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FD;
+    feature_ids: [ 0x000B ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #91
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x0000000F;
+}
+// Record #92
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #93
+if_act9 (is_bit_clear(param[0x00] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #94
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #95
+if_act9 (is_not_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #96
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #97
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7F], 1, 33, false);
+}
+// Record #98
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_industry_id: 0x00;
+        production_flags: 0x00;
+        production_cargo_list: [ 0x00 ];
+        acceptance_cargo_list: [ 0x00 0x01 ];
+        production_multipliers: [ 0x11 ];
+        input_cargo_multipliers: [ ];
+        industry_name_id: 0xDC00;
+        nearby_station_text_id: 0xDC01;
+        random_probability: 0x0A;
+        gameplay_probability: 0x00;
+        fund_cost_multiplier: 0x65;
+        map_colour: 0x8F;
+        special_flags: 0x00000004;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(0, 1, 0x0001);
+                new_tile(0, 2, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(0, 1, 0x0002);
+                new_tile(0, 2, 0x0001);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0001);
+                new_tile(0, 1, 0x0002);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0005);
+                new_tile(1, 0, 0x0004);
+                new_tile(2, 0, 0x0003);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0005);
+                new_tile(1, 0, 0x0003);
+                new_tile(2, 0, 0x0004);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0005);
+                new_tile(1, 0, 0x0004);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0006);
+                new_tile(1, 0, 0x0007);
+                new_tile(2, 0, 0x0008);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0008);
+                new_tile(1, 0, 0x0007);
+                new_tile(2, 0, 0x0008);
+            }
+            layout
+            {
+                new_tile(1, 0, 0x0007);
+                new_tile(2, 0, 0x0006);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x0009);
+                new_tile(0, 1, 0x000A);
+                new_tile(0, 2, 0x000B);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x000A);
+                new_tile(0, 1, 0x0009);
+                new_tile(0, 2, 0x000B);
+            }
+            layout
+            {
+                new_tile(0, 0, 0x000B);
+                new_tile(0, 1, 0x000A);
+            }
+        };
+    }
+}
+// Record #99
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        callback_flags_1: 0x38;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #100
+industry<Industries, 0xFD, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0000 0x0000 0x0000 ];
+    add_out_amounts: [ 0x0000 0x0000 ];
+    repeat_flag: false;
+}
+// Record #101
+switch<Industries, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x8000;
+    };
+    default: 0x00FD;
+}
+// Record #102
+switch<Industries, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000028: 0x00F3;
+        0x00000029: 0x8000;
+        0x00000035: 0x8000;
+    };
+    default: 0x00FD;
+}
+// Record #103
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FD;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}

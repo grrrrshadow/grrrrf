@@ -1,0 +1,7849 @@
+yagl_version: "";
+grf_format: Container2;
+// Record #1
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xA1;
+    source2: 0x00;
+}
+// Record #2
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x02;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x17280000;
+}
+// Record #3
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x05;
+    source1: 0x7E;
+    source2: 0xFF;
+    data_value: 0xFFFFFFE1;
+}
+// Record #4
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #5
+error_message<Fatal, default, 0x06> // Action0B <severity, language, message>
+{
+    // {grf_name} requires OpenTTD version {data} or better.
+    data: "1.7.2";
+}
+// Record #6
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x07;
+    source1: 0x83;
+    source2: 0xFF;
+    data_value: 0x000000FF;
+}
+// Record #7
+if_act9 (is_not_equal(param[0x7E] & 0xFFFFFFFF, 0x00000003)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #8
+error_message<Fatal, default, 0xFF> // Action0B <severity, language, message>
+{
+    message: "{substring1} is not designed to work with toyland climate.";
+}
+// Record #9
+optional_info // Action14
+{
+    INFO: 
+    {
+        URL_: default, "https://github.com/jrook1445/wannaroo-tourist-set"; // Default
+        VRSN: [ 0x4C 0x04 0x00 0x00 ];
+        MINV: [ 0x0A 0x00 0x00 0x00 ];
+        NPAR: [ 0x0E ];
+        PARA: 
+        {
+            0x00000000: 
+            {
+                NAME: default, "Hotel"; // Default
+                DESC: default, "The hotel accepts food and alcohol. It also produces and accepts tourists."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x00 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000001: 
+            {
+                NAME: default, "Visitor Center"; // Default
+                DESC: default, "The visitor center produces and accepts tourists."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x01 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000002: 
+            {
+                NAME: default, "Town Square"; // Default
+                DESC: default, "The town square produces and accepts tourists, and also accepts goods and alcohol."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x02 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000003: 
+            {
+                NAME: default, "Houses"; // Default
+                DESC: default, "2 houses (rustic, regular) produce 8 +/- 3 tourists per production tick.{new-line}{new-line}2 tall buildings (tower block, flats) produce 20 +/- 4 tourists per production tick."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x03 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000004: 
+            {
+                NAME: default, "Manual placement"; // Default
+                DESC: default, "Off (default): industries are placed on map generation and can appear in game. On: industries must be manually placed."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x04 0x00 0x01 ];
+                DFLT: [ 0x01 0x00 0x00 0x00 ];
+            }
+            0x00000005: 
+            {
+                NAME: default, "Max Tourist Production"; // Default
+                DESC: default, "Maximum tourist production per month: default 160, max 512, min 32{new-line}{new-line}Note: Affects Hotel, Visitor Center, Town Square only. Houses production is fixed."; // Default
+                MASK: [ 0x05 ];
+                LIMI: [ 0x20 0x00 0x00 0x00 0x00 0x02 0x00 0x00 ];
+                DFLT: [ 0xA0 0x00 0x00 0x00 ];
+            }
+            0x00000006: 
+            {
+                NAME: default, "Closure protection period"; // Default
+                DESC: default, "Industries will be protected from closure for this many months: default 60, max 600, min 0. A value of 0 will disable industry closure."; // Default
+                MASK: [ 0x06 ];
+                LIMI: [ 0x00 0x00 0x00 0x00 0x58 0x02 0x00 0x00 ];
+                DFLT: [ 0x3C 0x00 0x00 0x00 ];
+            }
+            0x00000007: 
+            {
+                NAME: default, "Debug Text"; // Default
+                DESC: default, "Show debug text in the industry windows."; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x07 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000008: 
+            {
+                NAME: default, "Industry base costs defined by this NewGRF"; // Default
+                DESC: default, "Off (default) if another NewGRF is defining industry base costs.{new-line}On if this NewGRF will define them.{new-line}{new-line}Base costs defined: PR_BUILD_INDUSTRY, PR_BUILD_INDUSTRY_RAW, PR_CLEAR_INDUSTRY"; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x08 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x00000009: 
+            {
+                NAME: default, "Industry base costs"; // Default
+                DESC: default, "Normal or reduced base costs (default = normal)."; // Default
+                MASK: [ 0x09 ];
+                LIMI: [ 0x00 0x00 0x00 0x00 0x05 0x00 0x00 0x00 ];
+                VALU: 
+                {
+                    0x00000000: default, "Normal"; // Default
+                    0x00000001: default, "1/2"; // Default
+                    0x00000002: default, "1/4"; // Default
+                    0x00000003: default, "1/8"; // Default
+                    0x00000004: default, "1/16"; // Default
+                    0x00000005: default, "Minimal (1/32)"; // Default
+                }
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x0000000A: 
+            {
+                NAME: default, "Train base costs defined by this NewGRF"; // Default
+                DESC: default, "Off (default) if another NewGRF is defining train base costs.{new-line}On if this NewGRF will define them.{new-line}{new-line}Base costs defined: PR_BUILD_VEHICLE_TRAIN, PR_BUILD_VEHICLE_WAGON, PR_RUNNING_TRAIN_STEAM, PR_RUNNING_TRAIN_DIESEL, PR_RUNNING_TRAIN_ELECTRIC"; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x0A 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x0000000B: 
+            {
+                NAME: default, "Train base costs"; // Default
+                DESC: default, "Normal or reduced base costs (default = normal)."; // Default
+                MASK: [ 0x0B ];
+                LIMI: [ 0x00 0x00 0x00 0x00 0x05 0x00 0x00 0x00 ];
+                VALU: 
+                {
+                    0x00000000: default, "Normal"; // Default
+                    0x00000001: default, "1/2"; // Default
+                    0x00000002: default, "1/4"; // Default
+                    0x00000003: default, "1/8"; // Default
+                    0x00000004: default, "1/16"; // Default
+                    0x00000005: default, "Minimal (1/32)"; // Default
+                }
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x0000000C: 
+            {
+                NAME: default, "Road vehicle base costs defined by this NewGRF"; // Default
+                DESC: default, "Off (default) if another NewGRF is defining road vehicle base costs.{new-line}On if this NewGRF will define them.{new-line}{new-line}Base costs defined: PR_BUILD_VEHICLE_ROAD, PR_RUNNING_ROADVEH"; // Default
+                TYPE: [ 0x01 ];
+                MASK: [ 0x0C 0x00 0x01 ];
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+            0x0000000D: 
+            {
+                NAME: default, "Road vehicle base costs"; // Default
+                DESC: default, "Normal or reduced base costs (default = normal)."; // Default
+                MASK: [ 0x0D ];
+                LIMI: [ 0x00 0x00 0x00 0x00 0x05 0x00 0x00 0x00 ];
+                VALU: 
+                {
+                    0x00000000: default, "Normal"; // Default
+                    0x00000001: default, "1/2"; // Default
+                    0x00000002: default, "1/4"; // Default
+                    0x00000003: default, "1/8"; // Default
+                    0x00000004: default, "1/16"; // Default
+                    0x00000005: default, "Minimal (1/32)"; // Default
+                }
+                DFLT: [ 0x00 0x00 0x00 0x00 ];
+            }
+        }
+        PALS: [ 0x44 ];
+        BLTR: [ 0x38 ];
+    }
+}
+// Record #10
+grf // Action08
+{
+    grf_id: "jdr\x02";
+    version: GRF8;
+    name: "Wannaroo Tourist Set";
+    description: "{new-line}Wannaroo Tourist Set provides 3 tourist industries for OpenTTD.{new-line}{new-line}Cargos added:{new-line}Tourists (TOUR, 31){new-line}{new-line}License: GPL v2";
+}
+// Record #11
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        plural_form: 0x00;
+    }
+}
+// Record #12
+strings<Trains, default, 0xD000*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xD000 */ "";
+    /* 0xD001 */ "{small-font}produced_this_month: {sd}{new-line}{new-line}production_level: {sd}{new-line}{new-line}current production rate: {sd}{new-line}max production rate: {sd}{new-line}{new-line}received this month: {sd}{new-line}{new-line}closure counter: {sd}";
+    /* 0xD002 */ "Town is too small (below 2000 population) for building this industry.";
+    /* 0xD003 */ "Can only build industry on flat land.";
+    /* 0xD004 */ "Industry should be located away from the town center, minimum distance is 20 tiles.";
+    /* 0xD005 */ "Too close to another industry.";
+    /* 0xD006 */ "Only one industry of this type allowed per town.";
+    /* 0xD007 */ "Too close to another similar industry, minimum distance is 50 tiles.";
+    /* 0xD008 */ "Hotel must be within 6 tiles of water.";
+    /* 0xD009 */ "Too close to another similar industry, minimum distance is 20 tiles.";
+}
+// Record #13
+strings<Cargos, default, 0xDC00*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC00 */ "Tourists";
+    /* 0xDC01 */ "{small-font}TR";
+    /* 0xDC02 */ "{sd} tourists";
+}
+// Record #14
+strings<Industries, default, 0xDC03*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC03 */ "Hotel";
+    /* 0xDC04 */ "{substring1} Hotel";
+    /* 0xDC05 */ "Visitor Center";
+    /* 0xDC06 */ "{substring1} Visitor Center";
+    /* 0xDC07 */ "Town Square";
+    /* 0xDC08 */ "{substring1} Square";
+}
+// Record #15
+strings<Houses, default, 0xDC09*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC09 */ "Rustic House";
+    /* 0xDC0A */ "Regular House";
+    /* 0xDC0B */ "Tower Block";
+    /* 0xDC0C */ "Flats";
+}
+// Record #16
+strings<Cargos, en_US, 0xDC02*> // <feature, language, first_id> Action04, English (US)
+{
+    /* 0xDC02 */ "{sd} tourist{ext plural-list 0xFF80}{ext list-value 0x0001}{ext list-default}s{ext end-list}";
+}
+// Record #17
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #18
+if_act9 (is_bit_clear(param[0x08] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #19
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #20
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x0F;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #21
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0x09;
+    source2: 0x00;
+}
+// Record #22
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7B;
+    data_value: 0x00000000;
+}
+// Record #23
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x01;
+    source1: 0x7C;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #24
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 8, false);
+}
+// Record #25
+properties<GlobalSettings, 0x0030> // Action00
+{
+    // instance_id: 0x0030
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #26
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x00;
+    source1: 0x09;
+    source2: 0x00;
+}
+// Record #27
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7A;
+    data_value: 0x00000000;
+}
+// Record #28
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x01;
+    source1: 0x7B;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #29
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7C], 1, 8, false);
+}
+// Record #30
+properties<GlobalSettings, 0x003A> // Action00
+{
+    // instance_id: 0x003A
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #31
+set_parameter // Action0D
+{
+    target: 0x79;
+    operation: 0x00;
+    source1: 0x09;
+    source2: 0x00;
+}
+// Record #32
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x79;
+    data_value: 0x00000000;
+}
+// Record #33
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x01;
+    source1: 0x7A;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #34
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7B], 1, 8, false);
+}
+// Record #35
+properties<GlobalSettings, 0x0031> // Action00
+{
+    // instance_id: 0x0031
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #36
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #37
+if_act9 (is_bit_clear(param[0x0A] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #38
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #39
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x10;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #40
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0x0B;
+    source2: 0x00;
+}
+// Record #41
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7B;
+    data_value: 0x00000000;
+}
+// Record #42
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x01;
+    source1: 0x7C;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #43
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x00;
+    source1: 0x0B;
+    source2: 0x00;
+}
+// Record #44
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7A;
+    data_value: 0x00000000;
+}
+// Record #45
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x01;
+    source1: 0x7B;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #46
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 8, false);
+    modification(parameter[0x7C], 1, 9, false);
+}
+// Record #47
+properties<GlobalSettings, 0x000F> // Action00
+{
+    // instance_id: 0x000F
+    {
+        cost_base_multipliers: 0x00;
+    }
+    // instance_id: 0x0010
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #48
+set_parameter // Action0D
+{
+    target: 0x79;
+    operation: 0x00;
+    source1: 0x0B;
+    source2: 0x00;
+}
+// Record #49
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x79;
+    data_value: 0x00000000;
+}
+// Record #50
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x01;
+    source1: 0x7A;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #51
+set_parameter // Action0D
+{
+    target: 0x78;
+    operation: 0x00;
+    source1: 0x0B;
+    source2: 0x00;
+}
+// Record #52
+set_parameter // Action0D
+{
+    target: 0x79;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x78;
+    data_value: 0x00000000;
+}
+// Record #53
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x01;
+    source1: 0x79;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #54
+set_parameter // Action0D
+{
+    target: 0x77;
+    operation: 0x00;
+    source1: 0x0B;
+    source2: 0x00;
+}
+// Record #55
+set_parameter // Action0D
+{
+    target: 0x78;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x77;
+    data_value: 0x00000000;
+}
+// Record #56
+set_parameter // Action0D
+{
+    target: 0x79;
+    operation: 0x01;
+    source1: 0x78;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #57
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7B], 1, 8, false);
+    modification(parameter[0x7A], 1, 9, false);
+    modification(parameter[0x79], 1, 10, false);
+}
+// Record #58
+properties<GlobalSettings, 0x002A> // Action00
+{
+    // instance_id: 0x002A
+    {
+        cost_base_multipliers: 0x00;
+    }
+    // instance_id: 0x002B
+    {
+        cost_base_multipliers: 0x00;
+    }
+    // instance_id: 0x002C
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #59
+label<0x10> // Action10 - target for Action07 or Action09
+{
+}
+// Record #60
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #61
+if_act9 (is_bit_clear(param[0x0C] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #62
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #63
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x0A;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #64
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0x0D;
+    source2: 0x00;
+}
+// Record #65
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7B;
+    data_value: 0x00000000;
+}
+// Record #66
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x01;
+    source1: 0x7C;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #67
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 8, false);
+}
+// Record #68
+properties<GlobalSettings, 0x0012> // Action00
+{
+    // instance_id: 0x0012
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #69
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x00;
+    source1: 0x0D;
+    source2: 0x00;
+}
+// Record #70
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7A;
+    data_value: 0x00000000;
+}
+// Record #71
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x01;
+    source1: 0x7B;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #72
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7C], 1, 8, false);
+}
+// Record #73
+properties<GlobalSettings, 0x002E> // Action00
+{
+    // instance_id: 0x002E
+    {
+        cost_base_multipliers: 0x00;
+    }
+}
+// Record #74
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        cargo_translation_table: "TOUR";
+    }
+    // instance_id: 0x0001
+    {
+        cargo_translation_table: "FOOD";
+    }
+    // instance_id: 0x0002
+    {
+        cargo_translation_table: "GOOD";
+    }
+    // instance_id: 0x0003
+    {
+        cargo_translation_table: "BEER";
+    }
+    // instance_id: 0x0004
+    {
+        cargo_translation_table: "PASS";
+    }
+    // instance_id: 0x0005
+    {
+        cargo_translation_table: "MAIL";
+    }
+}
+// Record #75
+set_parameter // Action0D
+{
+    target: 0x79;
+    operation: 0x00;
+    source1: 0x13;
+    source2: 0xFE;
+    data_value: 0x0000FFFF;
+}
+// Record #76
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x07;
+    source1: 0x79;
+    source2: 0xFF;
+    data_value: 0x000000FF;
+}
+// Record #77
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x01;
+    source1: 0x7A;
+    source2: 0xFF;
+    data_value: 0x0000000C;
+}
+// Record #78
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x06;
+    source1: 0xFF;
+    source2: 0x7B;
+    data_value: 0x00000001;
+}
+// Record #79
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x0A;
+    source1: 0x7C;
+    source2: 0xFF;
+    data_value: 0x00010000;
+}
+// Record #80
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x04;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x00000004;
+}
+// Record #81
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000003;
+}
+// Record #82
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7E;
+    data_value: 0x00000003;
+}
+// Record #83
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x05;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0xFFFFFFE1;
+}
+// Record #84
+if_act9 (is_equal(param[0x7D] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #85
+set_parameter // Action0D
+{
+    target: 0x7F;
+    operation: 0x00;
+    source1: 0x7E;
+    source2: 0x00;
+}
+// Record #86
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF % 0x00000005;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedMin(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseXor(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseXor(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x18] & 0xFFFFFFFF % 0x00000005;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x18] & 0xFFFFFFFF % 0x00000005;
+        value1 = Subtraction(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = PermStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000010;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #87
+industry<Industries, 0xFE, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0000 0x0000 0x0000 ];
+    add_out_amounts: [ 0x0000 0x0000 ];
+    repeat_flag: false;
+}
+// Record #88
+switch<Industries, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #89
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000001;
+    };
+    ranges:
+    {
+        0x00000001: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #90
+switch<Industries, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x0000D000;
+
+        value2 = variable[0x1A] & 0x00003800;
+        value1 = Addition(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #91
+switch<Industries, 0xFC, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x0000D000;
+
+        value2 = variable[0x1A] & 0x00003800;
+        value1 = Addition(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #92
+switch<Industries, 0xFB, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x0000D000;
+
+        value2 = variable[0x1A] & 0x00003800;
+        value1 = Addition(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #93
+switch<Industries, 0xFB, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FD;
+        0x00000001: 0x00FC;
+        0x00000002: 0x00FB;
+    };
+    default: 0x00FE;
+}
+// Record #94
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0x05;
+    source2: 0x00;
+}
+// Record #95
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x0A;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #96
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x05;
+    source1: 0x07;
+    source2: 0xFF;
+    data_value: 0x00000000;
+}
+// Record #97
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x07;
+    source1: 0x7C;
+    source2: 0xFF;
+    data_value: 0x00000001;
+}
+// Record #98
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7E], 4, 49, false);
+    modification(parameter[0x7D], 4, 93, false);
+}
+// Record #99
+switch<Industries, 0xFC, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x94] & 0x0000FFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x93] & 0x000000FF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000101;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7C, 0x02] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000102;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000103;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7C, 0x06] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000104;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7C, 0x00] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000105;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001: 0x8001;
+    };
+    default: 0x8400;
+}
+// Record #100
+switch<Industries, 0xFD, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x82] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x000007CF: 0x8002;
+    };
+    default: 0x8400;
+}
+// Record #101
+sprite_layout<IndustryTiles, 0xFA> // Action02 sprite layout
+{
+    ground_sprite<0x00000000>
+    {
+    }
+    building_sprite<0x00000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x00, 0x00, 0x00;
+    }
+}
+// Record #102
+switch<IndustryTiles, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x8000;
+    };
+    default: 0x00FA;
+}
+// Record #103
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x00] & 0x0000001F;
+    };
+    ranges:
+    {
+        0x00000000: 0x8400;
+        0x00000001..0x000000FF: 0x8003;
+    };
+    default: 0x00FA;
+}
+// Record #104
+switch<Industries, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x66, 0x00] & 0xFFFFFFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x0000018F: 0x8004;
+    };
+    default: 0x8400;
+}
+// Record #105
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #106
+if_act9 (is_bit_clear(param[0x00] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #107
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #108
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #109
+if_act9 (is_bit_clear(param[0x01] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #110
+set_parameter // Action0D
+{
+    target: 0x7A;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #111
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x08;
+    source1: 0x7B;
+    source2: 0x7A;
+}
+// Record #112
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #113
+if_act9 (is_bit_clear(param[0x02] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #114
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #115
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x08;
+    source1: 0x7C;
+    source2: 0x7B;
+}
+// Record #116
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #117
+if_act9 (is_bit_clear(param[0x03] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #118
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #119
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x08;
+    source1: 0x7D;
+    source2: 0x7C;
+}
+// Record #120
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #121
+properties<Cargos, 0x001F> // Action00
+{
+    // instance_id: 0x001F
+    {
+        cargo_type_name_id: 0xDC00;
+        single_unit_name_id: 0xDC00;
+        cargo_type_abbrev_id: 0xDC01;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x02;
+        station_list_colour: 0x5E;
+        payment_list_colour: 0x5E;
+        is_freight: false;
+        cargo_classes: 0x0005;
+        cargo_label: "TOUR";
+        town_growth_effect: 0x00;
+        town_growth_multiplier: 0x0140;
+        cargo_units_id: 0xDC02;
+        cargo_amount_id: 0xDC02;
+        penalty_time_1: 0x00;
+        penalty_time_2: 0x0F;
+        base_price: 0x000021BB;
+        capacity_multiplier: 0x02AC;
+        bit_number: 0x1F;
+    }
+}
+// Record #122
+sprite_sets<Cargos, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000007C>
+        {
+            [9, 10, 1, 0], normal, c8bpp, "wannaroo-tourist-set-8bpp-normal-0.png", [10, 10];
+        }
+    }
+}
+// Record #123
+sprite_groups<Cargos, 0xF7> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+}
+// Record #124
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #125
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F7;
+    feature_ids: [ 0x001F ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #126
+industry<Industries, 0xF7, Version1> // Action02 industry
+{
+    sub_in_registers: [ 0x80 0x81 0x82 ];
+    add_out_registers: [ 0x83 0x84 ];
+    repeat_register: 0x85;
+}
+// Record #127
+switch<Industries, 0xF7, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x7C, 0x06] & 0xFFFFFFFF;
+
+        value2 = variable[0x40] & 0x0000FFFF;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000006;
+        value1 = PermStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = PermStore(value1, value2);
+
+        value2 = variable[0x40] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x41] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x42] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x40] & 0x0000FFFF / 0x00000004;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000084;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000085;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+    };
+    default: 0x00F7;
+}
+// Record #128
+industry<Industries, 0xF6, Version1> // Action02 industry
+{
+    sub_in_registers: [ 0x80 0x81 0x82 ];
+    add_out_registers: [ 0x83 0x84 ];
+    repeat_register: 0x85;
+}
+// Record #129
+switch<Industries, 0xF6, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000000;
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7C, 0x02] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x10] & 0xFFFFFFFF % 0x00000004;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000084;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000085;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F6;
+    };
+    default: 0x00F6;
+}
+// Record #130
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0x06;
+    source2: 0x00;
+}
+// Record #131
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7D;
+    data_value: 0x00000000;
+}
+// Record #132
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x05;
+    source1: 0x7E;
+    source2: 0xFF;
+    data_value: 0xFFFFFFE1;
+}
+// Record #133
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0x06;
+    source2: 0x00;
+}
+// Record #134
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 4, 14, false);
+    modification(parameter[0x7E], 4, 35, false);
+}
+// Record #135
+switch<Industries, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x7C, 0x00] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Subtraction(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedMax(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001: 0x8003;
+    };
+    default: 0x8000;
+}
+// Record #136
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0x05;
+    source2: 0x00;
+}
+// Record #137
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x0A;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #138
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7E], 4, 21, false);
+}
+// Record #139
+switch<Industries, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x7C, 0x02] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedMin(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = PermStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001..0x00000000: 0x8000;
+    };
+    default: 0x00F5;
+}
+// Record #140
+switch<Industries, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x7C, 0x02] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Subtraction(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedMax(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = PermStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001..0x00000000: 0x8000;
+    };
+    default: 0x00F5;
+}
+// Record #141
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000004: 0x00F4;
+        0x00000005: 0x00F5;
+        0x00000006..0x0000000F: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #142
+switch<Industries, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000004: 0x00F5;
+        0x00000005: 0x00F4;
+        0x00000006..0x0000000F: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #143
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x9C] & 0x000000FF;
+
+        value2 = variable[0x1A] & 0x00000065;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = SignedDiv(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000040: 0x00F4;
+        0x00000041..0x00000064: 0x00F3;
+    };
+    default: 0x00FE;
+}
+// Record #144
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000007: 0x00F3;
+        0x00000008..0x0000000F: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #145
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0xA2] & 0x0000FFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Subtraction(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedMax(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseXor(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7C, 0x00] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = PermStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001..0x00000000: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #146
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x7C, 0x0F] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8000;
+        0x00000001: 0x00F3;
+    };
+    default: 0x00FE;
+}
+// Record #147
+switch<Industries, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000000;
+
+        value2 = variable[0x1A] & 0x00000006;
+        value1 = PermStore(value1, value2);
+
+        value2 = variable[0x18] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = PermStore(value1, value2);
+
+        value2 = variable[0x18] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000000F;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000005;
+        value1 = PermStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000001..0x00000000: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #148
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x88] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #149
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x98] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #150
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #151
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #152
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #153
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #154
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #155
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF8] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #156
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x08] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #157
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x18] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #158
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x28] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #159
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x38] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #160
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x48] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #161
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x58] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #162
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x68] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #163
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x78] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #164
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x89] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #165
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x99] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #166
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #167
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #168
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #169
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #170
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #171
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF9] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #172
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x09] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #173
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x19] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #174
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x29] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #175
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x39] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #176
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x49] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #177
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x59] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #178
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x69] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #179
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x79] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #180
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #181
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #182
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #183
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #184
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #185
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #186
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xEA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #187
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFA] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #188
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #189
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #190
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #191
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #192
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #193
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #194
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #195
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7A] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #196
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #197
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #198
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #199
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #200
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #201
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #202
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xEB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #203
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFB] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #204
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #205
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #206
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #207
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #208
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #209
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #210
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #211
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7B] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #212
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #213
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #214
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #215
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #216
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #217
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #218
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xEC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #219
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFC] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #220
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #221
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #222
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #223
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #224
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #225
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #226
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #227
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7C] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #228
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #229
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #230
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAD] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #231
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBD] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #232
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCD] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #233
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDD] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #234
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xED] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #235
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFD] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #236
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #237
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #238
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #239
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #240
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #241
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #242
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #243
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7D] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #244
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #245
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #246
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #247
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #248
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #249
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #250
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xEE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #251
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFE] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #252
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #253
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #254
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #255
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #256
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #257
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #258
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #259
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7E] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #260
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x8F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #261
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x9F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #262
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xAF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #263
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xBF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #264
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xCF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #265
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xDF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #266
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xEF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #267
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xFF] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #268
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x0F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #269
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x1F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #270
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x2F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #271
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x3F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #272
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x4F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #273
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x5F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #274
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x6F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #275
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x7F] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #276
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x80] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #277
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x90] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #278
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #279
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #280
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #281
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #282
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #283
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF0] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #284
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x10] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #285
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x20] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #286
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x30] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #287
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x40] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #288
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x50] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #289
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x60] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #290
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x70] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #291
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x81] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #292
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x91] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #293
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #294
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #295
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #296
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #297
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #298
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF1] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #299
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x01] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #300
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x11] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #301
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x21] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #302
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x31] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #303
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x41] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #304
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x51] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #305
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x61] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #306
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x71] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #307
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x82] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #308
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x92] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #309
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #310
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #311
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #312
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #313
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #314
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF2] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #315
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x02] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #316
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x12] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #317
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x22] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #318
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x32] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #319
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x42] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #320
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x52] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #321
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x62] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #322
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x72] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #323
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x83] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #324
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x93] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #325
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #326
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #327
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #328
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #329
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #330
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF3] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #331
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x03] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #332
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x13] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #333
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x23] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #334
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x33] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #335
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x43] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #336
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x53] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #337
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x63] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #338
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x73] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #339
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x84] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #340
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x94] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #341
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #342
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #343
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #344
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #345
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #346
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF4] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #347
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x04] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #348
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x14] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #349
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x24] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #350
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x34] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #351
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x44] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #352
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x54] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #353
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x64] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #354
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x74] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #355
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x85] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #356
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x95] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #357
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #358
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #359
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #360
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #361
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #362
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF5] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #363
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x05] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #364
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x15] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #365
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x25] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #366
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x35] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #367
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x45] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #368
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x55] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #369
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x65] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #370
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x75] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #371
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x86] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #372
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x96] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #373
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #374
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #375
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #376
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #377
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #378
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF6] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #379
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x06] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #380
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x16] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #381
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x26] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #382
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x36] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #383
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x46] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #384
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x56] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #385
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x66] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #386
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x76] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #387
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x87] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #388
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x97] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #389
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xA7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #390
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xB7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #391
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xC7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #392
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #393
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #394
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xF7] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #395
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x07] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #396
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x17] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #397
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x27] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #398
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x37] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #399
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x47] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #400
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x57] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #401
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x67] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #402
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0x77] >> 24 & 0x0000000F;
+    };
+    ranges:
+    {
+        0x00000008: 0x8005;
+    };
+    default: 0x00F9;
+}
+// Record #403
+sprite_layout<IndustryTiles, 0xF4> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x03218000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x83;
+        }
+    }
+}
+// Record #404
+switch<IndustryTiles, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x00000003;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseXor(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x40] & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000003;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00001179;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00001177;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F4;
+    };
+    default: 0x00F4;
+}
+// Record #405
+sprite_layout<IndustryTiles, 0xF5> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x03218000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+        registers: 
+        {
+            sprite_offset: 0x83;
+        }
+    }
+}
+// Record #406
+switch<IndustryTiles, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x00000003;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseXor(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x40] & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000003;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x0000117A;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00001178;
+        value1 = Multiply(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = Addition(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F5;
+    };
+    default: 0x00F5;
+}
+// Record #407
+sprite_layout<IndustryTiles, 0xF2> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    child_sprite<0x000005AF>
+    {
+        offset: 0x00, 0x06;
+    }
+}
+// Record #408
+sprite_layout<IndustryTiles, 0xF1> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x000005B0>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #409
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #410
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        callback_flags: 0x10;
+    }
+}
+// Record #411
+switch<IndustryTiles, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F9;
+    };
+    default: 0x00F4;
+}
+// Record #412
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F4;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #413
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #414
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        callback_flags: 0x10;
+    }
+}
+// Record #415
+switch<IndustryTiles, 0xF5, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F9;
+    };
+    default: 0x00F5;
+}
+// Record #416
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F5;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #417
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0000;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #418
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        callback_flags: 0x10;
+    }
+}
+// Record #419
+switch<IndustryTiles, 0xF2, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F9;
+    };
+    default: 0x00F2;
+}
+// Record #420
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F2;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #421
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0000;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #422
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        callback_flags: 0x10;
+    }
+}
+// Record #423
+switch<IndustryTiles, 0xF1, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x00F9;
+    };
+    default: 0x00F1;
+}
+// Record #424
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F1;
+    feature_ids: [ 0x0003 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #425
+switch<Industries, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000101;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x68, 0x00] >> 16 & 0x000000FF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F8;
+    };
+    default: 0x8006;
+}
+// Record #426
+switch<Industries, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x67, 0x00] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000031: 0x8007;
+    };
+    default: 0x00F8;
+}
+// Record #427
+switch<Industries, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x43] & 0xFFFFFFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x00000006: 0x00F8;
+    };
+    default: 0x8008;
+}
+// Record #428
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #429
+if_act9 (is_bit_clear(param[0x00] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #430
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #431
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x0F;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #432
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #433
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #434
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #435
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #436
+if_act9 (is_equal(param[0x7C] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #437
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #438
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000002;
+}
+// Record #439
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #440
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #441
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #442
+if_act9 (is_equal(param[0x7B] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #443
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #444
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 85, false);
+    modification(parameter[0x7C], 1, 87, false);
+}
+// Record #445
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_industry_id: 0x01;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0000);
+                new_tile(0, 1, 0x0001);
+                new_tile(1, 1, 0x0002);
+                new_tile(1, 0, 0x0003);
+            }
+        };
+        production_flags: 0x00;
+        special_flags: 0x00008000;
+        fund_cost_multiplier: 0x65;
+        destruction_cost_multiplier: 0x00000000;
+        production_cargo_types: [ 0x00 0xFF ];
+        acceptance_cargo_types: [ 0x00 0x01 0x03 0x00 ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x05;
+        input_multipliers1: 0x00000000;
+        input_multipliers2: 0x00000000;
+        input_multipliers3: 0x00000000;
+        conflicting_industries: [ 0x80 0x81 0x82 ];
+        random_probability: 0x00;
+        gameplay_probability: 0x00;
+        prospecting_probability: 0xFFFFFFFF;
+        map_colour: 0xBD;
+        industry_name_id: 0xDC03;
+        nearby_station_text_id: 0xDC04;
+    }
+}
+// Record #446
+properties<Industries, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        callback_flags_1: 0x7E;
+        callback_flags_2: 0x41;
+    }
+}
+// Record #447
+switch<Industries, 0xF1, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+        0x00000001: 0x00F6;
+    };
+    default: 0x00FE;
+}
+// Record #448
+switch<Industries, 0xF8, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F1;
+        0x00000028: 0x00F8;
+        0x00000029: 0x8000;
+        0x00000035: 0x00F3;
+        0x00000037: 0x00FB;
+        0x0000003A: 0x00FC;
+        0x0000015F: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #449
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #450
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F8;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #451
+sprite_sets<IndustryTiles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000001C6>
+        {
+            [48, 82, -24, -55], normal, c8bpp, "wannaroo-tourist-set-8bpp-normal-0.png", [29, 10];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001C7>
+        {
+            [60, 41, -29, -8], normal, c8bpp | chunked, "wannaroo-tourist-set-8bpp-normal-0.png", [87, 10];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x000001C8>
+        {
+            [60, 43, -30, -11], normal, c8bpp | chunked, "wannaroo-tourist-set-8bpp-normal-0.png", [157, 10];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x000001C9>
+        {
+            [60, 46, -30, -11], normal, c8bpp, "wannaroo-tourist-set-8bpp-normal-0.png", [227, 10];
+        }
+    }
+    sprite_set // 0x0004
+    {
+        sprite_id<0x000001CA>
+        {
+            [60, 46, -30, -11], normal, c8bpp, "wannaroo-tourist-set-8bpp-normal-0.png", [297, 10];
+        }
+    }
+    sprite_set // 0x0005
+    {
+        sprite_id<0x000001CB>
+        {
+            [60, 46, -30, -11], normal, c8bpp | chunked, "wannaroo-tourist-set-8bpp-normal-0.png", [367, 10];
+        }
+    }
+}
+// Record #452
+sprite_layout<IndustryTiles, 0xF8> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x80000000>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #453
+sprite_layout<IndustryTiles, 0xF1> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x0000121E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #454
+sprite_layout<IndustryTiles, 0xF9> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x0000121B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #455
+sprite_layout<IndustryTiles, 0xF2> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x00000A2A>
+    {
+        offset: 0x05, 0x05, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #456
+sprite_layout<IndustryTiles, 0xF5> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80000001>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #457
+sprite_layout<IndustryTiles, 0xF4> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80000002>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #458
+sprite_layout<IndustryTiles, 0xF0> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80000003>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #459
+sprite_layout<IndustryTiles, 0xEF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80000004>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #460
+sprite_layout<IndustryTiles, 0xEE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80000005>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #461
+sprite_layout<IndustryTiles, 0xED> // Action02 sprite layout
+{
+    ground_sprite<0x0000058C>
+    {
+    }
+    building_sprite<0x000005AE>
+    {
+        offset: 0x06, 0x05, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #462
+random_switch<IndustryTiles, 0xEC, Object> // Action02 random
+{
+    triggers: 0x00;
+    rand_bit: 0x00;
+    set_ids: // set_id: probability;
+    {
+        0x00ED: 1;
+        0x00F1: 3;
+        0x00F8: 4;
+    };
+}
+// Record #463
+random_switch<IndustryTiles, 0xF9, Object> // Action02 random
+{
+    triggers: 0x00;
+    rand_bit: 0x00;
+    set_ids: // set_id: probability;
+    {
+        0x00ED: 4;
+        0x00F1: 4;
+        0x00F8: 4;
+        0x00F9: 20;
+    };
+}
+// Record #464
+random_switch<IndustryTiles, 0xF4, Object> // Action02 random
+{
+    triggers: 0x00;
+    rand_bit: 0x00;
+    set_ids: // set_id: probability;
+    {
+        0x00ED: 1;
+        0x00F1: 1;
+        0x00F4: 13;
+        0x00F5: 16;
+        0x00F8: 1;
+    };
+}
+// Record #465
+random_switch<IndustryTiles, 0xEE, Object> // Action02 random
+{
+    triggers: 0x00;
+    rand_bit: 0x00;
+    set_ids: // set_id: probability;
+    {
+        0x00ED: 1;
+        0x00EE: 9;
+        0x00EF: 10;
+        0x00F0: 10;
+        0x00F1: 1;
+        0x00F8: 1;
+    };
+}
+// Record #466
+random_switch<IndustryTiles, 0xED, Object> // Action02 random
+{
+    triggers: 0x00;
+    rand_bit: 0x00;
+    set_ids: // set_id: probability;
+    {
+        0x00ED: 1;
+        0x00F1: 1;
+        0x00F2: 29;
+        0x00F8: 1;
+    };
+}
+// Record #467
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x07;
+    source1: 0x83;
+    source2: 0xFF;
+    data_value: 0x000000FF;
+}
+// Record #468
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x02;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x00000002;
+}
+// Record #469
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x0A;
+    source1: 0x7E;
+    source2: 0x7E;
+}
+// Record #470
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7E], 4, 167, false);
+}
+// Record #471
+switch<IndustryTiles, 0xF9, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE0] >> 24 & 0x0000000F;
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x02] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x20] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0E] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x42] & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x83] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00EC;
+        0x00000001: 0x00F9;
+    };
+    default: 0x00FA;
+}
+// Record #472
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x07;
+    source1: 0x83;
+    source2: 0xFF;
+    data_value: 0x000000FF;
+}
+// Record #473
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x02;
+    source1: 0x7D;
+    source2: 0xFF;
+    data_value: 0x00000002;
+}
+// Record #474
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x0A;
+    source1: 0x7E;
+    source2: 0x7E;
+}
+// Record #475
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x02;
+    source1: 0xFF;
+    source2: 0x7E;
+    data_value: 0x00000001;
+}
+// Record #476
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7E], 4, 167, false);
+}
+// Record #477
+switch<IndustryTiles, 0xF4, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xE0] >> 24 & 0x0000000F;
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x02] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x20] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0E] >> 24 & 0x0000000F;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x42] & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x83] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F9;
+        0x00000001: 0x00F4;
+    };
+    default: 0x00FA;
+}
+// Record #478
+switch<IndustryTiles, 0xEE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD0] >> 10 & 0x00000007;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x30] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0D] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x03] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0xE0] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000084;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x20] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000085;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0E] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000086;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x02] >> 10 & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000087;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x42] & 0x00000007;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x87] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x86] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x85] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x84] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x83] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F4;
+        0x00000001: 0x00EE;
+    };
+    default: 0x00FA;
+}
+// Record #479
+switch<IndustryTiles, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x60, 0xD0] >> 13 & 0x00000003;
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000080;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x30] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000081;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0D] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000082;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x03] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000083;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0xE0] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000084;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x20] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000085;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x0E] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000086;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x60, 0x02] >> 13 & 0x00000003;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = SignedCmp(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000001;
+        value1 = BitwiseAnd(value1, value2);
+
+        value2 = variable[0x7D, 0x86] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x85] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x84] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x83] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x82] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x81] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+
+        value2 = variable[0x7D, 0x80] & 0xFFFFFFFF;
+        value1 = BitwiseOr(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00EE;
+        0x00000001: 0x00ED;
+    };
+    default: 0x00FA;
+}
+// Record #480
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #481
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        callback_flags: 0x70;
+    }
+}
+// Record #482
+switch<IndustryTiles, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x0000002F: 0x8400;
+        0x00000030: 0x8001;
+        0x0000003C: 0x8000;
+    };
+    default: 0x00FA;
+}
+// Record #483
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FA;
+    feature_ids: [ 0x0004 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #484
+switch<Industries, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000101;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x68, 0x01] >> 16 & 0x000000FF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8400;
+    };
+    default: 0x8006;
+}
+// Record #485
+switch<Industries, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x67, 0x01] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000031: 0x8007;
+    };
+    default: 0x00FA;
+}
+// Record #486
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #487
+if_act9 (is_bit_clear(param[0x01] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #488
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #489
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x0F;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #490
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #491
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #492
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #493
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #494
+if_act9 (is_equal(param[0x7C] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #495
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #496
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000002;
+}
+// Record #497
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #498
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #499
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #500
+if_act9 (is_equal(param[0x7B] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #501
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #502
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 70, false);
+    modification(parameter[0x7C], 1, 72, false);
+}
+// Record #503
+properties<Industries, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        substitute_industry_id: 0x01;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0004);
+            }
+        };
+        production_flags: 0x00;
+        special_flags: 0x00008000;
+        fund_cost_multiplier: 0x65;
+        destruction_cost_multiplier: 0x00000000;
+        production_cargo_types: [ 0x00 0xFF ];
+        acceptance_cargo_types: [ 0x00 0xFF 0xFF 0x00 ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x05;
+        input_multipliers1: 0x00000000;
+        input_multipliers2: 0x00000000;
+        input_multipliers3: 0x00000000;
+        conflicting_industries: [ 0x80 0x81 0x82 ];
+        random_probability: 0x00;
+        gameplay_probability: 0x00;
+        prospecting_probability: 0xFFFFFFFF;
+        map_colour: 0xBA;
+        industry_name_id: 0xDC05;
+        nearby_station_text_id: 0xDC06;
+    }
+}
+// Record #504
+properties<Industries, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        callback_flags_1: 0x7E;
+        callback_flags_2: 0x41;
+    }
+}
+// Record #505
+switch<Industries, 0xED, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+        0x00000001: 0x00F6;
+    };
+    default: 0x00FE;
+}
+// Record #506
+switch<Industries, 0xFA, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00ED;
+        0x00000028: 0x00FA;
+        0x00000029: 0x8000;
+        0x00000035: 0x00F3;
+        0x00000037: 0x00FB;
+        0x0000003A: 0x00FC;
+        0x0000015F: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #507
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #508
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FA;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #509
+sprite_layout<IndustryTiles, 0xFA> // Action02 sprite layout
+{
+    ground_sprite<0x00001243>
+    {
+    }
+    building_sprite<0x00000FFB>
+    {
+        offset: 0x00, 0xF0, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000FFA>
+    {
+        offset: 0xF0, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x06, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x06, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #510
+sprite_layout<IndustryTiles, 0xED> // Action02 sprite layout
+{
+    ground_sprite<0x00001243>
+    {
+    }
+    building_sprite<0x00000FFB>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000FFA>
+    {
+        offset: 0xF0, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x06, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x06, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #511
+sprite_layout<IndustryTiles, 0xEE> // Action02 sprite layout
+{
+    ground_sprite<0x00001243>
+    {
+    }
+    building_sprite<0x00000FFB>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000FFA>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x000005AF>
+    {
+        offset: 0xF9, 0xF9, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x05, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x05, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #512
+sprite_layout<IndustryTiles, 0xF4> // Action02 sprite layout
+{
+    ground_sprite<0x00001243>
+    {
+    }
+    building_sprite<0x00000FFB>
+    {
+        offset: 0x00, 0xF0, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000FFA>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x06, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x06, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+    building_sprite<0x00000755>
+    {
+        offset: 0x0B, 0x0B, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #513
+properties<IndustryTiles, 0x0005> // Action00
+{
+    // instance_id: 0x0005
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0802;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #514
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FA;
+    feature_ids: [ 0x0005 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #515
+properties<IndustryTiles, 0x0006> // Action00
+{
+    // instance_id: 0x0006
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0802;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #516
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00ED;
+    feature_ids: [ 0x0006 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #517
+properties<IndustryTiles, 0x0007> // Action00
+{
+    // instance_id: 0x0007
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0802;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #518
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00EE;
+    feature_ids: [ 0x0007 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #519
+properties<IndustryTiles, 0x0008> // Action00
+{
+    // instance_id: 0x0008
+    {
+        substitute_building_id: 0x00;
+        tile_acceptance1: 0x0800;
+        tile_acceptance2: 0x0802;
+        tile_acceptance3: 0x0803;
+    }
+}
+// Record #520
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00F4;
+    feature_ids: [ 0x0008 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #521
+switch<Industries, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = Assign(value1, value2);
+
+        value2 = variable[0x1A] & 0x00000101;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x68, 0x02] >> 16 & 0x000000FF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00FD;
+    };
+    default: 0x8006;
+}
+// Record #522
+switch<Industries, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000100;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x67, 0x02] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000..0x00000013: 0x8009;
+    };
+    default: 0x00FD;
+}
+// Record #523
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #524
+if_act9 (is_bit_clear(param[0x02] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #525
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #526
+if_act9 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x0F;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #527
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #528
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #529
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #530
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #531
+if_act9 (is_equal(param[0x7C] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #532
+set_parameter // Action0D
+{
+    target: 0x7D;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #533
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000002;
+}
+// Record #534
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #535
+if_act9 (is_bit_clear(param[0x04] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #536
+set_parameter // Action0D
+{
+    target: 0x7B;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #537
+if_act9 (is_equal(param[0x7B] & 0xFFFFFFFF, 0x00000000)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #538
+set_parameter // Action0D
+{
+    target: 0x7C;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #539
+modify_next // Action06
+{
+    // modification(value, num_bytes, offset, add?);
+    modification(parameter[0x7D], 1, 85, false);
+    modification(parameter[0x7C], 1, 87, false);
+}
+// Record #540
+properties<Industries, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        substitute_industry_id: 0x01;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x0005);
+                new_tile(0, 1, 0x0006);
+                new_tile(1, 1, 0x0007);
+                new_tile(1, 0, 0x0008);
+            }
+        };
+        production_flags: 0x00;
+        special_flags: 0x00008010;
+        fund_cost_multiplier: 0x65;
+        destruction_cost_multiplier: 0x00000000;
+        production_cargo_types: [ 0x00 0xFF ];
+        acceptance_cargo_types: [ 0x00 0x02 0x03 0x00 ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x05;
+        input_multipliers1: 0x00000000;
+        input_multipliers2: 0x00000000;
+        input_multipliers3: 0x00000000;
+        conflicting_industries: [ 0x80 0x81 0x82 ];
+        random_probability: 0x00;
+        gameplay_probability: 0x00;
+        prospecting_probability: 0xFFFFFFFF;
+        map_colour: 0x25;
+        industry_name_id: 0xDC07;
+        nearby_station_text_id: 0xDC08;
+    }
+}
+// Record #541
+properties<Industries, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        callback_flags_1: 0x7E;
+        callback_flags_2: 0x41;
+    }
+}
+// Record #542
+switch<Industries, 0xF6, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+        0x00000001: 0x00F6;
+    };
+    default: 0x00FE;
+}
+// Record #543
+switch<Industries, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F6;
+        0x00000028: 0x00FD;
+        0x00000029: 0x8000;
+        0x00000035: 0x00F3;
+        0x00000037: 0x00FB;
+        0x0000003A: 0x00FC;
+        0x0000015F: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #544
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #545
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #546
+sprite_sets<Houses, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000022B>
+        {
+            [64, 31, -31, 0], normal, c8bpp, "wannaroo-tourist-set-8bpp-normal-0.png", [437, 10];
+        }
+    }
+}
+// Record #547
+sprite_layout<Houses, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x0000121B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #548
+sprite_layout<Houses, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x00009221>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #549
+sprite_layout<Houses, 0xFC> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x0000122A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #550
+sprite_layout<Houses, 0xFB> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x00001233>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #551
+switch<Houses, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x65, 0x47] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x8001;
+    };
+    default: 0x8000;
+}
+// Record #552
+switch<Houses, 0xFD, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x82] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x00007CFF: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #553
+switch<Houses, 0xF6, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x82] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x00001F3F: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #554
+switch<Houses, 0xF7, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x82] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x000012BF: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #555
+switch<Houses, 0xF4, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x82] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x000004AF: 0x8000;
+    };
+    default: 0x00F3;
+}
+// Record #556
+switch<Houses, 0xFD, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x44] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F4;
+        0x00000001: 0x00F6;
+        0x00000002: 0x00FD;
+    };
+    default: 0x8000;
+}
+// Record #557
+switch<Houses, 0xF6, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x44] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00F3;
+        0x00000001: 0x00F7;
+        0x00000002: 0x00F6;
+    };
+    default: 0x8000;
+}
+// Record #558
+switch<Houses, 0xF7, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF % 0x00000004;
+
+        value2 = variable[0x1A] & 0x00000008;
+        value1 = Addition(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #559
+switch<Houses, 0xF7, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F7;
+    };
+    default: 0xA0FF;
+}
+// Record #560
+switch<Houses, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0xFFFFFFFF % 0x00000005;
+
+        value2 = variable[0x1A] & 0x00000014;
+        value1 = Addition(value1, value2);
+    };
+    ranges:
+    {
+    };
+    default: 0x8000;
+}
+// Record #561
+switch<Houses, 0xF3, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0xFFFFFFFF;
+
+        value2 = variable[0x1A] & 0x00000000;
+        value1 = UnsignedShiftRight(value1, value2);
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = BitwiseAnd(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x00F3;
+    };
+    default: 0xA0FF;
+}
+// Record #562
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000000;
+}
+// Record #563
+if_act9 (is_bit_clear(param[0x03] & 0xFF, 1 << 0)) // Action09
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #564
+set_parameter // Action0D
+{
+    target: 0x7E;
+    operation: 0x00;
+    source1: 0xFF;
+    source2: 0x00;
+    data_value: 0x00000001;
+}
+// Record #565
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x02;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #566
+properties<Houses, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        callback_flags: 0x81;
+        callback_flags_2: 0x1E;
+    }
+}
+// Record #567
+switch<Houses, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x00000000;
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x0C] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000017: 0x00F6;
+        0x00000021: 0x8000;
+        0x0000002E: 0x00F7;
+        0x00000143: 0x8001;
+        0x0000014E: 0x8001;
+        0x0000014F: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #568
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x03;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #569
+feature_graphics<Houses> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #570
+properties<Houses, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        callback_flags: 0x81;
+        callback_flags_2: 0x1E;
+    }
+}
+// Record #571
+switch<Houses, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x01000000;
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x0C] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000017: 0x00F6;
+        0x00000021: 0x8000;
+        0x0000002E: 0x00F7;
+        0x00000143: 0x8001;
+        0x0000014E: 0x8001;
+        0x0000014F: 0x8000;
+    };
+    default: 0x00FF;
+}
+// Record #572
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x03;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #573
+feature_graphics<Houses> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #574
+properties<Houses, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        callback_flags: 0x81;
+        callback_flags_2: 0x1E;
+    }
+}
+// Record #575
+switch<Houses, 0xFC, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x02000000;
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x0C] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000017: 0x00FD;
+        0x00000021: 0x8000;
+        0x0000002E: 0x00F3;
+        0x00000143: 0x8001;
+        0x0000014E: 0x8001;
+        0x0000014F: 0x8000;
+    };
+    default: 0x00FC;
+}
+// Record #576
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x03;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #577
+feature_graphics<Houses> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FC;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #578
+properties<Houses, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        callback_flags: 0x81;
+        callback_flags_2: 0x1E;
+    }
+}
+// Record #579
+switch<Houses, 0xFB, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x1A] & 0x03000000;
+
+        value2 = variable[0x1A] & 0x000000FF;
+        value1 = TempStore(value1, value2);
+
+        value2 = variable[0x0C] & 0x0000FFFF;
+        value1 = Assign(value1, value2);
+    };
+    ranges:
+    {
+        0x00000017: 0x00FD;
+        0x00000021: 0x8000;
+        0x0000002E: 0x00F3;
+        0x00000143: 0x8001;
+        0x0000014E: 0x8001;
+        0x0000014F: 0x8000;
+    };
+    default: 0x00FB;
+}
+// Record #580
+if_act7 (is_equal(param[0x7E] & 0xFFFFFFFF, 0x00000000)) // Action07
+{
+    skip_sprites: 0x01;
+    // Or skip to the next label (Action10) with this value - search wraps at end of GRF.
+    // 0x00 means skip to end of GRF file - may disable the GRF.
+}
+// Record #581
+feature_graphics<Houses> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FB;
+    feature_ids: [ 0x0003 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}

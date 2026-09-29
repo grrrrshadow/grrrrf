@@ -236,3 +236,54 @@ jsem je odnikud, jen jsem je našel v souboru. Netipovat.
 Z toho `ELEC` a `NODC` jsou přesně ty dva, na které se odkazovala
 poznámka u `ELTR` („CZIS uses its own labels") a řádek v tabulce neměly.
 Takže se opravdu používají.
+
+## Kódy ze sad v hráčově hře (save v3s2, 2026-09-29)
+
+Hráč: *„studenti, vězni, dělníci … turisti druhý chybějí … projdi znova kódy, asi je seznam neúplný“*.
+V savu `v3s2.sav` je 40 GRF. Kódy a jména nákladů jsou opsané z jejich Action0 (`rozbalene/`,
+u sad s licencí bez šíření jen tady). Ve vzorové tabulce do 29. 9. chyběly tyhle (teď jsou za MARI):
+
+| zkratka | náklad | sada |
+|---|---|---|
+| `WORK` | Qualified Workers (kvalifikovaní dělníci), lidé | Temporal8 Real Industries |
+| `STUD` | Students (studenti), lidé | Temporal8 Real Industries |
+| `PRIS` | Prisioners (sic, vězni), lidé | Temporal8 Real Industries |
+| `PLAY` | Players (hráči), lidé | Temporal8 Real Industries |
+| `TRSH` | Trash (odpadky) | Temporal8 Real Industries |
+| `HVEH` | Heavy Vehicles (těžká vozidla) | Temporal8 Real Industries |
+| `ACET` | Acetic Acid (kyselina octová) | AXIS |
+| `ALO_` | Alumina (oxid hlinitý) | AXIS |
+| `BIOM` | Biomass (biomasa) | AXIS, GIST |
+| `COCO` | Copper Concentrate (měděný koncentrát) — ne kakao | AXIS |
+| `C2H4` | Ethylene / Monomer (ethylen) | AXIS, GIST |
+| `ENUM` | Food Additives (potravinářská aditiva) | AXIS |
+| `HYAC` | Hydrochloric Acid (kyselina chlorovodíková) | AXIS |
+| `H2__` | Hydrogen (vodík) | AXIS, GIST |
+| `MPAR` | Metal Parts (kovové díly) | AXIS |
+| `MEOH` | Methanol | AXIS |
+| `NAPH` | Naphtha (primární benzín) | AXIS |
+| `N7__` | Nitrogen (dusík) | AXIS, FIRS 5.2 |
+| `PHAC` | Phosphoric Acid (kyselina fosforečná) | AXIS |
+| `PPAR` | Plastic Parts (plastové díly) | AXIS |
+| `C3H6` | Propylene (propylen) | AXIS |
+| `RAMT` | Rare Metals (vzácné kovy) | AXIS |
+| `SUAC` | Sulphuric Acid (kyselina sírová) | AXIS |
+| `TINP` | Tinplate (bílý plech) | AXIS |
+| `UREA` | Urea (močovina) | AXIS |
+| `N2__` | Nitrogen (dusík), jiný label než `N7__` | GIST |
+| `LEAT` | Leather (kůže) | Open Industries: Temperate |
+| `LUBR` | Lubricants (maziva) | Open Industries: Temperate |
+| `PRNT` | Printed Products (tiskoviny) | Open Industries: Temperate |
+| `APOL` | Apollo spacecraft | Apollo Rocket Industry Set |
+| `LNDR` | Apollo landers | Apollo Rocket Industry Set |
+| `RSTG` | Rocket stages (raketové stupně) | Apollo Rocket Industry Set |
+| `RENG` | Rocket engines (raketové motory) | Apollo Rocket Industry Set |
+| `SILC` | Silicon (křemík) | Apollo Rocket Industry Set |
+
+**Lidé v hráčově hře:** `PASS` (Industries of the Caribbean ho jmenuje Workers), `TOUR` Tourists
+(ECS Town vector, WR Tourist Set, Industries of the Caribbean), `OTI2` Tourists (Real Industries),
+`WORK`, `STUD`, `PRIS`, `PLAY`. Turisté jsou tedy dva různé kódy se stejným jménem, `TOUR` a `OTI2`,
+oba byly ve vzoru už dřív.
+
+Hráčovy kódy: `CHME` chmel, `WINE` víno. Kódy, které znají jen vagóny a význam nikde nestojí
+(`NWST FREE FLOU LETH MLTR UORE CRAN LFEQ SCPR STTP SWRP TIN_ WDCH`), jsou ve vzoru taky, jako undefined.

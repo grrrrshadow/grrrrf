@@ -9,6 +9,17 @@ vozí, jaké kódy nákladů sada zná, jak jsou napsané callbacky. Zpátky do 
 | `gets-0.7/` | GETS German Extrazoom Trainset 0.7 | `gets0.7.grf` | 00fd0b19f81b0d30fb3c187e827c64b6 | BaNaNaS 53410808 |
 | `gets-alpine-0.3.1/` | GETS: Alpine Addon 0.3.1 | `gets_alpine_0.3.1.grf` | 6df3adfa09d57769cf4a721bcd045fcc | BaNaNaS 53411c1c |
 | `firs-5.2.0/` | FIRS Industry Replacement Set 5.2.0 | `firs.grf` | df3c0e7f1cb3f1fdcac37dd22a1b0885 | release `par4`, `zip4.zip` |
+| `axis-2.3.1/` | AXIS eXtreme Industry Set 2.3.1 | `axis_2.3.1.grf` | 8458a68b07293fe482ded5aa3b253e3c | BaNaNaS 4a4b8808 (hráčova hra, save v3s2) |
+| `apollo-1.0/` | Apollo Rocket Industry Set 1.0 | `apollo.grf` | 133d9f2bebb49f187515faf7b13356bb | BaNaNaS 454e1501 (hráčova hra, save v3s2) |
+| `auztown-commercial-14/` | AuzTown Commercial Industries 14 | `AuzTownSetInd-v14-2022-02-21.grf` | a155714d8a75ef84616ea813994434e1 | BaNaNaS 47473337 (hráčova hra, save v3s2) |
+| `beach-as-industry-1.2.0/` | Beach as Industry 1.2.0 | `beach_ind.grf` | b29c04d41ae17e1477cbde5651eb98ea | BaNaNaS 54540202 (hráčova hra, save v3s2) |
+| `czis-3.2.1/` | CZIS 3.2.1 | `czis.grf` | 2c7b622cf502529bf13d1a160306f92f | BaNaNaS 4d471002 (hráčova hra, save v3s2) |
+| `xis-0.6.2/` | XIS Extreme Industry Set 0.6.2 | `xis.grf` | 63dc8fb4423a643de87d70b06cccd3cf | BaNaNaS 4a448807 (hráčova hra, save v3s2) |
+| `gist-0.21.15/` | GIST German Industries Set 0.21.15 | `german_industries.grf` | 2b1fbabb629efa8d93db9988a764d605 | BaNaNaS 55440100 (hráčova hra, save v3s2) |
+| `housing-as-industries-0.1.1/` | Housing as Industries 0.1.1 | `housingind_0.1.1.grf` | 70b125abda6dd89fc1260792807191c5 | BaNaNaS 4a448850 (hráčova hra, save v3s2) |
+| `caribbean-2.7/` | Industries of the Caribbean 2.7 | `industries_of_the_caribbean.grf` | c3dae8e922e8486c1cf0bf8ccdd127ba | BaNaNaS 54543230 (hráčova hra, save v3s2) |
+| `open-industries-temperate-0.4.3/` | Open Industries: Temperate 0.4.3 | `open_industries_temperate.grf` | 4bebbf2bcbaeeb1cf4574c455f83f45d | BaNaNaS 4f495431 (hráčova hra, save v3s2) |
+| `wr-tourist-set-1.1.0/` | WR Tourist Set 1.1.0 | `wannaroo-tourist-set.grf` | de2dc28ca46c6f6f32bad7b7b8ef5ebc | BaNaNaS 6a647202 (hráčova hra, save v3s2) |
 
 Licence (podle BaNaNaS a přiložených `license.txt`):
 
@@ -17,10 +28,34 @@ Licence (podle BaNaNaS a přiložených `license.txt`):
 | CZTR Wagons-Cargo 1.1.0 | stefino_cz a Couda (CZTR team) | CC BY-SA 3.0 |
 | GETS 0.7 a GETS Alpine Addon 0.3.1 | GarlicBread42 | GPL v2 |
 | FIRS 5.2.0 | andythenorth | GPL v2 |
+| AXIS 2.3.1, XIS 0.6.2 a Housing as Industries 0.1.1 | EmperorJake | GPL v2 |
+| Apollo Rocket Industry Set 1.0 | Erato | GPL v3 |
+| AuzTown Commercial Industries 14 | kevinfields777 | GPL v2 |
+| Beach as Industry 1.2.0 a Industries of the Caribbean 2.7 | 2TallTyler | GPL v3 |
+| CZIS 3.2.1 | matematysek | GPL v2 |
+| GIST 0.21.15 | UweDomaratius | GPL v2 |
+| Open Industries: Temperate 0.4.3 | DuNeSliM | GPL v2 |
+| WR Tourist Set 1.1.0 | jrook1445 | GPL v2 |
 
 Výpisy jsou jen převedené do textu yaglem, obsah je beze změny. U CZTR ležel v rozbalené kopii jen
 GRF. Jeho `license.txt` je stejný soubor CC BY-SA 3.0 (22 820 B), vzatý ze CZTR Engines Diesel 1.1.0.
 Co z licencí plyne pro úpravy, je na konci.
+
+### Sady z hráčovy hry (2026-09-29)
+
+Hráč poslal uloženou hru `v3s2.sav` (hra 15.x, save 368) a ke kódům nákladů: *„si dej chybějící do repa, budem
+s nimi dělat“*. V savu (kus `NGRF`) je 40 GRF; sady průmyslu a měst, které v repu ještě nebyly, jsem stáhl
+z BaNaNaS a rozbalil tak jako ty výš (`yagl -d -n`). Odkaz na stažení je
+`https://bananas-cdn.openttd.org/newgrf/<GRF ID>/<md5 ze savu>/<GRF ID>-<jméno>-<verze>.tar.gz` (jméno na konci si CDN nekontroluje,
+rozhoduje md5 ze savu). Z rozbalených výpisů jsou kódy nákladů v `naklady.md` a ve vzorové tabulce.
+
+Do repa jsem **nedal** sady, jejichž licence to nedovoluje; jejich kódy nákladů jsou jen v `naklady.md`:
+
+| sada | autor | licence | proč ne |
+|---|---|---|---|
+| BSPI 2.13 (`42580002`) | Borg, kamnet | vlastní | „do not have permission to modify or distribute“ |
+| ECS Town vector 1.2 (`4d656f91`) | George | CC BY-NC-ND 3.0 | bez úprav, výpis je úprava |
+| Temporal8 Real Industries 32bpp beta 4.0.3 (`54454d39`) | Temporal8 | vlastní, `license.txt` prázdný | nevím, co dovoluje |
 
 CZTR Wagons-Cargo **1.0.0**, kterou má hra kvůli FIRS 5, leží v repu hry jako `CZTR_Wagons_cargo.yagl`.
 Tu tady nekopíruju, patří hře.

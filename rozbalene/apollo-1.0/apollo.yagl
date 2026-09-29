@@ -1,0 +1,4954 @@
+yagl_version: "";
+grf_format: Container2;
+// Record #1
+optional_info // Action14
+{
+    INFO: 
+    {
+        VRSN: [ 0x01 0x00 0x00 0x00 ];
+        MINV: [ 0x01 0x00 0x00 0x00 ];
+        NPAR: [ 0x00 ];
+        PALS: [ 0x57 ];
+        BLTR: [ 0x38 ];
+    }
+}
+// Record #2
+grf // Action08
+{
+    grf_id: "EN\x15\x01";
+    version: GRF8;
+    name: "Apollo Rocket Industry Set 1.0";
+    description: "An industry set which allows you to manage the logistics behind the world's most ambitious project to date. Made for the 50th anniversary of the Apollo 11 launch. {new-line}©2019 Erato Nysiad{new-line}License:CC BY-NC 4.0{new-line}";
+}
+// Record #3
+strings<Cargos, default, 0xDC00*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC00 */ "Apollo spacecraft";
+    /* 0xDC01 */ "Spacecraft";
+    /* 0xDC02 */ "item";
+    /* 0xDC03 */ "{sd} spacecraft";
+    /* 0xDC04 */ "{small-font}AP";
+    /* 0xDC05 */ "Apollo landers";
+    /* 0xDC06 */ "Lander";
+    /* 0xDC07 */ "item";
+    /* 0xDC08 */ "{sd} landers";
+    /* 0xDC09 */ "{small-font}LM";
+    /* 0xDC0A */ "Rocket stages";
+    /* 0xDC0B */ "Rocket stage";
+    /* 0xDC0C */ "item";
+    /* 0xDC0D */ "{sd} rocket stages";
+    /* 0xDC0E */ "{small-font}RK";
+    /* 0xDC0F */ "Rocket engines";
+    /* 0xDC10 */ "Roket engine";
+    /* 0xDC11 */ "item";
+    /* 0xDC12 */ "{sd} rocket engines";
+    /* 0xDC13 */ "{small-font}RE";
+    /* 0xDC14 */ "Electronics";
+    /* 0xDC15 */ "Electronics";
+    /* 0xDC16 */ "item";
+    /* 0xDC17 */ "{sd} items of electronics";
+    /* 0xDC18 */ "{small-font}EL";
+    /* 0xDC19 */ "Silicon";
+    /* 0xDC1A */ "Silicon";
+    /* 0xDC1B */ "tonne";
+    /* 0xDC1C */ "{sd} tonnes of silicon";
+    /* 0xDC1D */ "{small-font}SI";
+    /* 0xDC1E */ "Rare earth metals";
+    /* 0xDC1F */ "Rare earth metals";
+    /* 0xDC20 */ "tonne";
+    /* 0xDC21 */ "{sd} tonnes of rare earth metals";
+    /* 0xDC22 */ "{small-font}RE";
+    /* 0xDC23 */ "Sand";
+    /* 0xDC24 */ "Sand";
+    /* 0xDC25 */ "tonne";
+    /* 0xDC26 */ "{sd} tonnes of sand";
+    /* 0xDC27 */ "{small-font}SA";
+}
+// Record #4
+strings<Industries, default, 0xDC28*> // <feature, language, first_id> Action04, Default
+{
+    /* 0xDC28 */ "Electronics Factory";
+    /* 0xDC29 */ "Chemical Purification Plant";
+    /* 0xDC2A */ "Rocket Engine Factory";
+    /* 0xDC2B */ "Rocket Factory";
+    /* 0xDC2C */ "Lander Factory";
+    /* 0xDC2D */ "Spacecraft Factory";
+    /* 0xDC2E */ "Launch Complex";
+    /* 0xDC2F */ "Sand Pit";
+    /* 0xDC30 */ "Rare Earth Metal Mine";
+}
+// Record #5
+properties<GlobalSettings, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        cargo_translation_table: "APOL";
+    }
+    // instance_id: 0x0001
+    {
+        cargo_translation_table: "LNDR";
+    }
+    // instance_id: 0x0002
+    {
+        cargo_translation_table: "RSTG";
+    }
+    // instance_id: 0x0003
+    {
+        cargo_translation_table: "RENG";
+    }
+    // instance_id: 0x0004
+    {
+        cargo_translation_table: "ELEC";
+    }
+    // instance_id: 0x0005
+    {
+        cargo_translation_table: "SILC";
+    }
+    // instance_id: 0x0006
+    {
+        cargo_translation_table: "PETR";
+    }
+    // instance_id: 0x0007
+    {
+        cargo_translation_table: "STEL";
+    }
+    // instance_id: 0x0008
+    {
+        cargo_translation_table: "METL";
+    }
+    // instance_id: 0x0009
+    {
+        cargo_translation_table: "SAND";
+    }
+    // instance_id: 0x000A
+    {
+        cargo_translation_table: "OIL_";
+    }
+    // instance_id: 0x000B
+    {
+        cargo_translation_table: "IRON";
+    }
+    // instance_id: 0x000C
+    {
+        cargo_translation_table: "COAL";
+    }
+    // instance_id: 0x000D
+    {
+        cargo_translation_table: "PASS";
+    }
+}
+// Record #6
+properties<GlobalSettings, 0x000F> // Action00
+{
+    // instance_id: 0x000F
+    {
+        cost_base_multipliers: 0x09;
+    }
+    // instance_id: 0x0010
+    {
+        cost_base_multipliers: 0x0B;
+    }
+}
+// Record #7
+properties<GlobalSettings, 0x002A> // Action00
+{
+    // instance_id: 0x002A
+    {
+        cost_base_multipliers: 0x0B;
+    }
+}
+// Record #8
+properties<GlobalSettings, 0x002C> // Action00
+{
+    // instance_id: 0x002C
+    {
+        cost_base_multipliers: 0x0B;
+    }
+}
+// Record #9
+properties<GlobalSettings, 0x002B> // Action00
+{
+    // instance_id: 0x002B
+    {
+        cost_base_multipliers: 0x0B;
+    }
+}
+// Record #10
+set_parameter // Action0D
+{
+    target: 0x9E;
+    operation: 0x08;
+    source1: 0x9E;
+    source2: 0xFF;
+    data_value: 0x00000008;
+}
+// Record #11
+properties<Cargos, 0x0010> // Action00
+{
+    // instance_id: 0x0010
+    {
+        bit_number: 0x16;
+        cargo_type_name_id: 0xDC00;
+        single_unit_name_id: 0xDC01;
+        cargo_units_id: 0xDC02;
+        cargo_amount_id: 0xDC03;
+        cargo_type_abbrev_id: 0xDC04;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0xF0;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x000028F6;
+        is_freight: true;
+        cargo_classes: 0x0400;
+        cargo_label: "APOL";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #12
+sprite_sets<Cargos, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000000E>
+        {
+            [7, 7, 1, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 10];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000000F>
+        {
+            [8, 6, 0, 2], normal, c8bpp, "apollo-8bpp-normal-0.png", [27, 10];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x00000010>
+        {
+            [4, 8, 2, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [45, 10];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x00000011>
+        {
+            [6, 8, 1, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [59, 10];
+        }
+    }
+    sprite_set // 0x0004
+    {
+        sprite_id<0x00000012>
+        {
+            [8, 5, 0, 2], normal, c8bpp, "apollo-8bpp-normal-0.png", [75, 10];
+        }
+    }
+    sprite_set // 0x0005
+    {
+        sprite_id<0x00000013>
+        {
+            [8, 6, 0, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [93, 10];
+        }
+    }
+    sprite_set // 0x0006
+    {
+        sprite_id<0x00000014>
+        {
+            [7, 8, 0, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [111, 10];
+        }
+    }
+    sprite_set // 0x0007
+    {
+        sprite_id<0x00000015>
+        {
+            [8, 6, 0, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [128, 10];
+        }
+    }
+}
+// Record #13
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+}
+// Record #14
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0010 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #15
+properties<Cargos, 0x0011> // Action00
+{
+    // instance_id: 0x0011
+    {
+        bit_number: 0x17;
+        cargo_type_name_id: 0xDC05;
+        single_unit_name_id: 0xDC06;
+        cargo_units_id: 0xDC07;
+        cargo_amount_id: 0xDC08;
+        cargo_type_abbrev_id: 0xDC09;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0xF0;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x000028F6;
+        is_freight: true;
+        cargo_classes: 0x0400;
+        cargo_label: "LNDR";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #16
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+}
+// Record #17
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0011 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #18
+properties<Cargos, 0x0012> // Action00
+{
+    // instance_id: 0x0012
+    {
+        bit_number: 0x18;
+        cargo_type_name_id: 0xDC0A;
+        single_unit_name_id: 0xDC0B;
+        cargo_units_id: 0xDC0C;
+        cargo_amount_id: 0xDC0D;
+        cargo_type_abbrev_id: 0xDC0E;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0xF0;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x000028F6;
+        is_freight: true;
+        cargo_classes: 0x0400;
+        cargo_label: "RSTG";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #19
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+}
+// Record #20
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0012 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #21
+properties<Cargos, 0x0013> // Action00
+{
+    // instance_id: 0x0013
+    {
+        bit_number: 0x19;
+        cargo_type_name_id: 0xDC0F;
+        single_unit_name_id: 0xDC10;
+        cargo_units_id: 0xDC11;
+        cargo_amount_id: 0xDC12;
+        cargo_type_abbrev_id: 0xDC13;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x50;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x00001CEA;
+        is_freight: true;
+        cargo_classes: 0x0020;
+        cargo_label: "RENG";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #22
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0003 ];
+}
+// Record #23
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0013 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #24
+properties<Cargos, 0x0014> // Action00
+{
+    // instance_id: 0x0014
+    {
+        bit_number: 0x1A;
+        cargo_type_name_id: 0xDC14;
+        single_unit_name_id: 0xDC15;
+        cargo_units_id: 0xDC16;
+        cargo_amount_id: 0xDC17;
+        cargo_type_abbrev_id: 0xDC18;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x10;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x00001CEA;
+        is_freight: true;
+        cargo_classes: 0x0020;
+        cargo_label: "ELEC";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #25
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0004 ];
+}
+// Record #26
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0014 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #27
+properties<Cargos, 0x0015> // Action00
+{
+    // instance_id: 0x0015
+    {
+        bit_number: 0x1B;
+        cargo_type_name_id: 0xDC19;
+        single_unit_name_id: 0xDC1A;
+        cargo_units_id: 0xDC1B;
+        cargo_amount_id: 0xDC1C;
+        cargo_type_abbrev_id: 0xDC1D;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x10;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x00001CEA;
+        is_freight: true;
+        cargo_classes: 0x0010;
+        cargo_label: "SILC";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #28
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0005 ];
+}
+// Record #29
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0015 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #30
+properties<Cargos, 0x0017> // Action00
+{
+    // instance_id: 0x0017
+    {
+        bit_number: 0x1C;
+        cargo_type_name_id: 0xDC1E;
+        single_unit_name_id: 0xDC1F;
+        cargo_units_id: 0xDC20;
+        cargo_amount_id: 0xDC21;
+        cargo_type_abbrev_id: 0xDC22;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x10;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x00001CEA;
+        is_freight: true;
+        cargo_classes: 0x0010;
+        cargo_label: "METL";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #31
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0006 ];
+}
+// Record #32
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0017 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #33
+properties<Cargos, 0x0018> // Action00
+{
+    // instance_id: 0x0018
+    {
+        bit_number: 0x1D;
+        cargo_type_name_id: 0xDC23;
+        single_unit_name_id: 0xDC24;
+        cargo_units_id: 0xDC25;
+        cargo_amount_id: 0xDC26;
+        cargo_type_abbrev_id: 0xDC27;
+        cargo_sprite_id: 0xFFFF;
+        single_unit_weight: 0x10;
+        penalty_time_1: 0xC8;
+        penalty_time_2: 0xC8;
+        base_price: 0x00001CEA;
+        is_freight: true;
+        cargo_classes: 0x0020;
+        cargo_label: "SAND";
+        town_growth_effect: 0xFF;
+        town_growth_multiplier: 0x0000;
+        capacity_multiplier: 0x0100;
+    }
+}
+// Record #34
+sprite_groups<Cargos, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0007 ];
+}
+// Record #35
+feature_graphics<Cargos> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0018 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #36
+sprite_sets<IndustryTiles, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000002E>
+        {
+            [64, 31, -31, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [146, 10];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x0000002F>
+        {
+            [62, 61, -29, -32], normal, c8bpp, "apollo-8bpp-normal-0.png", [220, 10];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x00000030>
+        {
+            [60, 49, -31, -18], normal, c8bpp, "apollo-8bpp-normal-0.png", [292, 10];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x00000031>
+        {
+            [46, 58, -13, -28], normal, c8bpp, "apollo-8bpp-normal-0.png", [362, 10];
+        }
+    }
+    sprite_set // 0x0004
+    {
+        sprite_id<0x00000032>
+        {
+            [64, 58, -31, -30], normal, c8bpp, "apollo-8bpp-normal-0.png", [418, 10];
+        }
+    }
+    sprite_set // 0x0005
+    {
+        sprite_id<0x00000033>
+        {
+            [56, 41, -31, -14], normal, c8bpp, "apollo-8bpp-normal-0.png", [492, 10];
+        }
+    }
+    sprite_set // 0x0006
+    {
+        sprite_id<0x00000034>
+        {
+            [60, 46, -27, -16], normal, c8bpp, "apollo-8bpp-normal-0.png", [558, 10];
+        }
+    }
+    sprite_set // 0x0007
+    {
+        sprite_id<0x00000035>
+        {
+            [64, 33, -31, -2], normal, c8bpp, "apollo-8bpp-normal-0.png", [628, 10];
+        }
+    }
+    sprite_set // 0x0008
+    {
+        sprite_id<0x00000036>
+        {
+            [64, 57, -31, -34], normal, c8bpp, "apollo-8bpp-normal-0.png", [702, 10];
+        }
+    }
+    sprite_set // 0x0009
+    {
+        sprite_id<0x00000037>
+        {
+            [54, 49, -31, -18], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 81];
+        }
+    }
+    sprite_set // 0x000A
+    {
+        sprite_id<0x00000038>
+        {
+            [64, 41, -31, -10], normal, c8bpp, "apollo-8bpp-normal-0.png", [74, 81];
+        }
+    }
+    sprite_set // 0x000B
+    {
+        sprite_id<0x00000039>
+        {
+            [64, 41, -31, -10], normal, c8bpp, "apollo-8bpp-normal-0.png", [148, 81];
+        }
+    }
+    sprite_set // 0x000C
+    {
+        sprite_id<0x0000003A>
+        {
+            [64, 41, -31, -10], normal, c8bpp, "apollo-8bpp-normal-0.png", [222, 81];
+        }
+    }
+    sprite_set // 0x000D
+    {
+        sprite_id<0x0000003B>
+        {
+            [64, 41, -31, -10], normal, c8bpp, "apollo-8bpp-normal-0.png", [296, 81];
+        }
+    }
+    sprite_set // 0x000E
+    {
+        sprite_id<0x0000003C>
+        {
+            [64, 42, -31, -11], normal, c8bpp, "apollo-8bpp-normal-0.png", [370, 81];
+        }
+    }
+    sprite_set // 0x000F
+    {
+        sprite_id<0x0000003D>
+        {
+            [64, 40, -31, -9], normal, c8bpp, "apollo-8bpp-normal-0.png", [444, 81];
+        }
+    }
+    sprite_set // 0x0010
+    {
+        sprite_id<0x0000003E>
+        {
+            [52, 64, -23, -35], normal, c8bpp, "apollo-8bpp-normal-0.png", [518, 81];
+        }
+    }
+    sprite_set // 0x0011
+    {
+        sprite_id<0x0000003F>
+        {
+            [38, 44, -5, -18], normal, c8bpp, "apollo-8bpp-normal-0.png", [580, 81];
+        }
+    }
+    sprite_set // 0x0012
+    {
+        sprite_id<0x00000040>
+        {
+            [64, 34, -31, -3], normal, c8bpp, "apollo-8bpp-normal-0.png", [628, 81];
+        }
+    }
+    sprite_set // 0x0013
+    {
+        sprite_id<0x00000041>
+        {
+            [64, 61, -31, -35], normal, c8bpp, "apollo-8bpp-normal-0.png", [702, 81];
+        }
+    }
+    sprite_set // 0x0014
+    {
+        sprite_id<0x00000042>
+        {
+            [62, 50, -31, -19], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 155];
+        }
+    }
+    sprite_set // 0x0015
+    {
+        sprite_id<0x00000043>
+        {
+            [56, 51, -23, -23], normal, c8bpp, "apollo-8bpp-normal-0.png", [82, 155];
+        }
+    }
+    sprite_set // 0x0016
+    {
+        sprite_id<0x00000044>
+        {
+            [64, 38, -31, -7], normal, c8bpp, "apollo-8bpp-normal-0.png", [148, 155];
+        }
+    }
+    sprite_set // 0x0017
+    {
+        sprite_id<0x00000045>
+        {
+            [64, 67, -31, -39], normal, c8bpp, "apollo-8bpp-normal-0.png", [222, 155];
+        }
+    }
+    sprite_set // 0x0018
+    {
+        sprite_id<0x00000046>
+        {
+            [64, 54, -31, -23], normal, c8bpp, "apollo-8bpp-normal-0.png", [296, 155];
+        }
+    }
+    sprite_set // 0x0019
+    {
+        sprite_id<0x00000047>
+        {
+            [62, 77, -31, -55], normal, c8bpp, "apollo-8bpp-normal-0.png", [370, 155];
+        }
+    }
+    sprite_set // 0x001A
+    {
+        sprite_id<0x00000048>
+        {
+            [60, 53, -31, -23], normal, c8bpp, "apollo-8bpp-normal-0.png", [442, 155];
+        }
+    }
+    sprite_set // 0x001B
+    {
+        sprite_id<0x00000049>
+        {
+            [54, 127, -21, -97], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [512, 155];
+        }
+    }
+    sprite_set // 0x001C
+    {
+        sprite_id<0x0000004A>
+        {
+            [64, 128, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [576, 155];
+        }
+    }
+    sprite_set // 0x001D
+    {
+        sprite_id<0x0000004B>
+        {
+            [64, 128, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [650, 155];
+        }
+    }
+    sprite_set // 0x001E
+    {
+        sprite_id<0x0000004C>
+        {
+            [64, 123, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [724, 155];
+        }
+    }
+    sprite_set // 0x001F
+    {
+        sprite_id<0x0000004D>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 293];
+        }
+    }
+    sprite_set // 0x0020
+    {
+        sprite_id<0x0000004E>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [84, 293];
+        }
+    }
+    sprite_set // 0x0021
+    {
+        sprite_id<0x0000004F>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [158, 293];
+        }
+    }
+    sprite_set // 0x0022
+    {
+        sprite_id<0x00000050>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [232, 293];
+        }
+    }
+    sprite_set // 0x0023
+    {
+        sprite_id<0x00000051>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [306, 293];
+        }
+    }
+    sprite_set // 0x0024
+    {
+        sprite_id<0x00000052>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [380, 293];
+        }
+    }
+    sprite_set // 0x0025
+    {
+        sprite_id<0x00000053>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [454, 293];
+        }
+    }
+    sprite_set // 0x0026
+    {
+        sprite_id<0x00000054>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [528, 293];
+        }
+    }
+    sprite_set // 0x0027
+    {
+        sprite_id<0x00000055>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [602, 293];
+        }
+    }
+    sprite_set // 0x0028
+    {
+        sprite_id<0x00000056>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [676, 293];
+        }
+    }
+    sprite_set // 0x0029
+    {
+        sprite_id<0x00000057>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 429];
+        }
+    }
+    sprite_set // 0x002A
+    {
+        sprite_id<0x00000058>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [84, 429];
+        }
+    }
+    sprite_set // 0x002B
+    {
+        sprite_id<0x00000059>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [158, 429];
+        }
+    }
+    sprite_set // 0x002C
+    {
+        sprite_id<0x0000005A>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [232, 429];
+        }
+    }
+    sprite_set // 0x002D
+    {
+        sprite_id<0x0000005B>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [306, 429];
+        }
+    }
+    sprite_set // 0x002E
+    {
+        sprite_id<0x0000005C>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [380, 429];
+        }
+    }
+    sprite_set // 0x002F
+    {
+        sprite_id<0x0000005D>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [454, 429];
+        }
+    }
+    sprite_set // 0x0030
+    {
+        sprite_id<0x0000005E>
+        {
+            [64, 126, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [528, 429];
+        }
+    }
+    sprite_set // 0x0031
+    {
+        sprite_id<0x0000005F>
+        {
+            [60, 127, -31, -97], normal, c8bpp, "apollo-8bpp-normal-0.png", [602, 429];
+        }
+    }
+    sprite_set // 0x0032
+    {
+        sprite_id<0x00000060>
+        {
+            [28, 9, -17, 22], normal, c8bpp, "apollo-8bpp-normal-0.png", [672, 429];
+        }
+    }
+    sprite_set // 0x0033
+    {
+        sprite_id<0x00000061>
+        {
+            [42, 21, -31, 10], normal, c8bpp, "apollo-8bpp-normal-0.png", [710, 429];
+        }
+    }
+    sprite_set // 0x0034
+    {
+        sprite_id<0x00000062>
+        {
+            [16, 13, -31, 10], normal, c8bpp, "apollo-8bpp-normal-0.png", [762, 429];
+        }
+    }
+    sprite_set // 0x0035
+    {
+        sprite_id<0x00000063>
+        {
+            [57, 28, -24, 3], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 566];
+        }
+    }
+    sprite_set // 0x0036
+    {
+        sprite_id<0x00000064>
+        {
+            [64, 43, -31, -12], normal, c8bpp, "apollo-8bpp-normal-0.png", [77, 566];
+        }
+    }
+    sprite_set // 0x0037
+    {
+        sprite_id<0x00000065>
+        {
+            [48, 24, -31, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [151, 566];
+        }
+    }
+    sprite_set // 0x0038
+    {
+        sprite_id<0x00000066>
+        {
+            [20, 15, 13, 6], normal, c8bpp, "apollo-8bpp-normal-0.png", [209, 566];
+        }
+    }
+    sprite_set // 0x0039
+    {
+        sprite_id<0x00000067>
+        {
+            [43, 21, -10, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [239, 566];
+        }
+    }
+    sprite_set // 0x003A
+    {
+        sprite_id<0x00000068>
+        {
+            [28, 8, -11, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [292, 566];
+        }
+    }
+    sprite_set // 0x003B
+    {
+        sprite_id<0x00000069>
+        {
+            [44, 23, -21, 4], normal, c8bpp, "apollo-8bpp-normal-0.png", [330, 566];
+        }
+    }
+    sprite_set // 0x003C
+    {
+        sprite_id<0x0000006A>
+        {
+            [44, 23, -21, 4], normal, c8bpp, "apollo-8bpp-normal-0.png", [384, 566];
+        }
+    }
+    sprite_set // 0x003D
+    {
+        sprite_id<0x0000006B>
+        {
+            [47, 26, -14, 2], normal, c8bpp, "apollo-8bpp-normal-0.png", [438, 566];
+        }
+    }
+    sprite_set // 0x003E
+    {
+        sprite_id<0x0000006C>
+        {
+            [64, 30, -31, 1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [495, 566];
+        }
+    }
+    sprite_set // 0x003F
+    {
+        sprite_id<0x0000006D>
+        {
+            [61, 30, -28, 1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [569, 566];
+        }
+    }
+    sprite_set // 0x0040
+    {
+        sprite_id<0x0000006E>
+        {
+            [55, 29, -26, 2], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [640, 566];
+        }
+    }
+    sprite_set // 0x0041
+    {
+        sprite_id<0x0000006F>
+        {
+            [54, 31, -21, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [705, 566];
+        }
+    }
+    sprite_set // 0x0042
+    {
+        sprite_id<0x00000070>
+        {
+            [64, 31, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [10, 619];
+        }
+    }
+    sprite_set // 0x0043
+    {
+        sprite_id<0x00000071>
+        {
+            [64, 31, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [84, 619];
+        }
+    }
+    sprite_set // 0x0044
+    {
+        sprite_id<0x00000072>
+        {
+            [60, 30, -31, 1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [158, 619];
+        }
+    }
+    sprite_set // 0x0045
+    {
+        sprite_id<0x00000073>
+        {
+            [53, 31, -20, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [228, 619];
+        }
+    }
+    sprite_set // 0x0046
+    {
+        sprite_id<0x00000074>
+        {
+            [64, 31, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [291, 619];
+        }
+    }
+    sprite_set // 0x0047
+    {
+        sprite_id<0x00000075>
+        {
+            [64, 31, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [365, 619];
+        }
+    }
+    sprite_set // 0x0048
+    {
+        sprite_id<0x00000076>
+        {
+            [64, 30, -31, 1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [439, 619];
+        }
+    }
+    sprite_set // 0x0049
+    {
+        sprite_id<0x00000077>
+        {
+            [64, 30, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [513, 619];
+        }
+    }
+    sprite_set // 0x004A
+    {
+        sprite_id<0x00000078>
+        {
+            [58, 29, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [587, 619];
+        }
+    }
+    sprite_set // 0x004B
+    {
+        sprite_id<0x00000079>
+        {
+            [56, 55, -31, -26], normal, c8bpp, "apollo-8bpp-normal-0.png", [655, 619];
+        }
+    }
+    sprite_set // 0x004C
+    {
+        sprite_id<0x0000007A>
+        {
+            [54, 26, -31, 0], normal, c8bpp, "apollo-8bpp-normal-0.png", [721, 619];
+        }
+    }
+    sprite_set // 0x004D
+    {
+        sprite_id<0x0000007B>
+        {
+            [64, 36, -31, -5], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [10, 684];
+        }
+    }
+    sprite_set // 0x004E
+    {
+        sprite_id<0x0000007C>
+        {
+            [64, 36, -31, -5], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [84, 684];
+        }
+    }
+    sprite_set // 0x004F
+    {
+        sprite_id<0x0000007D>
+        {
+            [64, 65, -31, -34], normal, c8bpp, "apollo-8bpp-normal-0.png", [158, 684];
+        }
+    }
+    sprite_set // 0x0050
+    {
+        sprite_id<0x0000007E>
+        {
+            [64, 41, -31, -10], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [232, 684];
+        }
+    }
+    sprite_set // 0x0051
+    {
+        sprite_id<0x0000007F>
+        {
+            [64, 31, -31, 0], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [306, 684];
+        }
+    }
+    sprite_set // 0x0052
+    {
+        sprite_id<0x00000080>
+        {
+            [64, 59, -31, -28], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [380, 684];
+        }
+    }
+}
+// Record #37
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008001>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #38
+properties<IndustryTiles, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0805;
+        tile_acceptance2: 0x0808;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #39
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #40
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008002>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #41
+properties<IndustryTiles, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0805;
+        tile_acceptance2: 0x0808;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #42
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #43
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0004 0x0001 0x0000 ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #44
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #45
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #46
+properties<Industries, 0x0024> // Action00
+{
+    // instance_id: 0x0024
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC28;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(1, 0, 0x0000);
+                new_tile(0, 0, 0x0001);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x05 0x08 0xFF 0x00 ];
+        production_cargo_types: [ 0x04 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000210;
+    }
+}
+// Record #47
+properties<Industries, 0x0024> // Action00
+{
+    // instance_id: 0x0024
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #48
+industry<Industries, 0xFE, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0000 0x0000 0x0000 ];
+    add_out_amounts: [ 0x0000 0x0000 ];
+    repeat_flag: false;
+}
+// Record #49
+switch<Industries, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x8000;
+    };
+    default: 0x00FE;
+}
+// Record #50
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #51
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #52
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0024 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #53
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008003>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #54
+properties<IndustryTiles, 0x0002> // Action00
+{
+    // instance_id: 0x0002
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0809;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #55
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0002 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #56
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008004>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #57
+properties<IndustryTiles, 0x0003> // Action00
+{
+    // instance_id: 0x0003
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0809;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #58
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0003 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #59
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008005>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #60
+properties<IndustryTiles, 0x0004> // Action00
+{
+    // instance_id: 0x0004
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0809;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #61
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0004 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #62
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0004 0x0000 0x0000 ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #63
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #64
+properties<Industries, 0x0025> // Action00
+{
+    // instance_id: 0x0025
+    {
+        substitute_industry_id: 0x02;
+        industry_name_id: 0xDC29;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(2, 0, 0x0002);
+                new_tile(1, 0, 0x0003);
+                new_tile(0, 0, 0x0004);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x09 0xFF 0xFF 0x00 ];
+        production_cargo_types: [ 0x05 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #65
+properties<Industries, 0x0025> // Action00
+{
+    // instance_id: 0x0025
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #66
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #67
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #68
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0025 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #69
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008006>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #70
+properties<IndustryTiles, 0x0005> // Action00
+{
+    // instance_id: 0x0005
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #71
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0005 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #72
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008007>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #73
+properties<IndustryTiles, 0x0006> // Action00
+{
+    // instance_id: 0x0006
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #74
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0006 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #75
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008008>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #76
+properties<IndustryTiles, 0x0007> // Action00
+{
+    // instance_id: 0x0007
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #77
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0007 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #78
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008009>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #79
+properties<IndustryTiles, 0x0008> // Action00
+{
+    // instance_id: 0x0008
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0000;
+        tile_acceptance3: 0x0000;
+    }
+}
+// Record #80
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0008 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #81
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0064 0x0000 0x0000 ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #82
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #83
+properties<Industries, 0x0023> // Action00
+{
+    // instance_id: 0x0023
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2A;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(1, 0, 0x0005);
+                new_tile(0, 0, 0x0006);
+                new_tile(1, 1, 0x0007);
+                new_tile(0, 1, 0x0008);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x07 0xFF 0xFF 0x00 ];
+        production_cargo_types: [ 0x03 0xFF ];
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #84
+properties<Industries, 0x0023> // Action00
+{
+    // instance_id: 0x0023
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #85
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #86
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #87
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0023 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #88
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #89
+properties<IndustryTiles, 0x0009> // Action00
+{
+    // instance_id: 0x0009
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #90
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0009 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #91
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #92
+properties<IndustryTiles, 0x000A> // Action00
+{
+    // instance_id: 0x000A
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #93
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000A ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #94
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800C>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #95
+properties<IndustryTiles, 0x000B> // Action00
+{
+    // instance_id: 0x000B
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #96
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000B ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #97
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800D>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #98
+properties<IndustryTiles, 0x000C> // Action00
+{
+    // instance_id: 0x000C
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #99
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000C ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #100
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #101
+properties<IndustryTiles, 0x000D> // Action00
+{
+    // instance_id: 0x000D
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #102
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000D ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #103
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000800F>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #104
+properties<IndustryTiles, 0x000E> // Action00
+{
+    // instance_id: 0x000E
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #105
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000E ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #106
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008010>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #107
+properties<IndustryTiles, 0x000F> // Action00
+{
+    // instance_id: 0x000F
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #108
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x000F ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #109
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0004 0x07D0 0x0064 ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #110
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #111
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #112
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x42] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #113
+properties<Industries, 0x0022> // Action00
+{
+    // instance_id: 0x0022
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2B;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(0, 0, 0x000A);
+                new_tile(1, 0, 0x0009);
+                new_tile(2, 0, 0x000D);
+                new_tile(0, 1, 0x000C);
+                new_tile(1, 1, 0x000B);
+                new_tile(2, 1, 0x000D);
+                new_tile(0, 2, 0x000A);
+                new_tile(1, 2, 0x0009);
+                new_tile(2, 2, 0x000D);
+                new_tile(1, 3, 0x000F);
+                new_tile(2, 3, 0x000E);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x03 0x07 0x04 0x00 ];
+        production_cargo_types: [ 0x02 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #114
+properties<Industries, 0x0022> // Action00
+{
+    // instance_id: 0x0022
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #115
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #116
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #117
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0022 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #118
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008011>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #119
+properties<IndustryTiles, 0x0010> // Action00
+{
+    // instance_id: 0x0010
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #120
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0010 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #121
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008012>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #122
+properties<IndustryTiles, 0x0011> // Action00
+{
+    // instance_id: 0x0011
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #123
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0011 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #124
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008013>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #125
+properties<IndustryTiles, 0x0012> // Action00
+{
+    // instance_id: 0x0012
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #126
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0012 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #127
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008014>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #128
+properties<IndustryTiles, 0x0013> // Action00
+{
+    // instance_id: 0x0013
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #129
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0013 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #130
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0002 0x0096 0x0096 ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #131
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #132
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #133
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x42] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #134
+properties<Industries, 0x0021> // Action00
+{
+    // instance_id: 0x0021
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2C;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(1, 0, 0x0010);
+                new_tile(0, 0, 0x0011);
+                new_tile(1, 1, 0x0012);
+                new_tile(0, 1, 0x0013);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x03 0x07 0x04 0x00 ];
+        production_cargo_types: [ 0x01 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #135
+properties<Industries, 0x0021> // Action00
+{
+    // instance_id: 0x0021
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #136
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #137
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #138
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0021 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #139
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008015>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #140
+properties<IndustryTiles, 0x0014> // Action00
+{
+    // instance_id: 0x0014
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #141
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0014 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #142
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008016>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #143
+properties<IndustryTiles, 0x0015> // Action00
+{
+    // instance_id: 0x0015
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #144
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0015 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #145
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008017>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #146
+properties<IndustryTiles, 0x0016> // Action00
+{
+    // instance_id: 0x0016
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #147
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0016 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #148
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008018>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #149
+properties<IndustryTiles, 0x0017> // Action00
+{
+    // instance_id: 0x0017
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #150
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0017 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #151
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008019>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #152
+properties<IndustryTiles, 0x0018> // Action00
+{
+    // instance_id: 0x0018
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #153
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0018 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #154
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #155
+properties<IndustryTiles, 0x0019> // Action00
+{
+    // instance_id: 0x0019
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0807;
+        tile_acceptance2: 0x0803;
+        tile_acceptance3: 0x0804;
+    }
+}
+// Record #156
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0019 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #157
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0001 0x012C 0x012C ];
+    add_out_amounts: [ 0x0001 0x0000 ];
+    repeat_flag: true;
+}
+// Record #158
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #159
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #160
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x42] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #161
+properties<Industries, 0x0020> // Action00
+{
+    // instance_id: 0x0020
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2D;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(1, 0, 0x0014);
+                new_tile(0, 0, 0x0015);
+                new_tile(1, 1, 0x0016);
+                new_tile(0, 1, 0x0017);
+                new_tile(1, 2, 0x0018);
+                new_tile(0, 2, 0x0019);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x03 0x07 0x04 0x00 ];
+        production_cargo_types: [ 0x00 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #162
+properties<Industries, 0x0020> // Action00
+{
+    // instance_id: 0x0020
+    {
+        callback_flags_1: 0x02;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #163
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #164
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #165
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0020 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #166
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #167
+properties<IndustryTiles, 0x001A> // Action00
+{
+    // instance_id: 0x001A
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #168
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001A ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #169
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801C>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #170
+properties<IndustryTiles, 0x001B> // Action00
+{
+    // instance_id: 0x001B
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #171
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001B ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #172
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801D>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #173
+properties<IndustryTiles, 0x001C> // Action00
+{
+    // instance_id: 0x001C
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #174
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001C ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #175
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #176
+properties<IndustryTiles, 0x001D> // Action00
+{
+    // instance_id: 0x001D
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #177
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001D ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #178
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000801F>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #179
+sprite_layout<IndustryTiles, 0xFD> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008020>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #180
+sprite_layout<IndustryTiles, 0xFC> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008021>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #181
+sprite_layout<IndustryTiles, 0xFB> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008022>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #182
+sprite_layout<IndustryTiles, 0xFA> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008023>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #183
+sprite_layout<IndustryTiles, 0xF9> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008024>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #184
+sprite_layout<IndustryTiles, 0xF8> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008025>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #185
+sprite_layout<IndustryTiles, 0xF7> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008026>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #186
+sprite_layout<IndustryTiles, 0xF6> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008027>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #187
+sprite_layout<IndustryTiles, 0xF5> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008028>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #188
+sprite_layout<IndustryTiles, 0xF4> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008029>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #189
+sprite_layout<IndustryTiles, 0xF3> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #190
+sprite_layout<IndustryTiles, 0xF2> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #191
+sprite_layout<IndustryTiles, 0xF1> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802C>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #192
+sprite_layout<IndustryTiles, 0xF0> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802D>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #193
+sprite_layout<IndustryTiles, 0xEF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #194
+sprite_layout<IndustryTiles, 0xEE> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x8000802F>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #195
+sprite_layout<IndustryTiles, 0xED> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008030>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #196
+switch<IndustryTiles, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x44] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+        0x00000001: 0x00FD;
+        0x00000002: 0x00FC;
+        0x00000003: 0x00FB;
+        0x00000004: 0x00FA;
+        0x00000005: 0x00F9;
+        0x00000006: 0x00F8;
+        0x00000007: 0x00F7;
+        0x00000008: 0x00F6;
+        0x00000009: 0x00F5;
+        0x0000000A: 0x00F4;
+        0x0000000B: 0x00F3;
+        0x0000000C: 0x00F2;
+        0x0000000D: 0x00F1;
+        0x0000000E: 0x00F0;
+        0x0000000F: 0x00EF;
+        0x00000010: 0x00EE;
+        0x00000011: 0x00ED;
+    };
+    default: 0x00FF;
+}
+// Record #197
+switch<IndustryTiles, 0xED, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x44] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000..0x00000010: 0x80FE;
+    };
+    default: 0x80FF;
+}
+// Record #198
+switch<IndustryTiles, 0xEE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x44] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000000: 0x80FE;
+    };
+    default: 0x80FD;
+}
+// Record #199
+switch<IndustryTiles, 0xEE, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x42] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00EE;
+    };
+    default: 0x80FD;
+}
+// Record #200
+switch<IndustryTiles, 0xEE, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00EE;
+    };
+    default: 0x80FD;
+}
+// Record #201
+switch<IndustryTiles, 0xEE, RelatedDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000003..0x0000FFFF: 0x00EE;
+    };
+    default: 0x80FD;
+}
+// Record #202
+properties<IndustryTiles, 0x001E> // Action00
+{
+    // instance_id: 0x001E
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #203
+properties<IndustryTiles, 0x001E> // Action00
+{
+    // instance_id: 0x001E
+    {
+        callback_flags: 0x03;
+    }
+}
+// Record #204
+switch<IndustryTiles, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000025: 0x00EE;
+        0x00000026: 0x00ED;
+        0x00000027: 0x8004;
+    };
+    default: 0x00FF;
+}
+// Record #205
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001E ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #206
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x80000000>
+    {
+    }
+    building_sprite<0x80008031>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #207
+properties<IndustryTiles, 0x001F> // Action00
+{
+    // instance_id: 0x001F
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+        tile_acceptance1: 0x0802;
+        tile_acceptance2: 0x0801;
+        tile_acceptance3: 0x0800;
+    }
+}
+// Record #208
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x001F ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #209
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008032>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #210
+properties<IndustryTiles, 0x0020> // Action00
+{
+    // instance_id: 0x0020
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #211
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0020 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #212
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008033>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #213
+properties<IndustryTiles, 0x0021> // Action00
+{
+    // instance_id: 0x0021
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #214
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0021 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #215
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008034>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #216
+properties<IndustryTiles, 0x0022> // Action00
+{
+    // instance_id: 0x0022
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #217
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0022 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #218
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008035>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #219
+properties<IndustryTiles, 0x0023> // Action00
+{
+    // instance_id: 0x0023
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #220
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0023 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #221
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008036>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #222
+properties<IndustryTiles, 0x0024> // Action00
+{
+    // instance_id: 0x0024
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #223
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0024 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #224
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008037>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #225
+properties<IndustryTiles, 0x0025> // Action00
+{
+    // instance_id: 0x0025
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #226
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0025 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #227
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008038>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #228
+properties<IndustryTiles, 0x0026> // Action00
+{
+    // instance_id: 0x0026
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #229
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0026 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #230
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008039>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #231
+properties<IndustryTiles, 0x0027> // Action00
+{
+    // instance_id: 0x0027
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #232
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0027 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #233
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #234
+properties<IndustryTiles, 0x0028> // Action00
+{
+    // instance_id: 0x0028
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #235
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0028 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #236
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #237
+properties<IndustryTiles, 0x0029> // Action00
+{
+    // instance_id: 0x0029
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #238
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0029 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #239
+sprite_layout<IndustryTiles, 0xFF> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803C>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #240
+properties<IndustryTiles, 0x002A> // Action00
+{
+    // instance_id: 0x002A
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #241
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x002A ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #242
+industry<Industries, 0xFF, Version0> // Action02 industry
+{
+    sub_in_amounts: [ 0x0003 0x0001 0x0001 ];
+    add_out_amounts: [ 0x0003 0x0000 ];
+    repeat_flag: true;
+}
+// Record #243
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x40] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #244
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x41] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #245
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x42] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000001..0x0000FFFF: 0x00FF;
+    };
+    default: 0x8000;
+}
+// Record #246
+properties<Industries, 0x0029> // Action00
+{
+    // instance_id: 0x0029
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2E;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(2, 0, 0x001A);
+                new_tile(1, 0, 0x001B);
+                new_tile(0, 0, 0x001C);
+                new_tile(2, 1, 0x001D);
+                new_tile(1, 1, 0x001E);
+                new_tile(0, 1, 0x001F);
+                new_tile(1, 2, 0x0029);
+                new_tile(1, 3, 0x002A);
+                new_tile(0, 4, 0x0020);
+                new_tile(0, 5, 0x0021);
+                new_tile(0, 6, 0x0022);
+                new_tile(1, 4, 0x0023);
+                new_tile(1, 5, 0x0024);
+                new_tile(1, 6, 0x0025);
+                new_tile(2, 4, 0x0026);
+                new_tile(2, 5, 0x0027);
+                new_tile(2, 6, 0x0028);
+            }
+        };
+        production_flags: 0x04;
+        acceptance_cargo_types: [ 0x02 0x01 0x00 0x00 ];
+        production_cargo_types: [ 0x0D 0xFF ];
+        production_multipliers_1: 0x00;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #247
+properties<Industries, 0x0029> // Action00
+{
+    // instance_id: 0x0029
+    {
+        callback_flags_1: 0x04;
+        callback_flags_2: 0x00;
+    }
+}
+// Record #248
+switch<Industries, 0xFF, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x18] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #249
+switch<Industries, 0xFE, PrimaryDWord> // Action02 variable
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000: 0x00FF;
+    };
+    default: 0x00FE;
+}
+// Record #250
+feature_graphics<Industries> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0029 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #251
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803D>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #252
+properties<IndustryTiles, 0x002B> // Action00
+{
+    // instance_id: 0x002B
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #253
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x002B ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #254
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #255
+properties<IndustryTiles, 0x002C> // Action00
+{
+    // instance_id: 0x002C
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #256
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x002C ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #257
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000803F>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #258
+properties<IndustryTiles, 0x002D> // Action00
+{
+    // instance_id: 0x002D
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #259
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x002D ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #260
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008040>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #261
+properties<IndustryTiles, 0x002E> // Action00
+{
+    // instance_id: 0x002E
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #262
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x002E ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #263
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008041>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #264
+properties<IndustryTiles, 0x002F> // Action00
+{
+    // instance_id: 0x002F
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #265
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x002F ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #266
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008042>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #267
+properties<IndustryTiles, 0x0030> // Action00
+{
+    // instance_id: 0x0030
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #268
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0030 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #269
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008043>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #270
+properties<IndustryTiles, 0x0031> // Action00
+{
+    // instance_id: 0x0031
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #271
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0031 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #272
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008044>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #273
+properties<IndustryTiles, 0x0032> // Action00
+{
+    // instance_id: 0x0032
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #274
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0032 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #275
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008045>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #276
+properties<IndustryTiles, 0x0033> // Action00
+{
+    // instance_id: 0x0033
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #277
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0033 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #278
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008046>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #279
+properties<IndustryTiles, 0x0034> // Action00
+{
+    // instance_id: 0x0034
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #280
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0034 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #281
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008047>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #282
+properties<IndustryTiles, 0x0035> // Action00
+{
+    // instance_id: 0x0035
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #283
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0035 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #284
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008048>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #285
+properties<IndustryTiles, 0x0036> // Action00
+{
+    // instance_id: 0x0036
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #286
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0036 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #287
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008049>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #288
+properties<IndustryTiles, 0x0037> // Action00
+{
+    // instance_id: 0x0037
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #289
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0037 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #290
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804A>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #291
+properties<IndustryTiles, 0x0038> // Action00
+{
+    // instance_id: 0x0038
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #292
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0038 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #293
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804B>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #294
+properties<IndustryTiles, 0x0039> // Action00
+{
+    // instance_id: 0x0039
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #295
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0039 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #296
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804C>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #297
+properties<IndustryTiles, 0x003A> // Action00
+{
+    // instance_id: 0x003A
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #298
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003A ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #299
+properties<Industries, 0x0028> // Action00
+{
+    // instance_id: 0x0028
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC2F;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(3, 0, 0x002B);
+                new_tile(2, 0, 0x002C);
+                new_tile(1, 0, 0x002D);
+                new_tile(0, 0, 0x002E);
+                new_tile(3, 1, 0x002F);
+                new_tile(2, 1, 0x0030);
+                new_tile(1, 1, 0x0031);
+                new_tile(0, 1, 0x0032);
+                new_tile(3, 2, 0x0033);
+                new_tile(2, 2, 0x0034);
+                new_tile(1, 2, 0x0035);
+                new_tile(0, 2, 0x0036);
+                new_tile(3, 3, 0x0037);
+                new_tile(2, 3, 0x0038);
+                new_tile(1, 3, 0x0039);
+                new_tile(0, 3, 0x003A);
+            }
+        };
+        production_flags: 0x01;
+        acceptance_cargo_types: [ 0xFF 0xFF 0xFF 0x00 ];
+        production_cargo_types: [ 0x09 0xFF ];
+        production_multipliers_1: 0x05;
+        production_multipliers_2: 0x00;
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #300
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804D>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #301
+properties<IndustryTiles, 0x003B> // Action00
+{
+    // instance_id: 0x003B
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #302
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003B ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #303
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804E>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #304
+properties<IndustryTiles, 0x003C> // Action00
+{
+    // instance_id: 0x003C
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #305
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003C ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #306
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x8000804F>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #307
+properties<IndustryTiles, 0x003D> // Action00
+{
+    // instance_id: 0x003D
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #308
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003D ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #309
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008050>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #310
+properties<IndustryTiles, 0x003E> // Action00
+{
+    // instance_id: 0x003E
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #311
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003E ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #312
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008051>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #313
+properties<IndustryTiles, 0x003F> // Action00
+{
+    // instance_id: 0x003F
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #314
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x003F ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #315
+sprite_layout<IndustryTiles, 0xFE> // Action02 sprite layout
+{
+    ground_sprite<0x00000F8D>
+    {
+    }
+    building_sprite<0x80008052>
+    {
+        offset: 0x00, 0x00, 0x00;
+        extent: 0x10, 0x10, 0x10;
+    }
+}
+// Record #316
+properties<IndustryTiles, 0x0040> // Action00
+{
+    // instance_id: 0x0040
+    {
+        substitute_building_id: 0x00;
+        land_shape_flags: 0x10;
+    }
+}
+// Record #317
+feature_graphics<IndustryTiles> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FE;
+    feature_ids: [ 0x0040 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+    };
+}
+// Record #318
+properties<Industries, 0x0027> // Action00
+{
+    // instance_id: 0x0027
+    {
+        substitute_industry_id: 0x01;
+        industry_name_id: 0xDC30;
+        industry_layout: 
+        {
+            layout
+            {
+                new_tile(2, 0, 0x003B);
+                new_tile(1, 0, 0x003C);
+                new_tile(0, 0, 0x003D);
+                new_tile(2, 1, 0x003E);
+                new_tile(1, 1, 0x003F);
+                new_tile(0, 1, 0x0040);
+            }
+        };
+        production_flags: 0x01;
+        acceptance_cargo_types: [ 0xFF 0xFF 0xFF 0x00 ];
+        production_cargo_types: [ 0x08 0xFF ];
+        minimum_distributed: 0x01;
+        random_probability: 0x1E;
+        gameplay_probability: 0x3C;
+        special_flags: 0x00000200;
+    }
+}
+// Record #319
+sprite_sets<Trains, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x0000019C>
+        {
+            [8, 16, -1, -11], normal, c8bpp, "apollo-8bpp-normal-0.png", [454, 684];
+        }
+        sprite_id<0x0000019D>
+        {
+            [22, 12, -14, -4], normal, c8bpp, "apollo-8bpp-normal-0.png", [472, 684];
+        }
+        sprite_id<0x0000019E>
+        {
+            [32, 9, -15, -5], normal, c8bpp, "apollo-8bpp-normal-0.png", [504, 684];
+        }
+        sprite_id<0x0000019F>
+        {
+            [22, 12, -8, -4], normal, c8bpp, "apollo-8bpp-normal-0.png", [546, 684];
+        }
+        sprite_id<0x000001A0>
+        {
+            [8, 16, -1, -11], normal, c8bpp, "apollo-8bpp-normal-0.png", [578, 684];
+        }
+        sprite_id<0x000001A1>
+        {
+            [22, 12, -14, -4], normal, c8bpp, "apollo-8bpp-normal-0.png", [596, 684];
+        }
+        sprite_id<0x000001A2>
+        {
+            [32, 9, -15, -5], normal, c8bpp, "apollo-8bpp-normal-0.png", [628, 684];
+        }
+        sprite_id<0x000001A3>
+        {
+            [22, 12, -8, -4], normal, c8bpp, "apollo-8bpp-normal-0.png", [670, 684];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001A4>
+        {
+            [10, 25, -2, -20], normal, c8bpp, "apollo-8bpp-normal-0.png", [702, 684];
+        }
+        sprite_id<0x000001A5>
+        {
+            [22, 21, -14, -13], normal, c8bpp, "apollo-8bpp-normal-0.png", [722, 684];
+        }
+        sprite_id<0x000001A6>
+        {
+            [32, 17, -15, -13], normal, c8bpp, "apollo-8bpp-normal-0.png", [754, 684];
+        }
+        sprite_id<0x000001A7>
+        {
+            [22, 20, -8, -12], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 759];
+        }
+        sprite_id<0x000001A8>
+        {
+            [10, 25, -2, -20], normal, c8bpp, "apollo-8bpp-normal-0.png", [42, 759];
+        }
+        sprite_id<0x000001A9>
+        {
+            [22, 20, -14, -12], normal, c8bpp, "apollo-8bpp-normal-0.png", [62, 759];
+        }
+        sprite_id<0x000001AA>
+        {
+            [32, 17, -15, -13], normal, c8bpp, "apollo-8bpp-normal-0.png", [94, 759];
+        }
+        sprite_id<0x000001AB>
+        {
+            [22, 21, -8, -13], normal, c8bpp, "apollo-8bpp-normal-0.png", [136, 759];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x000001AC>
+        {
+            [8, 20, -1, -15], normal, c8bpp, "apollo-8bpp-normal-0.png", [168, 759];
+        }
+        sprite_id<0x000001AD>
+        {
+            [22, 14, -14, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [186, 759];
+        }
+        sprite_id<0x000001AE>
+        {
+            [32, 12, -15, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [218, 759];
+        }
+        sprite_id<0x000001AF>
+        {
+            [22, 14, -8, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [260, 759];
+        }
+        sprite_id<0x000001B0>
+        {
+            [8, 19, -1, -14], normal, c8bpp, "apollo-8bpp-normal-0.png", [292, 759];
+        }
+        sprite_id<0x000001B1>
+        {
+            [22, 14, -14, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [310, 759];
+        }
+        sprite_id<0x000001B2>
+        {
+            [32, 12, -15, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [342, 759];
+        }
+        sprite_id<0x000001B3>
+        {
+            [22, 14, -8, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [384, 759];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x000001B4>
+        {
+            [8, 19, -1, -14], normal, c8bpp, "apollo-8bpp-normal-0.png", [416, 759];
+        }
+        sprite_id<0x000001B5>
+        {
+            [22, 14, -14, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [434, 759];
+        }
+        sprite_id<0x000001B6>
+        {
+            [32, 12, -15, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [466, 759];
+        }
+        sprite_id<0x000001B7>
+        {
+            [22, 15, -8, -7], normal, c8bpp, "apollo-8bpp-normal-0.png", [508, 759];
+        }
+        sprite_id<0x000001B8>
+        {
+            [8, 17, -1, -12], normal, c8bpp, "apollo-8bpp-normal-0.png", [540, 759];
+        }
+        sprite_id<0x000001B9>
+        {
+            [22, 15, -14, -7], normal, c8bpp, "apollo-8bpp-normal-0.png", [558, 759];
+        }
+        sprite_id<0x000001BA>
+        {
+            [32, 12, -15, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [590, 759];
+        }
+        sprite_id<0x000001BB>
+        {
+            [22, 14, -8, -6], normal, c8bpp, "apollo-8bpp-normal-0.png", [632, 759];
+        }
+    }
+}
+// Record #320
+sprite_groups<Trains, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0001 ];
+}
+// Record #321
+sprite_groups<Trains, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0002 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+// Record #322
+sprite_groups<Trains, 0xED> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0003 ];
+    secondary_spritesets: [ 0x0000 0x0003 ];
+}
+// Record #323
+properties<Trains, 0x0000> // Action00
+{
+    // instance_id: 0x0000
+    {
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        model_life_years: 255;
+        retire_vehicle_early: 0x0A;
+        reliability_decay_speed: 12;
+        vehicle_life_years: 60;
+        refittable_cargo_classes: 0x0400;
+        refit_cargo_types: 0x00000000;
+        ai_special_flag: false;
+        cargo_type: 0x02;
+        loading_speed: 0x01;
+        running_cost_base: 0x00004C3C;
+        sprite_id: 0xFD;
+        track_type: 0;
+        refit_cost: 0x00;
+        power: 0;
+        weight_tons: 17;
+        weight_high_byte: 0x00;
+        cargo_capacity: 1;
+        cost_factor: 0x32;
+        running_cost_factor: 0x0A;
+        shorten_vehicle: 0x00;
+        is_dual_headed: false;
+    }
+}
+// Record #324
+strings<Trains, default, 0x0000> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0000 */ "Rocket Transporter";
+}
+// Record #325
+sprite_groups<Trains, 0xEE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #326
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00EE;
+    feature_ids: [ 0x0000 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0x00: 0x00FF;
+        0x01: 0x00ED;
+        0x02: 0x00FE;
+    };
+}
+// Record #327
+sprite_sets<Ships, 0x0000> // <feature, first_set> Action01
+{
+    sprite_set // 0x0000
+    {
+        sprite_id<0x000001C4>
+        {
+            [18, 48, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [664, 759];
+        }
+        sprite_id<0x000001C5>
+        {
+            [63, 36, -64, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [692, 759];
+        }
+        sprite_id<0x000001C6>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 817];
+        }
+        sprite_id<0x000001C7>
+        {
+            [63, 33, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [101, 817];
+        }
+        sprite_id<0x000001C8>
+        {
+            [18, 47, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [174, 817];
+        }
+        sprite_id<0x000001C9>
+        {
+            [61, 33, -60, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [202, 817];
+        }
+        sprite_id<0x000001CA>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [273, 817];
+        }
+        sprite_id<0x000001CB>
+        {
+            [63, 36, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [364, 817];
+        }
+    }
+    sprite_set // 0x0001
+    {
+        sprite_id<0x000001CC>
+        {
+            [18, 48, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [437, 817];
+        }
+        sprite_id<0x000001CD>
+        {
+            [63, 36, -64, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [465, 817];
+        }
+        sprite_id<0x000001CE>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [538, 817];
+        }
+        sprite_id<0x000001CF>
+        {
+            [63, 33, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [629, 817];
+        }
+        sprite_id<0x000001D0>
+        {
+            [18, 47, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [702, 817];
+        }
+        sprite_id<0x000001D1>
+        {
+            [61, 33, -60, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 875];
+        }
+        sprite_id<0x000001D2>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [81, 875];
+        }
+        sprite_id<0x000001D3>
+        {
+            [63, 36, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [172, 875];
+        }
+    }
+    sprite_set // 0x0002
+    {
+        sprite_id<0x000001D4>
+        {
+            [18, 48, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [245, 875];
+        }
+        sprite_id<0x000001D5>
+        {
+            [63, 36, -64, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [273, 875];
+        }
+        sprite_id<0x000001D6>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [346, 875];
+        }
+        sprite_id<0x000001D7>
+        {
+            [63, 33, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [437, 875];
+        }
+        sprite_id<0x000001D8>
+        {
+            [18, 47, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [510, 875];
+        }
+        sprite_id<0x000001D9>
+        {
+            [61, 33, -60, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [538, 875];
+        }
+        sprite_id<0x000001DA>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [609, 875];
+        }
+        sprite_id<0x000001DB>
+        {
+            [63, 36, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [700, 875];
+        }
+    }
+    sprite_set // 0x0003
+    {
+        sprite_id<0x000001DC>
+        {
+            [18, 48, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [10, 933];
+        }
+        sprite_id<0x000001DD>
+        {
+            [63, 36, -64, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [38, 933];
+        }
+        sprite_id<0x000001DE>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [111, 933];
+        }
+        sprite_id<0x000001DF>
+        {
+            [63, 33, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [202, 933];
+        }
+        sprite_id<0x000001E0>
+        {
+            [18, 47, -9, -24], normal, c8bpp, "apollo-8bpp-normal-0.png", [275, 933];
+        }
+        sprite_id<0x000001E1>
+        {
+            [61, 33, -60, 1], normal, c8bpp, "apollo-8bpp-normal-0.png", [303, 933];
+        }
+        sprite_id<0x000001E2>
+        {
+            [81, 16, -40, -8], normal, c8bpp, "apollo-8bpp-normal-0.png", [374, 933];
+        }
+        sprite_id<0x000001E3>
+        {
+            [63, 36, 0, -1], normal, c8bpp | chunked, "apollo-8bpp-normal-0.png", [465, 933];
+        }
+    }
+}
+// Record #328
+sprite_groups<Ships, 0xEE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0001 ];
+    secondary_spritesets: [ 0x0000 0x0001 ];
+}
+// Record #329
+sprite_groups<Ships, 0xFE> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0002 ];
+    secondary_spritesets: [ 0x0000 0x0002 ];
+}
+// Record #330
+sprite_groups<Ships, 0xED> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 0x0003 ];
+    secondary_spritesets: [ 0x0000 0x0003 ];
+}
+// Record #331
+properties<Ships, 0x0001> // Action00
+{
+    // instance_id: 0x0001
+    {
+        model_life_years: 255;
+        retire_vehicle_early: 0x0A;
+        reliability_decay_speed: 12;
+        vehicle_life_years: 60;
+        long_introduction_date: date(1964/1/1);
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        refittable_cargo_classes: 0x0400;
+        refit_cargo_types: 0x00000000;
+        sprite_id: 0xFF;
+        speed_2_kmh: 0x68;
+        miscellaneous_flags: 0x01;
+        cargo_type: 0x02;
+        cargo_capacity: 0x0001;
+        loading_speed: 0x01;
+        refit_cost: 0x00;
+        cost_factor: 0x82;
+        running_cost_factor: 0x64;
+    }
+}
+// Record #332
+strings<Ships, default, 0x0001> // <feature, language, first_id> Action04, Default
+{
+    /* 0x0001 */ "Rocket Transporter";
+}
+// Record #333
+sprite_groups<Ships, 0xFF> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+// Record #334
+feature_graphics<Ships> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x00FF;
+    feature_ids: [ 0x0001 ];
+    cargo_types:
+    {
+        // <cargo_type>: <cargo_id>;
+        0x00: 0x00FE;
+        0x01: 0x00ED;
+        0x02: 0x00EE;
+    };
+}
