@@ -317,7 +317,8 @@ def bedny(seed=19):
 # cihly", "sedy cihly trochu vetsi nez cerveny"): kostky cihel na paletach, dve rady po ctyrech. Cihly jsou proti
 # skutecnosti zvetsene, aby vazba byla videt i v malem obrazku (cervene 36 x 18 cm, sede 46 x 24 cm).
 #   druh: (tmava a svetla sRGB, spara sRGB, delka a vyska cihly v m, vyska kostky v m)
-CIHLY = {"cervene": ((148, 54, 34), (186, 84, 54), (64, 30, 22), 0.36, 0.18, 0.66),
+CIHLY = {"cervene": ((164, 44, 28), (202, 66, 42), (68, 26, 18), 0.36, 0.18, 0.66),   # od verze 10 cervenejsi
+                                                                                     # (hrac: "cihly trochu cervenejsi")
          "sede": ((138, 138, 132), (178, 178, 172), (70, 70, 68), 0.46, 0.24, 0.72)}
 
 def cihly(druh="cervene", seed=71):

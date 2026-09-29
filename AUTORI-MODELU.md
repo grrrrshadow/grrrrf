@@ -86,3 +86,22 @@ Lístek ze tří kousků papíru. Originál má hráč u sebe, fotky se neuklád
 - gun powder keg; Zeppelin – **Miguel Adão**
 
 Tučně jsou autoři, které potvrzují metadata v souborech (tabulka nahoře).
+
+## Tatry na focení (2026-09-29)
+
+Hráč: *„jaké máme Tatry 148, 138 objekty na focení?“*, *„tam je asi velkej soubor tater a pár jednotlivých“*.
+V releasech (stav k 29. 9., poslední je `par6`) jsou tři:
+
+- **`tatra-148-akt-3-3.glb`** (par6, 6,2 MB), hans1240, CC BY 4.0. Tatra 148 jako hasičská cisterna s nádrží
+  a zábradlím na střeše, 3,2 × 9,25 × 3,6 m. **Bez barev a textur**, všech 39 materiálů je bílých nebo šedých,
+  díly mají jména (`kabina`, `rama`, `otboynik` = nárazník, kola), takže se dá nabarvit po dílech jako vejtřaska.
+- **`tatra-815.glb`** (par6, 5,0 MB), hans1240, CC BY 4.0. Tatra 815 sklápěč, 3,0 × 6,9 × 3,0 m, s texturami
+  (zimní bílošedá kamufláž a špína).
+- **`FS25_Tatra_T_148_S1_S3_TN_converted.zip`** (par6, 31 MB), to je ten „velký soubor tater“: mod do Farming
+  Simulator 25, autoři EmikMODelStudio a Milan #82 (převod FS25). Tatra 148 s korbami S1 (sklápění dozadu),
+  S3 (na tři strany), siláž a rámem TN, textury i části z T 138 (budíky, poloosy, rám). Model je ve formátu hry
+  (`Tatra148.i3d` a binární `.i3d.shapes`) a **licence v modu není žádná**, takže bez svolení autorů ho do GRF
+  převádět nesmíme.
+- **Tatra 138** jako samostatný model v releasech není.
+
+Náhled obou GLB: `scratchpad` (nahled.py, kamera jako u vejtřasky), do repa se neukládá.
