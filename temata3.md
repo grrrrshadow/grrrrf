@@ -1345,3 +1345,24 @@ v GRF. Vlastnost 20 u silničních aut (`sort_purchase_list`) přesune auto **p�
 
 **Zkušební náklady:** `hra/zkusebni_naklady/` (`MAXn`) přidá do mírného klimatu SAND TATO CMNT GRVL
 a TOUR, `testv3s` pak naloží každý náklad a vypíše vrstvy (kupka, plachta, nic).
+
+## V3S verze 7: pytle s černou čarou (2026-09-29)
+
+**Pytle.** Hráč: *„měl jsi lepší tamty pytle, tak jen víc zvýrazni pytel, tam černou linku kolem pytle, aby
+bylo vidět, že to není kupa, že to jsou pytle, slévaly se do sebe“*, *„náhodně naházeny“*. Zpátky pytle
+z verze 5 (mřížka s posunem a natočením, horní vrstva nedoskládaná), bílé na cement, sůl, cukr, vlnu
+a stavební materiál, hnědé na kávu. Pytle jako na paletě (subsurf, vazba) se hráči líbily míň.
+
+**Černá čára kolem kusů:** `render_v3s.py`, `OBRYSY`. Po všech směrech ještě jeden render, kde má každý
+pytel svou plochou barvu (emise, 1 vzorek, filtr 0,01 px, pohled Standard, bez ditheru) a auto černou.
+Z něj je vidět, kterému pytli patří který pixel. Pixel pytle, který sousedí s prázdnem nebo s pytlem
+blíž ke kameře, se ve fotce ztmaví na 0,2. Mezi dvěma pytli je tak jedna čára 1 px (zin4), podél bočnic
+auta žádná. Starý kompozitor (`scene.node_tree`) Blender 5 nemá, tohle ho nepotřebuje.
+
+**Hra zmenšuje sprity výběrem pixelů, ne průměrem** (`spritecache.cpp`, `ResizeSpriteOut`): ze zin4 na
+zin2 bere sudé řádky a z dvojice pixelů ten pravý, když není průhledný. Čára 1 px se při oddálení
+rozpadne na tečky; komu by to vadilo, musí mít GRF vlastní sprity zin2 a normal.
+
+**Bedny** (hráč: *„zemědělské potřeby, strojírenské potřeby bedny, jako zboží má“*, *„krabice – bedny,
+jaký jsou na zboží“*): zboží, zemědělské a strojírenské zásoby a svařovací materiál jedou s jedním
+obrázkem beden.

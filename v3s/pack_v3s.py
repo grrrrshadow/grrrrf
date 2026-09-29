@@ -177,7 +177,7 @@ SADY = {"modra": ["modra_A", "modra_B", "modra_C", "modra_D"], "vojenska": ["voj
 # Sypke naklady jako kupka v barve nakladu, drevo klady, drevarske vyrobky prkna. VRSTVY jsou obrazky, VRSTVA rika,
 # ktery naklad jede s kterym obrazkem. Jeden obrazek pro vic nakladu stoji nula megabajtu navic (hrac 29. 9.:
 # "jen kupicka je min mb", "pisek a brambory zluta, cement, sterk seda"): brambory (TATO, a BEAN, ktere ma CZIS
-# prejmenovane na brambory) jedou se zlutou kupkou pisku, cement se sedou kupkou kamene, tropicke drevo s kladami,
+# prejmenovane na brambory) jedou se zlutou kupkou pisku, cement od verze 5 v pytlich, tropicke drevo s kladami,
 # stary kod srotu SCRP se srotem.
 VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
           "MARI", "SULP", "WOOD", "WDPR",
@@ -186,7 +186,8 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           # "rostlinna vlakna jako plnou sena, misto plachty seno", "vodu vozit v sudech, modry sudy a cerny sudy",
           # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
           "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene",
-          "CORE", "seno_mari", "seno_zlute"]                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
+          "CORE", "seno_mari", "seno_zlute",                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
+          "pytle_hnede"]                                                       # od verze 7 kava (hrac: "kafe budem vozit v hnedym pytli")
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
@@ -194,6 +195,12 @@ VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
 # rudy od verze 7 jako kupy podobne barvy: bauxit rezavy jako zelezna ruda, niklova a pyritova ruda sede, mangan
 # a uran tmave (hrac: "medena ruda kupa, rudy, uhli kupy")
 VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "URAN": "COKE"})
+# pytle a bedny od verze 7 (hrac 29. 9.: "sul, cukr, vlna bily pytle, co jsou na cement, a building materials taky bily
+# pytle", "zemedelske potreby, strojirenske potreby bedny, jako zbozi ma", "welding consumables krabice", "krabice - bedny,
+# jaky jsou na zbozi"); cukr i surovy cukr
+VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL BDMT".split()})
+VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
+VRSTVA["JAVA"] = "pytle_hnede"
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
 VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
 # (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
@@ -529,7 +536,6 @@ for n in ("modra", "vojenska"):
         obr, t = obrazek(k), telo(k)
         return t if obr is None else cil_vrstvy(obr, t)
     vychozi_g = cil_vrstvy(PLACHTA[n][0], zaklad)  # vychozi: plachta pres auto (u modre odstin A)
-    # dobytek: jmena podtypu pro okno prestavby (callback 0x19, 0x400 = konec seznamu), obrazek podle podtypu
     # naklady s podtypy (dobytek, rostlinna vlakna): jmena podtypu pro okno prestavby (callback 0x19, 0x400 = konec
     # seznamu) a obrazek podle podtypu (promenna 0xF2)
     s_podtyp_text, s_podtyp = {}, {}

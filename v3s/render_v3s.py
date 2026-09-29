@@ -270,39 +270,27 @@ def kvadr(mat, x, y, z, sx, sy, sz, rot=0.0, zaobleni=0.0):
     o.data.materials.append(mat)
     return o
 
-def pytle(seed=17):
-    """Pytle cementu (hrac 29. 9.: "cement uplne zrus a zacni znova pytle pekne, nic sediviho. bile pytle"): bile papirove
-    pytle 50 kg (asi 60 x 40 x 14 cm), bricha naducana, ve vazbe jako na palete (vrstvy stridave podel a napric),
-    pet vrstev, horni nedoskladana."""
-    import bmesh, random
+# Pytle (hrac 29. 9.: "mel jsi lepsi tamty pytle, tak jen vic zvyrazni pytel, tam cernou linku kolem pytle, aby bylo
+# videt, ze to neni kupa, ze to jsou pytle, slevaly se do sebe", "nahodne nahazeny", "kafe budem vozit v hnedym pytli,
+# cement bilej pytel"): pytle z verze 5, jen bile a hnede; cernou linku kolem kazdeho pytle dela obrys() po rendru.
+PYTLE = {"bile": ((226, 224, 216), (252, 251, 246), 0.95), "hnede": ((108, 74, 40), (152, 110, 64), 0.95)}
+
+def pytle(barva="bile", seed=17):
+    """pytle po 50 kg (asi 40 x 60 x 13 cm) ve ctyrech vrstvach, horni nedoskladana, kazdy trochu posunuty a natoceny"""
+    import random
     random.seed(seed)
-    mat = material("pytle", srgb((232, 230, 222)), srgb((252, 251, 247)), 0.9, 30.0)
-    nt_ = mat.node_tree; bsdf = nt_.nodes["Principled BSDF"]
-    papir = nt_.nodes.new("ShaderNodeTexNoise"); papir.inputs["Scale"].default_value = 45.0
-    hrbol = nt_.nodes.new("ShaderNodeBump"); hrbol.inputs["Strength"].default_value = 0.15
-    nt_.links.new(papir.outputs["Fac"], hrbol.inputs["Height"]); nt_.links.new(hrbol.outputs["Normal"], bsdf.inputs["Normal"])
-    D, S, V = 0.60, 0.40, 0.14                     # delka, sirka, vyska pytle
-    def pytel(x, y, z, podel, rot):
-        """naducany pytel: kvadr s velkym zaoblenim, vrch a spodek vyboulene"""
-        sx, sy = (S, D) if podel else (D, S)
-        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z), rotation=(0, 0, rot))
-        o = bpy.context.object; o.scale = (sx * 0.97, sy * 0.97, V)
-        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-        sub = o.modifiers.new("oblost", 'SUBSURF'); sub.levels = 2; sub.render_levels = 2
-        o.data.materials.append(mat)
-        return o
+    tm, sv, dr = PYTLE[barva]
+    mat = material("pytle_" + barva, srgb(tm), srgb(sv), dr, 25.0)
+    SX, SY, SZ, NX, NY = 0.40, 0.60, 0.13, 5, 6
     obs = []
-    dx, dy = 2 * KX - 0.06, KY1 - KY0 - 0.08       # vnitrek korby
-    for vrstva in range(5):
-        podel = vrstva % 2 == 0
-        sx, sy = (S, D) if podel else (D, S)
-        nx, ny = int(dx // sx), int(dy // sy)
-        for i in range(nx):
-            for j in range(ny):
-                if vrstva == 4 and random.random() < 0.4: continue
-                x = -KX + 0.03 + (dx - nx * sx) / 2 + (i + 0.5) * sx + random.uniform(-0.015, 0.015)
-                y = KY0 + 0.04 + (dy - ny * sy) / 2 + (j + 0.5) * sy + random.uniform(-0.015, 0.015)
-                obs.append(pytel(x, y, PODLAHA + V / 2 + vrstva * V * 0.92, podel, math.radians(random.uniform(-2, 2))))
+    for vrstva in range(4):
+        for i in range(NX):
+            for j in range(NY):
+                if vrstva == 3 and random.random() < 0.35: continue
+                x = -KX + 0.05 + SX / 2 + i * (2 * KX - 0.1 - SX) / (NX - 1) + random.uniform(-0.02, 0.02)
+                y = KY0 + 0.1 + SY / 2 + j * (KY1 - KY0 - 0.2 - SY) / (NY - 1) + random.uniform(-0.02, 0.02)
+                obs.append(kvadr(mat, x, y, PODLAHA + SZ / 2 + vrstva * SZ * 0.95, SX * 0.96, SY * 0.96, SZ,
+                                 math.radians(random.uniform(-4, 4)), 0.045))
     return obs
 
 def bedny(seed=19):
@@ -531,8 +519,8 @@ def seno(barva="vlakna", seed=31):
     ob.data.materials.append(mat)
     return [ob]
 
-KUSOVE = {"CMNT": pytle, "GOOD": bedny, "BEER": sudy, "sudy_bile": lambda: sudy("bile", 41),
-          "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
+KUSOVE = {"CMNT": pytle, "pytle_hnede": lambda: pytle("hnede", 59), "GOOD": bedny, "BEER": sudy,
+          "sudy_bile": lambda: sudy("bile", 41), "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
           "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno,
           "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute")}
 
@@ -587,5 +575,65 @@ for d in SMERY:
     scene.render.filepath = os.path.join(VYSTUP, f"d{d}.png")
     bpy.ops.render.render(write_still=True)
     print("smer", d, "zem pod stredem", [round(v, 2) for v in b["zem_stred"]], flush=True)
+
+# ---------------------------------------------------------------- cerna cara kolem pytlu
+# Hrac 29. 9.: "vic zvyrazni pytel, tam cernou linku kolem pytle, aby bylo videt, ze to neni kupa, ze to jsou pytle,
+# slevaly se do sebe". Po vsech smerech jeste jeden render, kde ma kazdy pytel svou plochou barvu (emise, jeden vzorek
+# uprostred pixelu, zadne prechody) a auto cernou: z nej je videt, kteremu pytli patri ktery pixel. Pixel pytle, ktery
+# sousedi s prazdnem nebo s pytlem blize ke kamere, je cara a ve fotce ztmavne skoro do cerna. Cara je tak jeden pixel
+# (zin4) kolem kazdeho pytle, mezi dvema pytli jen jedna (na strane zadniho). Podel bocnic auta cara neni.
+OBRYSY = {"CMNT", "pytle_hnede"}
+TMA = 0.2                                          # cara = barva pytle krat TMA
+if NAKLAD_KOD in OBRYSY:
+    from PIL import Image
+    UROVNE = (40, 90, 140, 190, 240)
+    paleta = [(r, g_, b_) for r in UROVNE for g_ in UROVNE for b_ in UROVNE]
+    N = len(nalozeno); assert N <= len(paleta), N
+    def linearni(v):
+        v = v / 255
+        return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+    def emise(jmeno, rgb):
+        m = bpy.data.materials.new(jmeno); m.use_nodes = True
+        n_ = m.node_tree.nodes
+        for x in list(n_): n_.remove(x)
+        e = n_.new("ShaderNodeEmission"); e.inputs["Color"].default_value = tuple(linearni(v) for v in rgb) + (1.0,)
+        vy = n_.new("ShaderNodeOutputMaterial"); m.node_tree.links.new(e.outputs["Emission"], vy.inputs["Surface"])
+        return m
+    for i, o in enumerate(nalozeno):
+        o.data.materials.clear(); o.data.materials.append(emise(f"id{i}", paleta[i]))
+    cerna = emise("id_auto", (0, 0, 0))
+    for o in meshe:
+        o.is_holdout = False
+        for s in o.material_slots: s.material = cerna
+    scene.cycles.samples = 1; scene.cycles.filter_width = 0.01
+    scene.view_settings.view_transform = 'Standard'; scene.view_settings.look = 'None'
+    scene.view_settings.exposure = 0.0; scene.view_settings.gamma = 1.0
+    scene.render.dither_intensity = 0.0
+    pal = np.array(paleta[:N] + [(0, 0, 0)], dtype=np.int32)          # 0..N-1 pytle, N auto, N+1 prazdno
+    for d in SMERY:
+        gramofon.rotation_euler[2] = math.radians(ROTATION_ANGLES[d])
+        bpy.context.view_layer.update()
+        smer_kamery = cam.matrix_world.to_quaternion() @ Vector((0, 0, -1))
+        H = np.array([(o.matrix_world.translation - cam.matrix_world.translation).dot(smer_kamery) for o in nalozeno]
+                     + [0.0, 0.0])
+        cesta_id = os.path.join(VYSTUP, f"id{d}.png")
+        scene.render.filepath = cesta_id
+        bpy.ops.render.render(write_still=True)
+        ids = np.asarray(Image.open(cesta_id).convert("RGBA")).astype(np.int32)
+        os.remove(cesta_id)
+        blizko = ((ids[:, :, None, :3] - pal[None, None]) ** 2).sum(-1).argmin(-1)
+        idx = np.where(ids[..., 3] > 127, blizko, N + 1)
+        cesta = os.path.join(VYSTUP, f"d{d}.png")
+        foto = np.asarray(Image.open(cesta).convert("RGBA")).astype(np.float64)
+        pytel = idx < N
+        cara = np.zeros(idx.shape, bool)
+        okraj = np.pad(idx, 1, constant_values=N + 1)
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            q = okraj[1 + dy:1 + dy + idx.shape[0], 1 + dx:1 + dx + idx.shape[1]]
+            cara |= pytel & ((q == N + 1) | ((q < N) & (q != idx) & (H[q] < H[idx])))
+        lem = (idx == N + 1) & (foto[..., 3] > 0)                # polopruhledny okraj za carou, at nesviti
+        foto[cara | lem, :3] *= TMA
+        Image.fromarray(np.clip(np.rint(foto), 0, 255).astype(np.uint8), "RGBA").save(cesta)
+        print("smer", d, "obrys pytlu", int(cara.sum()), "px", flush=True)
 json.dump(info, open(os.path.join(VYSTUP, "kotvy.json"), "w"), indent=1)
 print("hotovo")
