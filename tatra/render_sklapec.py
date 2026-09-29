@@ -97,9 +97,8 @@ def je_sklo(mn, mx, plocha):
         return "svetlo"                                                                                           # reflektory v blatnicich
     # Svetla na blatnicich: skrinka x 0,83 az 1,04, z 1,23 az 1,38 s prednim stitkem (y -0,26) a pred nim sklicko
     # 11 x 6 cm (y -0,29). Hrac 29. 9.: "vojenskou kolem blinkru na zeleno taky, u cervene a oranzove to nebude videt,
-    # tam je to dobry": u zelene je stitek v barve auta a oranzove jen sklicko, u ostatnich oranzove oboji.
-    if jedna_strana and mn.y >= -0.27 and mx.y <= -0.24 and 0.8 <= ax0 and ax1 <= 1.06 and mn.z >= 1.2 and mx.z <= 1.4 and plocha >= 0.02:
-        return None if NATER == "vojenska" else "blinkr"                                                          # stitek smerovky
+    # tam je to dobry", pak "tu zelenou jsi dobarvil dobre, udelej tak oranzovou a cervenou": stitek je vzdy v barve
+    # auta (zustane soucasti kabiny) a oranzove je jen sklicko.
     if jedna_strana and mn.y >= -0.30 and mx.y <= -0.26 and 0.88 <= ax0 and ax1 <= 1.01 and mn.z >= 1.27 and mx.z <= 1.35 and plocha < 0.02:
         return "blinkr"                                                                                           # sklicko smerovky
     return None
@@ -328,7 +327,9 @@ if KORBA == "cisterna":
     m_klanice = mat("klanice", (40, 40, 38), 0.5)
     # hrac 29. 9.: "chtelo by to tri barvy cisterny modrou, bilou a zlutou, jenom tu cisternu na aute jinou barvou",
     # "celooranzovou a celocervenou cisternu nebudem pouzivat". Kabina zustava v barve auta.
-    BARVY_CISTERNY = {"modra": (36, 84, 168), "bila": (226, 226, 220), "zluta": (232, 178, 28)}
+    # Hrac 29. 9., co v ktere: "zluta chemie, modra voda, mliko, olej a bila benzin, asi na ropu musime udelat cernou
+    # tmavou".
+    BARVY_CISTERNY = {"modra": (36, 84, 168), "bila": (226, 226, 220), "zluta": (232, 178, 28), "cerna": (26, 26, 28)}
     m_cis = mat("cisterna", BARVY_CISTERNY[os.environ.get("CISTERNA", "modra")], 0.4)
     A_, B_, N_, ZC_ = 1.15, 0.725, 2.4, 1.30 + 0.725
     Y0T, Y1T, HL = 2.76, 7.02, 0.16                                        # od, do, hloubka dna

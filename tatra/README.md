@@ -75,14 +75,17 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   a celočervená“*.
   - Valník: bočnice, zadní a přední čelo z vodorovných hnědých prken s mezerami (bočnice a zadní čelo tři prkna,
     přední pět), kování a klanice tmavé, rám podlahy černý. V barvě auta je jen kabina.
-  - Cisterna: `CISTERNA=modra|bila|zluta` (nádrž, obruče a průlezy), kabina v barvě auta.
+  - Cisterna: `CISTERNA=modra|bila|zluta|cerna` (nádrž, obruče a průlezy), kabina v barvě auta. Co v které (hráč:
+    *„žlutá chemie, modrá voda, mlíko, olej a bílá benzín, asi na ropu musíme udělat černou tmavou“*): modrá voda,
+    mléko a olej, bílá benzín, žlutá chemie, černá ropa. Přiřazení kódů nákladů se udělá při skládání GRF.
   - Sklápěč zůstává celý v barvě auta (148 oranžová, 138 červená).
 - **Zelená vojenská Tatra** (hráč: *„na ty věci, co vozí jenom zelená vejtřaska, uděláme zelenou Tatru 138 a 148
   valník a valník plachta, pro uranový věci, military, explosives“*): nátěr `vojenska` olivový jako vojenská
   vejtřaska (80, 74, 48), valník s hnědými bočnicemi a vojenská olivová plachta (výchozí pro `vojenska`).
   Světla na blatnících (hráč: *„vojenskou kolem blinkrů na zeleno taky, u červené a oranžové to nebude vidět, tam
   je to dobrý“*): u zelené je štítek skříňky v barvě auta a oranžové jen sklíčko (11 × 6 cm), u oranžové a červené
-  zůstává oranžový celý štítek. Náhled `nahledy/blinkry.png`.
+  zůstává oranžový celý štítek. Pak *„tu zelenou jsi dobarvil dobře, udělej tak oranžovou a červenou“*: štítek je
+  u všech v barvě auta, oranžové je jen sklíčko. Náhled `nahledy/blinkry.png`.
 - **Náklady** (hráč: *„náklady bude mít jako vejtřaska, jen tekutiny budou v cisterně“*): na valník stejné vrstvy jako
   u vejtřasky, tekutiny místo sudů v cisterně. Ještě neuděláno.
 - Náhled barev: `nahledy/barvy.png`.
