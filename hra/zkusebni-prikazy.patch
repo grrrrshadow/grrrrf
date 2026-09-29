@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-29 00:23:27.013576037 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 00:23:27.021613815 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-29 03:18:11.134331025 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 03:18:11.142536562 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -19,7 +19,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1348,289 @@
+@@ -1344,6 +1348,311 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -58,11 +58,11 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
 +	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
-+	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR"};
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR", "BEER", "FICR", "CHEM", "TOYS", "URAN", "WATR", "ACID", "OIL_"};
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +		if (e->GetGRFID() != want) continue;
-+		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
-+				e->company_avail.Test(_local_company) ? 1 : 0, e->info.refit_mask.Count(), e->GetDisplayDefaultCapacity());
++		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} poradi v nakupu {} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
++				e->list_position, e->company_avail.Test(_local_company) ? 1 : 0, e->info.refit_mask.Count(), e->GetDisplayDefaultCapacity());
 +		{
 +			/* jako okno nakupu (vehicle_gui.cpp, ShowRefitOptionsList): do 7 chybejicich pise "vse krome" */
 +			CargoTypes umi = GetUnionOfArticulatedRefitMasks(e->index, false);
@@ -96,8 +96,9 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +				radek += fmt::format(" | dil 0x{:04X} delka {} kapacita {} sprite W {} NE {}", Engine::Get(u->engine_type)->grf_prop.local_id,
 +						u->gcache.cached_veh_length, u->cargo_cap, seq.count > 0 ? seq.seq[0].sprite : 0, seq_ne.count > 0 ? seq_ne.seq[0].sprite : 0);
 +			}
-+			IConsolePrint(CC_INFO, "V3S:   {} prestavba {}{}", lab, rc.Succeeded() ? "ok" : "NE", radek);
-+			if (rc.Succeeded()) {
++			bool prestaveno = rc.Succeeded() && Vehicle::Get(vid)->Last()->cargo_type == ct;
++			IConsolePrint(CC_INFO, "V3S:   {} prestavba {}{}", lab, prestaveno ? "ok" : "NE (nevozi)", radek);
++			if (prestaveno) {
 +				/* nalozit plne a znovu se podivat na sprite (kupka nebo plachta), pak zase vylozit */
 +				std::string plne;
 +				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
@@ -110,6 +111,26 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +					u->cargo.Truncate();
 +				}
 +				IConsolePrint(CC_INFO, "V3S:   {} plne{}", lab, plne);
++			}
++			if (std::string_view(lab) == "LVST" && rc.Succeeded()) {
++				/* podtypy dobytka (callback 0x19): jmeno za nakladem a vrstvy obrazku pro kazdy podtyp */
++				for (uint8_t podtyp = 0; podtyp < 4; podtyp++) {
++					auto [pc, pcap, pmail, pcaps] = Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, podtyp, false, false, 0);
++					std::string radek2;
++					for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
++						if (u->cargo_cap > 0 && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
++						VehicleSpriteSeq seq;
++						u->GetImage(Direction::W, EngineImageType::OnMap, &seq);
++						std::string vrstvy;
++						for (uint s = 0; s < seq.count; s++) vrstvy += fmt::format("{}{}", s == 0 ? "" : "+", seq.seq[s].sprite);
++						StringID jm = GetCargoSubtypeText(u);
++						radek2 += fmt::format(" | dil 0x{:04X} podtyp {} jmeno '{}' sprite W {}", Engine::Get(u->engine_type)->grf_prop.local_id,
++								u->cargo_subtype, jm == STR_EMPTY ? std::string("-") : GetString(jm), vrstvy);
++						u->cargo.Truncate();
++					}
++					IConsolePrint(CC_INFO, "V3S:   LVST podtyp {} prestavba {}{}", podtyp, pc.Succeeded() ? "ok" : "NE", radek2);
++				}
++				Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
 +			}
 +		}
 +		/* zvuky (callback 0x33): odjezd v depu (auto schovane) a venku, jizda v ruznych rychlostech, stani;
@@ -245,10 +266,11 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, rt, DiagDirection::SE).Succeeded();
 +	V3SLog("V3SFOTO: okruh ({},{})-({},{}) depo {}", x0, y0, x1, y1, ok ? "ok" : "CHYBA");
 +	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
-+	struct Nakup { const char *grf; uint16_t local; const char *naklad; bool plne; };
++	struct Nakup { const char *grf; uint16_t local; const char *naklad; bool plne; uint8_t podtyp = 0; };
 +	static const Nakup nakupy[] = {
-+		{"MAXe", 0x0100, "GOOD", true}, {"MAXe", 0x0101, "STEL", true}, {"MAXe", 0x0100, "STEL", true}, {"MAXe", 0x0101, "TATO", true},
-+		{"MAXd", 0x0101, "GOOD", true}, {"MAXd", 0x0100, "PASS", true}, {"MAXd", 0x0101, "CMNT", true}, {"MAXd", 0x0100, "COAL", true},
++		{"MAXe", 0x0100, "BEER", true}, {"MAXe", 0x0101, "OIL_", true}, {"MAXe", 0x0100, "LVST", true, 2}, {"MAXe", 0x0101, "FICR", true},
++		{"MAXd", 0x0101, "WATR", true}, {"MAXd", 0x0100, "LVST", true, 1}, {"MAXd", 0x0101, "CMNT", true}, {"MAXd", 0x0100, "GOOD", true},
++		{"MAXd", 0x0101, "ACID", true}, {"MAXe", 0x0101, "LVST", true, 0},
 +	};
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
@@ -280,7 +302,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		if (n.naklad[0] != '\0') {
 +			uint32_t l = (uint32_t)(uint8_t)n.naklad[0] << 24 | (uint8_t)n.naklad[1] << 16 | (uint8_t)n.naklad[2] << 8 | (uint8_t)n.naklad[3];
 +			CargoType ct = GetCargoTypeByLabel(CargoLabel{l});
-+			if (IsValidCargoType(ct)) Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
++			if (IsValidCargoType(ct)) Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, n.podtyp, false, false, 0);
 +			if (IsValidCargoType(ct) && n.plne) {
 +				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
 +					if (u->cargo_cap > 0 && u->cargo_type == ct && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
@@ -309,7 +331,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1739,17 @@
+@@ -1452,6 +1761,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -327,7 +349,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7541,8 @@
+@@ -7243,6 +7563,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -337,8 +359,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-29 00:23:27.021613815 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-29 00:23:27.026915362 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 03:18:11.142536562 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 03:18:11.148598207 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

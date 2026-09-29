@@ -1,15 +1,57 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 5 (29. 9.) v kostce
+
+Co je jinak proti verzi 4 (podrobnosti v oddílech níž, starší text popisuje verzi 4, kde se liší, platí tohle):
+
+- **Jména:** „Praga V3S Vejtřaska (zelená)“ a „(modrá)“ (hráč: *„vůbec slova army a military … až na konec“*).
+  V nákupu je modrá nad zelenou: hra řadí auta jedné sady podle místního čísla a vlastnost 20
+  (`sort_purchase_list`) u modré ji přesune **před** zelenou (`CommitVehicleListOrderChanges`). Modrá je
+  i v GRF první (hráč: *„musíš mít v GRF nejdřív sprity modrý“*), na pořadí v nákupu to vliv nemá.
+- **Co vozí:** všechno z tabulky kromě skla, elektřiny a GEAR. Tekutiny v barevných sudech (hráč: *„prostě
+  udělej i tekutiny, barevný sudy a je to“*), chemikálie (`CHEM`, nový kód za MARI, 0xAB) pod plachtou.
+  Jen zelená: jídlo, výbušniny a radioaktivní (URAN NUKF NUKW). Jen modrá: hračky. Zelená 168 kódů, modrá 164.
+- **Náklad na korbě** (vrstvy, jeden obrázek pro víc nákladů):
+
+  | náklad | obrázek |
+  |---|---|
+  | sypký (uhlí, ruda, písek s bramborami, kámen …) | kupka v barvě nákladu jako ve verzi 4 |
+  | WOOD, TWOD / WDPR | klády / prkna |
+  | CMNT cement | pytle (hráč: *„si říkal, že cement dáš do pytlů“*) |
+  | GOOD zboží | dřevěné bedny |
+  | BEER alkohol | dřevěné sudy |
+  | OIL_ OILD OILI PETR RFPR ropa a benzín | modrá černé sudy, zelená šedá plachta (hráč: *„vojenská šedá plachta všechny benzíny, ropu“*) |
+  | CTAR dehet | černé sudy |
+  | WATR MILK EOIL MOLS voda, mléko, olej, melasa | modré sudy |
+  | ACID LYE_ CHLO NH3_ O2__ FUEL chemie a plyny | červené sudy |
+  | FICR přadné plodiny | naložené seno (hráč: *„místo plachty seno“*) |
+  | LVST dobytek | prasátka, kravičky (česká strakatá) nebo ovečky, podle přestavby |
+  | všechno ostatní | plachta (zelená olivová, modrá žlutá, ocel a strojírenství šedá a šedobílá) |
+
+- **Dobytek má tři podtypy** (hráč: *„může se jmenovat V3S prasátka … a na pozadí poběží kód dobytek
+  normálně“*, *„další jméno V3S dobytek a kravičky, po přestavbě“*, *„ovce tam jsou“*): v okně přestavby
+  „Dobytek (prasátka)“, „(kravičky)“, „(ovečky)“. Callback 0x19 (bit 0x20 masky callbacků u obou dílů)
+  vrací text D003 až D005 podle podtypu (proměnná 0xF2, `cargo_subtype`), 0x400 = konec seznamu. Hra
+  bere jen podtypy, které vrátí všechny díly, proto má čumák velké stejný callback. Obrázek na korbě
+  vybírá switch na 0xF2.
+- **Texty:** popis GRF „Carries everything and rides on railway wagons“, půl motoru Tatry 111, bez měřítka
+  CZTR (u malé „original size“), zeleně „for ottd Decouple by Karel Mácha“, socialismus, na konci věta
+  o zelených ze zásob armády. V nákupu totéž česky.
+- **Velikost:** malá 4,18 MB (auta 0,34, náklady 0,54, plachty 0,11, zvuk 3,15), velká 4,53 MB.
+- **Ověřeno ve zkušební hře** (`testv3s`, zkušební náklady `hra/zkusebni_naklady/`): každý náklad se
+  přestaví a naložený ukáže svůj obrázek, podtypy dobytka mají jména a obrázky v obou dílech, modrá
+  nevozí uran, zelená hračky, modrá je v nákupu první. Fotka ze hry: `kontrola/hra_naklady_v5.png`.
+
 Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vojenskou a modrou“*,
 *„vojenská tam je, jen ji přebarvi na modro“*, *„komunistickou modrou“*.
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v4.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v4.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v5.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v5.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v4.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v3`)
+Balík pro hráče je `Praga_V3S_Vejtraska-v5.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v4`)
 zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
@@ -270,4 +312,6 @@ Verze (`VERZE` v `pack_v3s.py`, je ve jménu souboru i v Action14): 1 první vyd
 bez „for“, texty bez „communist“, zelená kupka na MARI, pruhy na silnici CZTR, umělý zvuk s klaksonem,
 velká veze správně 20 a 3 lidi; 3 tmavá lesklá okna a bílé reflektory, náklad jako přikládací vrstva
 (18 nákladů), dřevo v seznamu nákladů; 4 náklady hráčovým systémem (celá tabulka ze vzoru, vypsaný
-seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na všechno, co není kupka.
+seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na všechno, co není kupka; 5 tekutiny
+v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasátka, kravičky nebo ovečky,
+zelená místo vojenské, modrá v nákupu první, nové texty.

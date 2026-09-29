@@ -1327,6 +1327,19 @@ V Action 3 stačí vypsat náklady, které nejdou na výchozí (u V3S plachta p�
 nákladu“, chybí nejvýš 7 → „Všechny kromě …“, jinak víc než 7 → „Skoro všechno vozí“, do 7 vyjmenované.
 ROLA se nepočítá autu, které auta nevozí. GRF kvůli tomu nemusí seznam ohýbat.
 
+**Podtypy nákladu (V3S verze 5, dobytek jako prasátka, kravičky, ovečky).** Callback 0x19
+(`CBID_VEHICLE_CARGO_SUFFIX`, bit 0x20 masky) volá okno přestavby pro každý náklad a podtyp 0, 1, 2 …
+(`v->cargo_subtype`, v GRF proměnná 0xF2), cestou Action 3 podle nákladu. Vrátí text D000 + číslo
+(u GRF8 0x400 = konec). Text se lepí rovnou za jméno nákladu, takže s mezerou: „ (prasátka)“. Článkové
+auto: okno bere jen podtypy, které vrátí všechny díly, i neviditelný čumák musí odpovídat. Grafika
+podle podtypu: switch na 0xF2 před switchem vrstev.
+
+**Pořadí v nákupu:** hra řadí auta jedné sady podle místního čísla (`EnginePreSort`), ne podle pořadí
+v GRF. Vlastnost 20 u silničních aut (`sort_purchase_list`) přesune auto **před** auto se zadaným číslem.
+
+**Zkouška přestavby:** `RefitVehicle` vrátí úspěch i na náklad, který auto nevozí, jen ho nezmění. Proto
+`testv3s` kontroluje `cargo_type` po přestavbě.
+
 **Fotky ze hry bez stromů:** v `openttd.cfg` rigu `transparency_options = 2` a
 `invisibility_options = 2` (bit 1 = stromy), stromy pak auta na okruhu nezakryjí.
 

@@ -97,11 +97,10 @@ def nacti_sadu(nater):
 # Co vozi: vsechno z tabulky krome NEVOZI (hrac: "napis vsechno vozi", "co nevozi vyjmenuj krom tekutin", "alkohol
 # vozime, pivo v base", "svarovaci material a jidlo nech, barvy nech, cistici prostredky taky nech, to neni tekuty ve
 # flaskach, vojenske jidlo jo"). Marihuana (MARI) je v seznamu jmenem, jako v kazdem normalnim GRF.
-NEVOZI = {                                         # nevozi ani jedna
-    "OIL_": "ropa", "OILD": "ropa", "OILI": "ropa", "PETR": "benzín", "RFPR": "rafinované produkty",
-    "FUEL": "zemní plyn", "CTAR": "dehet", "MILK": "mléko", "WATR": "voda", "EOIL": "jedlý olej", "MOLS": "melasa",
-    "ACID": "kyselina", "LYE_": "louh", "CHLO": "chlor", "NH3_": "čpavek", "O2__": "kyslík",     # tekutiny a plyny
-    "GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy"}
+# Od verze 5 vozi i tekutiny v barevnych sudech (hrac 29. 9.: "ropa je v kazdy hre v zakladnim prumyslu, tak to musi
+# nejak vozit", "vodu vozit v sudech", "prostě udělej i tekutiny, barevný sudy a je to"); sklo dal ne ("sklo nevozime
+# vejtraskou").
+NEVOZI = {"GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy"}      # nevozi ani jedna
 JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi (hrac: "jidlo jenom vojensky",
                 "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
                 "NUKW": "jaderný odpad"}                      # "vojenska radioaktivni veci, modra ne")
@@ -157,6 +156,9 @@ for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL
           "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD "
           "SULP RUBR AORE CORE NKOR PORE COPR ZINC NICK ALUM COBL MNO2 FECR SCRP VEHI").split():
     ODSTIN[k] = "D"
+# od verze 5 tekutiny: ropa, benzin, dehet a chemie D (u zelene tim i seda plachta na ropu a benzin), mleko B
+for k in "OIL_ OILD OILI PETR RFPR CTAR ACID LYE_ CHLO NH3_ O2__ FUEL".split(): ODSTIN[k] = "D"
+ODSTIN["MILK"] = "B"
 assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
 
 KAPACITA = 10                                      # jednotek beznych nakladu
@@ -175,11 +177,24 @@ SADY = {"modra": ["modra_A", "modra_B", "modra_C", "modra_D"], "vojenska": ["voj
 # prejmenovane na brambory) jedou se zlutou kupkou pisku, cement se sedou kupkou kamene, tropicke drevo s kladami,
 # stary kod srotu SCRP se srotem.
 VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
-          "MARI", "SULP", "WOOD", "WDPR"]
-VRSTVA = {k: k for k in VRSTVY}
-# Cement od verze 5 pod plachtou (hrac 29. 9.: "ten cement je venku, neni v pytlich nebo pod plachtou").
+          "MARI", "SULP", "WOOD", "WDPR",
+          # od verze 5 kusovy naklad (render_v3s.py, KUSOVE; hrac 29. 9.: "si rikal, ze cement das do pytlu", "zbozi
+          # bedny, alkohol sudy", "zviratka ... prasatka", "dalsi jmeno v3s dobytek a kravicky, po prestavbe",
+          # "rostlinna vlakna jako plnou sena, misto plachty seno", "vodu vozit v sudech, modry sudy a cerny sudy",
+          # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
+          "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_modre", "sudy_cervene"]
+VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
-assert all(k in NAKLADY["modra"] for k in VRSTVA), [k for k in VRSTVA if k not in NAKLADY["modra"]]
+VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
+VRSTVA.update({k: "sudy_modre" for k in "WATR MILK EOIL MOLS".split()})              # voda, mleko, jedly olej, melasa
+VRSTVA.update({k: "sudy_cervene" for k in "ACID LYE_ CHLO NH3_ O2__ FUEL".split()})  # chemie a plyny
+# ropa a benzin: modra v cernych sudech, zelena pod sedou plachtou (hrac: "vojenska seda plachta vsechny benziny, ropu")
+VRSTVA_MODRA = {k: "sudy_cerne" for k in "OIL_ OILD OILI PETR RFPR".split()}
+assert all(k in NAKLADY["modra"] for k in list(VRSTVA) + list(VRSTVA_MODRA)), \
+    [k for k in list(VRSTVA) + list(VRSTVA_MODRA) if k not in NAKLADY["modra"]]
+# Dobytek (LVST) ma dva podtypy nakladu, vybira se v okne prestavby (callback 0x19, promenna 0xF2 cargo_subtype):
+# 0 prasatka, 1 kravicky. V kodu je to dal dobytek (hrac: "na pozadi pobezi kod dobytek normalne").
+PODTYPY_DOBYTKA = [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce", " (ovečky)")]     # hrac: "ovce tam jsou"
 # Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
 # plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou
 # sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede
@@ -238,11 +253,11 @@ TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
         "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
 POPIS = {
-    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Zelený valník 6×6. Všechno vozí kromě tekutin, skla "
-                 "a hraček, 20 lidí na korbě. " + ZAJIMAVOST + SOCIALISMUS + PODPIS + "{black}{new-line}" + TECH +
+    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Zelený valník 6×6. Všechno vozí kromě skla a hraček, "
+                 "tekutiny v sudech, 20 lidí na korbě. " + ZAJIMAVOST + SOCIALISMUS + PODPIS + "{black}{new-line}" + TECH +
                  "{black}{new-line}" + ARMADA),
     "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu. Všechno vozí kromě "
-              "tekutin, skla, jídla, výbušnin a radioaktivních věcí, v kabině tři lidi. " + ZAJIMAVOST + SOCIALISMUS + PODPIS +
+              "skla, jídla, výbušnin a radioaktivních věcí, tekutiny v sudech, v kabině tři lidi. " + ZAJIMAVOST + SOCIALISMUS + PODPIS +
               "{black}{new-line}" + TECH + "{black}{new-line}" + ARMADA),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
@@ -293,6 +308,9 @@ for i, k in enumerate(TABULKA):
 Y += ["}", "strings<RoadVehicles, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in ("vojenska", "modra"):
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
+TEXT_PODTYP = []                                   # D003 a dal: jmena podtypu dobytka za jmenem nakladu
+for i, (obr, jm) in enumerate(PODTYPY_DOBYTKA):
+    TEXT_PODTYP.append(0x03 + i); Y.append(f'    /* 0xD0{0x03 + i:02X} */ "{jm}";')
 Y.append("}")
 
 # ---------------------------------------------------------------- zvuk
@@ -438,10 +456,11 @@ for n in ("modra", "vojenska"):
              f"        miscellaneous_flags: 0x{0x80 if (co == 'auto' and OBRAZKY) else 0:02X};",   # 0x80: vrstvy (sprite stack)
              f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
              f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
-        if eid == h and n == "vojenska":
-            # hrac 29. 9.: "dej zelenou dolu pod modrou v depu": v nakupu hned za modrou (vlastnost 20, poradi v seznamu;
-            # cisla aut zustala, at se ve hrach neprohodi uz koupena auta)
-            p += [f"        sort_purchase_list: 0x{ID['modra']:04X};"]
+        if eid == h and n == "modra":
+            # hrac 29. 9.: "dej zelenou dolu pod modrou v depu": modra v nakupu pred zelenou. Hra radi auta jedne sady
+            # podle mistniho cisla (zelena 0x0100 by byla prvni) a vlastnost 20 presune auto PRED zadane cislo
+            # (CommitVehicleListOrderChanges v newgrf_engine.cpp). Cisla aut zustala, at se neprohodi uz koupena auta.
+            p += [f"        sort_purchase_list: 0x{ID['vojenska']:04X};"]
         if eid == h:
             p += ["        climate_availability: Temperate | Arctic | Tropical | Toyland;",
                   "        speed_2_kmh: 0x78;",               # 60 km/h
@@ -451,6 +470,7 @@ for n in ("modra", "vojenska"):
                   "        running_cost_base: 0x00004C48;",
                   "        sound_effect_type: 0x17;"]         # odjezd nakladaku (SND_19_DEPARTURE_OLD_RV_1)
         maska = 0x18 if co == "cumak" else 0x08            # cumak: clanky (0x16) a lidi (0x15); auto: kapacita (0x15)
+        maska |= 0x20                                      # oba dily: jmena podtypu dobytka (callback 0x19)
         if eid == h and ZV: maska |= 0x80                   # prvni dil: zvuky motoru (callback 0x33)
         p += [f"        callback_flags_mask: 0x{maska:02X};"]
         Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
@@ -489,21 +509,35 @@ for n in ("modra", "vojenska"):
     # plachtou; switch pro kazdou dvojici (obrazek, auto) jednou
     telo = lambda k: g["modra_" + ODSTIN.get(k, "A")] if n == "modra" else zaklad
     def obrazek(k):
-        """obrazek nakladu k na korbe: kupka, jinak plachta; modra s lidmi nic (lide sedi v kabine)"""
+        """obrazek nakladu k na korbe: kupka nebo kusovy naklad, jinak plachta; modra s lidmi nic (sedi v kabine)"""
+        if n == "modra" and k in VRSTVA_MODRA: return VRSTVA_MODRA[k]
         if k in VRSTVA: return VRSTVA[k]
         if n == "modra" and k in LIDE: return None
         return PLACHTA[n][1] if ODSTIN.get(k) == "D" else PLACHTA[n][0]
     vrstvy_sw = {}
-    def grafika(k):
-        obr, t = obrazek(k), telo(k)
-        if obr is None: return t
+    def cil_vrstvy(obr, t):
+        """switch vrstev: auto t a pres nej obrazek obr (pro kazdou dvojici jednou)"""
         if (obr, t) not in vrstvy_sw:
             sv = nove(); vrstvy_sw[obr, t] = sv
             nat = [jm for jm, gg in g.items() if gg == t][0]
             Y.extend(sw(sv, f"vrstvy: {nat} a pres nej {obr} (vrstva 0 auto a dalsi vrstva, 1 naklad)", VRSTVY_VYRAZ,
                         [(1, G_VRSTVA[obr])], t))
         return vrstvy_sw[obr, t]
-    vychozi_g = grafika("GOOD")                    # vychozi naklad zbozi: plachta (u modre odstin A)
+    def grafika(k):
+        obr, t = obrazek(k), telo(k)
+        return t if obr is None else cil_vrstvy(obr, t)
+    vychozi_g = cil_vrstvy(PLACHTA[n][0], zaklad)  # vychozi: plachta pres auto (u modre odstin A)
+    # dobytek: jmena podtypu pro okno prestavby (callback 0x19, 0x400 = konec seznamu), obrazek podle podtypu
+    s_podtyp_text = nove()
+    Y += sw(s_podtyp_text, "dobytek (callback 0x19): jmena podtypu, dal konec seznamu",
+            ["value1 = variable[0xF2] & 0x000000FF;"], [(i, 0x8000 | t) for i, t in enumerate(TEXT_PODTYP)], 0x8400)
+    s_dobytek_obr = nove()
+    Y += sw(s_dobytek_obr, "dobytek: obrazek podle podtypu (promenna 0xF2)", ["value1 = variable[0xF2] & 0x000000FF;"],
+            [(i, cil_vrstvy(obr, telo("LVST"))) for i, (obr, jm) in enumerate(PODTYPY_DOBYTKA) if i > 0],
+            cil_vrstvy(PODTYPY_DOBYTKA[0][0], telo("LVST")))
+    s_dobytek = nove()
+    Y += sw(s_dobytek, "dobytek: jmena podtypu (callback 0x19), jinak obrazek", CALLBACK, [(0x19, s_podtyp_text)],
+            s_dobytek_obr)
     # osoby: callback 0x15 vrati kapacitu, jinak grafika (vojaci pod plachtou, modra bez plachty); u male i zvuk
     g_lide = grafika("PASS")
     Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
@@ -518,13 +552,18 @@ for n in ("modra", "vojenska"):
         Y += sw(s_cumak_lidi, "cumak, osoby: kapacita 1, clanky, zvuky", CALLBACK,
                 [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
-        Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE] + [(0xFF, s_nakup)])
+        # cumak s dobytkem: stejna jmena podtypu jako auto (okno prestavby bere jen podtypy, ktere maji oba dily)
+        s_cumak_dobytek = nove()
+        Y += sw(s_cumak_dobytek, "cumak, dobytek: clanky, jmena podtypu, zvuky", CALLBACK,
+                [(0x16, s_clanky), (0x19, s_podtyp_text)] + zvuk, g_prazdny)
+        Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE] + [(INDEX["LVST"], s_cumak_dobytek),
+                                                                             (0xFF, s_nakup)])
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
     # viditelne auto: osoby pres kapacitni callback, ostatni naklady auto a vrstva; co jde na vychozi, v Action 3 neni
     mapa = {}
     for k in NAKLADY[n]:
-        cil = s_lidi if k in LIDE else grafika(k)
+        cil = s_lidi if k in LIDE else (s_dobytek if k == "LVST" else grafika(k))
         if cil != vychozi_g: mapa[INDEX[k]] = cil
     vychozi = vychozi_g
     if not CUMAK and id_zvuk:
@@ -542,7 +581,8 @@ for n in ("modra", "vojenska"):
     print(n, "switchu a skupin do", hex(dalsi[0] - 1))
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
-souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "plachta": PLACHTA,
+souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "vrstva_modra": VRSTVA_MODRA,
+          "podtypy_dobytka": PODTYPY_DOBYTKA, "plachta": PLACHTA,
           "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse}}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-souhrn.json"), "w"), indent=1, ensure_ascii=False)
 print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "tabulka", len(TABULKA), "nakladu",

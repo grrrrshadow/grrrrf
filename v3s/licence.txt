@@ -20,13 +20,15 @@ Praga_V3S_BRYLE-v5.grf  velká, s neviditelným čumákem vepředu, aby auta
 
 V každém GRF dvě auta: Praga V3S Vejtřaska zelená a modrá. Modrá mění odstín
 podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
-všechno kromě tekutin a skla (pivo v basách a chemikálie v kanystrech ano), zelená
-navíc jídlo, výbušniny a radioaktivní náklad, ale ne hračky, 20 lidí na korbě, modrá
-3 lidi v kabině.
-Sypký náklad veze na korbě jako hromadu v jeho barvě (uhlí černé, písek a brambory
-žluté, kámen šedý, ruda, vápno, řepa, marihuana zelená…), dřevo jako klády,
-dřevařské výrobky jako prkna, ostatní naložený náklad pod plachtou: zelená
-olivovou, modrá žlutou, ocel a strojírenství pod šedou a šedobílou.
+všechno kromě skla, zelená navíc jídlo, výbušniny a radioaktivní náklad, ale ne
+hračky, 20 lidí na korbě, modrá 3 lidi v kabině.
+Naložený náklad je vidět na korbě: sypký jako hromada v jeho barvě (uhlí černé,
+písek a brambory žluté, kámen šedý, ruda, vápno, řepa, marihuana zelená…),
+dřevo jako klády, dřevařské výrobky jako prkna, cement v pytlích, zboží
+v bednách, alkohol v dřevěných sudech, tekutiny v barevných sudech (zelená
+vozí ropu a benzín pod šedou plachtou), přadné plodiny jako seno a dobytek jako
+prasátka nebo kravičky, vybere se při přestavbě. Ostatní jede pod plachtou:
+zelená olivovou, modrá žlutou, ocel a strojírenství pod šedou a šedobílou.
 Umí jezdit na vagónku. Motor Tatra 912 je chlazený vzduchem a nemá chladič,
 je to půlka dvanáctiválce z Tatry 111.
 Prototyp od 20. 2. 1952, pro všechny o rok později.
@@ -84,13 +86,15 @@ Praga_V3S_BRYLE-v5.grf  big, with an invisible front bumper so the trucks do not
 
 Each GRF has two trucks: Praga V3S Vejtřaska green and blue. The blue one changes
 its shade with the cargo (building light, engineering dark, farming, goods). They
-carry everything but liquids and glass (beer in crates and chemicals in canisters
-are fine); the green one also food, explosives and radioactive cargo, but no
-toys, and 20 people on the bed, the blue one 3 people in the cab. Loose cargo rides on the bed as a heap in its
-colour (coal black, sand and potatoes yellow, stone grey, ore, lime, beet,
-marijuana green...), wood as logs, wood products as planks, any other load under
-a tarp: olive on the green one, yellow on the blue one, grey and grey-white
-for steel and engineering.
+carry everything but glass; the green one also food, explosives and radioactive
+cargo, but no toys, and 20 people on the bed, the blue one 3 people in the cab.
+The load shows on the bed: loose cargo as a heap in its colour (coal black, sand
+and potatoes yellow, stone grey, ore, lime, beet, marijuana green...), wood as logs,
+wood products as planks, cement in sacks, goods in crates, alcohol in wooden
+barrels, liquids in coloured drums (the green one takes oil and petrol under a grey
+tarp), fibre crops as hay and livestock as piglets or cows, chosen when refitting.
+Anything else goes under a tarp: olive on the green one, yellow on the blue one,
+grey and grey-white for steel and engineering.
 It rides on railway wagons. The Tatra 912 engine is cooled by air, with no
 radiator, and it is half of the Tatra 111 V12.
 Prototype from 20 February 1952, for everyone a year later.

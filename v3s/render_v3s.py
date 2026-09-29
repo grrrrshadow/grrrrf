@@ -254,12 +254,268 @@ def plachta(barva):
 PLACHTY = {"vojenska": ((58, 64, 40), (100, 106, 70)), "seda": ((86, 88, 86), (136, 138, 134)),
            "zluta": ((168, 136, 36), (224, 190, 74)), "sedobila": ((168, 168, 160), (222, 222, 214)),
            "rezna": ((170, 160, 128), (220, 212, 178))}
+
+# ---------------------------------------------------------------- kusovy naklad (verze 5)
+# Hrac 29. 9.: "si rikal, ze cement das do pytlu", "zbozi bedny, alkohol sudy", "zviratka, muze se jmenovat v3s
+# prasatka, vozit grafiku s prasatkama a na pozadi pobezi kod dobytek normalne", "dalsi jmeno v3s dobytek a
+# kravicky, po prestavbe", "rostlinna vlakna jako plnou sena, misto plachty seno".
+def kvadr(mat, x, y, z, sx, sy, sz, rot=0.0, zaobleni=0.0):
+    """kvadr se stredem (x, y, z) a rozmery sx, sy, sz (m), natoceny o rot (rad) kolem svisle osy, hrany zaoblene"""
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z), rotation=(0, 0, rot))
+    o = bpy.context.object; o.scale = (sx, sy, sz)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    if zaobleni > 0:
+        b = o.modifiers.new("zaobleni", 'BEVEL'); b.width = zaobleni; b.segments = 3; b.limit_method = 'NONE'
+    o.data.materials.append(mat)
+    return o
+
+def pytle(seed=17):
+    """pytle cementu: papirove pytle po 50 kg (asi 40 x 60 x 13 cm) ve ctyrech vrstvach, horni nedoskladana"""
+    import random
+    random.seed(seed)
+    mat = material("pytle", srgb((178, 172, 154)), srgb((216, 210, 192)), 0.95, 25.0)
+    SX, SY, SZ, NX, NY = 0.40, 0.60, 0.13, 5, 6
+    obs = []
+    for vrstva in range(4):
+        for i in range(NX):
+            for j in range(NY):
+                if vrstva == 3 and random.random() < 0.35: continue
+                x = -KX + 0.05 + SX / 2 + i * (2 * KX - 0.1 - SX) / (NX - 1) + random.uniform(-0.02, 0.02)
+                y = KY0 + 0.1 + SY / 2 + j * (KY1 - KY0 - 0.2 - SY) / (NY - 1) + random.uniform(-0.02, 0.02)
+                obs.append(kvadr(mat, x, y, PODLAHA + SZ / 2 + vrstva * SZ * 0.95, SX * 0.96, SY * 0.96, SZ,
+                                 math.radians(random.uniform(-4, 4)), 0.045))
+    return obs
+
+def bedny(seed=19):
+    """dřevěné bedny se zbozim ve dvou vrstvach, horni nedoskladana"""
+    import random
+    random.seed(seed)
+    svetla = material("bedny", srgb((156, 118, 74)), srgb((200, 162, 110)), 0.85, 10.0)
+    tmava = material("bedny_tmave", srgb((120, 88, 52)), srgb((160, 124, 80)), 0.85, 10.0)
+    obs = []
+    for vrstva, (nx, ny, v, z0) in enumerate(((3, 5, 0.60, 0.0), (3, 4, 0.50, 0.60))):
+        dx, dy = (2 * KX - 0.08) / nx, (KY1 - KY0 - 0.12) / ny
+        for i in range(nx):
+            for j in range(ny):
+                if vrstva == 1 and random.random() < 0.3: continue
+                sx, sy, sz = dx * random.uniform(0.86, 0.95), dy * random.uniform(0.84, 0.95), v * random.uniform(0.85, 1.0)
+                x = -KX + 0.04 + (i + 0.5) * dx + random.uniform(-0.02, 0.02)
+                y = KY0 + 0.06 + (j + 0.5) * dy + random.uniform(-0.02, 0.02)
+                obs.append(kvadr(random.choice((svetla, svetla, tmava)), x, y, PODLAHA + z0 + sz / 2, sx, sy, sz,
+                                 math.radians(random.uniform(-3, 3)), 0.015))
+    return obs
+
+# Sudy (hrac 29. 9.: "alkohol sudy", "vojenska seda plachta vsechny benziny, ropu, tak udelej sudy, jako ze veze.
+# protoze ropa je v kazdy hre v zakladnim prumyslu, tak to musi nejak vozit", "vodu vozit v sudech, modry sudy
+# a cerny sudy"): drevene pivni sudy s brichem, plechove sudy 200 l modre (voda) a cerne (ropa a benzin).
+#   druh: (tmava sRGB, svetla sRGB, drsnost, polomer, vyska, bricho, vysky obruci)
+SUDY = {"drevo": ((104, 66, 36), (150, 102, 60), 0.8, 0.27, 0.80, 0.12, (0.05, 0.89)),
+        "modre": ((30, 62, 138), (58, 96, 176), 0.45, 0.29, 0.88, 0.0, (0.3, 0.64)),
+        "cerne": ((16, 16, 18), (46, 46, 50), 0.4, 0.29, 0.88, 0.0, (0.3, 0.64)),
+        "cervene": ((132, 26, 20), (184, 48, 38), 0.45, 0.29, 0.88, 0.0, (0.3, 0.64))}   # hrac: "prostě udělej i tekutiny, barevný sudy"
+
+def sudy(druh="drevo", seed=23):
+    """sudy nastojato, tri rady po sesti; drevene s brichem a zeleznymi obrucemi, plechove rovne s dvema prolisy"""
+    import bmesh, random
+    random.seed(seed)
+    tm, sv, dr, R, V, bricho, obruce = SUDY[druh]
+    drevo = material("sudy_" + druh, srgb(tm), srgb(sv), dr, 16.0)
+    zelezo = (material("obruce", srgb((34, 34, 36)), srgb((64, 64, 66)), 0.45, 30.0) if druh == "drevo" else
+              material("prolisy_" + druh, srgb(tuple(int(c * 0.75) for c in tm)), srgb(tuple(int(c * 0.8) for c in sv)), dr, 16.0))
+    K = 16
+    vysky = sorted({0, 0.3, 0.5, 0.7, 1.0} | {o for o in obruce} | {o + 0.06 for o in obruce})
+    obs = []
+    for x in (-0.7, 0.0, 0.7):
+        for j in range(6):
+            y = KY0 + 0.4 + j * (KY1 - KY0 - 0.8) / 5
+            bm = bmesh.new(); kruhy = []
+            for h in vysky:
+                r = R * (1 - bricho + bricho * math.sin(math.pi * h))
+                if druh != "drevo" and any(o <= h <= o + 0.06 for o in obruce): r *= 1.03              # prolis
+                kruhy.append([bm.verts.new((r * math.cos(2 * math.pi * k / K), r * math.sin(2 * math.pi * k / K), h * V))
+                              for k in range(K)])
+            for i in range(len(vysky) - 1):
+                for k in range(K):
+                    f = bm.faces.new((kruhy[i][k], kruhy[i][(k + 1) % K], kruhy[i + 1][(k + 1) % K], kruhy[i + 1][k]))
+                    if any(abs(vysky[i] - o) < 1e-9 for o in obruce): f.material_index = 1      # obruce, prolisy
+            bm.faces.new(kruhy[-1]); bm.faces.new(kruhy[0][::-1])
+            bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+            me = bpy.data.meshes.new("sud"); bm.to_mesh(me); bm.free()
+            o = bpy.data.objects.new("sud", me); scene.collection.objects.link(o)
+            o.location = (x + random.uniform(-0.03, 0.03), y + random.uniform(-0.03, 0.03), PODLAHA)
+            o.data.materials.append(drevo); o.data.materials.append(zelezo)
+            obs.append(o)
+    return obs
+
+def material_strakaty(jmeno, bila, hneda, meritko=3.0):
+    """strakata srst: skvrny (noise, ostry prah) hneda na bile"""
+    mat = bpy.data.materials.new(jmeno); mat.use_nodes = True
+    n_ = mat.node_tree.nodes; l_ = mat.node_tree.links
+    bsdf = n_["Principled BSDF"]
+    sum_ = n_.new("ShaderNodeTexNoise"); sum_.inputs["Scale"].default_value = meritko; sum_.inputs["Detail"].default_value = 2.0
+    rampa = n_.new("ShaderNodeValToRGB"); rampa.color_ramp.interpolation = 'CONSTANT'
+    rampa.color_ramp.elements[0].color = hneda
+    rampa.color_ramp.elements[1].position = 0.5; rampa.color_ramp.elements[1].color = bila
+    l_.new(sum_.outputs["Fac"], rampa.inputs["Fac"]); l_.new(rampa.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Roughness"].default_value = 0.8
+    return mat
+
+def zvire_koren(x, y, a):
+    """prazdny objekt, ke kteremu se prichyti dily zvirete v jeho vlastnich souradnicich (hlava na +y)"""
+    bpy.ops.object.empty_add(type='PLAIN_AXES', location=(x, y, PODLAHA), rotation=(0, 0, a))
+    return bpy.context.object
+
+def dil(koren, o, mat):
+    o.data.materials.append(mat); o.parent = koren          # matrix_parent_inverse zustava jednotkova
+    return o
+
+def prase(x, y, a, kuze, rypak):
+    koren = zvire_koren(x, y, a)
+    L, W, H, N = 0.48, 0.25, 0.24, 0.20                        # pul delky, pul sirky, pul vysky tela, nohy
+    zt = N + H
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=10, radius=1, location=(0, 0, zt))
+    t = dil(koren, bpy.context.object, kuze); t.scale = (W, L, H)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.16, location=(0, L + 0.05, zt + 0.05))
+    dil(koren, bpy.context.object, kuze)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.07, depth=0.1, location=(0, L + 0.2, zt + 0.02),
+                                        rotation=(math.radians(90), 0, 0))
+    dil(koren, bpy.context.object, rypak)
+    for sx in (-1, 1):
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.065, radius2=0.0, depth=0.12,
+                                        location=(sx * 0.09, L + 0.02, zt + 0.19), rotation=(math.radians(-30), sx * math.radians(25), 0))
+        dil(koren, bpy.context.object, kuze)
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.05, depth=N + 0.06, location=(sx * W * 0.55, sy * L * 0.55, (N + 0.06) / 2))
+            dil(koren, bpy.context.object, kuze)
+    return koren
+
+def prasata(seed=29):
+    """prasatka (dobytek, podtyp 0): tri sloupce po trech, hlavou dopredu i dozadu"""
+    import random
+    random.seed(seed)
+    kuze = material("prase", srgb((212, 148, 140)), srgb((240, 186, 178)), 0.7, 14.0)
+    rypak = material("rypak", srgb((186, 106, 106)), srgb((208, 128, 126)), 0.6, 30.0)
+    obs = []
+    for x0 in (-0.7, 0.0, 0.7):
+        for j in range(3):
+            y = KY0 + 0.7 + j * (KY1 - KY0 - 1.4) / 2 + random.uniform(-0.08, 0.08)
+            a = random.choice((0.0, math.pi)) + random.uniform(-0.25, 0.25)
+            obs.append(prase(x0 + random.uniform(-0.05, 0.05), y, a, kuze, rypak))
+    return obs
+
+def krava(x, y, a, srst, tmava, rohy):
+    koren = zvire_koren(x, y, a)
+    L, W, H, N = 0.62, 0.26, 0.29, 0.46                        # jalovicka: telo 1,25 m, nohy 0,46 m
+    zt = N + H
+    dil(koren, kvadr(srst, 0, 0, zt, 2 * W, 2 * L, 2 * H, 0.0, 0.12), srst)    # kvadr uz material ma, dil ho jen prichyti
+    koren_hlava = (0, L + 0.16, zt + 0.12)
+    o = kvadr(srst, koren_hlava[0], koren_hlava[1], koren_hlava[2], 0.22, 0.40, 0.24, 0.0, 0.06)
+    o.rotation_euler = (math.radians(-25), 0, 0); o.parent = koren
+    o = kvadr(tmava, 0, L + 0.36, zt + 0.02, 0.17, 0.10, 0.14, 0.0, 0.03); o.parent = koren       # cumak
+    for sx in (-1, 1):
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.03, radius2=0.0, depth=0.12,
+                                        location=(sx * 0.10, L + 0.12, zt + 0.28), rotation=(0, sx * math.radians(60), 0))
+        dil(koren, bpy.context.object, rohy)
+        o = kvadr(srst, sx * 0.15, L + 0.14, zt + 0.2, 0.12, 0.04, 0.07, 0.0, 0.01); o.parent = koren       # ucho
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.06, depth=N + 0.08, location=(sx * W * 0.6, sy * L * 0.7, (N + 0.08) / 2))
+            dil(koren, bpy.context.object, srst)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=6, radius=0.02, depth=0.5, location=(0, -L - 0.02, zt - 0.1))
+    dil(koren, bpy.context.object, tmava)                                                        # ocas
+    return koren
+
+def kravy(seed=37):
+    """kravicky (dobytek, podtyp 1): ceska strakata, dve rady po dvou"""
+    import random
+    random.seed(seed)
+    srst = material_strakaty("krava", srgb((236, 230, 220)), srgb((150, 72, 42)), 3.0)
+    tmava = material("cumak", srgb((70, 50, 44)), srgb((100, 76, 66)), 0.6, 20.0)
+    rohy = material("rohy", srgb((200, 190, 168)), srgb((230, 222, 200)), 0.5, 20.0)
+    obs = []
+    for x0 in (-0.5, 0.5):
+        for j in range(2):
+            y = KY0 + 1.0 + j * (KY1 - KY0 - 2.0) + random.uniform(-0.08, 0.08)
+            a = random.choice((0.0, math.pi)) + random.uniform(-0.15, 0.15)
+            obs.append(krava(x0 + random.uniform(-0.04, 0.04), y, a, srst, tmava, rohy))
+    return obs
+
+def ovce_kus(x, y, a, vlna, hlava):
+    koren = zvire_koren(x, y, a)
+    L, W, H, N = 0.42, 0.25, 0.24, 0.26                        # ovce: telo 0,85 m, huňaté, nohy 0,26 m
+    zt = N + H
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=18, ring_count=9, radius=1, location=(0, 0, zt))
+    t = dil(koren, bpy.context.object, vlna); t.scale = (W, L, H)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=1, location=(0, L + 0.08, zt + 0.1))
+    hl = dil(koren, bpy.context.object, hlava); hl.scale = (0.09, 0.14, 0.1)
+    for sx in (-1, 1):
+        o = kvadr(hlava, sx * 0.1, L + 0.04, zt + 0.16, 0.1, 0.03, 0.04, 0.0, 0.01); o.parent = koren      # ucho
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.035, depth=N + 0.06, location=(sx * W * 0.5, sy * L * 0.55, (N + 0.06) / 2))
+            dil(koren, bpy.context.object, hlava)
+    return koren
+
+def ovce(seed=53):
+    """ovečky (dobytek, podtyp 2; hrac 29. 9.: "ovce tam jsou"): bila vlna, tmava hlava a nohy, tri sloupce po ctyrech"""
+    import random
+    random.seed(seed)
+    vlna = material("vlna", srgb((206, 200, 184)), srgb((238, 234, 222)), 0.95, 40.0)
+    nt_ = vlna.node_tree; bsdf = nt_.nodes["Principled BSDF"]
+    kudrny = nt_.nodes.new("ShaderNodeTexNoise"); kudrny.inputs["Scale"].default_value = 60.0
+    hrbol = nt_.nodes.new("ShaderNodeBump"); hrbol.inputs["Strength"].default_value = 0.8
+    nt_.links.new(kudrny.outputs["Fac"], hrbol.inputs["Height"]); nt_.links.new(hrbol.outputs["Normal"], bsdf.inputs["Normal"])
+    hlava = material("hlava_ovce", srgb((40, 34, 30)), srgb((70, 60, 54)), 0.7, 20.0)
+    obs = []
+    for x0 in (-0.7, 0.0, 0.7):
+        for j in range(4):
+            y = KY0 + 0.55 + j * (KY1 - KY0 - 1.1) / 3 + random.uniform(-0.06, 0.06)
+            a = random.choice((0.0, math.pi)) + random.uniform(-0.3, 0.3)
+            obs.append(ovce_kus(x0 + random.uniform(-0.05, 0.05), y, a, vlna, hlava))
+    return obs
+
+def seno(seed=31):
+    """naložené seno: kupa pres bocnice, nahore zakulacena, 1,65 m nad podlahou"""
+    import bmesh, random
+    random.seed(seed)
+    mat = material("seno", srgb((168, 142, 72)), srgb((218, 196, 118)), 0.95, 70.0)
+    nt_ = mat.node_tree; bsdf = nt_.nodes["Principled BSDF"]
+    stebla = nt_.nodes.new("ShaderNodeTexNoise"); stebla.inputs["Scale"].default_value = 90.0
+    stebla.inputs["Detail"].default_value = 8.0
+    hrbol = nt_.nodes.new("ShaderNodeBump"); hrbol.inputs["Strength"].default_value = 0.6
+    nt_.links.new(stebla.outputs["Fac"], hrbol.inputs["Height"]); nt_.links.new(hrbol.outputs["Normal"], bsdf.inputs["Normal"])
+    X, Y0, Y1, V = KX + 0.12, KY0 - 0.05, KY1 + 0.03, 1.45
+    B, YS = (Y1 - Y0) / 2, (Y0 + Y1) / 2
+    bm = bmesh.new(); NX, NY = 30, 60; vrch = {}
+    hr = [[random.uniform(-1, 1) for _ in range(NY // 5 + 2)] for _ in range(NX // 5 + 2)]      # hrboly po naloženi
+    def hrbol(i, j):
+        a, b = i / 5, j / 5; i0, j0 = int(a), int(b); fa, fb = a - i0, b - j0
+        return ((hr[i0][j0] * (1 - fa) + hr[i0 + 1][j0] * fa) * (1 - fb) + (hr[i0][j0 + 1] * (1 - fa) + hr[i0 + 1][j0 + 1] * fa) * fb)
+    for i in range(NX + 1):
+        for j in range(NY + 1):
+            x = -X + 2 * X * i / NX; y = YS - B + 2 * B * j / NY
+            s = max(0.0, 1 - (abs(x) / X) ** 5 - (abs(y - YS) / B) ** 6)
+            z = (PODLAHA + 0.2 + V * s ** 0.3 + 0.10 * hrbol(i, j) * s ** 0.5 +
+                 (random.uniform(-0.03, 0.03) if s > 0 else 0.0))
+            vrch[i, j] = bm.verts.new((x, y, z))
+    for i in range(NX):
+        for j in range(NY):
+            bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
+    me = bpy.data.meshes.new("seno"); bm.to_mesh(me); bm.free()
+    for f in me.polygons: f.use_smooth = True
+    ob = bpy.data.objects.new("seno", me); scene.collection.objects.link(ob)
+    ob.data.materials.append(mat)
+    return [ob]
+
+KUSOVE = {"CMNT": pytle, "GOOD": bedny, "BEER": sudy, "sudy_modre": lambda: sudy("modre", 41),
+          "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
+          "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno}
+
 NAKLAD_KOD = NATER[len("naklad_"):] if NATER.startswith("naklad_") else None
 if NAKLAD_KOD:
     for o in nove: o.is_holdout = True
     if NAKLAD_KOD == "WOOD": nalozeno = klady()
     elif NAKLAD_KOD == "WDPR": nalozeno = prkna()
     elif NAKLAD_KOD.startswith("plachta_"): nalozeno = plachta(NAKLAD_KOD[len("plachta_"):])
+    elif NAKLAD_KOD in KUSOVE: nalozeno = KUSOVE[NAKLAD_KOD]()
     else:
         tm, sv, dr, hrub, mer = NAKLAD[NAKLAD_KOD]
         nalozeno = kupka(material("naklad", srgb(tm), srgb(sv), dr, mer), hrubost=hrub)

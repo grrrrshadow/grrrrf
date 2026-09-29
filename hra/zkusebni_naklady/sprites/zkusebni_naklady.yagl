@@ -4,8 +4,8 @@ grf // Action08
 {
     grf_id: "MAXn";
     version: GRF8;
-    name: "Zkušební náklady SAND TATO CMNT GRVL TOUR (jen pro zkušební hru)";
-    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky písku, brambor, cementu a kamene a turisté. Do hry pro hráče nepatří.";
+    name: "Zkušební náklady pro vejtřasku (jen pro zkušební hru)";
+    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky, pytle, sudy, seno, turisté, chemikálie, hračky, uran, voda a kyselina. Do hry pro hráče nepatří.";
 }
 strings<Cargos, default, 0xDC00*> // Action04
 {
@@ -24,6 +24,27 @@ strings<Cargos, default, 0xDC00*> // Action04
     /* 0xDC0C */ "Turisté";
     /* 0xDC0D */ "TU";
     /* 0xDC0E */ "{sw} turistů";
+    /* 0xDC0F */ "Alkohol";
+    /* 0xDC10 */ "AL";
+    /* 0xDC11 */ "{sw} kl alkoholu";
+    /* 0xDC12 */ "Přadné plodiny";
+    /* 0xDC13 */ "PP";
+    /* 0xDC14 */ "{sw} t přadných plodin";
+    /* 0xDC15 */ "Chemikálie";
+    /* 0xDC16 */ "CH";
+    /* 0xDC17 */ "{sw} kl chemikálií";
+    /* 0xDC18 */ "Hračky";
+    /* 0xDC19 */ "HR";
+    /* 0xDC1A */ "{sw} krabic hraček";
+    /* 0xDC1B */ "Uran";
+    /* 0xDC1C */ "UR";
+    /* 0xDC1D */ "{sw} t uranu";
+    /* 0xDC1E */ "Voda";
+    /* 0xDC1F */ "VO";
+    /* 0xDC20 */ "{sw} kl vody";
+    /* 0xDC21 */ "Kyselina";
+    /* 0xDC22 */ "KY";
+    /* 0xDC23 */ "{sw} kl kyseliny";
 }
 properties<Cargos, 0x0015> // Action00, volny slot 21 (mirne klima ma 0 az 11)
 {
@@ -128,5 +149,152 @@ properties<Cargos, 0x0019> // Action00, volny slot 25 (mirne klima ma 0 az 11)
         base_price: 0x00001000;
         cargo_label: "TOUR";
         bit_number: 0x19;
+    }
+}
+properties<Cargos, 0x001A> // Action00, volny slot 26 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001A
+    {
+        cargo_type_name_id: 0xDC0F;
+        single_unit_name_id: 0xDC0F;
+        cargo_type_abbrev_id: 0xDC10;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC11;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0004;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "BEER";
+        bit_number: 0x1A;
+    }
+}
+properties<Cargos, 0x001B> // Action00, volny slot 27 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001B
+    {
+        cargo_type_name_id: 0xDC12;
+        single_unit_name_id: 0xDC12;
+        cargo_type_abbrev_id: 0xDC13;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC14;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "FICR";
+        bit_number: 0x1B;
+    }
+}
+properties<Cargos, 0x001C> // Action00, volny slot 28 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001C
+    {
+        cargo_type_name_id: 0xDC15;
+        single_unit_name_id: 0xDC15;
+        cargo_type_abbrev_id: 0xDC16;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC17;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "CHEM";
+        bit_number: 0x1C;
+    }
+}
+properties<Cargos, 0x001D> // Action00, volny slot 29 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001D
+    {
+        cargo_type_name_id: 0xDC18;
+        single_unit_name_id: 0xDC18;
+        cargo_type_abbrev_id: 0xDC19;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC1A;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0004;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "TOYS";
+        bit_number: 0x1D;
+    }
+}
+properties<Cargos, 0x001E> // Action00, volny slot 30 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001E
+    {
+        cargo_type_name_id: 0xDC1B;
+        single_unit_name_id: 0xDC1B;
+        cargo_type_abbrev_id: 0xDC1C;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC1D;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "URAN";
+        bit_number: 0x1E;
+    }
+}
+properties<Cargos, 0x001F> // Action00, volny slot 31 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x001F
+    {
+        cargo_type_name_id: 0xDC1E;
+        single_unit_name_id: 0xDC1E;
+        cargo_type_abbrev_id: 0xDC1F;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC20;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "WATR";
+        bit_number: 0x1F;
+    }
+}
+properties<Cargos, 0x0020> // Action00, volny slot 32 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0020
+    {
+        cargo_type_name_id: 0xDC21;
+        single_unit_name_id: 0xDC21;
+        cargo_type_abbrev_id: 0xDC22;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC23;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "ACID";
+        bit_number: 0x20;
     }
 }
