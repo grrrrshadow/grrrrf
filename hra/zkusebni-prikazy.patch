@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-29 14:14:53.532014023 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 14:14:53.536662684 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-29 15:13:19.661826666 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 15:13:19.670400075 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -58,7 +58,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
 +	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
-+	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR", "BEER", "FICR", "CHEM", "TOYS", "URAN", "WATR", "ACID", "OIL_", "JAVA", "CLAY", "SGCN", "KAOL", "BRCK", "BDMT", "FRUT", "STUD", "WINE", "HOPS"};
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR", "BEER", "FICR", "CHEM", "TOYS", "URAN", "WATR", "ACID", "OIL_", "JAVA", "CLAY", "SGCN", "KAOL", "BRCK", "BDMT", "FRUT", "STUD", "WINE", "HOPS", "MLTR"};
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +		if (e->GetGRFID() != want) continue;
 +		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} poradi v nakupu {} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
@@ -360,8 +360,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-29 14:14:53.540014024 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-29 14:14:53.545880276 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 15:13:19.673826667 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 15:13:19.677826667 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

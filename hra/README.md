@@ -11,13 +11,13 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 | `zkusebni-prikazy.patch` | všechny moje změny proti zdrojákům hry (`patch -p1` v kopii `openttd/` na `60283b3`) |
 | `cztr_silnice/` | výstřižek silnice CZTR RT14 „1. třída – venkov“ (`CZTR_silnice_RT14.grf`), v domově už je zapsaný, okruh na fotce se staví z ní |
 | `zkusebni_mari/` | zkušební náklad `MARI` (`zkusebni_MARI.grf`): tahle stará verze hry ho nemá, ve hře hráče je zabudovaný |
-| `zkusebni_naklady/` | zkušební náklady SAND TATO CMNT GRVL TOUR BEER FICR CHEM TOYS URAN WATR ACID JAVA CLAY SGCN KAOL BRCK BDMT FRUT STUD WINE HOPS (`zkusebni_naklady.grf`, `MAXn`), mírné klima je nemá; na zkoušku kupek, pytlů, sudů, sena, turistů a toho, co které auto nevozí |
+| `zkusebni_naklady/` | zkušební náklady SAND TATO CMNT GRVL TOUR BEER FICR CHEM TOYS URAN WATR ACID JAVA CLAY SGCN KAOL BRCK BDMT FRUT STUD WINE HOPS MLTR (`zkusebni_naklady.grf`, `MAXn`), mírné klima je nemá; na zkoušku kupek, pytlů, sudů, sena, turistů a toho, co které auto nevozí |
 
 ## Zkušební příkazy
 
 | příkaz | co udělá |
 |---|---|
-| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), vypíše pořadí v nákupu (`list_position`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU SAND MARI TATO CMNT GRVL TOUR BEER FICR CHEM TOYS URAN WATR ACID OIL_ JAVA CLAY SGCN KAOL BRCK BDMT FRUT STUD WINE HOPS (co ve hře je; náklad, který auto nevozí, hlásí „NE (nevozi)“), u nákladů s podtypy (LVST FICR BEER BRCK BDMT TATO) i podtypy 0 až 3 s jménem (callback 0x19) a vrstvami a vypíše díly, délky, kapacity a čísla spritů; každý náklad i naloží a vypíše vrstvy obrázku naložené (auto + kupka nebo plachta); vypíše i, co by psalo okno nákupu (kolik nákladů auto umí a co mu chybí); u aut se zvukovým callbackem vypíše, co GRF vrátí pro výjezd z depa, odjezd ze zastávky, jízdu v 0–60 km/h, stání a poruchu (čítač tiků na chvíli posune do taktu zvuku) |
+| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), vypíše pořadí v nákupu (`list_position`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU SAND MARI TATO CMNT GRVL TOUR BEER FICR CHEM TOYS URAN WATR ACID OIL_ JAVA CLAY SGCN KAOL BRCK BDMT FRUT STUD WINE HOPS MLTR (co ve hře je; náklad, který auto nevozí, hlásí „NE (nevozi)“), u nákladů s podtypy (LVST FICR BEER BRCK BDMT TATO) i podtypy 0 až 3 s jménem (callback 0x19) a vrstvami a vypíše díly, délky, kapacity a čísla spritů; každý náklad i naloží a vypíše vrstvy obrázku naložené (auto + kupka nebo plachta); vypíše i, co by psalo okno nákupu (kolik nákladů auto umí a co mu chybí); u aut se zvukovým callbackem vypíše, co GRF vrátí pro výjezd z depa, odjezd ze zastávky, jízdu v 0–60 km/h, stání a poruchu (čítač tiků na chvíli posune do taktu zvuku) |
 | `testv3sfoto <tiků> [RTxx] [fotek] [tiků mezi fotkami]` | postaví silniční okruh s depem (ze silnice s daným štítkem, jinak CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a deset naložených V3S (`MAXd`, `MAXe`: od verze 8 cihly červené a šedé, ovoce, brambory na kupě a v pytlích, pivo Plzeň a Budvar, chmel; seznam `nakupy` v `ConTestV3SFoto`, i s podtypem), po zadaném počtu tiků vyfotí okruh při plném přiblížení, případně víckrát po sobě, a hru ukončí. U každé fotky vypíše počátek pohledu (`V3SPOHLED`) a polohu, směr a posun kreslení každého dílu (`V3SDIL`), takže se dá každé auto vystřihnout |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
@@ -30,8 +30,8 @@ Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback �
 apt-get install -y libsdl2-2.0-0        # jednou v novém kontejneru; xvfb-run tam už je
 mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-gfx.tar.xz -C /tmp/hra
 H=/tmp/hra/ottd-zkusebni/domov
-cp v3s/grf/mala/Praga_V3S-v8.grf v3s/grf/velka/Praga_V3S_BRYLE-v8.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
-sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S-v8.grf = \nPraga_V3S_BRYLE-v8.grf = /' $H/.openttd/openttd.cfg
+cp v3s/grf/mala/Praga_V3S-v9.grf v3s/grf/velka/Praga_V3S_BRYLE-v9.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S-v9.grf = \nPraga_V3S_BRYLE-v9.grf = /' $H/.openttd/openttd.cfg
 printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
 printf 'testv3sfoto 1500\n' > $H/.openttd/scripts/game_start.scr
 cd /tmp/hra/ottd-zkusebni

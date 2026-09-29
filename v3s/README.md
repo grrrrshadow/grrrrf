@@ -1,5 +1,16 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 9 (29. 9.)
+
+- **Vojenskou techniku** (`MLTR`) vozí jen zelená (hráč: *„mltr jen zelená“*). Kódy z nevydaného průmyslu CZTR
+  podle vagónů a hráče: `FLOU` mouka, `LETH` kůže, `MLTR` vojenská technika, `UORE` uranová ruda (jen zelená už
+  od verze 8). `FREE` není náklad, je to hráčova značka ve VW T1, kde skončil; vejtřaska ho nevozí.
+- Neznámé kódy (11) zůstávají ve vzoru a jedou pod výchozí plachtou (hráč: *„musíme kódy evidovat, i když
+  nevíme, co to je, dáme neutrální grafiku plachty“*).
+- Grafika jako ve verzi 8. Malá 4,37 MB, velká 4,78 MB.
+- **Ověřeno ve zkušební hře** (zkušební náklady navíc `MLTR`): modrá vojenskou techniku nevozí (umí 33 z 35,
+  chybí uran a vojenská technika), zelená ji veze pod olivovou plachtou (34 z 35, chybí hračky).
+
 ## Verze 8 (29. 9.)
 
 - **Vzorová tabulka 220 kódů** (hráč: *„budem muset aktualizovat vzorovou tabulku, já si ji pak stáhnu od tebe“*):
@@ -114,11 +125,11 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v8.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v8.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v9.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v9.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v8.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v7`)
+Balík pro hráče je `Praga_V3S_Vejtraska-v9.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v8`)
 zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
@@ -384,4 +395,5 @@ v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasát
 zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelený řádek ottd Decouple;
 7 v nákupu „for ottd Decouple by Karel Mácha“ a autor modelu, bílé a hnědé pytle s černou čarou, bedny
 i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin;
-8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel.
+8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel;
+9 vojenská technika jen zelená, FREE mezi nevozí.

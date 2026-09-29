@@ -13,14 +13,14 @@ No donations allowed. Dary se nepřijímají.
 
 CO JE V BALÍKU
 
-Praga_V3S-v8.grf        malá, original size, na jedno místo v koloně
-Praga_V3S_BRYLE-v8.grf  velká, s neviditelným čumákem vepředu, aby auta
+Praga_V3S-v9.grf        malá, original size, na jedno místo v koloně
+Praga_V3S_BRYLE-v9.grf  velká, s neviditelným čumákem vepředu, aby auta
                         v koloně nestála přes sebe.
                         Článkové auto, jezdí jen do průjezdných zastávek.
 
 V každém GRF dvě auta: Praga V3S Vejtřaska zelená a modrá. Modrá mění odstín
 podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
-všechno kromě skla, zelená navíc jídlo, výbušniny a radioaktivní náklad, ale ne
+všechno kromě skla, zelená navíc jídlo, výbušniny, vojenskou techniku a radioaktivní náklad, ale ne
 hračky, 20 lidí na korbě, modrá 3 lidi v kabině.
 Naložený náklad je vidět na korbě: sypký jako hromada v jeho barvě (uhlí černé,
 písek a obilí žluté, kámen šedý, rudy, jíl, vápenec, řepa, marihuana zelená…),
@@ -86,14 +86,14 @@ No donations allowed.
 
 WHAT IS IN THE PACKAGE
 
-Praga_V3S-v8.grf        small, original size, fits one queue slot
-Praga_V3S_BRYLE-v8.grf  big, with an invisible front bumper so the trucks do not
+Praga_V3S-v9.grf        small, original size, fits one queue slot
+Praga_V3S_BRYLE-v9.grf  big, with an invisible front bumper so the trucks do not
                         overlap in a queue.
                         Articulated, uses drive-through stops only.
 
 Each GRF has two trucks: Praga V3S Vejtřaska green and blue. The blue one changes
 its shade with the cargo (building light, engineering dark, farming, goods). They
-carry everything but glass; the green one also food, explosives and radioactive
+carry everything but glass; the green one also food, explosives, military equipment and radioactive
 cargo, but no toys, and 20 people on the bed, the blue one 3 people in the cab.
 The load shows on the bed: loose cargo as a heap in its colour (coal black, sand
 and grain yellow, stone grey, ores, clay, limestone, beet, marijuana green...),
