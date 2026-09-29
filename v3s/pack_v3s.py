@@ -236,12 +236,12 @@ BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
 # hrac 28. 9.: "ve jmenu vynech for, jen zlute V3S Praga, zelene ottd Decouple by Karel Macha";
 # symbol nakladaku v barve varianty na konci zustal (rozlisuje malou a velkou, jako Sergej)
 GRF_JMENO = "{yellow}V3S Praga{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
-VARIANTA_POPIS = {"mala": "CZTR scale, 12.2 px/m, one road vehicle slot (8/8)",
-                  "velka": "BRÝLE, magnified +20 %, 14.64 px/m, invisible front bumper keeps the queue "
-                           "spacing (articulated: drive-through stops only)"}[VEL]
+# hrac 29. 9.: "nepis tam cztr scale, kdyz budes muset cztr, tak nekde na konci v rohu a radsi vubec. nejak se to
+# jmenuje odborne, original size, a druhy radsi nepis vubec": mala "original size", velka bez radku
+VARIANTA_POPIS = {"mala": "original size", "velka": ""}[VEL]
 POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}Praga V3S military, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
-             BARVA + VARIANTA_POPIS + "{new-line}"
+             (BARVA + VARIANTA_POPIS + "{new-line}" if VARIANTA_POPIS else "") +
              "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass (chemicals in canisters "
              "are fine). Military: troops, food, explosives and radioactive cargo too, but no toys. Blue: three "
              "people in the cab, the shade follows the cargo. "
