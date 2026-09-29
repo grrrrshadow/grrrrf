@@ -1389,3 +1389,8 @@ nákladů není chyba: bez FIRS má zboží násobek kapacity 2, V3S veze 10 zbo
 který najdu v jakékoli sadě a ve vzoru není, přijde na konec vzoru (staré kódy nechávají čísla) s českým
 jménem a sadou, i když ho hráč zrovna nemá ve hře. Význam netipovat, co nikde nestojí, je undefined.
 FIRS podle verzí je v `firs-kody.md` (77 verzí, 112 kódů, všechny ve vzoru).
+
+**Neznámé kódy** (hráč 29. 9.: *„musíme kódy evidovat, i když nevíme, co to je, dáme neutrální grafiku plachty,
+pod plachtou může vézt cokoli“*): ve vzoru zůstávají s poznámkou undefined a vozidla je vozí pod výchozí plachtou
+(V3S zelená olivovou, modrá žlutou v odstínu A). Dnes 12 kódů: FARM LVPT ELEC NODC FREE CRAN LFEQ SCPR STTP SWRP
+TIN_ WDCH.

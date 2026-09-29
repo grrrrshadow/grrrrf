@@ -247,6 +247,8 @@ PODTYPY = {"LVST": [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce"
 # sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede
 # nalozene pod plachtou (render_v3s.py naklad_plachta_<barva>). Vojenska olivova, ocel a strojirenstvi (odstin D) seda;
 # modra zluta, ocel a strojirenstvi sedobila. Vojaci jedou pod plachtou, lide v modre sedi v kabine, ta plachtu nema.
+# Kody, u kterych nevime, co jsou (undefined ve vzoru), jedou taky, pod vychozi plachtou (hrac 29. 9.: "musime kody
+# evidovat, i kdyz nevime, co to je, dame neutralni grafiku plachty, pod plachtou muze vezt cokoli").
 PLACHTA = {"vojenska": ("plachta_vojenska", "plachta_seda"), "modra": ("plachta_zluta", "plachta_sedobila")}
 OBRAZKY = VRSTVY + [p for v in PLACHTA.values() for p in v]
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
