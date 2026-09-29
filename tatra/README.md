@@ -34,8 +34,15 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   jen hladkou plochu (y −0,48, x ±0,54, z 0,995 až 1,53). `render_sklapec.py` na ni dá mřížku podle hráčových fotek
   skutečné T148: 6 řad × 3 sloupce tmavých otvorů všude (hráč: *„tam udělej mřížku všude a je to jak nápis“*;
   skutečná má nahoře uprostřed plech), uprostřed tmavý nápis TATRA přes půl mřížky (39 × 6,2 cm, v malém z něj
-  je další řada mřížky) a po stranách masky 3 žebra. Otvory 4,5 cm, aby byla mřížka ve hře vidět i v malém. `MRIZKA=zadna` ji vypne
-  (pro 138 bude jiná).
+  je další řada mřížky) a po stranách masky 3 žebra. Otvory 4,5 cm, aby byla mřížka ve hře vidět i v malém.
+  `MRIZKA=zadna` ji vypne.
+- **Mřížka chladiče 138** (hráč 29. 9.: *„jo to máš mřížku 148 a co 138?“*, *„barva je dobrá, mřížku zkus trochu
+  zlepšit“*): `MRIZKA=138` dá místo mřížky 148 mřížku podle hráčova videa a čtyř fotek skutečné T138: oválný otvor
+  84 × 41 cm (x ±0,42, z 1,03 až 1,44, nahoře širší a zaoblený, dole plošší), za ním tma, v něm 13 lamel v barvě
+  auta do vějíře (sbíhají se k bodu pod mřížkou, uprostřed svisle, na krajích 30°, nahoře se krajní ohýbají ještě
+  víc ven), nad otvorem oválný chromový štítek s červeným nápisem TATRA. `ZEBRA=bila` dá bílé lamely jako na
+  některých fotkách. První verze přes celou masku byla moc široká. Jinak je 138 stejná jako 148, nátěr `cervena`
+  (hráč: *„barva je dobrá“*). Na fotkách mají 138 často blatníky a nárazník v jiné barvě (bílé, krémové).
 - **Světlo** (hráč: *„lépe osvětlit, ať vynikne zaoblení kolem mřížky chladiče směrem ke kabině, asi víc stínu“*):
   `SVETLO=slunce` (výchozí) zapne stíny od okolí a přidá slunce zleva shora, pevné vůči kameře (auto se točí,
   světlo ne), okolí slabší (`OKOLI` 0,35, `SLUNCE` 5, `ZEPREDU` −0,25) a lak lesklejší (`LESK` 0,42).
