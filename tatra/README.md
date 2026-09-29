@@ -30,5 +30,16 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   korbou). Pytle: bočnice jsou metr vysoké, pytle by byly vidět jen shora, musely by se skládat nad bočnice.
 - **Původ modelů:** oba modely od hans1240 jsou nejspíš převzaté (sklápěč z Emikova modu do Farming Simulatoru,
   cisterna AKT z GTA San Andreas), podrobně v `AUTORI-MODELU.md`, oddíl „Pozor na modely od hans1240“.
-  Do GRF ani jeden bez svolení autora. Když Emik svolí, cisternu na tekutiny uděláme vlastní na jeho podvozku
-  (bez hasičského hrbu).
+  Hráč 29. 9. rozhodl, že je bereme podle licence od hanse (CC BY) jako předlohu, auto je ve hře asi 120 × 60 px.
+  Cisternu na tekutiny uděláme vlastní na podvozku sklápěče (bez hasičského hrbu).
+- **Mřížka chladiče 148** (hráč 29. 9.: *„musíme zlepšit chladič mřížku, teď tam není žádnej“*): model má na masce
+  jen hladkou plochu (y −0,48, x ±0,54, z 0,995 až 1,53). `render_sklapec.py` na ni dá 3 sloupce × 6 řad tmavých
+  otvorů jako skutečná T148 (dvě řady nad nápisem, čtyři pod ním, dole o kus širší) a červený nápis TATRA na štítek.
+  Otvory jsou o něco vyšší než ve skutečnosti (4,4 cm), aby byla mřížka ve hře vidět i v malém. `MRIZKA=zadna` ji vypne
+  (pro 138 bude jiná).
+- **Světlo** (hráč: *„lépe osvětlit, ať vynikne zaoblení kolem mřížky chladiče směrem ke kabině, asi víc stínu“*):
+  `SVETLO=slunce` (výchozí) zapne stíny od okolí a přidá slunce zleva shora, pevné vůči kameře (auto se točí,
+  světlo ne), okolí slabší (`OKOLI` 0,35, `SLUNCE` 5, `ZEPREDU` −0,25) a lak lesklejší (`LESK` 0,42).
+  `SVETLO=okoli` je původní ploché světlo jako u vejtřasky.
+- **Kupa** (hráč: *„kupičku větší o 20 % na výšku, celou kupičku výš“*): korbu vyplní až těsně pod okraj bočnic
+  (`DNO_KUPY` 2,28 m) a vrchol je na 3,07 m místo 2,83 (nad bočnice kouká o 20 % víc a celá o 0,2 m výš).

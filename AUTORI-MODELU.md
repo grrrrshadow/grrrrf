@@ -138,5 +138,7 @@ převzaté z herních modů. Pak je hans1240 nejspíš pod CC BY dávat nesměl.
   `v3s_glass__da__spec`. Přípony `__d` a `__d_a` jsou pojmenování textur ve hrách Spintires/MudRunner. Méně jisté
   než u Tater, původní mod jsem zatím nenašel.
 
-Z toho plyne: CC BY od hans1240 nebereme jako jistou licenci. Tatry do GRF jen se svolením původního autora
-(sklápěč: EmikMODelStudio). Vejtřaska už vyšla (v1 až v9); hráči jsem to řekl 29. 9., co s ní, rozhodne on.
+Hráč to 29. 9. rozhodl: *„to je problém hanse a Sketchfabu, oni nám to dali takhle s licencí a zbytek není naše
+starost. Zmenšíme to tak, že nebudou vidět malé součástky … i po zvětšení to bude 120 × 60 pixelů … bereme si model
+jako vzor a ne model.“* Modely od hans1240 tedy používáme podle licence, kterou uvádí (CC BY 4.0), a v GRF ho
+uvádíme jako autora. Připsat k Tatře i EmikMODelStudio jako pravděpodobného původního autora nic nestojí.
