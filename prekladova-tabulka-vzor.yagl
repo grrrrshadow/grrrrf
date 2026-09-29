@@ -963,6 +963,8 @@ properties<GlobalSettings, 0x0000> // Action00
 // ====================================================================
 // DALŠÍ NAŠE NÁKLADY
 // ====================================================================
+// Hráč 29. 9.: „doplňuj vzor, když najdeš nový kódy“ — každý nový kód
+// z jakékoli sady sem patří, i když ho hráč zrovna ve hře nemá.
 // Přidávej na konec, za poslední číslo (staré kódy si svá čísla
 // nechávají). Label jsou přesně 4 znaky, kratší se doplní
 // podtržítkem (OIL_, NH3_, O2__).

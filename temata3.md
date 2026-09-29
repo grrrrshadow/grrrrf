@@ -1384,3 +1384,8 @@ nákladů není chyba: bez FIRS má zboží násobek kapacity 2, V3S veze 10 zbo
   koncentrát, ne kakao, proto netipovat.
 - **Zkušební hra a nová verze GRF:** v `openttd.cfg` je po prvním spuštění řádek s md5, starý se musí
   přepsat celý, jinak hra načte starou verzi (`hra/README.md`).
+
+**Vzorová tabulka se doplňuje průběžně** (hráč 29. 9.: *„doplňuj vzor, když najdeš nový kódy“*): každý kód,
+který najdu v jakékoli sadě a ve vzoru není, přijde na konec vzoru (staré kódy nechávají čísla) s českým
+jménem a sadou, i když ho hráč zrovna nemá ve hře. Význam netipovat, co nikde nestojí, je undefined.
+FIRS podle verzí je v `firs-kody.md` (77 verzí, 112 kódů, všechny ve vzoru).
