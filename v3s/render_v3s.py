@@ -215,6 +215,7 @@ NAKLAD = {
     "NUTS": ((118, 78, 44), (176, 126, 80), 0.8, 1.2, 24), "MARI": ((48, 98, 10), (94, 144, 26), 0.85, 1.0, 18),
     "SULP": ((196, 164, 28), (240, 214, 72), 0.85, 0.9, 18),      # sira pevna, zluta (FIRS ji ma jako tekutinu)
     "CORE": ((62, 74, 58), (114, 128, 100), 0.85, 1.2, 22),       # medena ruda, zelenosede (hrac 29. 9.: "medena ruda kupa")
+    "CLAY": ((136, 100, 66), (188, 150, 108), 0.9, 1.3, 20),      # jil, okrove hnedy v hroudach (hrac 29. 9.: "jil kupu")
 }
 def plachta(barva):
     """Plachta pres korbu (hrac 29. 9.: "co neni kupka, nech grafiku prazdne. udelame prikladaci plachtu. grafika

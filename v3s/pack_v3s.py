@@ -187,7 +187,8 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
           "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene",
           "CORE", "seno_mari", "seno_zlute",                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
-          "pytle_hnede"]                                                       # od verze 7 kava (hrac: "kafe budem vozit v hnedym pytli")
+          "pytle_hnede",                                                       # od verze 7 kava (hrac: "kafe budem vozit v hnedym pytli")
+          "CLAY"]                                                              # od verze 7 jil (hrac: "jil kupu")
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
