@@ -8,13 +8,16 @@ releasu: `python3` skript čte jen začátek každého `.glb` v zipu, celé mode
 **Buranu od tashtego: CC BY-NC 4.0, jen nekomerčně.** GRF s Buranem se nesmí prodávat a jeho licence
 musí NC převzít.
 
+**Pozor:** modely od hans1240 jsou nejspíš převzaté z herních modů, jeho CC BY nemusí platit. Viz oddíl
+„Pozor na modely od hans1240“ dole.
+
 | autor | modely (soubor) | licence | kde |
 |---|---|---|---|
 | [3D Sci-Fi](https://sketchfab.com/3D_Sci-Fi) | BSG – Shuttle Mk. II (`bsg__shuttle_mk._ii.glb`); BSG – Rising Star-type (`bsg__rising_star-type.glb`); BSG – Caprica Clipper (`bsg__caprica_clipper.glb`); BSG – Pyxis / Chrion (`bsg__pyxis__chrion.glb`); BSG – Olympic Carrier (`bsg__olympic_carrier.glb`); BSG – Gemenon Liner 1701 (`bsg__gemenon_liner_1701.glb`); BSG – Colonial Liner (`bsg__colonial_liner.glb`); BSG – Shuttle Mk. II (`bsg__shuttle_mk._iiix0cx60.glb`) | CC-BY-4.0 | glb (GLB.zip), z něj je shuttle.grf, par6 |
 | [Chicken cutlet](https://sketchfab.com/Chicken_Cutlet) | Diesel locomotive M62 (`diesel_locomotive_m62.glb`) | CC-BY-4.0 | par5 (zip5/m62), z něj je Sergej |
 | [DynamicSAV](https://sketchfab.com/dynamicsav) | Car trailer model game ready for free PBR (`car_trailer_model_game_ready_for_free_pbr.glb`) | CC-BY-4.0 | par6 |
 | [Fratzica](https://sketchfab.com/vasilebetivu62) | Opel Movano (`opel_movano.glb`) | CC-BY-4.0 | par6 |
-| [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
+| [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 (**nejisté**, viz „Pozor na modely od hans1240“ dole) | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
 | [LarsH.](https://sketchfab.com/LarsH.) | Star Wars A-A5 heavy speeder truck (`star_wars_a-a5_heavy_speeder_truck.glb`); Star Wars Landspeeder Collection (`star_wars_landspeeder_collection.glb`) | CC-BY-4.0 | par6 |
 | [manilov.ap](https://sketchfab.com/manilov.ap) | Mig21 (`mig21.glb`); Yak42 (`yak42.glb`); Tu204 (`tu204.glb`); Tu154 (`tu154.glb`); Tu144 (`tu144.glb`); Tu114 (`tu114.glb`); An225 (`an225.glb`); An10 (`an10.glb`); An124 (`an124.glb`); An74 (`an74.glb`) | CC-BY-4.0 | par6 |
 | [Miguel Adão](https://sketchfab.com/theauditor) | Zeppelin Aircraft (`zeppelin_aircraft.glb`) | CC-BY-4.0 | par6 |
@@ -117,3 +120,23 @@ a kapota 138, se použít dá; mřížku pak modelujeme sami.
 Druhá Tatra 148 od hans1240, **sklápěč se štítkem nad kabinou**, CC BY 4.0, bez barev:
 https://sketchfab.com/3d-models/tatra-148-f63907789df7437ebd3c3f6ecc689a16 (v releasech zatím není, Sketchfab chce
 ke stažení přihlášení).
+
+## Pozor na modely od hans1240 (2026-09-29)
+
+hans1240 má na Sketchfabu 160 modelů (hlavně sovětská nákladní auta a autobusy, pár amerických tahačů), všechny
+s CC BY a popisem jako „This is an old soviet truck …“. U tří, které máme, jsou přímo v souborech stopy, že jsou
+převzaté z herních modů. Pak je hans1240 nejspíš pod CC BY dávat nesměl.
+
+- **Tatra-148, sklápěč S1** (`tatra-148.glb`, nahráno 12. 9. 2026, hráč ho poslal 29. 9.): díly se jmenují
+  `Kabina`, `KorbaS1`, `TG_POLOOSA`, `TG_T148`, `PneuP`, `PneuP2`, přesně jako v modu Tatry 148 do Farming
+  Simulatoru od EmikMODelStudio (`Tatra148.i3d`, `Korba_S1.i3d` v par6; `TG_` je tamní značení skupin).
+  Rozvor náprav je jiný než v modu FS25 (372 + 133 cm proti 393 + 140 cm), takže asi ze starší verze modu.
+- **Tatra-148-AKT-3-3, cisterna** (`tatra-148-akt-3-3.glb`): díly `door_lf_ok`, `door_rf_ok`, `windscreen_ok`,
+  `misc_a`, `wheel_lf` … `wheel_rm`, `steringok` jsou přesně stavba aut do GTA San Andreas, zbytek je pojmenovaný
+  rusky (`otboynik` nárazník, `primochki` doplňky, `salon` interiér). Autor původního modu neznámý.
+- **Praga-V3S, z ní je naše vejtřaska** (`praga-v3s.glb`): materiály `v3s_kabpar__d__spec`, `v3s_intkor__d__spec`,
+  `v3s_glass__da__spec`. Přípony `__d` a `__d_a` jsou pojmenování textur ve hrách Spintires/MudRunner. Méně jisté
+  než u Tater, původní mod jsem zatím nenašel.
+
+Z toho plyne: CC BY od hans1240 nebereme jako jistou licenci. Tatry do GRF jen se svolením původního autora
+(sklápěč: EmikMODelStudio). Vejtřaska už vyšla (v1 až v9); hráči jsem to řekl 29. 9., co s ní, rozhodne on.

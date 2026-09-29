@@ -19,3 +19,16 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   z = 0,32 m, y −5,00 až 1,05 m, x ±1,24 m. Valník má bočnice 0,55 m (náklady na něm jsou vidět jako u vejtřasky),
   sklápěč S1 ocelové bočnice 1,0 m se žebry a štítek nad kabinou. Hráč chce spíš přebarvování hrou (jeden obrázek
   pro 148 i 138).
+- **Sklápěč S1 od hans1240** (`model/tatra-148.glb`, hráč ho poslal 29. 9.: *„co vozíme kupy a pytle, by šlo asi na
+  tuhle“*): 7,54 m dlouhý, v centimetrech, kabina na −Y jako vejtřaska (bez +180). Náhled dělá
+  `python3 render_sklapec.py <oranzova|cervena> <px_na_m> <rám_px> <výstup>`: nabarví po dílech (kabina, korba
+  a disky lak, `RamTk` černý, `TG_POLOOSA` a `TG_T148` tmavé, `Pneu*` pneumatiky), kabinu (jeden kus i se skly)
+  rozdělí na samostatné kusy a skla, zrcátka, reflektory a blinkry najde podle polohy a velikosti.
+  Korba S1 změřená paprsky: podlaha z = 1,46 m (u bočnic zaoblená nahoru, vzadu od y 5,9 stoupá na 1,66),
+  bočnice x ±1,13, nahoře z 2,39 až 2,61, přední čelo y 2,75, štítek nad kabinou y 1,25 až 2,5.
+  `KUPA=GRVL|SAND|COAL` nasype kupu jako u vejtřasky (okraj kupy musí zůstat nad podlahou, jinak vykukuje pod
+  korbou). Pytle: bočnice jsou metr vysoké, pytle by byly vidět jen shora, musely by se skládat nad bočnice.
+- **Původ modelů:** oba modely od hans1240 jsou nejspíš převzaté (sklápěč z Emikova modu do Farming Simulatoru,
+  cisterna AKT z GTA San Andreas), podrobně v `AUTORI-MODELU.md`, oddíl „Pozor na modely od hans1240“.
+  Do GRF ani jeden bez svolení autora. Když Emik svolí, cisternu na tekutiny uděláme vlastní na jeho podvozku
+  (bez hasičského hrbu).
