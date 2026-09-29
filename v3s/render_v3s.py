@@ -214,6 +214,7 @@ NAKLAD = {
     "OLSD": ((44, 34, 27), (92, 72, 52), 0.7, 0.7, 16), "BEAN": ((172, 148, 98), (222, 196, 146), 0.8, 0.9, 20),
     "NUTS": ((118, 78, 44), (176, 126, 80), 0.8, 1.2, 24), "MARI": ((48, 98, 10), (94, 144, 26), 0.85, 1.0, 18),
     "SULP": ((196, 164, 28), (240, 214, 72), 0.85, 0.9, 18),      # sira pevna, zluta (FIRS ji ma jako tekutinu)
+    "CORE": ((62, 74, 58), (114, 128, 100), 0.85, 1.2, 22),       # medena ruda, zelenosede (hrac 29. 9.: "medena ruda kupa")
 }
 def plachta(barva):
     """Plachta pres korbu (hrac 29. 9.: "co neni kupka, nech grafiku prazdne. udelame prikladaci plachtu. grafika

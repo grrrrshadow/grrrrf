@@ -185,19 +185,23 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           # bedny, alkohol sudy", "zviratka ... prasatka", "dalsi jmeno v3s dobytek a kravicky, po prestavbe",
           # "rostlinna vlakna jako plnou sena, misto plachty seno", "vodu vozit v sudech, modry sudy a cerny sudy",
           # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
-          "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene"]
+          "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene",
+          "CORE"]                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
 VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
+# rudy od verze 7 jako kupy podobne barvy: bauxit rezavy jako zelezna ruda, niklova a pyritova ruda sede, mangan
+# a uran tmave (hrac: "medena ruda kupa, rudy, uhli kupy")
+VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "URAN": "COKE"})
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
 VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
 # (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
 VRSTVA.update({k: "sudy_cervene" for k in "ACID LYE_ CHLO NH3_ O2__ FUEL".split()})  # chemie a plyny
 # ropa a benzin: modra v cernych sudech, zelena pod sedou plachtou (hrac: "vojenska seda plachta vsechny benziny, ropu")
 VRSTVA_MODRA = {k: "sudy_cerne" for k in "OIL_ OILD OILI PETR RFPR".split()}
-assert all(k in NAKLADY["modra"] for k in list(VRSTVA) + list(VRSTVA_MODRA)), \
-    [k for k in list(VRSTVA) + list(VRSTVA_MODRA) if k not in NAKLADY["modra"]]
+assert all(k in NAKLADY["modra"] or k in NAKLADY["vojenska"] for k in list(VRSTVA) + list(VRSTVA_MODRA)), \
+    [k for k in list(VRSTVA) + list(VRSTVA_MODRA) if k not in NAKLADY["modra"] and k not in NAKLADY["vojenska"]]
 # Dobytek (LVST) ma dva podtypy nakladu, vybira se v okne prestavby (callback 0x19, promenna 0xF2 cargo_subtype):
 # 0 prasatka, 1 kravicky. V kodu je to dal dobytek (hrac: "na pozadi pobezi kod dobytek normalne").
 PODTYPY_DOBYTKA = [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce", " (ovečky)")]     # hrac: "ovce tam jsou"
