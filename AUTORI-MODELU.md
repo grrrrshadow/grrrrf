@@ -105,3 +105,15 @@ V releasech (stav k 29. 9., poslední je `par6`) jsou tři:
 - **Tatra 138** jako samostatný model v releasech není.
 
 Náhled obou GLB: `scratchpad` (nahled.py, kamera jako u vejtřasky), do repa se neukládá.
+
+### par7 (29. 9.): Tatra T-148 S1 1:18 z Printables
+
+Hráč stáhl model pro 3D tisk https://www.printables.com/model/895225-tatra-t-148-s1-118-scale , autor „Michael Doe“
+(SDesign): STL díly T 148 S1 (sklápěč), k tomu kapota a motor T 138 (`Bonnet_Tatra_138_V2`), okna a PDF s plánem.
+**Licence CC BY-NC-ND 4.0** (ověřeno přes API Printables): šířit smíme jen beze změny a nekomerčně. Nabarvené
+sprity s nákladem jsou úprava, takže do GRF ho bez svolení autora dát nesmíme. Jako předloha, jak vypadá mřížka
+a kapota 138, se použít dá; mřížku pak modelujeme sami.
+
+Druhá Tatra 148 od hans1240, **sklápěč se štítkem nad kabinou**, CC BY 4.0, bez barev:
+https://sketchfab.com/3d-models/tatra-148-f63907789df7437ebd3c3f6ecc689a16 (v releasech zatím není, Sketchfab chce
+ke stažení přihlášení).

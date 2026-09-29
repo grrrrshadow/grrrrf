@@ -7,6 +7,25 @@ U GRF je md5 (podle něj hra pozná GRF v savu) a `grf_id` se jménem z Action08
 Jeden soubor se dá vytáhnout bez stažení celého zipu:
 `python3 tools/zipindex.py get <odkaz na asset> <část jména> <výstup>`
 
+## grrrrf / par7 — zip7.zip
+
+`https://github.com/grrrrshadow/grrrrf/releases/download/par7/zip7.zip`
+
+387 393 258 B, 8 záznamů
+
+```
+               zip7/
+   11 169 401  zip7/tatra-t-148-s1-118-scale-other_files.zip   (deflate)
+                 ↳   1 576 588  tatra148_sdesign_plan.pdf
+                 ↳   9 709 974  895225-tatra-t-148-s1-118-scale-9cd62185-ece6-4dd4-be76-159a9acc8d5f.pdf
+  388 921 410  zip7/tatra-t-148-s1-118-scale-model_files.zip   (deflate)
+   44 640 984  zip7/Bonnet_Tatra_138_V2_SDesign_1x.stl   (deflate)
+   22 598 834  zip7/Engine_Tatra_138_V2_SDesign_1x.stl   (deflate)
+      480 084  zip7/window_rear_2_tatra_148_sdesign.stl   (deflate)
+      383 084  zip7/windshield_1_tatra_148_sdesign.stl   (deflate)
+      440 484  zip7/window_side_2_tatra_148_sdesign.stl   (deflate)
+```
+
 ## grrrrf / par6 — zip6.zip
 
 `https://github.com/grrrrshadow/grrrrf/releases/download/par6/zip6.zip`
