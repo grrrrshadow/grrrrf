@@ -102,6 +102,8 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
     (modrá cisterna).
   - **Kupa na valníku** (hráč: *„trochu tu kupu rozsypej, je to jak bochník chleba, rozsypej to jako když zadrncá“*,
     *„kupa nevadila ve sklápěčce, ale na valníku to vypadá nepřirozeně“*): korba plná skoro po okraj bočnic a nad tím
-    tři nízké nepravidelné hrbolky (0,30 až 0,42 m), povrch zvlněný. Na sklápěči zůstává kupa jako dřív.
+    tři nízké nepravidelné hrbolky (0,30 až 0,42 m), povrch zvlněný. Pak *„ve valníku jsi to hezky rozsypal, takhle
+    to udělej i ve sklápěčce“*: sklápěč je taky rozsypaný (plný po 2,33 m, hrbolky 0,45 až 0,60 m, aby nad vysokým
+    horním lemem korby koukaly asi jako na valníku). Obojí dělá `rozsypana_kupa()`.
   - Přehled všech nákladů: `nahledy/naklady.png`.
 - Náhled barev: `nahledy/barvy.png`.

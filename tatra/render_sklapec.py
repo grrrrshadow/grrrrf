@@ -407,26 +407,25 @@ if NAKLAD_KOD:
     V3 = {"bpy": bpy, "math": math, "np": np, "os": os, "scene": scene, "Vector": Vector, "mn": Vector((0.0, 0.0, 0.0))}
     exec(compile(zdroj[zdroj.index("# ---------------------------------------------------------------- naklad na korbe"):
                        zdroj.index("NAKLAD_KOD = ")], "v3s/render_v3s.py", "exec"), V3)
-    auto = [o for o in scene.objects if o.type in ('MESH', 'FONT') and not o.hide_render]
-    if KORBA == "sklapec":
-        # Kupa v korbe S1 (namereno paprsky, rez.py a bok.py): podlaha z 1,46 (u bocnic zaoblena nahoru, vzadu od y 5,9
-        # stoupa na 1,66), bocnice x +-1,13, nahore z 2,39 az 2,61, predni celo y 2,75, zadni y 6,75 nahore z 2,59.
-        # Hrac 29. 9.: "kupicku vetsi o 20 % na vysku, celou kupicku vys". Kupa korbu vyplni az tesne pod okraj bocnic
-        # (DNO_KUPY, okraj je schovany za bocnicemi a cely) a nad bocnice kouka o 20 % vys a cela o 0,2 m vys nez
-        # na prvnim nahledu: vrchol 2,83 -> 3,07 m. Kdyz byla kupa na podlaze a jen vysoka, vypadala v korbe jako vejce.
-        tm, sv, drs, hrubost, mer = V3["NAKLAD"][NAKLAD_KOD]
-        mk = V3["material"]("kupa", V3["srgb"](tm), V3["srgb"](sv), drs, mer)
-        KX, KY0, KY1 = 1.135, 2.77, 6.73
-        DNO_KUPY = float(os.environ.get("DNO_KUPY", "2.28")); VRCH_KUPY = float(os.environ.get("VRCH_KUPY", "3.07"))
-        random.seed(7); B = (KY1 - KY0) / 2; YS = (KY0 + KY1) / 2
-        bm = bmesh.new(); NX, NY = 40, 80; vrch = {}
+    def rozsypana_kupa(mk, KX_, KY0_, KY1_, DNO, hrubost, vysky=(0.30, 0.42), seed=11):
+        """Rozsypana kupa (hrac 29. 9.: "je to jak bochnik chleba, rozsypej to jako kdyz zadrnca", pak "ve valniku jsi
+        to hezky rozsypal, takhle to udelej i ve sklapecce"): korba plna po DNO (tesne pod okrajem, okraj kupy schovany
+        za bocnicemi) a nad tim tri nizke nepravidelne hrbolky jako sesednuta hromada po ceste, povrch zvlneny
+        a hrudkovity podle hrubosti nakladu."""
+        random.seed(seed)
+        B_ = (KY1_ - KY0_) / 2; YS_ = (KY0_ + KY1_) / 2
+        hrby = [(random.uniform(-0.35, 0.35), KY0_ + (KY1_ - KY0_) * f_ + random.uniform(-0.2, 0.2),
+                 random.uniform(*vysky), random.uniform(0.5, 0.7), random.uniform(0.6, 0.9)) for f_ in (0.2, 0.5, 0.8)]
+        vlny = [(random.uniform(0, 6.3), random.uniform(0, 6.3), random.uniform(1.5, 3.0), random.uniform(1.0, 2.2)) for _ in range(4)]
+        bm = bmesh.new(); NX, NY = 48, 96; vrch = {}
         hr = [[random.uniform(-1, 1) for _ in range(NY // 4 + 2)] for _ in range(NX // 4 + 2)]
         for i in range(NX + 1):
             for j in range(NY + 1):
-                x = -KX + 2 * KX * i / NX; y = YS - B + 2 * B * j / NY
-                sk = max(0.0, 1 - (abs(x) / KX) ** 2.2 - (abs(y - YS) / B) ** 2.2)
-                hrudka = hr[i // 4][j // 4] * 0.035 * max(0.0, hrubost - 0.7) * sk
-                z = DNO_KUPY + (VRCH_KUPY - DNO_KUPY) * sk ** 0.6 + (random.uniform(-0.04, 0.04) * sk * hrubost if sk > 0 else 0) + hrudka - 0.02
+                x = -KX_ + 2 * KX_ * i / NX; y = KY0_ + (KY1_ - KY0_) * j / NY
+                okraj = (1 - (abs(x) / KX_) ** 6) * (1 - (abs(y - YS_) / B_) ** 6)
+                h = sum(a * math.exp(-((x - hx) / sx) ** 2 - ((y - hy) / sy) ** 2) for hx, hy, a, sx, sy in hrby)
+                h += sum(0.025 * math.sin(fx * x + px_) * math.sin(fy * y + py_) for px_, py_, fx, fy in vlny)
+                z = DNO + max(0.0, h) * okraj + hr[i // 4][j // 4] * 0.03 * max(0.0, hrubost - 0.6) + random.uniform(-0.02, 0.02) * hrubost
                 vrch[i, j] = bm.verts.new((x, y, z))
         for i in range(NX):
             for j in range(NY):
@@ -434,7 +433,17 @@ if NAKLAD_KOD:
         me = bpy.data.meshes.new("kupa"); bm.to_mesh(me); bm.free()
         for f in me.polygons: f.use_smooth = True
         ob = bpy.data.objects.new("kupa", me); scene.collection.objects.link(ob); ob.data.materials.append(mk)
-        nalozeno = [ob]
+        return [ob]
+    auto = [o for o in scene.objects if o.type in ('MESH', 'FONT') and not o.hide_render]
+    if KORBA == "sklapec":
+        # Kupa v korbe S1 (namereno paprsky, rez.py a bok.py): podlaha z 1,46 (u bocnic zaoblena nahoru, vzadu od y 5,9
+        # stoupa na 1,66), bocnice x +-1,13, vnitrek do z 2,39 a nad nim horni lem do 2,61, predni celo y 2,75 (nahore
+        # 2,69), zadni y 6,75 (nahore 2,59). Drive bochnik s vrcholem 3,07 (hrac: "kupicku vetsi o 20 % na vysku, celou
+        # kupicku vys"), od 29. 9. rozsypana jako na valniku: korba plna po 2,33 a hrbolky 0,45 az 0,60 m, aby nad
+        # vysokym hornim lemem koukaly asi jako na valniku nad bocnicemi.
+        tm, sv, drs, hrubost, mer = V3["NAKLAD"][NAKLAD_KOD]
+        mk = V3["material"]("kupa", V3["srgb"](tm), V3["srgb"](sv), drs, mer)
+        nalozeno = rozsypana_kupa(mk, 1.13, 2.77, 6.73, float(os.environ.get("DNO_KUPY", "2.33")), hrubost, vysky=(0.45, 0.60), seed=7)
     elif KORBA in ("valnik", "plachta"):
         # valnik: podlaha z 1,36, vnitrek bocnic x +-1,20, cela y 2,74 a 6,96; okraje jako u vejtrasky (asi 8 cm)
         V3.update(PODLAHA=ZP_, KX=1.12, KY0=Y0N + 0.10, KY1=Y1N - 0.10)
@@ -449,30 +458,7 @@ if NAKLAD_KOD:
             # (0,30 az 0,42 m) jako sesednuta hromada po ceste, povrch zvlneny a hrudkovity podle hrubosti nakladu.
             tm, sv, drs, hrubost, mer = V3["NAKLAD"][NAKLAD_KOD]
             mk = V3["material"]("naklad", V3["srgb"](tm), V3["srgb"](sv), drs, mer)
-            random.seed(11)
-            KX_, KY0_, KY1_ = XV - 0.035, Y0N + 0.04, Y1N - 0.04               # az k vnitrku bocnic a cel
-            DNO = ZP_ + BOK - 0.08
-            B_ = (KY1_ - KY0_) / 2; YS_ = (KY0_ + KY1_) / 2
-            hrby = [(random.uniform(-0.35, 0.35), KY0_ + (KY1_ - KY0_) * f_ + random.uniform(-0.2, 0.2),
-                     random.uniform(0.30, 0.42), random.uniform(0.5, 0.7), random.uniform(0.6, 0.9)) for f_ in (0.2, 0.5, 0.8)]
-            vlny = [(random.uniform(0, 6.3), random.uniform(0, 6.3), random.uniform(1.5, 3.0), random.uniform(1.0, 2.2)) for _ in range(4)]
-            bm = bmesh.new(); NX, NY = 48, 96; vrch = {}
-            hr = [[random.uniform(-1, 1) for _ in range(NY // 4 + 2)] for _ in range(NX // 4 + 2)]
-            for i in range(NX + 1):
-                for j in range(NY + 1):
-                    x = -KX_ + 2 * KX_ * i / NX; y = KY0_ + (KY1_ - KY0_) * j / NY
-                    okraj = (1 - (abs(x) / KX_) ** 6) * (1 - (abs(y - YS_) / B_) ** 6)
-                    h = sum(a * math.exp(-((x - hx) / sx) ** 2 - ((y - hy) / sy) ** 2) for hx, hy, a, sx, sy in hrby)
-                    h += sum(0.025 * math.sin(fx * x + px_) * math.sin(fy * y + py_) for px_, py_, fx, fy in vlny)
-                    z = DNO + max(0.0, h) * okraj + hr[i // 4][j // 4] * 0.03 * max(0.0, hrubost - 0.6) + random.uniform(-0.02, 0.02) * hrubost
-                    vrch[i, j] = bm.verts.new((x, y, z))
-            for i in range(NX):
-                for j in range(NY):
-                    bm.faces.new((vrch[i, j], vrch[i + 1, j], vrch[i + 1, j + 1], vrch[i, j + 1]))
-            me = bpy.data.meshes.new("kupa_valnik"); bm.to_mesh(me); bm.free()
-            for f in me.polygons: f.use_smooth = True
-            ob = bpy.data.objects.new("kupa_valnik", me); scene.collection.objects.link(ob); ob.data.materials.append(mk)
-            nalozeno = [ob]
+            nalozeno = rozsypana_kupa(mk, XV - 0.035, Y0N + 0.04, Y1N - 0.04, ZP_ + BOK - 0.08, hrubost)
         else: raise SystemExit(f"naklad {NAKLAD_KOD} na valnik neumim")
     else:
         raise SystemExit(f"naklad na korbu {KORBA} neni (tekutiny jsou barvou cisterny)")
