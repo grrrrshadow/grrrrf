@@ -1371,3 +1371,16 @@ obrázkem beden.
 `testv3s` je přestaví a u FICR projde i podtypy jako u dobytka, `testv3sfoto` veze nové náklady. Hra
 v `ottd-zkusebni-gfx.tar.xz` je před zabalením `strip`nutá (18,6 MB místo 21,8). Kapacita 5 u sypkých
 nákladů není chyba: bez FIRS má zboží násobek kapacity 2, V3S veze 10 zboží, ale 5 uhlí (`README.md` V3S).
+
+## Save hráčovy hry a sady z BaNaNaS (2026-09-29)
+
+- **Co je v savu:** kódy nákladů ne, ale kus `NGRF` má všechny zapnuté GRF (jméno souboru, GRF ID, md5).
+  Save je `OTTX` (xz), kusy jsou tabulkové (hlavička s typy polí, pak záznamy s délkou v gama kódu);
+  čtečka `scratchpad/savecti.py`. Řetězec má typ 0x1A (délka je jeho vlastní), pole bajtů 0x12.
+- **Stažení sady bez klienta hry:** `https://bananas-cdn.openttd.org/newgrf/<GRF ID>/<md5 ze savu>/<cokoli>.tar.gz`,
+  CDN rozhoduje podle md5, jméno souboru nekontroluje. Katalog jmen a verzí: `zvuky/bananas/newgrf.json`.
+- **Kódy nákladů ze sady:** `yagl -d -n`, pak `properties<Cargos>` (`cargo_label`, `cargo_type_name_id`)
+  a texty `strings<Cargos>`; skript `scratchpad/sady/naklady_sad.py`. Pozor, COCO v AXIS je měděný
+  koncentrát, ne kakao, proto netipovat.
+- **Zkušební hra a nová verze GRF:** v `openttd.cfg` je po prvním spuštění řádek s md5, starý se musí
+  přepsat celý, jinak hra načte starou verzi (`hra/README.md`).

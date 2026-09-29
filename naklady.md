@@ -285,5 +285,7 @@ u sad s licencí bez šíření jen tady). Ve vzorové tabulce do 29. 9. chyběl
 `WORK`, `STUD`, `PRIS`, `PLAY`. Turisté jsou tedy dva různé kódy se stejným jménem, `TOUR` a `OTI2`,
 oba byly ve vzoru už dřív.
 
-Hráčovy kódy: `CHME` chmel, `WINE` víno. Kódy, které znají jen vagóny a význam nikde nestojí
+Hráčův kód: `WINE` víno. Chmel je `HOPS` (hráč: *„hops, tak to je náš kód, nemusíme nový chme kód“*). Kódy, které znají jen vagóny a význam nikde nestojí
 (`NWST FREE FLOU LETH MLTR UORE CRAN LFEQ SCPR STTP SWRP TIN_ WDCH`), jsou ve vzoru taky, jako undefined.
+Jen `NWST` a `UORE` určil hráč: jaderný odpad a uranová ruda (*„odpad jaderný vojenská jenom, všechno co je uran
+jenom zelená“*).

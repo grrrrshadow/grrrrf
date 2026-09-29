@@ -7,9 +7,10 @@ cement, kámen ani turisty, tak je přidává tenhle GRF, aby šla vyzkoušet ve
   kámen (GRVL);
 - turisté (TOUR) jsou lidé: vojenská jich veze 20 pod plachtou, modrá 3 v kabině.
 
-`grf_id` `MAXn`, náklady ve volných místech 0x15 až 0x24: SAND TATO CMNT GRVL TOUR BEER FICR CHEM TOYS
+`grf_id` `MAXn`, náklady ve volných místech 0x15 až 0x2A: SAND TATO CMNT GRVL TOUR BEER FICR CHEM TOYS
 URAN WATR ACID (verze 4 a 5 vejtřasky), od verze 7 i JAVA CLAY SGCN KAOL (káva v hnědých pytlích, kupka
-jílu, cukrová třtina s obrázkem vláken, kaolín v bílých pytlích). Postup: `yagl -e zkusebni_naklady.grf`
+jílu, cukrová třtina s obrázkem vláken, kaolín v bílých pytlích), od verze 8 BRCK BDMT FRUT STUD WINE HOPS
+(cihly a stavební materiál s podtypy, ovoce, studenti jako lidé, víno v sudech, chmel jako seno). Postup: `yagl -e zkusebni_naklady.grf`
 v tomhle adresáři (yagl čte `sprites/zkusebni_naklady.yagl`).
 
 Ověřeno 29. 9.: `testv3s` s `Praga_V3S-v4.grf` a `Praga_V3S_BRYLE-v4.grf`, vrstvy obrázku sedí

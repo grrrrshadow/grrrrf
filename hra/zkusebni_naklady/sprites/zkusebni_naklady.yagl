@@ -5,7 +5,7 @@ grf // Action08
     grf_id: "MAXn";
     version: GRF8;
     name: "Zkušební náklady pro vejtřasku (jen pro zkušební hru)";
-    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky, pytle, sudy, seno, turisté, chemikálie, hračky, uran, voda, kyselina, káva, jíl, cukrová třtina a kaolín. Do hry pro hráče nepatří.";
+    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky, pytle, sudy, seno, turisté, chemikálie, hračky, uran, voda, kyselina, káva, jíl, cukrová třtina, kaolín, cihly, stavební materiál, ovoce, studenti, víno a chmel. Do hry pro hráče nepatří.";
 }
 strings<Cargos, default, 0xDC00*> // Action04
 {
@@ -57,6 +57,24 @@ strings<Cargos, default, 0xDC00*> // Action04
     /* 0xDC2D */ "Kaolín";
     /* 0xDC2E */ "KA";
     /* 0xDC2F */ "{sw} t kaolínu";
+    /* 0xDC30 */ "Cihly";
+    /* 0xDC31 */ "CI";
+    /* 0xDC32 */ "{sw} t cihel";
+    /* 0xDC33 */ "Stavební materiál";
+    /* 0xDC34 */ "SM";
+    /* 0xDC35 */ "{sw} t stavebního materiálu";
+    /* 0xDC36 */ "Ovoce";
+    /* 0xDC37 */ "OV";
+    /* 0xDC38 */ "{sw} t ovoce";
+    /* 0xDC39 */ "Studenti";
+    /* 0xDC3A */ "ST";
+    /* 0xDC3B */ "{sw} studentů";
+    /* 0xDC3C */ "Víno";
+    /* 0xDC3D */ "VI";
+    /* 0xDC3E */ "{sw} kl vína";
+    /* 0xDC3F */ "Chmel";
+    /* 0xDC40 */ "CM";
+    /* 0xDC41 */ "{sw} t chmele";
 }
 properties<Cargos, 0x0015> // Action00, volny slot 21 (mirne klima ma 0 az 11)
 {
@@ -392,5 +410,131 @@ properties<Cargos, 0x0024> // Action00, volny slot 36 (mirne klima ma 0 az 11)
         base_price: 0x00001000;
         cargo_label: "KAOL";
         bit_number: 0x24;
+    }
+}
+properties<Cargos, 0x0025> // Action00, volny slot 37 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0025
+    {
+        cargo_type_name_id: 0xDC30;
+        single_unit_name_id: 0xDC30;
+        cargo_type_abbrev_id: 0xDC31;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC32;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "BRCK";
+        bit_number: 0x25;
+    }
+}
+properties<Cargos, 0x0026> // Action00, volny slot 38 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0026
+    {
+        cargo_type_name_id: 0xDC33;
+        single_unit_name_id: 0xDC33;
+        cargo_type_abbrev_id: 0xDC34;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC35;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "BDMT";
+        bit_number: 0x26;
+    }
+}
+properties<Cargos, 0x0027> // Action00, volny slot 39 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0027
+    {
+        cargo_type_name_id: 0xDC36;
+        single_unit_name_id: 0xDC36;
+        cargo_type_abbrev_id: 0xDC37;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC38;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "FRUT";
+        bit_number: 0x27;
+    }
+}
+properties<Cargos, 0x0028> // Action00, volny slot 40 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0028
+    {
+        cargo_type_name_id: 0xDC39;
+        single_unit_name_id: 0xDC39;
+        cargo_type_abbrev_id: 0xDC3A;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x01;
+        is_freight: false;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC3B;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0001;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "STUD";
+        bit_number: 0x28;
+    }
+}
+properties<Cargos, 0x0029> // Action00, volny slot 41 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0029
+    {
+        cargo_type_name_id: 0xDC3C;
+        single_unit_name_id: 0xDC3C;
+        cargo_type_abbrev_id: 0xDC3D;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC3E;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0004;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "WINE";
+        bit_number: 0x29;
+    }
+}
+properties<Cargos, 0x002A> // Action00, volny slot 42 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x002A
+    {
+        cargo_type_name_id: 0xDC3F;
+        single_unit_name_id: 0xDC3F;
+        cargo_type_abbrev_id: 0xDC40;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC41;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0020;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "HOPS";
+        bit_number: 0x2A;
     }
 }

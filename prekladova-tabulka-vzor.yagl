@@ -649,7 +649,7 @@ properties<GlobalSettings, 0x0000> // Action00
         cargo_translation_table: "MARI"; // marihuana                           [Marihuana]
     }
 
-    // ---- Z VW T1 — vozí je VW T1 i vejtřaska, význam neznámý (v žádné tabulce nejsou) ----
+    // ---- Z VW T1 — vozí je VW T1 i vejtřaska; HOPS je chmel, u ostatních význam neznámý ----
     // instance_id: 0x0093
     {
         cargo_translation_table: "FARM"; // undefined
@@ -660,7 +660,7 @@ properties<GlobalSettings, 0x0000> // Action00
     }
     // instance_id: 0x0095
     {
-        cargo_translation_table: "HOPS"; // undefined
+        cargo_translation_table: "HOPS"; // chmel (hráč 29. 9.: „hops, tak to je náš kód“)  [Hops]
     }
     // instance_id: 0x0096
     {
@@ -899,66 +899,62 @@ properties<GlobalSettings, 0x0000> // Action00
         cargo_translation_table: "SILC"; // křemík                              [Silicon]
     }
 
-    // ---- HRÁČOVY KÓDY (29. 9.) ----
+    // ---- HRÁČŮV KÓD (29. 9.) ----
     // instance_id: 0x00CE
-    {
-        cargo_translation_table: "CHME"; // chmel                               [Hops]
-    }
-    // instance_id: 0x00CF
     {
         cargo_translation_table: "WINE"; // víno                                [Wine]
     }
 
-    // ---- ZNAJÍ JE VAGÓNY, VÝZNAM NIKDE NESTOJÍ (netipovat) ----
-    // instance_id: 0x00D0
+    // ---- ZNAJÍ JE VAGÓNY, VÝZNAM NIKDE NESTOJÍ (netipovat; NWST a UORE určil hráč) ----
+    // instance_id: 0x00CF
     {
-        cargo_translation_table: "NWST"; // undefined (zná ho VWT1cargo.yagl)
+        cargo_translation_table: "NWST"; // jaderný odpad (podle hráče; zná ho VWT1cargo.yagl)
     }
-    // instance_id: 0x00D1
+    // instance_id: 0x00D0
     {
         cargo_translation_table: "FREE"; // undefined (zná ho VWT1cargo.yagl)
     }
-    // instance_id: 0x00D2
+    // instance_id: 0x00D1
     {
         cargo_translation_table: "FLOU"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
     }
-    // instance_id: 0x00D3
+    // instance_id: 0x00D2
     {
         cargo_translation_table: "LETH"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
     }
-    // instance_id: 0x00D4
+    // instance_id: 0x00D3
     {
         cargo_translation_table: "MLTR"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
     }
-    // instance_id: 0x00D5
+    // instance_id: 0x00D4
     {
-        cargo_translation_table: "UORE"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
+        cargo_translation_table: "UORE"; // uranová ruda (podle hráče; zná ho CZTR Wagons-Cargo 1.1.0)
     }
-    // instance_id: 0x00D6
+    // instance_id: 0x00D5
     {
         cargo_translation_table: "CRAN"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00D7
+    // instance_id: 0x00D6
     {
         cargo_translation_table: "LFEQ"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00D8
+    // instance_id: 0x00D7
     {
         cargo_translation_table: "SCPR"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00D9
+    // instance_id: 0x00D8
     {
         cargo_translation_table: "STTP"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00DA
+    // instance_id: 0x00D9
     {
         cargo_translation_table: "SWRP"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00DB
+    // instance_id: 0x00DA
     {
         cargo_translation_table: "TIN_"; // undefined (zná ho GETS Alpine 0.3.1)
     }
-    // instance_id: 0x00DC
+    // instance_id: 0x00DB
     {
         cargo_translation_table: "WDCH"; // undefined (zná ho GETS Alpine 0.3.1)
     }
@@ -975,9 +971,9 @@ properties<GlobalSettings, 0x0000> // Action00
 // existoval, musí se nadefinovat: Action0 feature 0B, vlastnost 17
 // (label) a k tomu jména, ikona, váha, cena.
 //
-//    // instance_id: 0x00DD
+//    // instance_id: 0x00DC
 //    {
 //        cargo_translation_table: "XXXX"; // co to je
 //    }
 
-// v tabulce výš: 221 nákladů, sloty 0x0000-0x00DC (strop je 255)
+// v tabulce výš: 220 nákladů, sloty 0x0000-0x00DB (strop je 255)

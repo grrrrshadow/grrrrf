@@ -1,5 +1,33 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 8 (29. 9.)
+
+- **Vzorová tabulka 220 kódů** (hráč: *„budem muset aktualizovat vzorovou tabulku, já si ji pak stáhnu od tebe“*):
+  prvních 147 beze změny na stejných číslech, za MARI kódy z VW T1, FIRS 5.2 a CHEM (jako dosud), kódy ze sad
+  v hráčově hře (save `v3s2`, `naklady.md`), víno `WINE` a kódy, které znají jen vagóny. Vejtřaska bere celý vzor,
+  vlastní kódy navíc už nemá. Chmel je `HOPS` (hráč: *„hops, tak to je náš kód“*).
+- **Lidé:** navíc studenti `STUD`, vězni `PRIS`, kvalifikovaní dělníci `WORK` a hráči `PLAY` (Temporal8 Real
+  Industries), zelená 20 pod plachtou, modrá 3 v kabině. Turisté jsou ve hře dva kódy, `TOUR` a `OTI2`, oba vozí.
+- **Jen zelená:** navíc jaderný odpad `NWST` a uranová ruda `UORE` (hráč: *„odpad jaderný vojenská jenom, všechno
+  co je uran jenom zelená“*).
+- **Náklad na korbě**, co je nové:
+
+  | náklad | obrázek |
+  |---|---|
+  | BRCK cihly | podtypy: červené, šedé (o kus větší) cihly na paletách |
+  | BDMT stavební materiál | podtypy: červené cihly, šedé cihly, bílé pytle |
+  | TATO BEAN brambory | podtypy: kupa brambor, hnědé pytle (hráč: *„já brambory ještě neviděl“*) |
+  | FRUT FRVG ovoce | pestrá kupa jablíček (hráč: *„ovoce krásný je“*) |
+  | BEER alkohol | podtypy: rum (dřevěné sudy), pivo Plzeň (bílé sudy), pivo Budvar (šedá plachta) |
+  | WINE víno | dřevěné sudy jako rum |
+  | HOPS chmel | marihuanové seno |
+  | kyseliny a plyny z AXIS a GIST | červené sudy; NAPH a LUBR jako ropa, COCO (měděný koncentrát) kupa měděné rudy |
+
+- **Velikost:** malá 4,37 MB, velká 4,78 MB.
+- **Ověřeno ve zkušební hře** (`testv3s`, zkušební náklady navíc BRCK BDMT FRUT STUD WINE HOPS): každý náklad
+  i podtyp má svůj obrázek a jméno v obou dílech, studenti 20 a 3, modrá nevozí uran, zelená hračky.
+  Fotka ze hry: `kontrola/hra_naklady_v8.png`.
+
 ## Verze 7 (29. 9.)
 
 - **Nákup:** zeleně „for ottd Decouple by Karel Mácha“, pod tím „Model: hans1240 (Sketchfab), CC BY 4.0“
@@ -86,11 +114,11 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v7.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v7.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v8.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v8.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v7.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v6`)
+Balík pro hráče je `Praga_V3S_Vejtraska-v8.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v7`)
 zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
@@ -355,4 +383,5 @@ seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na v
 v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasátka, kravičky nebo ovečky,
 zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelený řádek ottd Decouple;
 7 v nákupu „for ottd Decouple by Karel Mácha“ a autor modelu, bílé a hnědé pytle s černou čarou, bedny
-i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin.
+i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin;
+8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel.
