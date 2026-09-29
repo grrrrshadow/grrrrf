@@ -33,7 +33,8 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra, tekutiny v sudech,
 #   pytle, bedny, sudy, seno, dobytek s podtypy (prasatka, kravicky, ovecky), zelena misto vojenske, modra v nakupu prvni,
 # 6 v nakupu jen zeleny radek ottd Decouple (dlouhy text zvetsoval okno nakupu a schoval tlacitko Koupit),
-# 7 v nakupu zelene "for ottd Decouple by Karel Macha" a autor modelu
+# 7 v nakupu zelene "for ottd Decouple by Karel Macha" a autor modelu, pytle bile a hnede s cernou carou, bedny i na
+#   zasoby, obili, rudy a jil jako kupky, bile sudy misto modrych, podtypy pradnych plodin (vlakna, seno)
 VERZE = 7
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]

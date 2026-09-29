@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-29 03:18:11.134331025 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 03:18:11.142536562 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-29 12:19:04.972956322 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 12:19:04.980756601 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -58,7 +58,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
 +	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
-+	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR", "BEER", "FICR", "CHEM", "TOYS", "URAN", "WATR", "ACID", "OIL_"};
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR", "BEER", "FICR", "CHEM", "TOYS", "URAN", "WATR", "ACID", "OIL_", "JAVA", "CLAY", "SGCN", "KAOL"};
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +		if (e->GetGRFID() != want) continue;
 +		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} poradi v nakupu {} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
@@ -112,8 +112,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +				}
 +				IConsolePrint(CC_INFO, "V3S:   {} plne{}", lab, plne);
 +			}
-+			if (std::string_view(lab) == "LVST" && rc.Succeeded()) {
-+				/* podtypy dobytka (callback 0x19): jmeno za nakladem a vrstvy obrazku pro kazdy podtyp */
++			if ((std::string_view(lab) == "LVST" || std::string_view(lab) == "FICR") && rc.Succeeded()) {
++				/* podtypy dobytka a vlaken (callback 0x19): jmeno za nakladem a vrstvy obrazku pro kazdy podtyp */
 +				for (uint8_t podtyp = 0; podtyp < 4; podtyp++) {
 +					auto [pc, pcap, pmail, pcaps] = Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, podtyp, false, false, 0);
 +					std::string radek2;
@@ -128,7 +128,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +								u->cargo_subtype, jm == STR_EMPTY ? std::string("-") : GetString(jm), vrstvy);
 +						u->cargo.Truncate();
 +					}
-+					IConsolePrint(CC_INFO, "V3S:   LVST podtyp {} prestavba {}{}", podtyp, pc.Succeeded() ? "ok" : "NE", radek2);
++					IConsolePrint(CC_INFO, "V3S:   {} podtyp {} prestavba {}{}", lab, podtyp, pc.Succeeded() ? "ok" : "NE", radek2);
 +				}
 +				Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, 0, false, false, 0);
 +			}
@@ -268,9 +268,9 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
 +	struct Nakup { const char *grf; uint16_t local; const char *naklad; bool plne; uint8_t podtyp = 0; };
 +	static const Nakup nakupy[] = {
-+		{"MAXe", 0x0100, "BEER", true}, {"MAXe", 0x0101, "OIL_", true}, {"MAXe", 0x0100, "LVST", true, 2}, {"MAXe", 0x0101, "FICR", true},
-+		{"MAXd", 0x0101, "WATR", true}, {"MAXd", 0x0100, "LVST", true, 1}, {"MAXd", 0x0101, "CMNT", true}, {"MAXd", 0x0100, "GOOD", true},
-+		{"MAXd", 0x0101, "ACID", true}, {"MAXe", 0x0101, "LVST", true, 0},
++		{"MAXe", 0x0100, "JAVA", true}, {"MAXe", 0x0101, "CMNT", true}, {"MAXe", 0x0100, "FICR", true, 1}, {"MAXe", 0x0101, "FICR", true, 2},
++		{"MAXd", 0x0101, "CLAY", true}, {"MAXd", 0x0100, "CMNT", true}, {"MAXd", 0x0101, "JAVA", true}, {"MAXd", 0x0100, "KAOL", true},
++		{"MAXd", 0x0101, "SGCN", true}, {"MAXe", 0x0100, "WATR", true},
 +	};
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
@@ -359,8 +359,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-29 03:18:11.142536562 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-29 03:18:11.148598207 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 12:19:04.984956323 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 12:19:04.993173906 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

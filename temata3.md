@@ -1366,3 +1366,8 @@ rozpadne na tečky; komu by to vadilo, musí mít GRF vlastní sprity zin2 a nor
 **Bedny** (hráč: *„zemědělské potřeby, strojírenské potřeby bedny, jako zboží má“*, *„krabice – bedny,
 jaký jsou na zboží“*): zboží, zemědělské a strojírenské zásoby a svařovací materiál jedou s jedním
 obrázkem beden.
+
+**Zkouška verze 7** (`hra/`): zkušební náklady `MAXn` mají navíc JAVA CLAY SGCN KAOL (sloty 0x21 až 0x24),
+`testv3s` je přestaví a u FICR projde i podtypy jako u dobytka, `testv3sfoto` veze nové náklady. Hra
+v `ottd-zkusebni-gfx.tar.xz` je před zabalením `strip`nutá (18,6 MB místo 21,8). Kapacita 5 u sypkých
+nákladů není chyba: bez FIRS má zboží násobek kapacity 2, V3S veze 10 zboží, ale 5 uhlí (`README.md` V3S).

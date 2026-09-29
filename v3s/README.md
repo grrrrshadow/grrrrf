@@ -1,5 +1,35 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 7 (29. 9.)
+
+- **Nákup:** zeleně „for ottd Decouple by Karel Mácha“, pod tím „Model: hans1240 (Sketchfab), CC BY 4.0“
+  (hráč: *„napíšem zeleně for, for ottd decouple by karel macha. A kde máš autora objektu, toho tam
+  napíšem“*). Dva krátké řádky, okno nákupu se nezvětší.
+- **Náklad na korbě**, co je nové (hráč: *„žádný modrý náklad, auta jsou modrý“*):
+
+  | náklad | obrázek |
+  |---|---|
+  | CMNT SALT SUGR RSGR WOOL BDMT KAOL QLME SASH (cement, sůl, cukr, vlna, stavební materiál, kaolín, nehašené vápno, soda) | bílé pytle jako ve verzi 5, náhodně naházené, černá čára kolem každého (hráč: *„tam černou linku kolem pytle … slévaly se do sebe“*) |
+  | JAVA káva | hnědé pytle |
+  | GOOD FMSP ENSP WELD (zboží, zemědělské a strojírenské zásoby, svařovací materiál) | bedny |
+  | GRAI WHEA MAIZ CERE obilí | žlutá kupka jako písek |
+  | CORE měděná ruda | zelenošedá kupka |
+  | AORE NKOR PORE MNO2 URAN ostatní rudy | kupky: bauxit jako železná ruda, niklová jako struska, pyritová jako štěrk, mangan a uran jako koks |
+  | CLAY jíl | okrově hnědá kupka |
+  | SGCN cukrová třtina | vlákna (obrázek přadných plodin) |
+  | WATR MILK EOIL MOLS voda, mléko, olej, melasa | bílé sudy místo modrých |
+  | FICR přadné plodiny | tři podtypy: vlákna, marihuanové seno (zelené), seno (žlutší) |
+
+  Kupka nehašeného vápna je pryč, vápno jede v pytlích. Pod plachtou dál plasty, mouka, hnojivo a saze.
+- **Černá čára kolem pytlů** dělá `render_v3s.py` (`OBRYSY`): druhý render, kde má každý pytel svou barvu,
+  z něj pixely na hranách pytlů, ty se ve fotce ztmaví (`temata3.md`). Při oddálení se čára rozpadne na
+  tečky, hra zmenšuje sprity výběrem pixelů.
+- **Velikost:** malá 4,27 MB, velká 4,66 MB.
+- **Ověřeno ve zkušební hře** (`testv3s` obě velikosti, zkušební náklady rozšířené o JAVA CLAY SGCN KAOL):
+  každý náklad se přestaví a naložený ukáže svůj obrázek (cement a kaolín stejné bílé pytle, káva hnědé,
+  jíl svou kupku, třtina vlákna), podtypy vláken i dobytka mají jména a obrázky v obou dílech, modrá nevozí
+  uran, zelená hračky, modrá je v nákupu první. Fotka ze hry: `kontrola/hra_naklady_v7.png`.
+
 ## Verze 6 (29. 9.)
 
 Jen popis v nákupu (callback 0x23): jediný zelený řádek „ottd Decouple by Karel Mácha“. Okno nákupu se
@@ -56,11 +86,11 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v6.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v6.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v7.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v7.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v6.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v5`)
+Balík pro hráče je `Praga_V3S_Vejtraska-v7.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v6`)
 zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
@@ -323,4 +353,6 @@ velká veze správně 20 a 3 lidi; 3 tmavá lesklá okna a bílé reflektory, n�
 (18 nákladů), dřevo v seznamu nákladů; 4 náklady hráčovým systémem (celá tabulka ze vzoru, vypsaný
 seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na všechno, co není kupka; 5 tekutiny
 v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasátka, kravičky nebo ovečky,
-zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelený řádek ottd Decouple.
+zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelený řádek ottd Decouple;
+7 v nákupu „for ottd Decouple by Karel Mácha“ a autor modelu, bílé a hnědé pytle s černou čarou, bedny
+i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin.
