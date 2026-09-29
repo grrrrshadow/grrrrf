@@ -916,15 +916,15 @@ properties<GlobalSettings, 0x0000> // Action00
     }
     // instance_id: 0x00D1
     {
-        cargo_translation_table: "FLOU"; // mouka (nevydaný průmysl CZTR; vozí ji kryté vozy Zav a Gᵍ s obilím a potravinami)
+        cargo_translation_table: "FLOU"; // mouka (hráč to potvrdil; nevydaný průmysl CZTR, vozí ji kryté vozy Zav a Gᵍ s obilím a potravinami)
     }
     // instance_id: 0x00D2
     {
-        cargo_translation_table: "LETH"; // undefined (nevydaný průmysl CZTR; kryté a kontejnerové vozy se zbožím, jméno nikde nestojí)
+        cargo_translation_table: "LETH"; // kůže (podle hráče; nevydaný průmysl CZTR, vozí ji kryté a kontejnerové vozy se zbožím)
     }
     // instance_id: 0x00D3
     {
-        cargo_translation_table: "MLTR"; // vojenská technika (nevydaný průmysl CZTR; vozí ji plošinový vůz Nas „pro těžké náklady, například vojenskou techniku“)
+        cargo_translation_table: "MLTR"; // vojenská technika (hráč to potvrdil; nevydaný průmysl CZTR, vozí ji plošinový vůz Nas „pro těžké náklady, například vojenskou techniku“)
     }
     // instance_id: 0x00D4
     {

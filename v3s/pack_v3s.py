@@ -37,7 +37,8 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   zasoby, obili, rudy a jil jako kupky, bile sudy misto modrych, podtypy pradnych plodin (vlakna, seno)
 # 8 vzorova tabulka 221 kodu (lide STUD PRIS WORK PLAY a kody ze sad v hracove hre), cihly cervene a sede (BRCK,
 #   BDMT), kupa brambor a brambory v pytlich, pestra kupa ovoce, alkohol rum, pivo Plzen, pivo Budvar, chmel (HOPS), vino
-VERZE = 8
+# 9 vojenska technika MLTR jen zelena, LETH kuze a FLOU mouka ve vzoru (hrac)
+VERZE = 9
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -110,8 +111,9 @@ NEVOZI = {"GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy
 JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi (hrac: "jidlo jenom vojensky",
                 "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
                 "NUKW": "jaderný odpad",                      # "vojenska radioaktivni veci, modra ne")
-                "NWST": "jaderný odpad", "UORE": "uranová ruda"}   # od verze 8 (hrac: "odpad jaderny vojenska jenom,
+                "NWST": "jaderný odpad", "UORE": "uranová ruda",   # od verze 8 (hrac: "odpad jaderny vojenska jenom,
                                                                     # vsechno co je uran jenom zelena")
+                "MLTR": "vojenská technika"}                  # od verze 9 (hrac: "mltr jen zelena")
 JEN_MODRA = {"TOYS": "hračky"}                               # vojenska je nevozi (hrac 29. 9.: "vojenska ne hracky")
 # Kody vejtrasky, ktere ve vzoru nejsou. Od verze 8 zadne: hrac 29. 9.: "budem muset aktualizovat vzorovou tabulku,
 # ja si ji pak stahnu od tebe", takze kody z VW T1, FIRS 5.2 Steeltown a CHEM jsou ve vzoru (na stejnych cislech jako

@@ -291,7 +291,7 @@ Hráč 29. 9.: *„to jsou kódy CZTR průmyslu, ten nikdy nevyšel. Když vyčt
 tak to je ono“*. České jméno nákladu ve vagónech CZTR (1.0.0 ve hře, 1.1.0 v `rozbalene/`) nestojí, jen jména
 a popisy vozů. Z nich: `FLOU` vozí kryté vozy Zav a Gᵍ s obilím a potravinami (mouka), `MLTR` plošinový vůz
 Nas „pro těžké náklady, například vojenskou techniku“ (vojenská technika), `LETH` kryté a kontejnerové vozy
-se zbožím (nic víc). CRAN LFEQ SCPR STTP SWRP TIN_ WDCH ve vagónech CZTR nejsou (GETS Alpine, čtyři i AXIS),
+se zbožím (nic víc). Hráč potom: *„mltr jen zelená, leth bude kůže, flou mouka, uore je zelená v3s“*. CRAN LFEQ SCPR STTP SWRP TIN_ WDCH ve vagónech CZTR nejsou (GETS Alpine, čtyři i AXIS),
 FREE jen v tabulce VW T1.
 Jen `NWST` a `UORE` určil hráč: jaderný odpad a uranová ruda (*„odpad jaderný vojenská jenom, všechno co je uran
 jenom zelená“*).
