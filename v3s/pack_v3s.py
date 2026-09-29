@@ -32,8 +32,9 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   prikladaci plachta na vsechno, co neni kupka,
 # 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra, tekutiny v sudech,
 #   pytle, bedny, sudy, seno, dobytek s podtypy (prasatka, kravicky, ovecky), zelena misto vojenske, modra v nakupu prvni,
-# 6 v nakupu jen zeleny radek ottd Decouple (dlouhy text zvetsoval okno nakupu a schoval tlacitko Koupit)
-VERZE = 6
+# 6 v nakupu jen zeleny radek ottd Decouple (dlouhy text zvetsoval okno nakupu a schoval tlacitko Koupit),
+# 7 v nakupu zelene "for ottd Decouple by Karel Macha" a autor modelu
+VERZE = 7
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -244,7 +245,10 @@ UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S,
 # by karel macha se vejde", "zeleny jen ottd decouple by karel macha", "to hybalo s velikosti okna a ostatni to nedelali
 # a schovalo to cudlik koupit": okno nakupu se roztahne podle nejdelsiho popisu a tlacitko Koupit vyjelo z obrazovky.
 # V nakupu je proto jen jeden zeleny radek; o aute, motoru, socialismu a zasobach armady je popis GRF a licence.
-POPIS = {n: "{green}" + DECOUPLE for n in ("vojenska", "modra")}
+# Od verze 7 (hrac: "napisem zelene for, for ottd decouple by karel macha. a kde mas autora objektu, toho tam napisem,
+# hans tam byl, vid? jinde neni co zkratit a ja mam jeste pusteny jmena grf") i autor modelu (licence CC BY ho chce).
+POPIS = {n: "{green}for " + DECOUPLE + "{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0"
+         for n in ("vojenska", "modra")}
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
 _zj = os.path.join(ZVUKY_ADR, "zvuky.json")
