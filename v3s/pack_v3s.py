@@ -221,7 +221,9 @@ PODPIS = "{new-line}{green}" + DECOUPLE + "{new-line}" + ITCH
 NAZEV = {"vojenska": "Praga V3S Vejtřaska (zelená)", "modra": "Praga V3S Vejtřaska (modrá)"}
 # hrac 29. 9.: "napis, ze praga v3s vybudovala socialismus. treba nerikej, ze zelene byly nejcastejsi, usetrime kousek
 # mista, a jenom ze praga v3s se pouzivala v zemedelstvi, ve stavebnictvi, v prumyslu a budovala socialismus"
-SOCIALISMUS = "Praga V3S se používala v zemědělství, ve stavebnictví, v průmyslu a budovala socialismus."
+# a potom: "ze skladovych zasob armady, ze byly zelene, tam nech" (bez "nejcastejsi")
+SOCIALISMUS = ("Praga V3S se používala v zemědělství, ve stavebnictví, v průmyslu a budovala socialismus. "
+               "Zelené jezdily i v civilu, rozprodané ze skladových zásob armády.")
 UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S, Praha-Vysocany 20. 2. 1952
 TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}"
@@ -255,7 +257,8 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{orange}The legendary vejtřaska, the 6×6 workhorse of Czechoslovakia from 1953 to 1990. Its air-cooled Tatra 912 diesel is half of the Tatra 111 V12: an inline six of 7.4 litres. " +
              ("It roars when pulling away and leaves the depot with the starter and a two-tone horn. " if ZV else "") +
              "The load shows on the bed as a heap, logs or a tarp. The Praga V3S worked in farming, construction "
-             "and industry and built socialism.{new-line}"
+             "and industry and built socialism. The green ones ran in civilian life too, sold off from army stock."
+             "{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}"
              "{new-line}"
              "{green}for ottd Decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
