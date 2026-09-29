@@ -18,16 +18,18 @@ Praga_V3S_BRYLE-v5.grf  velká, s neviditelným čumákem vepředu, aby auta
                         v koloně nestála přes sebe.
                         Článkové auto, jezdí jen do průjezdných zastávek.
 
-V každém GRF dvě auta: Praga V3S Vejtřaska vojenská a modrá. Modrá mění odstín
+V každém GRF dvě auta: Praga V3S Vejtřaska zelená a modrá. Modrá mění odstín
 podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
-všechno kromě tekutin a skla (pivo v basách a chemikálie v kanystrech ano), vojenská
-navíc jídlo, výbušniny a radioaktivní náklad, ale ne hračky, vojáků 20, modrá 3 lidi
-v kabině.
+všechno kromě tekutin a skla (pivo v basách a chemikálie v kanystrech ano), zelená
+navíc jídlo, výbušniny a radioaktivní náklad, ale ne hračky, 20 lidí na korbě, modrá
+3 lidi v kabině.
 Sypký náklad veze na korbě jako hromadu v jeho barvě (uhlí černé, písek a brambory
 žluté, kámen a cement šedé, ruda, vápno, řepa, marihuana zelená…), dřevo jako klády,
-dřevařské výrobky jako prkna, ostatní naložený náklad pod plachtou: vojenská
+dřevařské výrobky jako prkna, ostatní naložený náklad pod plachtou: zelená
 olivovou, modrá žlutou, ocel a strojírenství pod šedou a šedobílou.
 Prototyp od 20. 2. 1952, pro všechny o rok později.
+Zelené byly nejčastější, v civilu jezdily vejtřasky rozprodané ze skladových
+zásob armády.
 
 Zvuk je umělý, složený podle motoru Tatra 912: rozjezd ze zastávky s řevem,
 vrčení za jízdy podle rychlosti, volnoběh, výjezd z depa se startérem
@@ -50,8 +52,8 @@ PŘEVZATÉ ČÁSTI
     https://sketchfab.com/hans1240
     https://sketchfab.com/3d-models/praga-v3s-5593b3ca44cb41adb5a1c6ecb81297d3
     licence CC BY 4.0
-    Úpravy: vyfoceno do spritů pro OpenTTD ve dvou velikostech, vojenský olivový
-    nátěr beze změny, k tomu modrý nátěr ve čtyřech odstínech přebarvený z olivového,
+    Úpravy: vyfoceno do spritů pro OpenTTD ve dvou velikostech, olivový nátěr
+    modelu beze změny, k tomu modrý nátěr ve čtyřech odstínech přebarvený z olivového,
     tmavá lesklá okna, bíle svítící reflektory, náklady na korbě a plachty.
 
 -------------------------------------------------------------------------------
@@ -76,16 +78,18 @@ Praga_V3S_BRYLE-v5.grf  big, with an invisible front bumper so the trucks do not
                         overlap in a queue.
                         Articulated, uses drive-through stops only.
 
-Each GRF has two trucks: Praga V3S Vejtřaska military and blue. The blue one changes
+Each GRF has two trucks: Praga V3S Vejtřaska green and blue. The blue one changes
 its shade with the cargo (building light, engineering dark, farming, goods). They
 carry everything but liquids and glass (beer in crates and chemicals in canisters
-are fine); the military one also food, explosives and radioactive cargo, but no
-toys, and 20 troops, the blue one 3 people in the cab. Loose cargo rides on the bed as a heap in its
+are fine); the green one also food, explosives and radioactive cargo, but no
+toys, and 20 people on the bed, the blue one 3 people in the cab. Loose cargo rides on the bed as a heap in its
 colour (coal black, sand and potatoes yellow, stone and cement grey, ore, lime, beet,
 marijuana green...), wood as logs, wood products as planks, any other load under
-a tarp: olive on the military one, yellow on the blue one, grey and grey-white
+a tarp: olive on the green one, yellow on the blue one, grey and grey-white
 for steel and engineering.
 Prototype from 20 February 1952, for everyone a year later.
+The green one is the common one: in civilian life they drove trucks sold off
+from army stock.
 
 The sound is synthesized after the Tatra 912 engine: a roaring pull-away from
 stops, a growl that follows the speed, idling, and leaving the depot with the
@@ -108,6 +112,6 @@ THIRD-PARTY PARTS
     https://sketchfab.com/hans1240
     https://sketchfab.com/3d-models/praga-v3s-5593b3ca44cb41adb5a1c6ecb81297d3
     license CC BY 4.0
-    Changes: rendered to OpenTTD sprites in two sizes, the military olive livery
-    unchanged, plus a blue livery in four shades recoloured from the olive one,
+    Changes: rendered to OpenTTD sprites in two sizes, the olive livery of the
+    model unchanged, plus a blue livery in four shades recoloured from the olive one,
     dark glossy windows, white shining headlights, cargo loads on the bed and tarps.
