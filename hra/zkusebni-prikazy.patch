@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-29 20:25:07.231223609 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 20:25:07.333199794 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-29 22:23:42.885088003 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 22:23:42.892969894 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -19,7 +19,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1348,321 @@
+@@ -1344,6 +1348,478 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -338,10 +338,167 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	return true;
 +}
 +
++/* ZKOUSKA PORADI KRESLENI (jen tahle kopie hry, 29. 9.): hrac videl na silnici SV-JZ, ze auto jedouci na jihozapad
++ * v zadnim pruhu se kresli pres auto v prednim pruhu (dvanacttrojky VW T1 s naraznikem vepredu i vzadu, sestava 1, 1, 1).
++ * 'testpruhy x|y [tiku]' postavi tri rovne silnice podel osy X (SV-JZ) nebo Y (SZ-JV) a na kazdou osm dvojic stojicich
++ * aut proti sobe, zadni pruh a predni pruh, cela od sebe 0 az 14 osmin dlazdice, jak se miji. Vyfoti je a hru ukonci. */
++static void PolozAutoNaSilnici(RoadVehicle *v, Axis osa, bool kladne, int celo, int napric)
++{
++	/* pravostranny provoz (tabulky 24, 16, 17, 25 v roadveh_movement.h): X kladne = jihozapad v y 5,
++	 * X zaporne = severovychod v y 9, Y kladne = jihovychod v x 9, Y zaporne = severozapad v x 5 */
++	const Trackdir td = osa == Axis::X ? (kladne ? Trackdir::X_SW : Trackdir::X_NE) : (kladne ? Trackdir::Y_SE : Trackdir::Y_NW);
++	const Direction dir = osa == Axis::X ? (kladne ? Direction::SW : Direction::NE) : (kladne ? Direction::SE : Direction::NW);
++	const int pruh = napric * (int)TILE_SIZE + (osa == Axis::X ? (kladne ? 5 : 9) : (kladne ? 9 : 5));
++	int za = 0;
++	for (RoadVehicle *u = v; u != nullptr; u = u->Next()) {
++		if (u != v) za += u->Previous()->gcache.cached_veh_length;
++		const int podel = kladne ? celo - za : celo + za;
++		const int px = osa == Axis::X ? podel : pruh;
++		const int py = osa == Axis::X ? pruh : podel;
++		u->tile = TileXY(px / (int)TILE_SIZE, py / (int)TILE_SIZE);
++		u->state = to_underlying(td);
++		u->frame = kladne ? (podel & 0xF) : 15 - (podel & 0xF);
++		u->x_pos = px;
++		u->y_pos = py;
++		u->direction = dir;
++		u->overtaking = 0;
++		u->cur_speed = 0;
++		u->vehstatus.Reset(VehState::Hidden);
++		u->UpdatePosition();
++		u->UpdateInclination(true, true);
++		u->UpdateViewport(true, true);
++	}
++}
++
++static bool ConTestPruhy(std::span<std::string_view> argv)
++{
++	if (argv.empty()) {
++		IConsolePrint(CC_HELP, "Poradi kresleni aut proti sobe na rovne silnici. Usage: 'testpruhy x|y [tiku]'.");
++		return true;
++	}
++	if (_game_mode != GameMode::Normal) return true;
++	if (Company::GetIfValid(_local_company) == nullptr) {
++		extern Company *DoStartupNewCompany(bool is_ai, CompanyID company);
++		Company *made = DoStartupNewCompany(false, CompanyID::Invalid());
++		if (made == nullptr) return true;
++		SetLocalCompany(made->index);
++	}
++	Command<Commands::MoneyCheat>::Do(DoCommandFlag::Execute, 100000000);
++	if (_settings_game.vehicle.road_side != RoadVehicleDrivingSide::Right) {
++		V3SLog("PRUHY: hra jezdi vlevo, zkouska je pro pravostranny provoz");
++		return true;
++	}
++	const Axis osa = (argv.size() > 1 && argv[1] == "y") ? Axis::Y : Axis::X;
++	uint tiku = 30;
++	if (argv.size() > 2) {
++		tiku = 0;
++		for (char c : argv[2]) if (c >= '0' && c <= '9') tiku = tiku * 10 + (c - '0');
++	}
++	/* rovne prazdne misto: 21 dlazdic podel osy, 12 napric */
++	const uint DL = 21, SI = 12;
++	const uint W = osa == Axis::X ? DL : SI, H = osa == Axis::X ? SI : DL;
++	TileIndex zac = INVALID_TILE;
++	for (uint y = 10; y + H < Map::SizeY() - 10 && zac == INVALID_TILE; y++) {
++		for (uint x = 10; x + W < Map::SizeX() - 10; x++) {
++			bool ok = true;
++			int z0 = GetTileZ(TileXY(x, y));
++			for (uint dy = 0; dy < H && ok; dy++) for (uint dx = 0; dx < W && ok; dx++) {
++				TileIndex t = TileXY(x + dx, y + dy);
++				ok = (IsTileType(t, TileType::Clear) || IsTileType(t, TileType::Trees)) && GetTileSlope(t) == SLOPE_FLAT && GetTileZ(t) == z0;
++			}
++			if (ok) { zac = TileXY(x, y); break; }
++		}
++	}
++	if (zac == INVALID_TILE) {
++		V3SLog("PRUHY: neni misto");
++		return true;
++	}
++	const uint x0 = TileX(zac), y0 = TileY(zac);
++	RoadType rt = GetRoadTypeByLabel('R' << 24 | 'T' << 16 | '1' << 8 | '4', false);
++	if (rt == INVALID_ROADTYPE) rt = ROADTYPE_ROAD;
++	/* dlazdice podle polohy podel osy a napric */
++	auto dl = [&](uint podel, uint napric) { return osa == Axis::X ? TileXY(x0 + podel, y0 + napric) : TileXY(x0 + napric, y0 + podel); };
++	/* tri silnice napric 2, 5, 8, podel od 1 do 19; depo na zacatku prvni */
++	bool ok = true;
++	for (uint r = 0; r < 3; r++) {
++		ok = ok && Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, dl(19, 2 + 3 * r), dl(1, 2 + 3 * r), rt, osa, DisallowedRoadDirections{}, true, true, false).Succeeded();
++	}
++	const TileIndex depo = dl(0, 2);
++	const RoadBits k_depu = osa == Axis::X ? RoadBits{RoadBit::NE} : RoadBits{RoadBit::NW};
++	Command<Commands::BuildRoad>::Do(DoCommandFlag::Execute, dl(1, 2), k_depu, rt, DisallowedRoadDirections{}, TownID::Invalid());
++	ok = ok && Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depo, rt, osa == Axis::X ? DiagDirection::SW : DiagDirection::SE).Succeeded();
++	V3SLog("PRUHY: osa {} misto ({},{}) silnice a depo {}", osa == Axis::X ? "X" : "Y", x0, y0, ok ? "ok" : "CHYBA");
++
++	/* zadni pruh (X: jihozapad v y 5, Y: severozapad v x 5) a predni pruh (X: severovychod v y 9, Y: jihovychod v x 9) */
++	struct Typ { const char *grf; uint16_t local; };
++	static const Typ zadni[3] = {{"MAX\x08", 0x0093}, {"MAXd", 0x0103}, {"MAX\x08", 0x0091}};
++	static const Typ predni[3] = {{"MAXd", 0x0102}, {"MAX\x08", 0x0092}, {"MAX\x08", 0x0080}};
++	auto kup = [&](const Typ &t) -> RoadVehicle * {
++		const uint32_t want = (uint8_t)t.grf[0] | (uint8_t)t.grf[1] << 8 | (uint8_t)t.grf[2] << 16 | (uint32_t)(uint8_t)t.grf[3] << 24;
++		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
++			if (e->GetGRFID() != want || e->grf_prop.local_id != t.local) continue;
++			auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depo, e->index, true, INVALID_CARGO, ClientID::Invalid);
++			if (bc.Failed()) {
++				V3SLog("PRUHY: koupe {:08X} 0x{:04X} SELHALA", want, t.local);
++				return nullptr;
++			}
++			return RoadVehicle::From(Vehicle::Get(vid));
++		}
++		V3SLog("PRUHY: {:08X} 0x{:04X} nenalezen", want, t.local);
++		return nullptr;
++	};
++	/* 'kolona' (treti argument): misto dvojic zacpa v obou pruzich jako na hracove fotce, auta 10 osmin od sebe
++	 * (rozestup dvanacttrojky s narazniky), predni pruh posunuty o 5 proti zadnimu */
++	const bool kolona = argv.size() > 3 && argv[3] == "kolona";
++	for (uint r = 0; r < 3 && kolona; r++) {
++		const int napric = (int)(osa == Axis::X ? y0 : x0) + 2 + 3 * (int)r;
++		const int start = (int)(osa == Axis::X ? x0 : y0) * (int)TILE_SIZE;
++		for (uint i = 0; i < 12; i++) {
++			RoadVehicle *a = kup(i % 2 ? predni[r] : zadni[r]);
++			RoadVehicle *b = kup(i % 2 ? zadni[r] : predni[r]);
++			/* zadni pruh jede u X k vetsimu x, u Y k mensimu y; cela jdou od konce, kam jedou */
++			const int a_celo = osa == Axis::X ? start + 16 * (int)TILE_SIZE - 10 * (int)i : start + 4 * (int)TILE_SIZE + 10 * (int)i;
++			const int b_celo = osa == Axis::X ? start + 8 * (int)TILE_SIZE + 5 + 10 * (int)i : start + 12 * (int)TILE_SIZE - 5 - 10 * (int)i;
++			if (a != nullptr) PolozAutoNaSilnici(a, osa, osa == Axis::X, a_celo, napric);
++			if (b != nullptr) PolozAutoNaSilnici(b, osa, osa != Axis::X, b_celo, napric);
++		}
++	}
++	for (uint r = 0; r < 3 && !kolona; r++) {
++		const int napric = (int)(osa == Axis::X ? y0 : x0) + 2 + 3 * (int)r;
++		for (uint k = 0; k < 8; k++) {
++			const int d = 2 * (int)k;
++			const int zaklad = ((int)(osa == Axis::X ? x0 : y0) + 3 + 2 * (int)k) * (int)TILE_SIZE;
++			const int b_celo = zaklad + (osa == Axis::X ? 4 : 12);
++			const int a_celo = osa == Axis::X ? b_celo + d : b_celo - d;
++			RoadVehicle *a = kup(zadni[r]);
++			RoadVehicle *b = kup(predni[r]);
++			if (a != nullptr) PolozAutoNaSilnici(a, osa, osa == Axis::X, a_celo, napric);
++			if (b != nullptr) PolozAutoNaSilnici(b, osa, osa != Axis::X, b_celo, napric);
++			for (RoadVehicle *v : {a, b}) {
++				for (RoadVehicle *u = v; u != nullptr; u = u->Next()) {
++					V3SLog("PRUHY: rada {} par {} odstup {} {} vuz {} dil 0x{:04X} delka {} x {} y {} smer {} box x {}..{} y {}..{}", r, k, d,
++							v == a ? "zadni" : "predni", v->unitnumber, u->GetEngine()->grf_prop.local_id, u->gcache.cached_veh_length,
++							u->x_pos, u->y_pos, to_underlying(u->direction),
++							u->x_pos + u->bounds.origin.x, u->x_pos + u->bounds.origin.x + u->bounds.extent.x - 1,
++							u->y_pos + u->bounds.origin.y, u->y_pos + u->bounds.origin.y + u->bounds.extent.y - 1);
++				}
++			}
++		}
++	}
++	_v3s_stred = dl(10, 5);
++	ScrollMainWindowToTile(_v3s_stred, true);
++	_v3s_foto_pocet = _v3s_foto_zbyva = 1;
++	_v3s_foto_krok = 100;
++	_v3s_foto_cislo = 0;
++	_v3s_foto_dalsi = TimerGameTick::counter + tiku;
++	V3SLog("PRUHY: fotka za {} tiku", tiku);
++	return true;
++}
++
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1771,17 @@
+@@ -1452,6 +1928,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -359,18 +516,19 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7573,8 @@
+@@ -7243,6 +7730,9 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
 +	IConsole::CmdRegister("testv3s",                 ConTestV3S);
 +	IConsole::CmdRegister("testv3sfoto",             ConTestV3SFoto);
++	IConsole::CmdRegister("testpruhy",               ConTestPruhy);
  	IConsole::CmdRegister("testnaklad",              ConTestCargoScene);
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-29 20:25:07.327223615 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-29 20:25:07.333431189 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 22:23:42.892969894 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 22:23:42.897484749 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  
