@@ -126,6 +126,9 @@ přestavět, jen to chce vědět dopředu, jakou podobu potřebujete.
 
 ## 4. Marihuana u vozidel ze sad, která ji mají jménem (2026-09-28)
 
+**Hotovo (kolega, commit `f3f7e7e`, 29. 9.):** sada, která má `MARI` (nebo `BOOM`) v překladové tabulce,
+si ho nechá (`GrfNamesCargo`). Vejtřaska ho v tabulce má. Níž původní návrh.
+
 Hráč: *„vejtřaska nejde přestavět na marihuanu“*. Praga V3S (`v3s/`, GRF `MAXd` a `MAXe`) má
 `MARI` v seznamu vždy povolených nákladů (vlastnost 24, `always_refittable_cargos`) jménem,
 přes překladovou tabulku. Hra ji ale škrtne v `OfferMarijuanaToShipsAndAircraft()`

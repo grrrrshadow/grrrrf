@@ -69,14 +69,17 @@ systém mapování nákladů, ať se v tom yaglu vyznám“*, *„můj systém j
   lokomotivy (GEAR, není to náklad). Modrá navíc nevozí jídlo a výbušniny (FOOD BOOM, hráč: *„jídlo
   jenom vojenský“*, *„vojenská explosives, modrá ne“*). Vojenská 152 kódů, modrá 150.
 - **Marihuana** (MARI, 0x92) je v seznamu jménem, jako v každém normálním GRF (hráč: *„ty děláš
-  normální GRF s kódem MARI“*), a má zelenou kupku. Hráčova hra ji ale škrtá všem vozidlům kromě
-  svých marihuanových náklaďáků (`OfferMarijuanaToShipsAndAircraft`), pro kolegu `PRO-HRU.md`, bod 4.
+  normální GRF s kódem MARI“*), a má zelenou kupku. Hráčova hra ji do 28. 9. škrtala všem vozidlům
+  kromě svých marihuanových náklaďáků; od kolegova commitu `f3f7e7e` (29. 9.) si ji nechá každá sada,
+  která má `MARI` v překladové tabulce (`GrfNamesCargo` v `OfferMarijuanaToShipsAndAircraft`), stejně
+  jako `ROLA`. Hráč: *„bude to fungovat normálně na kód MARI, standardně všem GRF, mezinárodní wiki
+  značka, jako ROLA, my jsme to zavedli“*.
   Moje zkušební hra to pravidlo nemá a vejtřaska se v ní na MARI přestaví (`hra/zkusebni_mari/`).
 - Řádek „Lze přestavět na“ v nákupu píše hra sama. Od kolegovy úpravy (`forclaude`, commit `fcbf5c6`,
   29. 9., `GetRefitOptionsString` ve `vehicle_gui.cpp`): všechno → „Všechny druhy nákladu“, chybí nejvýš
   7 → „Všechny kromě …“, jinak víc než 7 → „Skoro všechno vozí“, do 7 nákladů je vyjmenuje. Náklad pro
   auta na vagonech (ROLA) se autu, které auta nevozí, nepočítá jako chybějící. Spočítáno pro verzi 4
-  a FIRS 5.2 s vlastními náklady hry (marihuanu hra škrtá): Steeltown „Skoro všechno vozí“ (vojenské
+  a FIRS 5.2 s vlastními náklady hry (ještě se škrtanou marihuanou): Steeltown „Skoro všechno vozí“ (vojenské
   chybí 8: ACID CHLO CTAR GLAS LYE_ MARI N7__ O2__), ostatní ekonomiky „Všechny kromě …“ (2 až 7,
   tekutiny, sklo, marihuana, u modré jídlo a výbušniny). FIRS má i tekutiny CHEM a N7__, které ve vzoru
   tabulky nejsou; vejtřaska je nevozí, protože v seznamu nejsou.
