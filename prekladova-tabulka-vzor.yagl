@@ -648,50 +648,336 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "MARI"; // marihuana                           [Marihuana]
     }
+
+    // ---- Z VW T1 — vozí je VW T1 i vejtřaska, význam neznámý (v žádné tabulce nejsou) ----
+    // instance_id: 0x0093
+    {
+        cargo_translation_table: "FARM"; // undefined
+    }
+    // instance_id: 0x0094
+    {
+        cargo_translation_table: "LVPT"; // undefined
+    }
+    // instance_id: 0x0095
+    {
+        cargo_translation_table: "HOPS"; // undefined
+    }
+    // instance_id: 0x0096
+    {
+        cargo_translation_table: "ELEC"; // undefined
+    }
+    // instance_id: 0x0097
+    {
+        cargo_translation_table: "NODC"; // undefined
+    }
+
+    // ---- FIRS 5.2 — wiki je nemá (jména z FIRS 5.2.0) ----
+    // instance_id: 0x0098
+    {
+        cargo_translation_table: "CCPR"; // betonové výrobky                    [Concrete Products]
+    }
+    // instance_id: 0x0099
+    {
+        cargo_translation_table: "HWAR"; // železářské zboží                    [Hardware]
+    }
+    // instance_id: 0x009A
+    {
+        cargo_translation_table: "STBL"; // předvalky                           [Billets & Blooms]
+    }
+    // instance_id: 0x009B
+    {
+        cargo_translation_table: "FOCA"; // výkovky a odlitky                   [Forgings & Castings]
+    }
+    // instance_id: 0x009C
+    {
+        cargo_translation_table: "PPWK"; // nádrže a potrubí                    [Storage Tanks & Pipework]
+    }
+    // instance_id: 0x009D
+    {
+        cargo_translation_table: "RBAR"; // betonářská ocel                     [Rebar]
+    }
+    // instance_id: 0x009E
+    {
+        cargo_translation_table: "SEAL"; // těsnění, hadice a řemeny            [Seals, Hoses & Belts]
+    }
+    // instance_id: 0x009F
+    {
+        cargo_translation_table: "STPP"; // ocelové trubky                      [Steel Pipe]
+    }
+    // instance_id: 0x00A0
+    {
+        cargo_translation_table: "STTB"; // ocelové trubky, tenkostěnné         [Steel Tube]
+    }
+    // instance_id: 0x00A1
+    {
+        cargo_translation_table: "TYCO"; // kord do pneumatik                   [Tyre Cord]
+    }
+    // instance_id: 0x00A2
+    {
+        cargo_translation_table: "WELD"; // svařovací materiál                  [Welding Consumables]
+    }
+    // instance_id: 0x00A3
+    {
+        cargo_translation_table: "PUMP"; // čerpadla a ventily                  [Pumps & Valves]
+    }
+    // instance_id: 0x00A4
+    {
+        cargo_translation_table: "STIG"; // ocelové ingoty                      [Steel Ingots]
+    }
+    // instance_id: 0x00A5
+    {
+        cargo_translation_table: "STSL"; // bramy                               [Steel Slab]
+    }
+    // instance_id: 0x00A6
+    {
+        cargo_translation_table: "STBR"; // tyčová ocel                         [Merchant Bar]
+    }
+    // instance_id: 0x00A7
+    {
+        cargo_translation_table: "STPL"; // ocelový plech                       [Steel Plate]
+    }
+    // instance_id: 0x00A8
+    {
+        cargo_translation_table: "STSW"; // konstrukční ocel                    [Structural Steel]
+    }
+    // instance_id: 0x00A9
+    {
+        cargo_translation_table: "FEAL"; // feroslitiny                         [Ferroalloys]
+    }
+    // instance_id: 0x00AA
+    {
+        cargo_translation_table: "PLNT"; // stroje a zařízení                   [Plant & Machinery]
+    }
+    // instance_id: 0x00AB
+    {
+        cargo_translation_table: "CHEM"; // chemikálie                          [Chemicals]
+    }
+
+    // ---- TEMPORAL8 REAL INDUSTRIES beta 4.0.3 — lidé a další (hráčova hra, save v3s2) ----
+    // instance_id: 0x00AC
+    {
+        cargo_translation_table: "WORK"; // kvalifikovaní dělníci               [Qualified Workers]
+    }
+    // instance_id: 0x00AD
+    {
+        cargo_translation_table: "STUD"; // studenti                            [Students]
+    }
+    // instance_id: 0x00AE
+    {
+        cargo_translation_table: "PRIS"; // vězni                               [Prisioners (sic)]
+    }
+    // instance_id: 0x00AF
+    {
+        cargo_translation_table: "PLAY"; // hráči                               [Players]
+    }
+    // instance_id: 0x00B0
+    {
+        cargo_translation_table: "TRSH"; // odpadky                             [Trash]
+    }
+    // instance_id: 0x00B1
+    {
+        cargo_translation_table: "HVEH"; // těžká vozidla                       [Heavy Vehicles]
+    }
+
+    // ---- AXIS 2.3.1 (hráčova hra); BIOM, C2H4 a H2__ má i GIST, N7__ i FIRS 5.2 ----
+    // instance_id: 0x00B2
+    {
+        cargo_translation_table: "ACET"; // kyselina octová                     [Acetic Acid]
+    }
+    // instance_id: 0x00B3
+    {
+        cargo_translation_table: "ALO_"; // oxid hlinitý                        [Alumina]
+    }
+    // instance_id: 0x00B4
+    {
+        cargo_translation_table: "BIOM"; // biomasa                             [Biomass]
+    }
+    // instance_id: 0x00B5
+    {
+        cargo_translation_table: "COCO"; // měděný koncentrát                   [Copper Concentrate]
+    }
+    // instance_id: 0x00B6
+    {
+        cargo_translation_table: "C2H4"; // ethylen                             [Ethylene / Monomer]
+    }
+    // instance_id: 0x00B7
+    {
+        cargo_translation_table: "ENUM"; // potravinářská aditiva               [Food Additives]
+    }
+    // instance_id: 0x00B8
+    {
+        cargo_translation_table: "HYAC"; // kyselina chlorovodíková             [Hydrochloric Acid]
+    }
+    // instance_id: 0x00B9
+    {
+        cargo_translation_table: "H2__"; // vodík                               [Hydrogen]
+    }
+    // instance_id: 0x00BA
+    {
+        cargo_translation_table: "MPAR"; // kovové díly                         [Metal Parts]
+    }
+    // instance_id: 0x00BB
+    {
+        cargo_translation_table: "MEOH"; // methanol                            [Methanol]
+    }
+    // instance_id: 0x00BC
+    {
+        cargo_translation_table: "NAPH"; // primární benzín                     [Naphtha]
+    }
+    // instance_id: 0x00BD
+    {
+        cargo_translation_table: "N7__"; // dusík                               [Nitrogen]
+    }
+    // instance_id: 0x00BE
+    {
+        cargo_translation_table: "PHAC"; // kyselina fosforečná                 [Phosphoric Acid]
+    }
+    // instance_id: 0x00BF
+    {
+        cargo_translation_table: "PPAR"; // plastové díly                       [Plastic Parts]
+    }
+    // instance_id: 0x00C0
+    {
+        cargo_translation_table: "C3H6"; // propylen                            [Propylene]
+    }
+    // instance_id: 0x00C1
+    {
+        cargo_translation_table: "RAMT"; // vzácné kovy                         [Rare Metals]
+    }
+    // instance_id: 0x00C2
+    {
+        cargo_translation_table: "SUAC"; // kyselina sírová                     [Sulphuric Acid]
+    }
+    // instance_id: 0x00C3
+    {
+        cargo_translation_table: "TINP"; // bílý plech                          [Tinplate]
+    }
+    // instance_id: 0x00C4
+    {
+        cargo_translation_table: "UREA"; // močovina                            [Urea]
+    }
+
+    // ---- GIST 0.21.15 (hráčova hra) ----
+    // instance_id: 0x00C5
+    {
+        cargo_translation_table: "N2__"; // dusík (jiný label než N7__)         [Nitrogen]
+    }
+
+    // ---- OPEN INDUSTRIES: TEMPERATE 0.4.3 (hráčova hra) ----
+    // instance_id: 0x00C6
+    {
+        cargo_translation_table: "LEAT"; // kůže                                [Leather]
+    }
+    // instance_id: 0x00C7
+    {
+        cargo_translation_table: "LUBR"; // maziva                              [Lubricants]
+    }
+    // instance_id: 0x00C8
+    {
+        cargo_translation_table: "PRNT"; // tiskoviny                           [Printed Products]
+    }
+
+    // ---- APOLLO ROCKET INDUSTRY SET 1.0 (hráčova hra) ----
+    // instance_id: 0x00C9
+    {
+        cargo_translation_table: "APOL"; // kosmická loď Apollo                 [Apollo spacecraft]
+    }
+    // instance_id: 0x00CA
+    {
+        cargo_translation_table: "LNDR"; // lunární moduly Apollo               [Apollo landers]
+    }
+    // instance_id: 0x00CB
+    {
+        cargo_translation_table: "RSTG"; // raketové stupně                     [Rocket stages]
+    }
+    // instance_id: 0x00CC
+    {
+        cargo_translation_table: "RENG"; // raketové motory                     [Rocket engines]
+    }
+    // instance_id: 0x00CD
+    {
+        cargo_translation_table: "SILC"; // křemík                              [Silicon]
+    }
+
+    // ---- HRÁČOVY KÓDY (29. 9.) ----
+    // instance_id: 0x00CE
+    {
+        cargo_translation_table: "CHME"; // chmel                               [Hops]
+    }
+    // instance_id: 0x00CF
+    {
+        cargo_translation_table: "WINE"; // víno                                [Wine]
+    }
+
+    // ---- ZNAJÍ JE VAGÓNY, VÝZNAM NIKDE NESTOJÍ (netipovat) ----
+    // instance_id: 0x00D0
+    {
+        cargo_translation_table: "NWST"; // undefined (zná ho VWT1cargo.yagl)
+    }
+    // instance_id: 0x00D1
+    {
+        cargo_translation_table: "FREE"; // undefined (zná ho VWT1cargo.yagl)
+    }
+    // instance_id: 0x00D2
+    {
+        cargo_translation_table: "FLOU"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
+    }
+    // instance_id: 0x00D3
+    {
+        cargo_translation_table: "LETH"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
+    }
+    // instance_id: 0x00D4
+    {
+        cargo_translation_table: "MLTR"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
+    }
+    // instance_id: 0x00D5
+    {
+        cargo_translation_table: "UORE"; // undefined (zná ho CZTR Wagons-Cargo 1.1.0)
+    }
+    // instance_id: 0x00D6
+    {
+        cargo_translation_table: "CRAN"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00D7
+    {
+        cargo_translation_table: "LFEQ"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00D8
+    {
+        cargo_translation_table: "SCPR"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00D9
+    {
+        cargo_translation_table: "STTP"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00DA
+    {
+        cargo_translation_table: "SWRP"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00DB
+    {
+        cargo_translation_table: "TIN_"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
+    // instance_id: 0x00DC
+    {
+        cargo_translation_table: "WDCH"; // undefined (zná ho GETS Alpine 0.3.1)
+    }
 }
 
 // ====================================================================
 // DALŠÍ NAŠE NÁKLADY
 // ====================================================================
-// Přidávej za MARI. Label jsou přesně 4 znaky, kratší se doplní
+// Přidávej na konec, za poslední číslo (staré kódy si svá čísla
+// nechávají). Label jsou přesně 4 znaky, kratší se doplní
 // podtržítkem (OIL_, NH3_, O2__).
 //
 // Řádek tady náklad nezakládá — jen mu přiděluje číslo. Aby ve hře
 // existoval, musí se nadefinovat: Action0 feature 0B, vlastnost 17
 // (label) a k tomu jména, ikona, váha, cena.
 //
-//    // instance_id: 0x0093
+//    // instance_id: 0x00DD
 //    {
 //        cargo_translation_table: "XXXX"; // co to je
 //    }
 
-// ====================================================================
-// LABELY Z VWT1cargo.yagl, KTERÉ V SEZNAMU NA WIKI NEJSOU
-// ====================================================================
-// Ověřeno rozborem stránky CargoTypes: mezi jejími 146 labely tyhle
-// nejsou. (Fulltext hledání na té wiki je rozbité — vrací nulu i na
-// PASS — takže víc než tohle tvrdit nemůžu.)
-// Dokud nevím, které z nich jsou naše a co znamenají, mají u sebe
-// undefined, ne domyšlený význam.
-//
-//    cargo_translation_table: "FARM"; // undefined
-//    cargo_translation_table: "LVPT"; // undefined
-//    cargo_translation_table: "HOPS"; // undefined
-//    cargo_translation_table: "ELEC"; // undefined
-//    cargo_translation_table: "NODC"; // undefined
-//    cargo_translation_table: "CCPR"; // undefined
-//    cargo_translation_table: "HWAR"; // undefined
-//    cargo_translation_table: "STBL"; // undefined
-//    cargo_translation_table: "FOCA"; // undefined
-//    cargo_translation_table: "PPWK"; // undefined
-//    cargo_translation_table: "RBAR"; // undefined
-//    cargo_translation_table: "SEAL"; // undefined
-//    cargo_translation_table: "STPP"; // undefined
-//    cargo_translation_table: "STTB"; // undefined
-//    cargo_translation_table: "TYCO"; // undefined
-//    cargo_translation_table: "WELD"; // undefined
-//    cargo_translation_table: "PUMP"; // undefined
-//    cargo_translation_table: "NWST"; // undefined
-//    cargo_translation_table: "FREE"; // undefined
-
-// v tabulce výš: 147 nákladů, sloty 0x0000-0x0092 (strop je 255)
+// v tabulce výš: 221 nákladů, sloty 0x0000-0x00DC (strop je 255)
