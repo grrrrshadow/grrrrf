@@ -24,7 +24,7 @@ všechno kromě tekutin a skla (pivo v basách a chemikálie v kanystrech ano), 
 navíc jídlo, výbušniny a radioaktivní náklad, ale ne hračky, 20 lidí na korbě, modrá
 3 lidi v kabině.
 Sypký náklad veze na korbě jako hromadu v jeho barvě (uhlí černé, písek a brambory
-žluté, kámen a cement šedé, ruda, vápno, řepa, marihuana zelená…), dřevo jako klády,
+žluté, kámen šedý, ruda, vápno, řepa, marihuana zelená…), dřevo jako klády,
 dřevařské výrobky jako prkna, ostatní naložený náklad pod plachtou: zelená
 olivovou, modrá žlutou, ocel a strojírenství pod šedou a šedobílou.
 Umí jezdit na vagónku. Motor Tatra 912 je chlazený vzduchem a nemá chladič,
@@ -87,7 +87,7 @@ its shade with the cargo (building light, engineering dark, farming, goods). The
 carry everything but liquids and glass (beer in crates and chemicals in canisters
 are fine); the green one also food, explosives and radioactive cargo, but no
 toys, and 20 people on the bed, the blue one 3 people in the cab. Loose cargo rides on the bed as a heap in its
-colour (coal black, sand and potatoes yellow, stone and cement grey, ore, lime, beet,
+colour (coal black, sand and potatoes yellow, stone grey, ore, lime, beet,
 marijuana green...), wood as logs, wood products as planks, any other load under
 a tarp: olive on the green one, yellow on the blue one, grey and grey-white
 for steel and engineering.

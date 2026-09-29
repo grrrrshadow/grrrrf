@@ -177,7 +177,8 @@ SADY = {"modra": ["modra_A", "modra_B", "modra_C", "modra_D"], "vojenska": ["voj
 VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
           "MARI", "SULP", "WOOD", "WDPR"]
 VRSTVA = {k: k for k in VRSTVY}
-VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "CMNT": "GRVL", "TWOD": "WOOD", "SCRP": "SCMT"})
+# Cement od verze 5 pod plachtou (hrac 29. 9.: "ten cement je venku, neni v pytlich nebo pod plachtou").
+VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 assert all(k in NAKLADY["modra"] for k in VRSTVA), [k for k in VRSTVA if k not in NAKLADY["modra"]]
 # Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
 # plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou

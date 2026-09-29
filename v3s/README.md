@@ -201,7 +201,7 @@ v GRF je jednou (skupiny 0xC0 a dál), auto má switche od 0x10.
 | COKE koks, SLAG struska | tmavě šedá |
 | IORE železná ruda, SCMT šrot | rezavě hnědá (šrot hrubší) |
 | LIME vápenec, QLME pálené vápno | světle šedá, bílá |
-| GRVL kámen, CMNT cement | šedá (cement od verze 4, hráč: *„cement, štěrk šedá“*) |
+| GRVL kámen | šedá (cement jel ve verzi 4 s ní, od verze 5 je pod plachtou, hráč: *„ten cement je venku, není v pytlích nebo pod plachtou“*) |
 | SAND písek, TATO brambory, BEAN | žlutá, jemná (brambory od verze 4, hráč: *„písek a brambory žlutá“*; BEAN má CZIS přejmenované na brambory) |
 | SGBT cukrová řepa | béžová, hrudkovitá |
 | SEED osivo, NUTS ořechy, OLSD olejniny | zlatá, světle hnědá, tmavě hnědá |
