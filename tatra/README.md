@@ -38,11 +38,18 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   `MRIZKA=zadna` ji vypne.
 - **Mřížka chladiče 138** (hráč 29. 9.: *„jo to máš mřížku 148 a co 138?“*, *„barva je dobrá, mřížku zkus trochu
   zlepšit“*): `MRIZKA=138` dá místo mřížky 148 mřížku podle hráčova videa a čtyř fotek skutečné T138: oválný otvor
-  84 × 41 cm (x ±0,42, z 1,03 až 1,44, nahoře širší a zaoblený, dole plošší), za ním tma, v něm 13 lamel v barvě
-  auta do vějíře (sbíhají se k bodu pod mřížkou, uprostřed svisle, na krajích 30°, nahoře se krajní ohýbají ještě
-  víc ven), nad otvorem oválný chromový štítek s červeným nápisem TATRA. `ZEBRA=bila` dá bílé lamely jako na
-  některých fotkách. První verze přes celou masku byla moc široká. Jinak je 138 stejná jako 148, nátěr `cervena`
-  (hráč: *„barva je dobrá“*). Na fotkách mají 138 často blatníky a nárazník v jiné barvě (bílé, krémové).
+  92 × 44 cm (x ±0,46, z 1,065 až 1,505, nahoře širší a zaoblený, dole plošší), za ním čistá černá, v něm 9 širokých
+  lamel (6,5 cm) v barvě auta do vějíře (sbíhají se k bodu pod mřížkou, uprostřed svisle, na krajích 32°, krajní
+  nahoře ohnuté ještě víc ven), nad mřížkou na horním pásku masky oválný chromový štítek s červeným TATRA,
+  skloněný dozadu jako kapota. `ZEBRA=bila` dá bílé lamely jako na některých fotkách, `LAMEL` a `SIRKA` mění počet
+  a šířku lamel. Jinak je 138 stejná jako 148, nátěr `cervena` (hráč: *„barva je dobrá“*). Na fotkách mají 138
+  často blatníky a nárazník v jiné barvě (bílé, krémové).
+  Jak se k tomu došlo: první mřížka přes celou masku byla moc široká. Druhá (84 × 41 cm, 13 úzkých lamel) seděla
+  na hranaté masce 148 jako druhý oblouk. Hráč: *„to půlkulatý trochu výš a větší a ztratí se to … dej mřížku výš
+  a opticky se líp spojí do hranaté 148“*, *„tahle oválná je asi dobrá“*. Takže ovál zůstal, je větší a vrchol má
+  2 cm pod horní hranou masky. Pak *„jen trochu zvýraznit, ať na malinký fotce je trochu vidět, nemusí to být
+  přesný“* a *„černou pod lamely“*: 15 úzkých lamel v herní velikosti splynulo do tmavé skvrny, 9 širokých na
+  černé dává svislé proužky.
 - **Světlo** (hráč: *„lépe osvětlit, ať vynikne zaoblení kolem mřížky chladiče směrem ke kabině, asi víc stínu“*):
   `SVETLO=slunce` (výchozí) zapne stíny od okolí a přidá slunce zleva shora, pevné vůči kameře (auto se točí,
   světlo ne), okolí slabší (`OKOLI` 0,35, `SLUNCE` 5, `ZEPREDU` −0,25) a lak lesklejší (`LESK` 0,42).

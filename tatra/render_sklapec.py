@@ -139,13 +139,17 @@ if MRIZKA == "148":
 
 elif MRIZKA == "138":
     # Mrizka T138 (hrac 29. 9.: "a co 138?", "barva je dobra, mrizku zkus trochu zlepsit"; podle jeho videa
-    # skutecne T138 a ctyr fotek T138): ovalny otvor asi 84 x 41 cm, nahore sirsi a zaobleny, dole plossi, za nim tma.
-    # V nem 13 svislych lamel do vejire (sbihaji se k bodu pod mrizkou, uprostred svisle, na krajich 30 stupnu,
+    # skutecne T138 a ctyr fotek T138): ovalny otvor, nahore sirsi a zaobleny, dole plossi, za nim tma.
+    # V nem 15 svislych lamel do vejire (sbihaji se k bodu pod mrizkou, uprostred svisle, na krajich 32 stupnu,
     # dole skoro u sebe, nahore se krajni ohybaji jeste vic ven). Lamely v barve auta
     # (ZEBRA=bila jako na nekterych fotkach). Nad otvorem ovalny chromovy stitek s cervenym napisem TATRA.
     # Jinak je 138 stejna jako 148.
     import bmesh
-    YM, ZC, A_, BH, BD = -0.477, 1.19, 0.42, 0.25, 0.16
+    # Hrac k 2. verzi: "to pulkulaty trochu vys a vetsi a ztrati se to. 148 je hranata a mrizka nepasuje, dej mrizku
+    # vys a opticky se lip spoji do hranate 148", pak "tahle ovalna je asi dobra". Oval zustava, je vetsi (92 x 44 cm)
+    # a vys, vrchol oblouku 2 cm pod horni hranou hladke plochy masky 148 (z 1,528), takze nejsou videt dva oblouky
+    # nad sebou. Stitek je nad mrizkou na hornim pasku masky.
+    YM, ZC, A_, BH, BD = -0.477, 1.235, 0.46, 0.27, 0.17
     obrys = []
     for k in range(144):
         u = 2 * math.pi * k / 144; cu, su = math.cos(u), math.sin(u)
@@ -156,7 +160,9 @@ elif MRIZKA == "138":
         obrys.append((x, z))
     bm = bmesh.new(); vs = [bm.verts.new((x, YM - 0.002, z)) for x, z in obrys]; bm.faces.new(vs)
     me = bpy.data.meshes.new("otvor138"); bm.to_mesh(me); bm.free()
-    ot = bpy.data.objects.new("otvor138", me); scene.collection.objects.link(ot); ot.data.materials.append(M["mrizka"])
+    # hrac: "cernou pod lamely": za lamelami ciste cerna bez odlesku, at je mrizka v malem videt
+    M["cerna"] = mat("cerna", (0, 0, 0), 1.0); M["cerna"].node_tree.nodes["Principled BSDF"].inputs["Specular IOR Level"].default_value = 0.0
+    ot = bpy.data.objects.new("otvor138", me); scene.collection.objects.link(ot); ot.data.materials.append(M["cerna"])
     ot.parent = koren; ot.matrix_parent_inverse = koren.matrix_world.inverted()
     def v_obrysu(px, pz, dx, dz):                                             # kde paprsek vstupuje a vystupuje z otvoru
         ts = []
@@ -166,8 +172,10 @@ elif MRIZKA == "138":
             t = ((x0 - px) * (-ez) - (z0 - pz) * (-ex)) / det; w = (dx * (z0 - pz) - dz * (x0 - px)) / det
             if 0 <= w <= 1 and t > 0: ts.append(t)
         return min(ts), max(ts)
-    UHEL, LAMEL, SIRKA = 30.0, 13, 0.038
-    ZP = ZC - (A_ - 0.03) / math.tan(math.radians(UHEL))                     # kam se lamely sbihaji
+    # hrac: "jen trochu zvyraznit, at na malinky fotce je trochu videt, nemusi to byt presny" (LAMEL, SIRKA)
+    # 9 sirsich lamel misto 15 (jako na fotkach): v herni velikosti jsou videt svisle prouzky, 15 uzkych splyne v tmu
+    UHEL, LAMEL, SIRKA = 32.0, int(os.environ.get("LAMEL", "9")), float(os.environ.get("SIRKA", "0.065"))
+    ZP = ZC - (A_ - 0.035) / math.tan(math.radians(UHEL))                    # kam se lamely sbihaji
     m_lam = M["lak"] if os.environ.get("ZEBRA", "lak") == "lak" else mat("lamely", (232, 230, 220), 0.4)
     OHYB = 0.10                                                                # jak moc se krajni lamely nahore ohnou ven
     for i in range(LAMEL):
@@ -191,17 +199,19 @@ elif MRIZKA == "138":
         for f_ in me.polygons: f_.use_smooth = True
         la.parent = koren; la.matrix_parent_inverse = koren.matrix_world.inverted()
     M["chrom"] = mat("chrom", (196, 196, 190), 0.25, 0.9)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=1.0, depth=0.006, location=(0, YM - 0.003, 1.487),
-                                        rotation=(math.radians(90), 0, 0))
-    st_ = bpy.context.object; st_.scale = (0.17, 0.036, 1.0); st_.data.materials.append(M["chrom"])
+    # stitek na hornim pasku masky (y -0,486, z 1,53 az 1,57) a kousek na kapote, skloneny dozadu jako kapota
+    ZST, YST, SKLON = 1.565, -0.490, math.radians(90 - 18)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=1.0, depth=0.006, location=(0, YST, ZST),
+                                        rotation=(SKLON, 0, 0))
+    st_ = bpy.context.object; st_.scale = (0.16, 0.03, 1.0); st_.data.materials.append(M["chrom"])
     st_.parent = koren; st_.matrix_parent_inverse = koren.matrix_world.inverted()
     M["napis"] = mat("napis", (200, 16, 16), 0.35)
-    bpy.ops.object.text_add(location=(0, YM - 0.008, 1.487), rotation=(math.radians(90), 0, 0))
+    bpy.ops.object.text_add(location=(0, YST - 0.0045 * math.sin(SKLON), ZST + 0.0045 * math.cos(SKLON)), rotation=(SKLON, 0, 0))
     t = bpy.context.object; t.data.body = "TATRA"; t.data.align_x = 'CENTER'; t.data.align_y = 'CENTER'
     t.data.font = bpy.data.fonts.load("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
     t.data.size = 0.08; t.data.extrude = 0.002; t.data.materials.append(M["napis"])
     bpy.context.view_layer.update()
-    t.scale = (0.27 / t.dimensions.x, 0.042 / t.dimensions.y, 1.0)
+    t.scale = (0.25 / t.dimensions.x, 0.036 / t.dimensions.y, 1.0)
     bpy.context.view_layer.update()
     t.parent = koren; t.matrix_parent_inverse = koren.matrix_world.inverted()
 
