@@ -30,8 +30,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 3 tmava leskla okna a bile reflektory, prikladaci naklady (vrstva nad autem, barva podle nakladu, klady, prkna),
 # 4 naklady hracovym systemem (cela tabulka ze vzoru, vypsany seznam, bez trid), brambory zlute, cement sedy,
 #   prikladaci plachta na vsechno, co neni kupka,
-# 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra
-VERZE = 5
+# 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra, tekutiny v sudech,
+#   pytle, bedny, sudy, seno, dobytek s podtypy (prasatka, kravicky, ovecky), zelena misto vojenske, modra v nakupu prvni,
+# 6 v nakupu jen zelene ottd Decouple, parametry a na konci veta o zasobach armady (dlouhy text se do okna nevesel)
+VERZE = 6
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -233,33 +235,22 @@ def sprite(nat=None, i=None):
 # ---------------------------------------------------------------- texty
 ITCH = "https://karel-macha.itch.io/openttd-decouple-by-karel-macha"
 DECOUPLE = "ottd Decouple by Karel Mácha"
-PODPIS = "{new-line}{green}" + DECOUPLE + "{new-line}" + ITCH
 # Hrac 29. 9.: "vubec slova army a military taky az na konec, ze tam teda je, nebo vubec ne, kdyz je to videt moc.
 # to je hra, ale zelena je casta, castejsi nez modra, protoze je military, tak to tam vsude napis, v civilu jezdily
 # rozprodane ze skladovych zasob armady": olivova je v textech zelena, armada jen na konci. (Jmena v kodu zustala.)
 NAZEV = {"vojenska": "Praga V3S Vejtřaska (zelená)", "modra": "Praga V3S Vejtřaska (modrá)"}
-# hrac 29. 9.: "napis, ze praga v3s vybudovala socialismus. treba nerikej, ze zelene byly nejcastejsi, usetrime kousek
-# mista, a jenom ze praga v3s se pouzivala v zemedelstvi, ve stavebnictvi, v prumyslu a budovala socialismus"
-SOCIALISMUS = "Praga V3S se používala v zemědělství, ve stavebnictví, v průmyslu a budovala socialismus."
-# a potom: "ze skladovych zasob armady, ze byly zelene, tam nech" (bez "nejcastejsi"), "na konci"
+# hrac 29. 9.: "ze skladovych zasob armady, ze byly zelene, tam nech", "na konci". (Veta o socialismu, vagonku
+# a motoru ve verzi 5 byla i v nakupu, od verze 6 je jen v popisu GRF a v licenci; hrac: "ten zelenej text musi pryc".)
 ARMADA = "Zelené jezdily i v civilu, rozprodané ze skladových zásob armády."
-# hrac 29. 9.: "napis, ze umi jezdit na vagonku a neco zajimaveho o motoru nebo o unikatni konstrukci podvozku".
-# Motor podle cs.wikipedia (Praga V3S): Tatra 912 "chlazeni nucene vzduchove, pomoci axialniho ventilatoru",
-# "odvozeny z vidlicoveho dvanactivalce T 111 A puvodem z vozu Tatra 111", 7412 cm3, 98 k.
-ZAJIMAVOST = "Umí jezdit na vagónku. Motor chlazený vzduchem nemá chladič, je to půlka dvanáctiválce z Tatry 111. "
 UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S, Praha-Vysocany 20. 2. 1952
 TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}"
         "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
         "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
-POPIS = {
-    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Zelený valník 6×6. Všechno vozí kromě skla a hraček, "
-                 "tekutiny v sudech, 20 lidí na korbě. " + ZAJIMAVOST + SOCIALISMUS + PODPIS + "{black}{new-line}" + TECH +
-                 "{black}{new-line}" + ARMADA),
-    "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu. Všechno vozí kromě "
-              "skla, jídla, výbušnin a radioaktivních věcí, tekutiny v sudech, v kabině tři lidi. " + ZAJIMAVOST + SOCIALISMUS + PODPIS +
-              "{black}{new-line}" + TECH + "{black}{new-line}" + ARMADA),
-}
+# Popis v nakupu (callback 0x23). Hrac 29. 9. u verze 5 (fotka nakupu, veta o armade byla pod okrajem okna): "ten
+# zelenej text musi pryc, vsechno zeleny. ottd decouple by karel macha se vejde": jen zelene ottd Decouple (bez odkazu,
+# ten se lamal na dva radky), parametry a na konci veta o zasobach armady. Hezke veci o aute jsou v popisu GRF.
+POPIS = {n: "{green}" + DECOUPLE + "{black}{new-line}" + TECH + "{black}{new-line}" + ARMADA for n in ("vojenska", "modra")}
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
 _zj = os.path.join(ZVUKY_ADR, "zvuky.json")

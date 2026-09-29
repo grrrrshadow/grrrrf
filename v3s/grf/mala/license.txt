@@ -13,8 +13,8 @@ No donations allowed. Dary se nepřijímají.
 
 CO JE V BALÍKU
 
-Praga_V3S-v5.grf        malá, original size, na jedno místo v koloně
-Praga_V3S_BRYLE-v5.grf  velká, s neviditelným čumákem vepředu, aby auta
+Praga_V3S-v6.grf        malá, original size, na jedno místo v koloně
+Praga_V3S_BRYLE-v6.grf  velká, s neviditelným čumákem vepředu, aby auta
                         v koloně nestála přes sebe.
                         Článkové auto, jezdí jen do průjezdných zastávek.
 
@@ -79,8 +79,8 @@ No donations allowed.
 
 WHAT IS IN THE PACKAGE
 
-Praga_V3S-v5.grf        small, original size, fits one queue slot
-Praga_V3S_BRYLE-v5.grf  big, with an invisible front bumper so the trucks do not
+Praga_V3S-v6.grf        small, original size, fits one queue slot
+Praga_V3S_BRYLE-v6.grf  big, with an invisible front bumper so the trucks do not
                         overlap in a queue.
                         Articulated, uses drive-through stops only.
 

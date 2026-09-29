@@ -1,5 +1,13 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 6 (29. 9.)
+
+Jen popis v nákupu (callback 0x23): zeleně „ottd Decouple by Karel Mácha“ bez odkazu, pod tím parametry
+a na konci věta o zelených ze zásob armády. Dlouhý světle zelený odstavec se do okna nevešel a větu
+o armádě vytlačil pod okraj (hráč: *„ten zelenej text musí pryč … ottd decouple by karel macha se vejde“*,
+*„zelený jen ottd decouple by karel macha“*). Věty o vagónku, motoru a socialismu zůstaly v popisu GRF
+a v licenci. Grafika a náklady jako ve verzi 5.
+
 ## Verze 5 (29. 9.) v kostce
 
 Co je jinak proti verzi 4 (podrobnosti v oddílech níž, starší text popisuje verzi 4, kde se liší, platí tohle):
@@ -47,11 +55,11 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v5.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v5.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S-v6.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_BRYLE-v6.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v5.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v4`)
+Balík pro hráče je `Praga_V3S_Vejtraska-v6.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v5`)
 zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
@@ -314,4 +322,5 @@ velká veze správně 20 a 3 lidi; 3 tmavá lesklá okna a bílé reflektory, n�
 (18 nákladů), dřevo v seznamu nákladů; 4 náklady hráčovým systémem (celá tabulka ze vzoru, vypsaný
 seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na všechno, co není kupka; 5 tekutiny
 v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasátka, kravičky nebo ovečky,
-zelená místo vojenské, modrá v nákupu první, nové texty.
+zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelené ottd Decouple, parametry
+a věta o zásobách armády.
