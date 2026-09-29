@@ -13,3 +13,9 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
 - **Mřížka chladiče:** model má na masce jen hladkou plochu. Namodelovat mřížku 148 i 138; 138 podle hráčova
   videa skutečné T 138 (velký zaoblený otvor, nahoře širší, svislá zahnutá žebra do vějíře, nad ním červené TATRA).
 - **Fotky:** `python3 render_t148.py <oranzova|cervena> <px_na_m> <výstup>`, kamera a HDRI jako vejtřaska.
+- **Korba místo cisterny** (hráč: *„cisterna je fakt pro hasiče, tam z cisterny nahoře kouká takovej hrb. Jak bysme
+  udělali korbu na náklad?“*, *„můžem vzít korbu z jiného auta“*): `KORBA=valnik` nebo `KORBA=sklapec` schová cisternu
+  (díly `AC_` kromě blatníků `AC_kabina.3`, příčníku a tažného zařízení) a postaví korbu z kvádrů na rám: podlaha
+  z = 0,32 m, y −5,00 až 1,05 m, x ±1,24 m. Valník má bočnice 0,55 m (náklady na něm jsou vidět jako u vejtřasky),
+  sklápěč S1 ocelové bočnice 1,0 m se žebry a štítek nad kabinou. Hráč chce spíš přebarvování hrou (jeden obrázek
+  pro 148 i 138).

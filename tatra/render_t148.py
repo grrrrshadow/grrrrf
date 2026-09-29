@@ -78,6 +78,61 @@ for o in meshe:
 neznama = sorted({s.material.name for o in meshe for s in o.material_slots if s.material} - set(BARVY) - set(SVITI) - SKRYT - {"glass"})
 print("materialy bez barvy:", neznama)
 
+# ---------------------------------------------------------------- korba misto cisterny
+# Hrac 29. 9.: "cisterna je fakt pro hasice, tam z cisterny nahore kouka takovej hrb. Jak bysme udelali korbu na naklad,
+# jak by to vypadalo?" KORBA=cisterna nechava model, valnik a sklapec schovaji cisternu (dily AC_ krome blatniku
+# AC_kabina.3, pricniku AC_rama.0 a tazneho zarizeni AC_primochki.4) a postavi korbu z kvadru na ram.
+KORBA = os.environ.get("KORBA", "cisterna")
+if KORBA != "cisterna":
+    for o in meshe:
+        if o.name.startswith("AC_") and not o.name.startswith(("AC_kabina.3", "AC_rama.0", "AC_primochki.4")):
+            o.hide_render = True
+    def mat(jmeno, rgb, drsnost=0.6):
+        m = bpy.data.materials.new(jmeno); m.use_nodes = True
+        b = m.node_tree.nodes["Principled BSDF"]; b.inputs["Base Color"].default_value = srgb(rgb)
+        b.inputs["Roughness"].default_value = drsnost
+        return m
+    m_lak = mat("korba_lak", LAK); m_tmava = mat("korba_tmava", (40, 40, 38)); m_podlaha = mat("korba_podlaha", (92, 74, 52), 0.85)
+    def kvadr(m, x0, x1, y0, y1, z0, z1):
+        bpy.ops.mesh.primitive_cube_add(size=1, location=((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2))
+        o = bpy.context.object; o.scale = (x1 - x0, y1 - y0, z1 - z0)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        b = o.modifiers.new("hrana", 'BEVEL'); b.width = min(0.012, (min(x1 - x0, y1 - y0, z1 - z0)) / 3); b.segments = 2
+        o.data.materials.append(m); koreny.append(o); meshe.append(o)
+        return o
+    # rozmery: kabina konci na y 1,20, ram nahore z 0,11, sirka auta +-1,25
+    X, Y0, Y1, Z0 = 1.24, -5.00, 1.05, 0.12
+    kvadr(m_tmava, -0.55, 0.55, Y0 + 0.1, Y1 - 0.05, Z0, Z0 + 0.12)             # pomocny ram pod podlahou
+    kvadr(m_podlaha, -X, X, Y0, Y1, Z0 + 0.12, Z0 + 0.20)                        # podlaha
+    ZP = Z0 + 0.20
+    if KORBA == "valnik":
+        V = 0.55                                                                  # bocnice valniku
+        for s in (-1, 1):
+            kvadr(m_lak, s * X - 0.03, s * X + 0.03, Y0, Y1, ZP, ZP + V)
+            for k in range(3):                                                    # tri vodorovne prolisy
+                z = ZP + 0.10 + k * 0.17
+                kvadr(m_tmava, s * (X + 0.03) - 0.01, s * (X + 0.03) + 0.01, Y0 + 0.05, Y1 - 0.05, z, z + 0.03)
+            for y in (Y0 + 2.0, Y0 + 4.0):                                        # svisle zamky mezi dily bocnice
+                kvadr(m_tmava, s * (X + 0.03) - 0.015, s * (X + 0.03) + 0.015, y - 0.04, y + 0.04, ZP, ZP + V)
+        kvadr(m_lak, -X, X, Y0 - 0.03, Y0 + 0.03, ZP, ZP + V)                     # zadni celo
+        kvadr(m_lak, -X, X, Y1 - 0.03, Y1 + 0.03, ZP, ZP + 1.05)                  # predni celo, vyssi, chrani kabinu
+        for x in (-0.8, -0.27, 0.27, 0.8):                                        # mrizka nad prednim celem
+            kvadr(m_tmava, x - 0.02, x + 0.02, Y1 - 0.02, Y1 + 0.02, ZP + 1.05, ZP + 1.30)
+        kvadr(m_tmava, -X, X, Y1 - 0.02, Y1 + 0.02, ZP + 1.28, ZP + 1.32)
+    elif KORBA == "sklapec":
+        V = 1.00                                                                  # vysoke ocelove bocnice S1
+        for s in (-1, 1):
+            kvadr(m_lak, s * X - 0.03, s * X + 0.03, Y0, Y1, ZP, ZP + V)
+            kvadr(m_lak, s * (X + 0.02) - 0.03, s * (X + 0.02) + 0.03, Y0, Y1, ZP + V - 0.08, ZP + V)   # horni lem
+            y = Y0 + 0.25
+            while y < Y1 - 0.2:                                                   # svisla zebra
+                kvadr(m_lak, s * (X + 0.05) - 0.025, s * (X + 0.05) + 0.025, y - 0.04, y + 0.04, ZP, ZP + V - 0.08)
+                y += 0.62
+        kvadr(m_lak, -X, X, Y0 - 0.03, Y0 + 0.03, ZP, ZP + V)                     # zadni celo
+        kvadr(m_lak, -X, X, Y1 - 0.03, Y1 + 0.03, ZP, ZP + V + 0.35)              # predni celo
+        kvadr(m_lak, -X, X, Y1 - 0.03, Y1 + 0.75, ZP + V + 0.30, ZP + V + 0.36)   # stitek nad kabinou
+    print("korba", KORBA, "podlaha z", round(ZP, 2), "y", Y0, "az", Y1)
+
 pts = [o.matrix_world @ v.co for o in meshe if not o.hide_render for v in o.data.vertices]
 mn = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
 mx = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
