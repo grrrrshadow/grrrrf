@@ -720,8 +720,8 @@ properties<GlobalSettings, 0x0000> // Action00, překladová tabulka nákladů: 
 }
 strings<RoadVehicles, default, 0xD001*> // Action04, popisy v nakupnim okne
 {
-    /* 0xD001 */ "{green}ottd Decouple by Karel Mácha{black}{new-line}Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0{black}{new-line}Zelené jezdily i v civilu, rozprodané ze skladových zásob armády.";
-    /* 0xD002 */ "{green}ottd Decouple by Karel Mácha{black}{new-line}Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0{black}{new-line}Zelené jezdily i v civilu, rozprodané ze skladových zásob armády.";
+    /* 0xD001 */ "{green}ottd Decouple by Karel Mácha";
+    /* 0xD002 */ "{green}ottd Decouple by Karel Mácha";
     /* 0xD003 */ " (prasátka)";
     /* 0xD004 */ " (kravičky)";
     /* 0xD005 */ " (ovečky)";

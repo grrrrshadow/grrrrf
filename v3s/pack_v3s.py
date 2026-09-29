@@ -32,7 +32,7 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   prikladaci plachta na vsechno, co neni kupka,
 # 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra, tekutiny v sudech,
 #   pytle, bedny, sudy, seno, dobytek s podtypy (prasatka, kravicky, ovecky), zelena misto vojenske, modra v nakupu prvni,
-# 6 v nakupu jen zelene ottd Decouple, parametry a na konci veta o zasobach armady (dlouhy text se do okna nevesel)
+# 6 v nakupu jen zeleny radek ottd Decouple (dlouhy text zvetsoval okno nakupu a schoval tlacitko Koupit)
 VERZE = 6
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
@@ -239,18 +239,12 @@ DECOUPLE = "ottd Decouple by Karel Mácha"
 # to je hra, ale zelena je casta, castejsi nez modra, protoze je military, tak to tam vsude napis, v civilu jezdily
 # rozprodane ze skladovych zasob armady": olivova je v textech zelena, armada jen na konci. (Jmena v kodu zustala.)
 NAZEV = {"vojenska": "Praga V3S Vejtřaska (zelená)", "modra": "Praga V3S Vejtřaska (modrá)"}
-# hrac 29. 9.: "ze skladovych zasob armady, ze byly zelene, tam nech", "na konci". (Veta o socialismu, vagonku
-# a motoru ve verzi 5 byla i v nakupu, od verze 6 je jen v popisu GRF a v licenci; hrac: "ten zelenej text musi pryc".)
-ARMADA = "Zelené jezdily i v civilu, rozprodané ze skladových zásob armády."
 UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S, Praha-Vysocany 20. 2. 1952
-TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
-        "Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}"
-        "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
-        "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
-# Popis v nakupu (callback 0x23). Hrac 29. 9. u verze 5 (fotka nakupu, veta o armade byla pod okrajem okna): "ten
-# zelenej text musi pryc, vsechno zeleny. ottd decouple by karel macha se vejde": jen zelene ottd Decouple (bez odkazu,
-# ten se lamal na dva radky), parametry a na konci veta o zasobach armady. Hezke veci o aute jsou v popisu GRF.
-POPIS = {n: "{green}" + DECOUPLE + "{black}{new-line}" + TECH + "{black}{new-line}" + ARMADA for n in ("vojenska", "modra")}
+# Popis v nakupu (callback 0x23). Hrac 29. 9. u verze 5: "ten zelenej text musi pryc, vsechno zeleny. ottd decouple
+# by karel macha se vejde", "zeleny jen ottd decouple by karel macha", "to hybalo s velikosti okna a ostatni to nedelali
+# a schovalo to cudlik koupit": okno nakupu se roztahne podle nejdelsiho popisu a tlacitko Koupit vyjelo z obrazovky.
+# V nakupu je proto jen jeden zeleny radek; o aute, motoru, socialismu a zasobach armady je popis GRF a licence.
+POPIS = {n: "{green}" + DECOUPLE for n in ("vojenska", "modra")}
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
 _zj = os.path.join(ZVUKY_ADR, "zvuky.json")

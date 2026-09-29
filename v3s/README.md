@@ -2,10 +2,11 @@
 
 ## Verze 6 (29. 9.)
 
-Jen popis v nákupu (callback 0x23): zeleně „ottd Decouple by Karel Mácha“ bez odkazu, pod tím parametry
-a na konci věta o zelených ze zásob armády. Dlouhý světle zelený odstavec se do okna nevešel a větu
-o armádě vytlačil pod okraj (hráč: *„ten zelenej text musí pryč … ottd decouple by karel macha se vejde“*,
-*„zelený jen ottd decouple by karel macha“*). Věty o vagónku, motoru a socialismu zůstaly v popisu GRF
+Jen popis v nákupu (callback 0x23): jediný zelený řádek „ottd Decouple by Karel Mácha“. Okno nákupu se
+roztahuje podle popisu vybraného auta; dlouhý text verze 5 ho zvětšil a tlačítko „Koupit vozidlo“ vyjelo
+z obrazovky, ostatní auta to nedělají (hráč: *„ten zelenej text musí pryč … ottd decouple by karel macha
+se vejde“*, *„zelený jen ottd decouple by karel macha“*, *„to hýbalo s velikostí okna a ostatní to nedělali
+a schovalo to čudlík koupit“*). Věty o vagónku, motoru, socialismu a zásobách armády zůstaly v popisu GRF
 a v licenci. Grafika a náklady jako ve verzi 5.
 
 ## Verze 5 (29. 9.) v kostce
@@ -322,5 +323,4 @@ velká veze správně 20 a 3 lidi; 3 tmavá lesklá okna a bílé reflektory, n�
 (18 nákladů), dřevo v seznamu nákladů; 4 náklady hráčovým systémem (celá tabulka ze vzoru, vypsaný
 seznam, bez tříd), brambory žluté, cement šedý, přikládací plachta na všechno, co není kupka; 5 tekutiny
 v barevných sudech, chemikálie, pytle, bedny, sudy, seno, dobytek jako prasátka, kravičky nebo ovečky,
-zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelené ottd Decouple, parametry
-a věta o zásobách armády.
+zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen zelený řádek ottd Decouple.
