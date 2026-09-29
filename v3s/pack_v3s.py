@@ -163,7 +163,10 @@ KAPACITA = 10                                      # jednotek beznych nakladu
 LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojenska nevim, hodne"
 
 # ---------------------------------------------------------------- sprity a list
-SADY = {"vojenska": ["vojenska"], "modra": ["modra_A", "modra_B", "modra_C", "modra_D"]}
+# hrac 29. 9.: "dej zelenou dolu pod modrou v depu", "to musis mit v grf nejdriv sprity modry, prohodit je":
+# modra je v GRF prvni (sprity, vlastnosti, grafika), zelena za ni; k tomu vlastnost 20 (poradi v nakupu) u zelene,
+# protoze rozehrana hra si cisla aut pamatuje v puvodnim poradi
+SADY = {"modra": ["modra_A", "modra_B", "modra_C", "modra_D"], "vojenska": ["vojenska"]}
 # Prikladaci naklady (hrac 28. 9.: "kupku prikladaci, udelame cernou kupku uhli a zlutou pisek a vsechny barvy a drevo
 # udelej"): fotky render_v3s.py naklad_<KOD>, jen naklad, auto neviditelne, ale zakryva, co je za bocnicemi.
 # Sypke naklady jako kupka v barve nakladu, drevo klady, drevarske vyrobky prkna. VRSTVY jsou obrazky, VRSTVA rika,
@@ -401,7 +404,7 @@ VRSTVY_VYRAZ = ["value1 = variable[0x1A] & 0x00000001;", "value2 = variable[0x10
                 "value2 = variable[0x1A] & 0x00000100;", "value1 = TempStore(value1, value2);",    # do registru 0x100
                 "value2 = variable[0x10] >> 8 & 0x000000FF;", "value1 = Assign(value1, value2);"]  # vyber podle vrstvy
 
-for n in ("vojenska", "modra"):
+for n in ("modra", "vojenska"):
     h = ID[n]; auto = ID_AUTO[n] if CUMAK else h
     # cisla skupin a switchu: kazde auto znova od 0x10 (Action 3 predchoziho auta uz je hotova), naklady 0xC0 a dal
     dalsi = [0x10]
