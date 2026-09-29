@@ -56,3 +56,16 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
   `SVETLO=okoli` je původní ploché světlo jako u vejtřasky.
 - **Kupa** (hráč: *„kupičku větší o 20 % na výšku, celou kupičku výš“*): korbu vyplní až těsně pod okraj bočnic
   (`DNO_KUPY` 2,28 m) a vrchol je na 3,07 m místo 2,83 (nad bočnice kouká o 20 % víc a celá o 0,2 m výš).
+- **Nástavby** (hráč 29. 9.: *„co dál? připravíme valník, pro plný valník plachta a cisterna na tekutiny?“*):
+  `KORBA=sklapec` (výchozí) je korba S1 z modelu, `valnik`, `plachta` a `cisterna` ji schovají a postaví svoji,
+  `zadna` nechá jen podvozek. Podvozek bez korby: pomocný rám nahoře z 1,18 (y 2,16 až 6,37), za kabinou rezervní
+  kolo a schránka do z 2,3 (y 2,2 až 2,6), díly sklápění do z 1,30 zmizí pod podlahou. Nástavby jsou od y 2,70 do 7,00.
+  - **Valník** (hráč: *„jo je to dobrej valník“*): dřevěná podlaha z 1,36 na příčnících, sklopné ocelové bočnice
+    0,6 m v barvě auta se dvěma prolisy, na každé straně dva díly, klanice, panty, zadní čelo stejné, přední čelo
+    1,0 m a nad ním mřížka proti nákladu do kabiny.
+  - **Plachta** na plný valník (jako u vejtřasky): boky kousek přes bočnice, střecha 1,6 m nad podlahou (z 2,96),
+    podélné hrany zaoblené. Barva `PLACHTA=seda|zluta|sedobila|rezna` (vojenská ne, hráč: *„žádná vojenská“*).
+  - **Cisterna** na tekutiny: vlastní, hladká, bez hasičského hrbu. Oválný průřez 2,30 × 1,45 m, vyduté dna,
+    y 2,76 až 7,02, dno z 1,30 na třech sedlech, dvě obruče, dva nízké průlezy, vzadu výpust a žebřík, blatníky
+    nad zadními koly. Asi 11 m³.
+- **Náhledy v repu** (`nahledy/`, hráči mizí obrázky v aplikaci): `sklapec148.png`, `mrizka138.png`, `nastavby.png`.
