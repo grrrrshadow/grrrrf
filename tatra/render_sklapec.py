@@ -51,7 +51,10 @@ def mat(jmeno, rgb, drsnost=0.6, kov=0.0, sviti=0.0):
     if sviti:
         b.inputs["Emission Color"].default_value = srgb(rgb); b.inputs["Emission Strength"].default_value = sviti
     return m
-NATERY = {"oranzova": (224, 104, 24), "cervena": (176, 24, 20)}
+NATERY = {"oranzova": (224, 104, 24), "cervena": (176, 24, 20),
+          # hrac 29. 9.: "na ty veci, ktere vozi jenom zelena vejtraska, udelame zelenou tatru 138 a 148 valnik a valnik
+          # plachta, pro uranovy veci, military, explosives". Olivova jako vojenska vejtraska (ve fotce ~60, 53, 40).
+          "vojenska": (80, 74, 48)}
 M = {"lak": mat("lak", NATERY[NATER]), "ram": mat("ram", (22, 22, 22)), "naprava": mat("naprava", (40, 40, 38)),
      "podvozek": mat("podvozek", (58, 58, 56)), "pneu": mat("pneu", (26, 26, 26), 0.85),
      "sklo": mat("sklo", (8, 10, 14), 0.15), "zrcatko": mat("zrcatko", (30, 36, 44), 0.1, 0.8),
@@ -250,33 +253,36 @@ if KORBA in ("valnik", "plachta"):
     while y < Y1N - 0.05:                                                  # pricniky pod podlahou
         kvadr(M["ram"], -XV + 0.04, XV - 0.04, y - 0.04, y + 0.04, 1.19, ZP_ - 0.05); y += 0.55
     kvadr(m_prkna, -XV + 0.05, XV - 0.05, Y0N + 0.05, Y1N - 0.05, ZP_ - 0.05, ZP_)          # podlaha
+    # Hrac 29. 9.: "bocnice udelej hnedou, prkna, to jsou hnede drevene boky valniku a nad nimi plachta, u 138 i 148",
+    # "celooranzovy a celocerveny valnik nebudem pouzivat". Bocnice, zadni a predni celo jsou z vodorovnych hnedych
+    # prken s mezerami, kovani a klanice tmave, ram podlahy cerny. V barve auta zustava jen kabina.
+    m_drevo = mat_sum("drevo_bocnic", (84, 56, 32), (124, 86, 52), 0.8, 9.0)
+    def prkna(x0, x1, y0, y1, z0, z1, n):                                  # n vodorovnych prken s mezerou 1,5 cm
+        v = (z1 - z0 - 0.015 * (n - 1)) / n
+        for i in range(n):
+            kvadr(m_drevo, x0, x1, y0, y1, z0 + i * (v + 0.015), z0 + i * (v + 0.015) + v)
     for str_ in (-1, 1):                                                   # obvodovy ram podlahy
-        x0, x1 = sorted((str_ * (XV - 0.06), str_ * XV)); kvadr(M["lak"], x0, x1, Y0N, Y1N, ZP_ - 0.12, ZP_)
+        x0, x1 = sorted((str_ * (XV - 0.06), str_ * XV)); kvadr(M["ram"], x0, x1, Y0N, Y1N, ZP_ - 0.12, ZP_)
     for yy in (Y0N, Y1N - 0.06):
-        kvadr(M["lak"], -XV, XV, yy, yy + 0.06, ZP_ - 0.12, ZP_)
+        kvadr(M["ram"], -XV, XV, yy, yy + 0.06, ZP_ - 0.12, ZP_)
     YD = (Y0N + 0.05 + Y1N) / 2                                            # deleni bocnice (klanice)
     for str_ in (-1, 1):
         for ya, yb in ((Y0N + 0.05, YD - 0.02), (YD + 0.02, Y1N)):
-            x0, x1 = sorted((str_ * (XV - 0.035), str_ * XV))
-            kvadr(M["lak"], x0, x1, ya, yb, ZP_, ZP_ + BOK)                    # dil bocnice
-            x0, x1 = sorted((str_ * XV, str_ * (XV + 0.012)))
-            for zp in (ZP_ + 0.17, ZP_ + 0.40):                                  # prolisy
-                kvadr(M["lak"], x0, x1, ya + 0.06, yb - 0.06, zp, zp + 0.05)
-            x0, x1 = sorted((str_ * (XV - 0.04), str_ * (XV + 0.012)))
-            kvadr(M["lak"], x0, x1, ya, yb, ZP_ + BOK - 0.035, ZP_ + BOK)      # horni lem
+            x0, x1 = sorted((str_ * (XV - 0.04), str_ * XV))
+            prkna(x0, x1, ya, yb, ZP_, ZP_ + BOK, 3)                            # dil bocnice ze tri prken
+            x0, x1 = sorted((str_ * XV, str_ * (XV + 0.008)))
+            for yz in (ya + 0.03, yb - 0.03):                                    # kovani na koncich dilu
+                kvadr(m_klanice, x0, x1, yz - 0.025, yz + 0.025, ZP_, ZP_ + BOK)
             for yz in (ya + 0.25, (ya + yb) / 2, yb - 0.25):                     # panty dole
                 x0, x1 = sorted((str_ * XV, str_ * (XV + 0.02))); kvadr(m_klanice, x0, x1, yz - 0.05, yz + 0.05, ZP_ - 0.03, ZP_ + 0.03)
         x0, x1 = sorted((str_ * (XV - 0.02), str_ * (XV + 0.03)))
         for yk in (Y0N + 0.03, YD, Y1N - 0.03):                                # klanice
             kvadr(m_klanice, x0, x1, yk - 0.035, yk + 0.035, ZP_ - 0.10, ZP_ + BOK + 0.02)
-    kvadr(M["lak"], -XV, XV, Y1N - 0.035, Y1N, ZP_, ZP_ + BOK)                  # zadni celo
-    for zp in (ZP_ + 0.17, ZP_ + 0.40):
-        kvadr(M["lak"], -XV + 0.08, XV - 0.08, Y1N, Y1N + 0.012, zp, zp + 0.05)
-    kvadr(M["lak"], -XV, XV, Y1N - 0.04, Y1N + 0.012, ZP_ + BOK - 0.035, ZP_ + BOK)
+    prkna(-XV, XV, Y1N - 0.04, Y1N, ZP_, ZP_ + BOK, 3)                          # zadni celo
+    for xz in (-XV + 0.10, XV - 0.10):
+        kvadr(m_klanice, xz - 0.025, xz + 0.025, Y1N, Y1N + 0.008, ZP_, ZP_ + BOK)
     CELO = 1.00
-    kvadr(M["lak"], -XV, XV, Y0N, Y0N + 0.04, ZP_, ZP_ + CELO)                  # predni celo
-    for zp in (ZP_ + 0.20, ZP_ + 0.50, ZP_ + 0.80):
-        kvadr(M["lak"], -XV + 0.08, XV - 0.08, Y0N - 0.012, Y0N, zp, zp + 0.05)
+    prkna(-XV, XV, Y0N, Y0N + 0.04, ZP_, ZP_ + CELO, 5)                         # predni celo
     for xm in (-XV + 0.02, -0.42, 0.0, 0.42, XV - 0.02):                        # mrizka nad celem
         kvadr(m_klanice, xm - 0.02, xm + 0.02, Y0N, Y0N + 0.04, ZP_ + CELO, ZP_ + CELO + 0.30)
     kvadr(m_klanice, -XV, XV, Y0N, Y0N + 0.04, ZP_ + CELO + 0.27, ZP_ + CELO + 0.31)
@@ -284,9 +290,9 @@ if KORBA in ("valnik", "plachta"):
 if KORBA == "plachta":
     # Plachta na plny valnik (hrac 29. 9.: "pro plny valnik plachta"), jako u vejtrasky: boky svisle kousek pres
     # bocnice, strecha 1,6 m nad podlahou (z 2,96), podelne hrany zaoblene jako oblouky, vpredu u cela a vzadu rovne.
-    PLACHTY = {"seda": ((86, 88, 86), (136, 138, 134)), "zluta": ((168, 136, 36), (224, 190, 74)),
+    PLACHTY = {"vojenska": ((58, 64, 40), (100, 106, 70)), "seda": ((86, 88, 86), (136, 138, 134)), "zluta": ((168, 136, 36), (224, 190, 74)),
                "sedobila": ((168, 168, 160), (222, 222, 214)), "rezna": ((170, 160, 128), (220, 212, 178))}
-    tm_, sv_ = PLACHTY[os.environ.get("PLACHTA", "seda")]
+    tm_, sv_ = PLACHTY[os.environ.get("PLACHTA", "vojenska" if NATER == "vojenska" else "seda")]
     m_pl = mat_sum("plachta", tm_, sv_, 0.95, 7.0); nt_ = m_pl.node_tree; bs_ = nt_.nodes["Principled BSDF"]
     vr = nt_.nodes.new("ShaderNodeTexNoise"); vr.inputs["Scale"].default_value = 3.0; vr.inputs["Detail"].default_value = 4.0
     hb = nt_.nodes.new("ShaderNodeBump"); hb.inputs["Strength"].default_value = 0.25
@@ -315,6 +321,10 @@ if KORBA == "cisterna":
     # koly blatniky. Asi 11 m3.
     import bmesh
     m_klanice = mat("klanice", (40, 40, 38), 0.5)
+    # hrac 29. 9.: "chtelo by to tri barvy cisterny modrou, bilou a zlutou, jenom tu cisternu na aute jinou barvou",
+    # "celooranzovou a celocervenou cisternu nebudem pouzivat". Kabina zustava v barve auta.
+    BARVY_CISTERNY = {"modra": (36, 84, 168), "bila": (226, 226, 220), "zluta": (232, 178, 28)}
+    m_cis = mat("cisterna", BARVY_CISTERNY[os.environ.get("CISTERNA", "modra")], 0.4)
     A_, B_, N_, ZC_ = 1.15, 0.725, 2.4, 1.30 + 0.725
     Y0T, Y1T, HL = 2.76, 7.02, 0.16                                        # od, do, hloubka dna
     def prurez(f, zvetseni=1.0, n=48):
@@ -337,7 +347,7 @@ if KORBA == "cisterna":
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new("cisterna"); bm.to_mesh(me); bm.free()
     for f_ in me.polygons: f_.use_smooth = True
-    ci = bpy.data.objects.new("cisterna", me); scene.collection.objects.link(ci); ci.data.materials.append(M["lak"])
+    ci = bpy.data.objects.new("cisterna", me); scene.collection.objects.link(ci); ci.data.materials.append(m_cis)
     ci.parent = koren; ci.matrix_parent_inverse = koren.matrix_world.inverted()
     for yo in (Y0T + 1.25, Y1T - 1.25):                                     # obruce
         bm = bmesh.new(); r0 = [bm.verts.new((x, yo - 0.03, z)) for x, z in prurez(1.0, 1.012)]
@@ -346,14 +356,14 @@ if KORBA == "cisterna":
             j = (i + 1) % len(r0); bm.faces.new((r0[i], r0[j], r1[j], r1[i]))
         me = bpy.data.meshes.new("obruc"); bm.to_mesh(me); bm.free()
         for f_ in me.polygons: f_.use_smooth = True
-        ob_ = bpy.data.objects.new("obruc", me); scene.collection.objects.link(ob_); ob_.data.materials.append(M["lak"])
+        ob_ = bpy.data.objects.new("obruc", me); scene.collection.objects.link(ob_); ob_.data.materials.append(m_cis)
         ob_.parent = koren; ob_.matrix_parent_inverse = koren.matrix_world.inverted()
     for ys in (Y0T + 0.45, (Y0T + Y1T) / 2, Y1T - 0.45):                    # sedla
         kvadr(M["ram"], -0.56, 0.56, ys - 0.07, ys + 0.07, 1.18, 1.36)
     ZV = ZC_ + B_
     for yp in (Y0T + 1.0, Y1T - 1.0):                                       # prulezy nahore, nizke
         bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.24, depth=0.12, location=(0, yp, ZV + 0.03))
-        d_ = bpy.context.object; d_.data.materials.append(M["lak"]); bpy.ops.object.shade_smooth()
+        d_ = bpy.context.object; d_.data.materials.append(m_cis); bpy.ops.object.shade_smooth()
         d_.parent = koren; d_.matrix_parent_inverse = koren.matrix_world.inverted()
         bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.26, depth=0.03, location=(0, yp, ZV + 0.10))
         v_ = bpy.context.object; v_.data.materials.append(m_klanice); bpy.ops.object.shade_smooth()

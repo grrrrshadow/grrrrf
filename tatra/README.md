@@ -69,3 +69,17 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
     y 2,76 až 7,02, dno z 1,30 na třech sedlech, dvě obruče, dva nízké průlezy, vzadu výpust a žebřík, blatníky
     nad zadními koly. Asi 11 m³.
 - **Náhledy v repu** (`nahledy/`, hráči mizí obrázky v aplikaci): `sklapec148.png`, `mrizka138.png`, `nastavby.png`.
+- **Barvy nástaveb** (hráč 29. 9.): *„bočnice udělej hnědou, prkna, to jsou hnědé dřevěné boky valníku a nad nimi
+  plachta, u 138 i 148“*, *„chtělo by to tři barvy cisterny modrou, bílou a žlutou, jenom tu cisternu na autě jinou
+  barvou“*, *„celooranžový a celočervený valník a cisternu nebudem používat, jen sklápěčka může být celooranžová
+  a celočervená“*.
+  - Valník: bočnice, zadní a přední čelo z vodorovných hnědých prken s mezerami (bočnice a zadní čelo tři prkna,
+    přední pět), kování a klanice tmavé, rám podlahy černý. V barvě auta je jen kabina.
+  - Cisterna: `CISTERNA=modra|bila|zluta` (nádrž, obruče a průlezy), kabina v barvě auta.
+  - Sklápěč zůstává celý v barvě auta (148 oranžová, 138 červená).
+- **Zelená vojenská Tatra** (hráč: *„na ty věci, co vozí jenom zelená vejtřaska, uděláme zelenou Tatru 138 a 148
+  valník a valník plachta, pro uranový věci, military, explosives“*): nátěr `vojenska` olivový jako vojenská
+  vejtřaska (80, 74, 48), valník s hnědými bočnicemi a vojenská olivová plachta (výchozí pro `vojenska`).
+- **Náklady** (hráč: *„náklady bude mít jako vejtřaska, jen tekutiny budou v cisterně“*): na valník stejné vrstvy jako
+  u vejtřasky, tekutiny místo sudů v cisterně. Ještě neuděláno.
+- Náhled barev: `nahledy/barvy.png`.
