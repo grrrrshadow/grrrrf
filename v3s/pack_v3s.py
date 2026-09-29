@@ -188,6 +188,8 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene"]
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
+# obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
+VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
 VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
 # (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
