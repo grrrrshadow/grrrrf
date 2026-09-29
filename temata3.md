@@ -1393,4 +1393,6 @@ FIRS podle verzí je v `firs-kody.md` (77 verzí, 112 kódů, všechny ve vzoru)
 **Neznámé kódy** (hráč 29. 9.: *„musíme kódy evidovat, i když nevíme, co to je, dáme neutrální grafiku plachty,
 pod plachtou může vézt cokoli“*): ve vzoru zůstávají s poznámkou undefined a vozidla je vozí pod výchozí plachtou
 (V3S zelená olivovou, modrá žlutou v odstínu A). Dnes 11 kódů: FARM LVPT ELEC NODC CRAN LFEQ SCPR STTP SWRP TIN_
-WDCH. `FREE` není náklad, ale volný slot (hráč: *„free je opravdu free slot“*), vozidlo ho nevozí.
+WDCH. `FREE` není náklad, ale hráčova značka ve VW T1, kde skončil a může pokračovat (*„free je opravdu free slot“*,
+*„free jsem si značil konec, kde jsem končil, že tam můžu pokračovat“*). Ve vzoru zůstal na svém čísle, ať se
+kódy za ním nepřečíslují; vozidlo ho nevozí.

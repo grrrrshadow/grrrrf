@@ -108,7 +108,8 @@ def nacti_sadu(nater):
 # nejak vozit", "vodu vozit v sudech", "prostě udělej i tekutiny, barevný sudy a je to"); sklo dal ne ("sklo nevozime
 # vejtraskou").
 NEVOZI = {"GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy",      # nevozi ani jedna
-          "FREE": "volný slot, není náklad"}                                        # hrac: "free je opravdu free slot"
+          "FREE": "volný slot, není náklad"}          # hrac: "free je opravdu free slot", "free jsem si znacil konec,
+                                                      # kde jsem koncil, ze tam muzu pokracovat"
 JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi (hrac: "jidlo jenom vojensky",
                 "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
                 "NUKW": "jaderný odpad",                      # "vojenska radioaktivni veci, modra ne")

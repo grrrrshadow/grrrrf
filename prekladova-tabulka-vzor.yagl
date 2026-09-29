@@ -912,7 +912,7 @@ properties<GlobalSettings, 0x0000> // Action00
     }
     // instance_id: 0x00D0
     {
-        cargo_translation_table: "FREE"; // volný slot, žádný náklad (hráč: „free je opravdu free slot“; drží místo ve VWT1cargo.yagl)
+        cargo_translation_table: "FREE"; // žádný náklad: hráčova značka ve VWT1cargo.yagl, kde skončil a může pokračovat
     }
     // instance_id: 0x00D1
     {
