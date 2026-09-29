@@ -492,11 +492,17 @@ def ovce(seed=53):
             obs.append(ovce_kus(x0 + random.uniform(-0.05, 0.05), y, a, vlna, hlava))
     return obs
 
-def seno(seed=31):
+# Barvy sena (hrac 29. 9.: "rostlina vlakna livery jako ovecky prasatka. marihuanove seno zeleny z grafiky rostlina
+# vlakna a seno taky jako rostlina vlakna ale zlutejsi"): stejna kupa, jina barva.
+SENO = {"vlakna": ((168, 142, 72), (218, 196, 118)), "mari": ((66, 104, 26), (116, 156, 52)),
+        "zlute": ((208, 176, 42), (250, 226, 96))}
+
+def seno(barva="vlakna", seed=31):
     """naložené seno: kupa pres bocnice, nahore zakulacena, 1,65 m nad podlahou"""
     import bmesh, random
     random.seed(seed)
-    mat = material("seno", srgb((168, 142, 72)), srgb((218, 196, 118)), 0.95, 70.0)
+    tm, sv = SENO[barva]
+    mat = material("seno_" + barva, srgb(tm), srgb(sv), 0.95, 70.0)
     nt_ = mat.node_tree; bsdf = nt_.nodes["Principled BSDF"]
     stebla = nt_.nodes.new("ShaderNodeTexNoise"); stebla.inputs["Scale"].default_value = 90.0
     stebla.inputs["Detail"].default_value = 8.0
@@ -527,7 +533,8 @@ def seno(seed=31):
 
 KUSOVE = {"CMNT": pytle, "GOOD": bedny, "BEER": sudy, "sudy_bile": lambda: sudy("bile", 41),
           "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
-          "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno}
+          "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno,
+          "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute")}
 
 NAKLAD_KOD = NATER[len("naklad_"):] if NATER.startswith("naklad_") else None
 if NAKLAD_KOD:

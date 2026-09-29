@@ -186,7 +186,7 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           # "rostlinna vlakna jako plnou sena, misto plachty seno", "vodu vozit v sudech, modry sudy a cerny sudy",
           # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
           "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene",
-          "CORE"]                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
+          "CORE", "seno_mari", "seno_zlute"]                                   # od verze 7 medena ruda (hrac: "medena ruda kupa, rudy, uhli kupy")
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
@@ -204,7 +204,10 @@ assert all(k in NAKLADY["modra"] or k in NAKLADY["vojenska"] for k in list(VRSTV
     [k for k in list(VRSTVA) + list(VRSTVA_MODRA) if k not in NAKLADY["modra"] and k not in NAKLADY["vojenska"]]
 # Dobytek (LVST) ma dva podtypy nakladu, vybira se v okne prestavby (callback 0x19, promenna 0xF2 cargo_subtype):
 # 0 prasatka, 1 kravicky. V kodu je to dal dobytek (hrac: "na pozadi pobezi kod dobytek normalne").
-PODTYPY_DOBYTKA = [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce", " (ovečky)")]     # hrac: "ovce tam jsou"
+# Od verze 7 i rostlinna vlakna (hrac 29. 9.: "rostlina vlakna livery jako ovecky prasatka. marihuanove seno zeleny
+# z grafiky rostlina vlakna a seno taky jako rostlina vlakna ale zlutejsi"). Naklad: [(obrazek, jmeno podtypu), ...].
+PODTYPY = {"LVST": [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce", " (ovečky)")],     # hrac: "ovce tam jsou"
+           "FICR": [("FICR", " (vlákna)"), ("seno_mari", " (marihuanové seno)"), ("seno_zlute", " (seno)")]}
 # Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
 # plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou
 # sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede
@@ -304,9 +307,12 @@ for i, k in enumerate(TABULKA):
 Y += ["}", "strings<RoadVehicles, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in ("vojenska", "modra"):
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
-TEXT_PODTYP = []                                   # D003 a dal: jmena podtypu dobytka za jmenem nakladu
-for i, (obr, jm) in enumerate(PODTYPY_DOBYTKA):
-    TEXT_PODTYP.append(0x03 + i); Y.append(f'    /* 0xD0{0x03 + i:02X} */ "{jm}";')
+TEXT_PODTYP = {}                                   # D003 a dal: jmena podtypu za jmenem nakladu
+_t = 0x03
+for _k, _p in PODTYPY.items():
+    TEXT_PODTYP[_k] = []
+    for obr, jm in _p:
+        TEXT_PODTYP[_k].append(_t); Y.append(f'    /* 0xD0{_t:02X} */ "{jm}";'); _t += 1
 Y.append("}")
 
 # ---------------------------------------------------------------- zvuk
@@ -524,16 +530,20 @@ for n in ("modra", "vojenska"):
         return t if obr is None else cil_vrstvy(obr, t)
     vychozi_g = cil_vrstvy(PLACHTA[n][0], zaklad)  # vychozi: plachta pres auto (u modre odstin A)
     # dobytek: jmena podtypu pro okno prestavby (callback 0x19, 0x400 = konec seznamu), obrazek podle podtypu
-    s_podtyp_text = nove()
-    Y += sw(s_podtyp_text, "dobytek (callback 0x19): jmena podtypu, dal konec seznamu",
-            ["value1 = variable[0xF2] & 0x000000FF;"], [(i, 0x8000 | t) for i, t in enumerate(TEXT_PODTYP)], 0x8400)
-    s_dobytek_obr = nove()
-    Y += sw(s_dobytek_obr, "dobytek: obrazek podle podtypu (promenna 0xF2)", ["value1 = variable[0xF2] & 0x000000FF;"],
-            [(i, cil_vrstvy(obr, telo("LVST"))) for i, (obr, jm) in enumerate(PODTYPY_DOBYTKA) if i > 0],
-            cil_vrstvy(PODTYPY_DOBYTKA[0][0], telo("LVST")))
-    s_dobytek = nove()
-    Y += sw(s_dobytek, "dobytek: jmena podtypu (callback 0x19), jinak obrazek", CALLBACK, [(0x19, s_podtyp_text)],
-            s_dobytek_obr)
+    # naklady s podtypy (dobytek, rostlinna vlakna): jmena podtypu pro okno prestavby (callback 0x19, 0x400 = konec
+    # seznamu) a obrazek podle podtypu (promenna 0xF2)
+    s_podtyp_text, s_podtyp = {}, {}
+    for k, podtypy in PODTYPY.items():
+        s_podtyp_text[k] = nove()
+        Y += sw(s_podtyp_text[k], f"{k} (callback 0x19): jmena podtypu, dal konec seznamu",
+                ["value1 = variable[0xF2] & 0x000000FF;"], [(i, 0x8000 | t) for i, t in enumerate(TEXT_PODTYP[k])], 0x8400)
+        s_obr = nove()
+        Y += sw(s_obr, f"{k}: obrazek podle podtypu (promenna 0xF2)", ["value1 = variable[0xF2] & 0x000000FF;"],
+                [(i, cil_vrstvy(obr, telo(k))) for i, (obr, jm) in enumerate(podtypy) if i > 0],
+                cil_vrstvy(podtypy[0][0], telo(k)))
+        s_podtyp[k] = nove()
+        Y += sw(s_podtyp[k], f"{k}: jmena podtypu (callback 0x19), jinak obrazek", CALLBACK, [(0x19, s_podtyp_text[k])],
+                s_obr)
     # osoby: callback 0x15 vrati kapacitu, jinak grafika (vojaci pod plachtou, modra bez plachty); u male i zvuk
     g_lide = grafika("PASS")
     Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
@@ -549,17 +559,19 @@ for n in ("modra", "vojenska"):
                 [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
         # cumak s dobytkem: stejna jmena podtypu jako auto (okno prestavby bere jen podtypy, ktere maji oba dily)
-        s_cumak_dobytek = nove()
-        Y += sw(s_cumak_dobytek, "cumak, dobytek: clanky, jmena podtypu, zvuky", CALLBACK,
-                [(0x16, s_clanky), (0x19, s_podtyp_text)] + zvuk, g_prazdny)
-        Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE] + [(INDEX["LVST"], s_cumak_dobytek),
-                                                                             (0xFF, s_nakup)])
+        s_cumak_podtyp = {}
+        for k in PODTYPY:
+            s_cumak_podtyp[k] = nove()
+            Y += sw(s_cumak_podtyp[k], f"cumak, {k}: clanky, jmena podtypu, zvuky", CALLBACK,
+                    [(0x16, s_clanky), (0x19, s_podtyp_text[k])] + zvuk, g_prazdny)
+        Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE] +
+                     [(INDEX[k], s_cumak_podtyp[k]) for k in PODTYPY] + [(0xFF, s_nakup)])
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
     # viditelne auto: osoby pres kapacitni callback, ostatni naklady auto a vrstva; co jde na vychozi, v Action 3 neni
     mapa = {}
     for k in NAKLADY[n]:
-        cil = s_lidi if k in LIDE else (s_dobytek if k == "LVST" else grafika(k))
+        cil = s_lidi if k in LIDE else (s_podtyp[k] if k in PODTYPY else grafika(k))
         if cil != vychozi_g: mapa[INDEX[k]] = cil
     vychozi = vychozi_g
     if not CUMAK and id_zvuk:
@@ -578,7 +590,7 @@ for n in ("modra", "vojenska"):
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "vrstva_modra": VRSTVA_MODRA,
-          "podtypy_dobytka": PODTYPY_DOBYTKA, "plachta": PLACHTA,
+          "podtypy": PODTYPY, "plachta": PLACHTA,
           "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse}}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-souhrn.json"), "w"), indent=1, ensure_ascii=False)
 print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "tabulka", len(TABULKA), "nakladu",
