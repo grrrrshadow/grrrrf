@@ -29,8 +29,9 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 1 prvni vydani, 2 jmeno "V3S Praga" zlute bez "for", texty bez "communist", zelena kupka na MARI, pruhy CZTR, zvuk,
 # 3 tmava leskla okna a bile reflektory, prikladaci naklady (vrstva nad autem, barva podle nakladu, klady, prkna),
 # 4 naklady hracovym systemem (cela tabulka ze vzoru, vypsany seznam, bez trid), brambory zlute, cement sedy,
-#   prikladaci plachta na vsechno, co neni kupka
-VERZE = 4
+#   prikladaci plachta na vsechno, co neni kupka,
+# 5 chemikalie v kanystrech pod plachtou (obe), radioaktivni naklad jen vojenska, hracky jen modra
+VERZE = 5
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -101,8 +102,10 @@ NEVOZI = {                                         # nevozi ani jedna
     "FUEL": "zemní plyn", "CTAR": "dehet", "MILK": "mléko", "WATR": "voda", "EOIL": "jedlý olej", "MOLS": "melasa",
     "ACID": "kyselina", "LYE_": "louh", "CHLO": "chlor", "NH3_": "čpavek", "O2__": "kyslík",     # tekutiny a plyny
     "GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy"}
-JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny"}    # modra je nevozi (hrac: "jidlo jenom vojensky",
-                                                             # "vojenska explosives, modra ne")
+JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi (hrac: "jidlo jenom vojensky",
+                "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
+                "NUKW": "jaderný odpad"}                      # "vojenska radioaktivni veci, modra ne")
+JEN_MODRA = {"TOYS": "hračky"}                               # vojenska je nevozi (hrac 29. 9.: "vojenska ne hracky")
 # Kody vejtrasky, ktere ve vzoru nejsou: nezname labely ze seznamu VW T1 (naklady.md, "Labely, ktere v zadne tabulce
 # nejsou"; hrac je ma, tak zustaly) a FIRS 5.2 Steeltown (naklady.md). Jdou do tabulky za MARI.
 NAVIC = {
@@ -116,7 +119,10 @@ NAVIC = {
     "WELD": "svařovací materiál  [Welding Consumables]", "PUMP": "čerpadla a ventily  [Pumps & Valves]",
     "STIG": "ocelové ingoty  [Steel Ingots]", "STSL": "bramy  [Steel Slab]", "STBR": "tyčová ocel  [Merchant Bar]",
     "STPL": "ocelový plech  [Steel Plate]", "STSW": "konstrukční ocel  [Structural Steel]",
-    "FEAL": "feroslitiny  [Ferroalloys]", "PLNT": "stroje a zařízení  [Plant & Machinery]"}
+    "FEAL": "feroslitiny  [Ferroalloys]", "PLNT": "stroje a zařízení  [Plant & Machinery]",
+    # od verze 5 (hrac 29. 9.: "budem vozit i chemikalie, to je dulezity v prumyslu. plachta jako ze veze chemikalie
+    # v kanystrech pod plachtou"); FIRS ho ma v ekonomikach 0, 3 a 4
+    "CHEM": "chemikálie  [Chemicals] (FIRS), vejtřaska je veze v kanystrech pod plachtou"}
 
 # prekladova tabulka: cely hracuv vzor (i s jeho poznamkami a nadpisy oddilu), za MARI kody NAVIC
 vzor = open(os.path.join(TU, "..", "prekladova-tabulka-vzor.yagl"), encoding="utf-8").read()
@@ -134,9 +140,9 @@ ODDIL[len(PORADI)] = "// ---- NAVÍC PRO VEJTŘASKU — ve vzoru nejsou ----"
 POZNAMKA.update(NAVIC)
 TABULKA = PORADI + list(NAVIC)
 INDEX = {k: i for i, k in enumerate(TABULKA)}
-assert all(k in INDEX for k in list(NEVOZI) + list(JEN_VOJENSKA))
-NAKLADY = {"vojenska": [k for k in TABULKA if k not in NEVOZI]}
-NAKLADY["modra"] = [k for k in NAKLADY["vojenska"] if k not in JEN_VOJENSKA]
+assert all(k in INDEX for k in list(NEVOZI) + list(JEN_VOJENSKA) + list(JEN_MODRA))
+NAKLADY = {"vojenska": [k for k in TABULKA if k not in NEVOZI and k not in JEN_MODRA],
+           "modra": [k for k in TABULKA if k not in NEVOZI and k not in JEN_VOJENSKA]}
 # lide: cestujici, turiste, delnici; kapacitu jim dava callback 0x15 (vojenska 20, modra 3)
 LIDE = ["PASS", "TOUR", "OTI1", "OTI2", "YETI", "YETY"]
 
@@ -149,7 +155,7 @@ for k in ("TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS
 for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW CLAY KAOL".split(): ODSTIN[k] = "C"
 for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
           "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD "
-          "SULP RUBR AORE CORE NKOR PORE COPR ZINC NICK ALUM COBL MNO2 FECR URAN SCRP VEHI").split():
+          "SULP RUBR AORE CORE NKOR PORE COPR ZINC NICK ALUM COBL MNO2 FECR SCRP VEHI").split():
     ODSTIN[k] = "D"
 assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
 
@@ -216,10 +222,11 @@ TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Uspořádání: {gold}6×6{black}{new-line}Nosnost: {gold}5 t na silnici, 3 t v terénu{black}{new-line}"
         "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
 POPIS = {
-    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6. Všechno vozí kromě tekutin a skla, "
-                 "vojáky na korbě." + PODPIS + "{black}{new-line}" + TECH),
+    "vojenska": ("{lt-green}Praga V3S, vejtřaska. Vojenský valník 6×6. Všechno vozí kromě tekutin, skla "
+                 "a hraček, vojáky na korbě." + PODPIS + "{black}{new-line}" + TECH),
     "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu. Všechno vozí kromě "
-              "tekutin, skla, jídla a výbušnin, v kabině tři lidi." + PODPIS + "{black}{new-line}" + TECH),
+              "tekutin, skla, jídla, výbušnin a radioaktivních věcí, v kabině tři lidi." + PODPIS +
+              "{black}{new-line}" + TECH),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
 ZVUKY_ADR = os.path.join(TU, "zvuky")               # umely zvuk motoru (zvuky/syntetizuj_zvuky.py)
@@ -235,8 +242,9 @@ VARIANTA_POPIS = {"mala": "CZTR scale, 12.2 px/m, one road vehicle slot (8/8)",
 POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}Praga V3S military, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
              BARVA + VARIANTA_POPIS + "{new-line}"
-             "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass. Military: troops, food and "
-             "explosives too. Blue: three people in the cab, the shade follows the cargo. "
+             "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass (chemicals in canisters "
+             "are fine). Military: troops, food, explosives and radioactive cargo too, but no toys. Blue: three "
+             "people in the cab, the shade follows the cargo. "
              "Loose cargo rides on the bed in its colour (coal black, sand and potatoes yellow, stone and cement grey, "
              "ore, lime, beet, marijuana green...), wood as logs, wood products as planks, everything else under "
              "a tarp: olive or yellow, grey for steel and engineering. Prototype from 1952.{new-line}"
@@ -295,7 +303,7 @@ def seznam(n):
 
 def nevozi(n):
     """co auto nevozi, pro poznamku u seznamu"""
-    nv = dict(NEVOZI, **(JEN_VOJENSKA if n == "modra" else {}))
+    nv = dict(NEVOZI, **(JEN_VOJENSKA if n == "modra" else JEN_MODRA))
     return ", ".join(f"{k} {v}" for k, v in nv.items())
 
 def sw(cid, popis, vyraz, rozsahy, default):
