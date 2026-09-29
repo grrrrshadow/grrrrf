@@ -1323,6 +1323,10 @@ nejsou kupka. Barva podle auta a skupiny nákladu: vojenská olivová a šedá (
 modrá žlutá a šedobílá. Switch vrstev je pro každou dvojici (obrázek nákladu, obrázek auta) jednou.
 V Action 3 stačí vypsat náklady, které nejdou na výchozí (u V3S plachta přes auto v odstínu A).
 
+**Řádek „Lze přestavět na“ v nákupu** (kolega, `forclaude` `fcbf5c6`, 29. 9.): všechno → „Všechny druhy
+nákladu“, chybí nejvýš 7 → „Všechny kromě …“, jinak víc než 7 → „Skoro všechno vozí“, do 7 vyjmenované.
+ROLA se nepočítá autu, které auta nevozí. GRF kvůli tomu nemusí seznam ohýbat.
+
 **Fotky ze hry bez stromů:** v `openttd.cfg` rigu `transparency_options = 2` a
 `invisibility_options = 2` (bit 1 = stromy), stromy pak auta na okruhu nezakryjí.
 

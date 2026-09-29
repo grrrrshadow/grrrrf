@@ -72,8 +72,14 @@ systém mapování nákladů, ať se v tom yaglu vyznám“*, *„můj systém j
   normální GRF s kódem MARI“*), a má zelenou kupku. Hráčova hra ji ale škrtá všem vozidlům kromě
   svých marihuanových náklaďáků (`OfferMarijuanaToShipsAndAircraft`), pro kolegu `PRO-HRU.md`, bod 4.
   Moje zkušební hra to pravidlo nemá a vejtřaska se v ní na MARI přestaví (`hra/zkusebni_mari/`).
-- Hra v okně nákupu píše krátce „vše kromě …“, jen když chybí nejvýš 7 nákladů hry
-  (`ShowRefitOptionsList` ve `vehicle_gui.cpp`), jinak vypíše celý seznam.
+- Řádek „Lze přestavět na“ v nákupu píše hra sama. Od kolegovy úpravy (`forclaude`, commit `fcbf5c6`,
+  29. 9., `GetRefitOptionsString` ve `vehicle_gui.cpp`): všechno → „Všechny druhy nákladu“, chybí nejvýš
+  7 → „Všechny kromě …“, jinak víc než 7 → „Skoro všechno vozí“, do 7 nákladů je vyjmenuje. Náklad pro
+  auta na vagonech (ROLA) se autu, které auta nevozí, nepočítá jako chybějící. Spočítáno pro verzi 4
+  a FIRS 5.2 s vlastními náklady hry (marihuanu hra škrtá): Steeltown „Skoro všechno vozí“ (vojenské
+  chybí 8: ACID CHLO CTAR GLAS LYE_ MARI N7__ O2__), ostatní ekonomiky „Všechny kromě …“ (2 až 7,
+  tekutiny, sklo, marihuana, u modré jídlo a výbušniny). FIRS má i tekutiny CHEM a N7__, které ve vzoru
+  tabulky nejsou; vejtřaska je nevozí, protože v seznamu nejsou.
 - FIRS Steeltown má u všech nákladů násobek kapacity 1 (vlastnost 1D), takže V3S vezme 10 jednotek
   čehokoli. Ve hře bez FIRS má zboží násobek 2, tam vezme 10 zboží, ale 5 uhlí.
 
