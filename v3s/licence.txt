@@ -22,7 +22,9 @@ V každém GRF šest aut: Praga V3S Vejtřaska zelená a modrá, Tatra 148 oran�
 Tatra 138 červená a Tatra 148 a 138 zelená. Tatry jsou ve stejném GRF jako
 vejtřaska, aby zvuky byly v souboru jen jednou.
 
-V každém GRF dvě auta: Praga V3S Vejtřaska zelená a modrá. Modrá mění odstín
+PRAGA V3S VEJTŘASKA
+
+Zelená a modrá. Modrá mění odstín
 podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
 všechno kromě skla, zelená navíc jídlo, výbušniny, vojenskou techniku a radioaktivní náklad, ale ne
 hračky, 20 lidí na korbě, modrá 3 lidi v kabině.
@@ -120,7 +122,9 @@ Each GRF has six trucks: Praga V3S Vejtřaska green and blue, Tatra 148 orange,
 Tatra 138 red and Tatra 148 and 138 green. The Tatras are in the same GRF as the
 V3S so that the sounds are stored only once.
 
-Each GRF has two trucks: Praga V3S Vejtřaska green and blue. The blue one changes
+PRAGA V3S VEJTŘASKA
+
+Green and blue. The blue one changes
 its shade with the cargo (building light, engineering dark, farming, goods). They
 carry everything but glass; the green one also food, explosives, military equipment and radioactive
 cargo, but no toys, and 20 people on the bed, the blue one 3 people in the cab.

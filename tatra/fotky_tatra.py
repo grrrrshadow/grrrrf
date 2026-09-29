@@ -42,6 +42,9 @@ for vel, px in VELIKOSTI.items():
         for k in SKLAPEC:
             ULOHY.append((f"{vel}_T_sklapec_naklad_{k}", "oranzova", px, {"KORBA": "sklapec", "NAKLAD": k}))
 
+# OBRACENE=1 bere ulohy od konce: druha davka vedle prvni doceli od druheho konce (hotove obe preskoci)
+if os.environ.get("OBRACENE"): ULOHY.reverse()
+
 def udelej(uloha):
     jm, nater, px, env = uloha
     out = os.path.join(FOTKY, jm)

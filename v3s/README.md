@@ -12,6 +12,12 @@
 - **Výjezd z depa bez startéru** (hráč: *„ustřihni starter ze zvuků, tu první vteřinu, možná dvě vteřiny, když ho
   pustím z depa“*): `zvuky/syntetizuj_zvuky.py` ořízne zvuk na začátku o 1,3 s (tak dlouho hraje startér), výjezd
   začíná, jak motor chytne, zatroubí a vyjede; 3,7 s místo 5 s. Ostatní zvuky se nezměnily (stejné md5).
+- Malá 6,44 MB, velká 7,56 MB (verze 9 bez Tater 4,37 a 4,78 MB).
+- **Ověřeno ve zkušební hře** (`testv3s` pro `MAXd` i `MAXe`, fotky okruhu): oranžová a červená Tatra nevozí uran
+  a vojenskou techniku (umí 33 z 35), zelené je vezou (34 z 35, chybí hračky); uhlí jede na sklápěči, voda, ropa
+  a kyselina v cisterně své barvy, pivo v sudech a přestavbou v cisterně Plzeň a Budvar, zvuky má Tatra stejné
+  jako vejtřaska. Vejtřaska se chová jako ve verzi 9 (stejné kapacity, náklady, podtypy i počty vrstev). Tatry
+  jezdí na okruhu ve správném pruhu.
 
 ## Verze 9 (29. 9.)
 
@@ -138,12 +144,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S-v9.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_BRYLE-v9.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v10.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v10.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Vejtraska-v9.zip`: oba GRF a `licence.txt` (licence, převzatý model,
-reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší verze (`-v1` až `-v8`)
-zůstávají v repu.
+Balík pro hráče je `Praga_V3S_Tatra-v10.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
+(`Praga_V3S_Vejtraska-v1` až `-v9`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 

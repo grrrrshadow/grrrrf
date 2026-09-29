@@ -133,3 +133,7 @@ soubory?“*, *„dáme zvlášť obrázky pro přesné barvy“*, *„jo zvuk j
    (i uran, vojenskou techniku a výbušniny), valník s obrázky vejtřasky, ostatní pod vojenskou plachtou.
 5. **Zkouška:** `testv3s` ve zkušební hře (`hra/`) vypíše Tatry jako vejtřasku; fotka na okruhu
    `TEST_FOTO_SADA=tatra` a `testv3sfoto` (seznam `nakupy_tatra` v `console_cmds.cpp`).
+6. **Vydáno ve verzi 10** (balík `v3s/Praga_V3S_Tatra-v10.zip`, oba GRF a licence). Ve zkušební hře:
+   oranžová a červená nevozí uran a vojenskou techniku (33 z 35), zelené je vezou (34 z 35, chybí hračky), uhlí na
+   sklápěči, voda, ropa a kyselina v cisterně své barvy, pivo v sudech a přestavbou v cisterně Plzeň a Budvar,
+   zvuky jako vejtřaska. Tatry na okruhu: `nahledy/ve_hre_v10.png`.

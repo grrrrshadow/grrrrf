@@ -31,8 +31,8 @@ Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback �
 apt-get install -y libsdl2-2.0-0        # jednou v novém kontejneru; xvfb-run tam už je
 mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-gfx.tar.xz -C /tmp/hra
 H=/tmp/hra/ottd-zkusebni/domov
-cp v3s/grf/mala/Praga_V3S-v9.grf v3s/grf/velka/Praga_V3S_BRYLE-v9.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
-sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S-v9.grf = \nPraga_V3S_BRYLE-v9.grf = /' $H/.openttd/openttd.cfg
+cp v3s/grf/mala/Praga_V3S_Tatra-v10.grf v3s/grf/velka/Praga_V3S_Tatra_BRYLE-v10.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S_Tatra-v10.grf = \nPraga_V3S_Tatra_BRYLE-v10.grf = /' $H/.openttd/openttd.cfg
 printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
 printf 'testv3sfoto 1500\n' > $H/.openttd/scripts/game_start.scr
 cd /tmp/hra/ottd-zkusebni
@@ -43,6 +43,8 @@ HOME=$H xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r
 Pozor při výměně GRF za novou verzi: hra si po prvním spuštění zapíše do `[newgrf]` řádky jako
 `4D415864|<md5>|Praga_V3S-v7.grf = ` a pak načítá přesně ten soubor s tím md5. Starý řádek se musí přepsat
 celý (na `Praga_V3S-v8.grf = `), jinak zkouška tiše běží se starou verzí (29. 9. se to stalo u verze 8).
+Md5 v tom řádku počítá hra jen z dat GRF (akce), ne z obrázků: GRF se stejnými pravidly a jinými obrázky
+má stejné md5 (u verze 10 nanečisto i naostro), proto soubor vždycky zkontrolovat `md5sum`.
 
 Stromy, které auta na okruhu zakrývají, schová v `openttd.cfg` `transparency_options = 2`
 a `invisibility_options = 2`.
