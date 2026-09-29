@@ -185,11 +185,12 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND"
           # bedny, alkohol sudy", "zviratka ... prasatka", "dalsi jmeno v3s dobytek a kravicky, po prestavbe",
           # "rostlinna vlakna jako plnou sena, misto plachty seno", "vodu vozit v sudech, modry sudy a cerny sudy",
           # "co dame do cervenych sudu? prostě udělej i tekutiny, barevný sudy")
-          "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_modre", "sudy_cervene"]
+          "CMNT", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR", "sudy_cerne", "sudy_bile", "sudy_cervene"]
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "TWOD": "WOOD", "SCRP": "SCMT"})
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
-VRSTVA.update({k: "sudy_modre" for k in "WATR MILK EOIL MOLS".split()})              # voda, mleko, jedly olej, melasa
+VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
+# (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
 VRSTVA.update({k: "sudy_cervene" for k in "ACID LYE_ CHLO NH3_ O2__ FUEL".split()})  # chemie a plyny
 # ropa a benzin: modra v cernych sudech, zelena pod sedou plachtou (hrac: "vojenska seda plachta vsechny benziny, ropu")
 VRSTVA_MODRA = {k: "sudy_cerne" for k in "OIL_ OILD OILI PETR RFPR".split()}

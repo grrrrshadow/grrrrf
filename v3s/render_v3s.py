@@ -270,20 +270,38 @@ def kvadr(mat, x, y, z, sx, sy, sz, rot=0.0, zaobleni=0.0):
     return o
 
 def pytle(seed=17):
-    """pytle cementu: papirove pytle po 50 kg (asi 40 x 60 x 13 cm) ve ctyrech vrstvach, horni nedoskladana"""
-    import random
+    """Pytle cementu (hrac 29. 9.: "cement uplne zrus a zacni znova pytle pekne, nic sediviho. bile pytle"): bile papirove
+    pytle 50 kg (asi 60 x 40 x 14 cm), bricha naducana, ve vazbe jako na palete (vrstvy stridave podel a napric),
+    pet vrstev, horni nedoskladana."""
+    import bmesh, random
     random.seed(seed)
-    mat = material("pytle", srgb((178, 172, 154)), srgb((216, 210, 192)), 0.95, 25.0)
-    SX, SY, SZ, NX, NY = 0.40, 0.60, 0.13, 5, 6
+    mat = material("pytle", srgb((232, 230, 222)), srgb((252, 251, 247)), 0.9, 30.0)
+    nt_ = mat.node_tree; bsdf = nt_.nodes["Principled BSDF"]
+    papir = nt_.nodes.new("ShaderNodeTexNoise"); papir.inputs["Scale"].default_value = 45.0
+    hrbol = nt_.nodes.new("ShaderNodeBump"); hrbol.inputs["Strength"].default_value = 0.15
+    nt_.links.new(papir.outputs["Fac"], hrbol.inputs["Height"]); nt_.links.new(hrbol.outputs["Normal"], bsdf.inputs["Normal"])
+    D, S, V = 0.60, 0.40, 0.14                     # delka, sirka, vyska pytle
+    def pytel(x, y, z, podel, rot):
+        """naducany pytel: kvadr s velkym zaoblenim, vrch a spodek vyboulene"""
+        sx, sy = (S, D) if podel else (D, S)
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z), rotation=(0, 0, rot))
+        o = bpy.context.object; o.scale = (sx * 0.97, sy * 0.97, V)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        sub = o.modifiers.new("oblost", 'SUBSURF'); sub.levels = 2; sub.render_levels = 2
+        o.data.materials.append(mat)
+        return o
     obs = []
-    for vrstva in range(4):
-        for i in range(NX):
-            for j in range(NY):
-                if vrstva == 3 and random.random() < 0.35: continue
-                x = -KX + 0.05 + SX / 2 + i * (2 * KX - 0.1 - SX) / (NX - 1) + random.uniform(-0.02, 0.02)
-                y = KY0 + 0.1 + SY / 2 + j * (KY1 - KY0 - 0.2 - SY) / (NY - 1) + random.uniform(-0.02, 0.02)
-                obs.append(kvadr(mat, x, y, PODLAHA + SZ / 2 + vrstva * SZ * 0.95, SX * 0.96, SY * 0.96, SZ,
-                                 math.radians(random.uniform(-4, 4)), 0.045))
+    dx, dy = 2 * KX - 0.06, KY1 - KY0 - 0.08       # vnitrek korby
+    for vrstva in range(5):
+        podel = vrstva % 2 == 0
+        sx, sy = (S, D) if podel else (D, S)
+        nx, ny = int(dx // sx), int(dy // sy)
+        for i in range(nx):
+            for j in range(ny):
+                if vrstva == 4 and random.random() < 0.4: continue
+                x = -KX + 0.03 + (dx - nx * sx) / 2 + (i + 0.5) * sx + random.uniform(-0.015, 0.015)
+                y = KY0 + 0.04 + (dy - ny * sy) / 2 + (j + 0.5) * sy + random.uniform(-0.015, 0.015)
+                obs.append(pytel(x, y, PODLAHA + V / 2 + vrstva * V * 0.92, podel, math.radians(random.uniform(-2, 2))))
     return obs
 
 def bedny(seed=19):
@@ -310,7 +328,8 @@ def bedny(seed=19):
 # a cerny sudy"): drevene pivni sudy s brichem, plechove sudy 200 l modre (voda) a cerne (ropa a benzin).
 #   druh: (tmava sRGB, svetla sRGB, drsnost, polomer, vyska, bricho, vysky obruci)
 SUDY = {"drevo": ((104, 66, 36), (150, 102, 60), 0.8, 0.27, 0.80, 0.12, (0.05, 0.89)),
-        "modre": ((30, 62, 138), (58, 96, 176), 0.45, 0.29, 0.88, 0.0, (0.3, 0.64)),
+        "bile": ((212, 210, 202), (246, 245, 240), 0.45, 0.29, 0.88, 0.0, (0.3, 0.64)),     # hrac: "zadne modre sudy,
+                                                                                           # modre budou bile"
         "cerne": ((16, 16, 18), (46, 46, 50), 0.4, 0.29, 0.88, 0.0, (0.3, 0.64)),
         "cervene": ((132, 26, 20), (184, 48, 38), 0.45, 0.29, 0.88, 0.0, (0.3, 0.64))}   # hrac: "prostě udělej i tekutiny, barevný sudy"
 
@@ -505,7 +524,7 @@ def seno(seed=31):
     ob.data.materials.append(mat)
     return [ob]
 
-KUSOVE = {"CMNT": pytle, "GOOD": bedny, "BEER": sudy, "sudy_modre": lambda: sudy("modre", 41),
+KUSOVE = {"CMNT": pytle, "GOOD": bedny, "BEER": sudy, "sudy_bile": lambda: sudy("bile", 41),
           "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
           "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno}
 
