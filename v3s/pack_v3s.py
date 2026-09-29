@@ -201,6 +201,7 @@ VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "
 VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL BDMT".split()})
 VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
 VRSTVA["JAVA"] = "pytle_hnede"
+VRSTVA["SGCN"] = "FICR"             # cukrova trtina s obrazkem vlaken, bez podtypu (hrac: "sugarcane grafiku nakladu rostlina vlakna")
 VRSTVA.update({k: "sudy_cerne" for k in ["CTAR"]})                                   # dehet
 VRSTVA.update({k: "sudy_bile" for k in "WATR MILK EOIL MOLS".split()})               # voda, mleko, jedly olej, melasa
 # (od verze 7 bile, hrac: "zadne modre sudy, modre budou bile", "zadny modry naklad, auta jsou modry")
