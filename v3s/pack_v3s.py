@@ -227,6 +227,10 @@ NAZEV = {"vojenska": "Praga V3S Vejtřaska (zelená)", "modra": "Praga V3S Vejt�
 SOCIALISMUS = "Praga V3S se používala v zemědělství, ve stavebnictví, v průmyslu a budovala socialismus."
 # a potom: "ze skladovych zasob armady, ze byly zelene, tam nech" (bez "nejcastejsi"), "na konci"
 ARMADA = "Zelené jezdily i v civilu, rozprodané ze skladových zásob armády."
+# hrac 29. 9.: "napis, ze umi jezdit na vagonku a neco zajimaveho o motoru nebo o unikatni konstrukci podvozku".
+# Motor podle cs.wikipedia (Praga V3S): Tatra 912 "chlazeni nucene vzduchove, pomoci axialniho ventilatoru",
+# "odvozeny z vidlicoveho dvanactivalce T 111 A puvodem z vozu Tatra 111", 7412 cm3, 98 k.
+ZAJIMAVOST = "Umí jezdit na vagónku. Motor chlazený vzduchem nemá chladič, je to půlka dvanáctiválce z Tatry 111. "
 UVEDENI = "1952/2/20"                              # prvni funkcni prototyp V3S, Praha-Vysocany 20. 2. 1952
 TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Motor: {gold}Tatra 912, řadový šestiválec 7,4 l{black}{new-line}"
@@ -234,10 +238,10 @@ TECH = ("Výrobce: {gold}Praga, od 1964 Avia{black}{new-line}"
         "Délka: {gold}6,91 m{black}{new-line}Model: {gold}hans1240 (Sketchfab), CC BY 4.0")
 POPIS = {
     "vojenska": ("{lt-green}Praga V3S, vejtřaska. Zelený valník 6×6. Všechno vozí kromě tekutin, skla "
-                 "a hraček, 20 lidí na korbě. " + SOCIALISMUS + PODPIS + "{black}{new-line}" + TECH +
+                 "a hraček, 20 lidí na korbě. " + ZAJIMAVOST + SOCIALISMUS + PODPIS + "{black}{new-line}" + TECH +
                  "{black}{new-line}" + ARMADA),
     "modra": ("{lt-green}Praga V3S, vejtřaska. Civilní modrý valník, odstín podle nákladu. Všechno vozí kromě "
-              "tekutin, skla, jídla, výbušnin a radioaktivních věcí, v kabině tři lidi. " + SOCIALISMUS + PODPIS +
+              "tekutin, skla, jídla, výbušnin a radioaktivních věcí, v kabině tři lidi. " + ZAJIMAVOST + SOCIALISMUS + PODPIS +
               "{black}{new-line}" + TECH + "{black}{new-line}" + ARMADA),
 }
 TEXT = {"vojenska": 0x01, "modra": 0x02}           # D001, D002
@@ -257,8 +261,10 @@ VARIANTA_POPIS = {"mala": "original size", "velka": ""}[VEL]
 POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}Praga V3S green, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
              (BARVA + VARIANTA_POPIS + "{new-line}" if VARIANTA_POPIS else "") +
-             "{orange}Carries everything.{new-line}"
-             "{orange}The legendary vejtřaska, the 6×6 workhorse of Czechoslovakia from 1953 to 1990. Its air-cooled Tatra 912 diesel is half of the Tatra 111 V12: an inline six of 7.4 litres. " +
+             "{orange}Carries everything and rides on railway wagons.{new-line}"
+             "{orange}The legendary vejtřaska, the 6×6 workhorse of Czechoslovakia from 1953 to 1990. Its Tatra 912 "
+             "diesel is cooled by air, with no radiator: an axial fan blows over the finned cylinders. It is half of "
+             "the Tatra 111 V12, an inline six of 7.4 litres. " +
              ("It roars when pulling away and leaves the depot with the starter and a two-tone horn. " if ZV else "") +
              "The load shows on the bed as a heap, logs or a tarp. The Praga V3S worked in farming, construction "
              "and industry and built socialism.{new-line}"
