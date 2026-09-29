@@ -95,8 +95,13 @@ def je_sklo(mn, mx, plocha):
         return "zrcatko"
     if jedna_strana and mx.y < -0.25 and 0.75 <= ax0 and ax1 <= 1.05 and mn.z >= 0.88 and mx.z <= 1.15 and 0.02 <= plocha <= 0.05:
         return "svetlo"                                                                                           # reflektory v blatnicich
+    # Svetla na blatnicich: skrinka x 0,83 az 1,04, z 1,23 az 1,38 s prednim stitkem (y -0,26) a pred nim sklicko
+    # 11 x 6 cm (y -0,29). Hrac 29. 9.: "vojenskou kolem blinkru na zeleno taky, u cervene a oranzove to nebude videt,
+    # tam je to dobry": u zelene je stitek v barve auta a oranzove jen sklicko, u ostatnich oranzove oboji.
     if jedna_strana and mn.y >= -0.27 and mx.y <= -0.24 and 0.8 <= ax0 and ax1 <= 1.06 and mn.z >= 1.2 and mx.z <= 1.4 and plocha >= 0.02:
-        return "blinkr"                                                                                           # smerovky na blatnicich
+        return None if NATER == "vojenska" else "blinkr"                                                          # stitek smerovky
+    if jedna_strana and mn.y >= -0.30 and mx.y <= -0.26 and 0.88 <= ax0 and ax1 <= 1.01 and mn.z >= 1.27 and mx.z <= 1.35 and plocha < 0.02:
+        return "blinkr"                                                                                           # sklicko smerovky
     return None
 pocet = {}
 for o in kusy:
