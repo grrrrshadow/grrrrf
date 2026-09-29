@@ -179,7 +179,7 @@ SADY = {"modra": ["modra_A", "modra_B", "modra_C", "modra_D"], "vojenska": ["voj
 # "jen kupicka je min mb", "pisek a brambory zluta, cement, sterk seda"): brambory (TATO, a BEAN, ktere ma CZIS
 # prejmenovane na brambory) jedou se zlutou kupkou pisku, cement od verze 5 v pytlich, tropicke drevo s kladami,
 # stary kod srotu SCRP se srotem.
-VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
+VRSTVY = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
           "MARI", "SULP", "WOOD", "WDPR",
           # od verze 5 kusovy naklad (render_v3s.py, KUSOVE; hrac 29. 9.: "si rikal, ze cement das do pytlu", "zbozi
           # bedny, alkohol sudy", "zviratka ... prasatka", "dalsi jmeno v3s dobytek a kravicky, po prestavbe",
@@ -198,8 +198,11 @@ VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
 VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "URAN": "COKE"})
 # pytle a bedny od verze 7 (hrac 29. 9.: "sul, cukr, vlna bily pytle, co jsou na cement, a building materials taky bily
 # pytle", "zemedelske potreby, strojirenske potreby bedny, jako zbozi ma", "welding consumables krabice", "krabice - bedny,
-# jaky jsou na zbozi"); cukr i surovy cukr
-VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL BDMT".split()})
+# jaky jsou na zbozi"); cukr i surovy cukr (stary kod, ve vzoru mezi zastaralymi). Pak i kaolin, nehasene vapno a soda
+# (hrac: "kaolin do pytlu a nehasene vapno do pytlu", "soda muze do pytle"); kupka nehaseneho vapna od verze 7 neni.
+# Plasty, mouka, hnojivo a saze zustavaji pod plachtou (hrac: "plasty pod plachtou, mouka plachta, hnojivo plachta,
+# saze plachta").
+VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL BDMT KAOL QLME SASH".split()})
 VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
 VRSTVA["JAVA"] = "pytle_hnede"
 VRSTVA["SGCN"] = "FICR"             # cukrova trtina s obrazkem vlaken, bez podtypu (hrac: "sugarcane grafiku nakladu rostlina vlakna")
