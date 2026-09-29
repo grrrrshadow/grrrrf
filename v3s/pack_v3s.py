@@ -239,20 +239,21 @@ GRF_JMENO = "{yellow}V3S Praga{green} ottd Decouple by Karel Macha " + BARVA + "
 # hrac 29. 9.: "nepis tam cztr scale, kdyz budes muset cztr, tak nekde na konci v rohu a radsi vubec. nejak se to
 # jmenuje odborne, original size, a druhy radsi nepis vubec": mala "original size", velka bez radku
 VARIANTA_POPIS = {"mala": "original size", "velka": ""}[VEL]
+# Hrac 29. 9.: "ten zbytek, to ti rikam, nemenuj, co vozi, napis vsechno vozi a napis neco hezkyho o autu a neco
+# duleziteho zelene for decouple by karel macha. to melo pul motoru tatry ne?": Tatra 912 je polovina vidlicoveho
+# dvanactivalce Tatra 111 (stejny valec 110 x 130 mm, 14,8 l / 2 = 7,4 l).
 POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}Praga V3S military, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}" +
              (BARVA + VARIANTA_POPIS + "{new-line}" if VARIANTA_POPIS else "") +
-             "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass (chemicals in canisters "
-             "are fine). Military: troops, food, explosives and radioactive cargo too, but no toys. Blue: three "
-             "people in the cab, the shade follows the cargo. "
-             "Loose cargo rides on the bed in its colour (coal black, sand and potatoes yellow, stone and cement grey, "
-             "ore, lime, beet, marijuana green...), wood as logs, wood products as planks, everything else under "
-             "a tarp: olive or yellow, grey for steel and engineering. Prototype from 1952.{new-line}"
-             "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}" +
-             ("{orange}Sound: synthesized after the Tatra 912 engine, roars when pulling away, leaves the depot "
-              "with the starter and a two-tone horn{new-line}" if ZV else "") +
+             "{orange}Carries everything.{new-line}"
+             "{orange}The legendary vejtřaska, the 6×6 workhorse of the Czechoslovak army and economy from 1953 "
+             "to 1990. Its air-cooled Tatra 912 diesel is half of the Tatra 111 V12: an inline six of 7.4 litres. " +
+             ("It roars when pulling away and leaves the depot with the starter and a two-tone horn. " if ZV else "") +
+             "The load shows on the bed as a heap, logs or a tarp.{new-line}"
+             "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}"
              "{new-line}"
-             "{green}ottd decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
+             "{green}for ottd Decouple by Karel Mácha " + BARVA + "{truck}{new-line}"
+             "{green}OpenTTD where trains couple and uncouple on the move{new-line}"
              "{green}" + ITCH + "{new-line}"
              "{green}GRF: Karel Mácha, licence CC BY 4.0")
 
