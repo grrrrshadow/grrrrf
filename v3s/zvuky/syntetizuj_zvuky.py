@@ -397,7 +397,11 @@ mz = np.zeros(nz); i0 = int(CHYTNE * SRS); mz[i0:i0 + len(mot)] = mot[: nz - i0]
 rms_vol = np.sqrt((mz[int(2.0 * SRS):int(3.2 * SRS)] ** 2).mean())    # motor na volnoběh kolem troubení
 kl = klakson([(2.2, 2.42), (2.54, 3.02)], DZ)
 kl *= 1.6 * rms_vol / np.sqrt((kl[int(2.25 * SRS):int(2.95 * SRS)] ** 2).mean())
-vyjezd = vyrob(0.8 * rms_vol * st + mz + kl, "vyjezd_z_depa.wav", ROZJEZD_LUFS, fade_in=0.01, fade_out=0.5)
+# Hrac 29. 9.: "ustrihni starter ze zvuku, tu prvni vterinu, mozna dve vteriny, kdyz ho pustim z depa". Starter hraje
+# do 1,3 s (motor chytne v 0,95 s pod nim), zvuk proto zacina az v 1,3 s: motor se vytaci, srovna na volnobeh,
+# zatrouba a vyjede (3,7 s misto 5 s).
+STRIH = 1.3
+vyjezd = vyrob((0.8 * rms_vol * st + mz + kl)[int(STRIH * SRS):], "vyjezd_z_depa.wav", ROZJEZD_LUFS, fade_in=0.03, fade_out=0.5)
 
 json.dump({"perioda_tiku": PERIODA, "1": rozjezd, "1_depo": vyjezd, "jizda": jizda, "stani": stani},
           open(os.path.join(TU, "zvuky.json"), "w"), indent=1)

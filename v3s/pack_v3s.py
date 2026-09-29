@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Balic Pragy V3S "vejtrasky": z fotek (render_v3s.py) udela spritesheet a GRF v yaglu.
-#   python3 pack_v3s.py <mala|velka> <adresar s fotkami> <vystupni adresar>
+#   python3 pack_v3s.py <mala|velka> <adresar s fotkami> <vystupni adresar> [<adresar s fotkami Tater>]
 # Fotky: <adresar>/<mala|velka>_<nater>/d0-d7.png a kotvy.json, nater = vojenska, modra_A .. modra_D.
 #
 #   mala : meritko CZTR, 12,2 px/m (zin4). Auto ma 7,7 osminy, vejde se do jednoho mista v kolone (8).
@@ -38,9 +38,14 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 8 vzorova tabulka 221 kodu (lide STUD PRIS WORK PLAY a kody ze sad v hracove hre), cihly cervene a sede (BRCK,
 #   BDMT), kupa brambor a brambory v pytlich, pestra kupa ovoce, alkohol rum, pivo Plzen, pivo Budvar, chmel (HOPS), vino
 # 9 vojenska technika MLTR jen zelena, LETH kuze a FLOU mouka ve vzoru (hrac)
-# 10 cervenejsi cervene cihly (hrac: "naklad cihly trochu cervenejsi na priste")
+# 10 cervenejsi cervene cihly (hrac: "naklad cihly trochu cervenejsi na priste"); v GRF jsou i Tatry 148 a 138 (hrac:
+#   "tak je dame k vejtraskam, at usetrime misto MB za zvukove soubory?"), vyjezd z depa bez starteru
 VERZE = 10
+# Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
+TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
+if TATRA:
+    JMENO = {"mala": "Praga_V3S_Tatra", "velka": "Praga_V3S_Tatra_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 
@@ -256,6 +261,9 @@ PLACHTA = {"vojenska": ("plachta_vojenska", "plachta_seda"), "modra": ("plachta_
 OBRAZKY = VRSTVY + [p for v in PLACHTA.values() for p in v]
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
 vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}") for k in OBRAZKY})
+if TATRA:
+    exec(compile(open(os.path.join(TU, "..", "tatra", "grf_tatra.py"), encoding="utf-8").read(), "tatra/grf_tatra.py", "exec"))
+    tatra_nacti()
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 ODST = 6; SIRKA = 1024
 polozky = [((nat, i), vse[nat][i][0]) for nat in vse for i in range(8)]
@@ -306,6 +314,8 @@ BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
 # hrac 28. 9.: "ve jmenu vynech for, jen zlute V3S Praga, zelene ottd Decouple by Karel Macha";
 # symbol nakladaku v barve varianty na konci zustal (rozlisuje malou a velkou, jako Sergej)
 GRF_JMENO = "{yellow}V3S Praga{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
+if TATRA:
+    GRF_JMENO = "{yellow}V3S Praga, Tatra 148, 138{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
 # hrac 29. 9.: "nepis tam cztr scale, kdyz budes muset cztr, tak nekde na konci v rohu a radsi vubec. nejak se to
 # jmenuje odborne, original size, a druhy radsi nepis vubec": mala "original size", velka bez radku
 VARIANTA_POPIS = {"mala": "original size", "velka": ""}[VEL]
@@ -319,7 +329,7 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{orange}The legendary vejtřaska, the 6×6 workhorse of Czechoslovakia from 1953 to 1990. Its Tatra 912 "
              "diesel is cooled by air, with no radiator: an axial fan blows over the finned cylinders. It is half of "
              "the Tatra 111 V12, an inline six of 7.4 litres. " +
-             ("It roars when pulling away and leaves the depot with the starter and a two-tone horn. " if ZV else "") +
+             ("It roars when pulling away and leaves the depot with a two-tone horn. " if ZV else "") +
              "The load shows on the bed as a heap, logs or a tarp. The Praga V3S worked in farming, construction "
              "and industry and built socialism.{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}"
@@ -329,6 +339,18 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}" + ITCH + "{new-line}"
              "{green}GRF: Karel Mácha, licence CC BY 4.0{new-line}"
              "{black}The green ones ran in civilian life too, sold off from army stock.")
+if TATRA:
+    # hrac 29. 9.: Tatry ve stejnem GRF; popis Tater za vejtraskou, autor modelu Tatry je taky hans1240
+    POPIS_GRF = POPIS_GRF.replace("{yellow}V3S Praga{green}  {truck} {new-line}",
+                                  "{yellow}V3S Praga, Tatra 148, Tatra 138{green}  {truck} {new-line}", 1)
+    POPIS_GRF = POPIS_GRF.replace("{orange}3D: Praga V3S, hans1240",
+        "{green}Tatra 148 orange, Tatra 138 red, Tatra 148 and 138 green  " + BARVA + "{truck}{new-line}"
+        "{orange}Tatra 148 and 138, the orange and red Czechoslovak 6×6 trucks: a tipper for coal, ore and stone, "
+        "a flatbed with wooden sides for crops, animals and goods, a tarp for steel, a tank for liquids (blue water, "
+        "milk and oil, white petrol, yellow chemicals, black crude oil), beer in barrels or in a Plzeň (white) or "
+        "Budvar (blue) tank. The green ones carry uranium, military equipment and explosives like the green V3S. "
+        "Air-cooled Tatra V8, 71 km/h.{new-line}"
+        "{orange}3D: Praga V3S and Tatra-148, hans1240", 1)
 
 # ---------------------------------------------------------------- yagl
 Y = ['yagl_version: "";', "grf_format: Container2;",
@@ -352,6 +374,7 @@ for _k, _p in PODTYPY.items():
     TEXT_PODTYP[_k] = []
     for obr, jm in _p:
         TEXT_PODTYP[_k].append(_t); Y.append(f'    /* 0xD0{_t:02X} */ "{jm}";'); _t += 1
+if TATRA: tatra_texty()
 Y.append("}")
 
 # ---------------------------------------------------------------- zvuk
@@ -626,6 +649,7 @@ for n in ("modra", "vojenska"):
     Y += action3(auto, vychozi, sorted(mapa.items()))
     print(n, "switchu a skupin do", hex(dalsi[0] - 1))
 
+if TATRA: tatra_yagl()
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "vrstva_modra": VRSTVA_MODRA,
           "podtypy": PODTYPY, "plachta": PLACHTA,

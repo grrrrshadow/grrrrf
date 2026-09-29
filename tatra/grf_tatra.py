@@ -1,0 +1,258 @@
+# -*- coding: utf-8 -*-
+# Tatry 148 a 138 ve spolecnem GRF s vejtraskou (hrac 29. 9.: "tak je dame k vejtraskam, at usetrime misto MB za zvukove
+# soubory?" -> zvuky jsou v GRF jen jednou). Tenhle soubor spousti v3s/pack_v3s.py ve svem jmennem prostoru (exec),
+# takze pouziva jeho pomocniky (sw, action3, sprite, sid, INDEX, NAKLADY, VRSTVA, PODTYPY, zvukovy_retez, CUMAK, ...):
+#   tatra_nacti()  pred sestavenim spritesheetu: fotky Tater do vse (fotky z tatra/fotky_tatra.py, argument 4 baliče)
+#   tatra_texty()  retezce Tater (popis v nakupu, jmena podtypu) za retezci vejtrasky
+#   tatra_yagl()   za auty vejtrasky: vrstvy nakladu Tatry, ctyri Tatry (vlastnosti, grafika, callbacky)
+#
+# Hrac 29. 9. (tatra/README.md): 148 oranzova a 138 cervena, kazda se svymi obrazky ("dame zvlast obrazky pro presne
+# barvy"); nastavba podle nakladu: "mineraly, uhli sklapec", "co roste, to na valnik", "valnik ocel hotovou a vyrobky
+# z oceli pod plachtu", tekutiny v cisterne ("zluta chemie, modra voda, mliko, olej a bila benzin, asi na ropu musime
+# udelat cernou tmavou"), pivo v sudech a prestavbou v cisterne ("Plzen bilou a Budvar modrou"). Zelena 148 a 138
+# ("na ty veci, ktere vozi jenom zelena vejtraska, udelame zelenou tatru 138 a 148 valnik a valnik plachta, pro uranovy
+# veci, military, explosives") ma jen valnik a vozi jako zelena vejtraska.
+
+T_AUTA = ["T148", "T138", "T148z", "T138z"]
+T_ID = {"T148": 0x0102, "T138": 0x0103, "T148z": 0x0104, "T138z": 0x0105}        # kupovane cislo (u velke cumak)
+T_ID_AUTO = {k: v + 0x10 for k, v in T_ID.items()}                                  # u velke viditelne auto
+T_NAZEV = {"T148": "Tatra 148", "T138": "Tatra 138", "T148z": "Tatra 148 (zelená)", "T138z": "Tatra 138 (zelená)"}
+T_MODEL = {"T148": "T148", "T138": "T138", "T148z": "T148", "T138z": "T138"}
+T_ZELENA = {"T148z", "T138z"}
+# Uvedeni: T 138 se vyrabela od roku 1959, T 148 od roku 1969 (obe do 1982, resp. 1969)
+T_UVEDENI = {"T148": "1969/1/1", "T138": "1959/1/1", "T148z": "1969/1/1", "T138z": "1959/1/1"}
+T_KAPACITA = {"T148": 15, "T138": 12, "T148z": 15, "T138z": 12}                  # vejtraska 10
+T_LIDI = {"T148": 3, "T138": 3, "T148z": 20, "T138z": 20}                          # jako vejtraska: v kabine / na korbe
+T_VYKON = {"T148": 0x15, "T138": 0x12}             # 212 k (T2-928-1), 180 k (T 928-1), v 10 k
+T_HMOTNOST = {"T148": 0x29, "T138": 0x24}          # 10,25 t a 9 t, ve ctvrttunach
+
+# Sklapec: kupy nerostu (obrazek kupy na sklapeci); uran a uranova ruda jen zelena
+T_SKLAPEC = {k: k for k in "COAL COKE IORE LIME SLAG SCMT GRVL SAND CLAY CORE SULP".split()}
+T_SKLAPEC.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "COCO": "CORE", "SCRP": "SCMT"})
+# Cisterna: barva podle tekutiny
+T_CISTERNA = {}
+for _c, _k in (("modra", "WATR MILK EOIL MOLS"),                                   # voda, mleko, jedly olej, melasa
+               ("bila", "PETR RFPR NAPH LUBR"),                                    # benzin a rafinovane produkty
+               ("zluta", "ACID LYE_ CHLO NH3_ O2__ FUEL ACET HYAC PHAC SUAC MEOH C2H4 C3H6 H2__ N7__ N2__"),  # chemie, plyny
+               ("cerna", "OIL_ OILD OILI CTAR")):                                  # ropa a dehet
+    T_CISTERNA.update({k: _c for k in _k.split()})
+# Valnik s plachtou: ocel a strojirenstvi (odstin D u vejtrasky) pod sedou, ostatni pod sedobilou
+T_PLACHTA = {"oranzova": ("plachta_sedobila", "plachta_seda"), "zelena": ("plachta_vojenska", "plachta_seda")}
+# Podtypy: [(telo, obrazek nakladu nebo None, jmeno)]; telo valnik, sklapec nebo cisterna_<barva>
+T_PODTYPY = {k: [("valnik", obr, jm) for obr, jm in v] for k, v in PODTYPY.items()}
+T_PODTYPY_ORANZ = dict(T_PODTYPY)
+T_PODTYPY_ORANZ["BEER"] = [("valnik", "BEER", " (sudy)"), ("cisterna_bila", None, " (pivo Plzeň, cisterna)"),
+                           ("cisterna_modra", None, " (pivo Budvar, cisterna)")]
+
+def tatra_nacti():
+    """fotky Tater do vse: auta a vrstvy nakladu (valnik Tv_, sklapec Ts_), kotvy jako u vejtrasky"""
+    global T_OBR_V, T_OBR_S
+    fotky = sys.argv[4]
+    def sada(jm):
+        adr = os.path.join(fotky, f"{VEL}_{jm}")
+        if os.environ.get("TATRA_NANECISTO") and not os.path.exists(os.path.join(adr, "kotvy.json")):
+            return [(Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)] * 8     # zkouska baliče, fotka jeste neni
+        info = json.load(open(os.path.join(adr, "kotvy.json")))
+        out = []
+        for d in range(8):
+            gx, gy = info["smery"][str(d)]["zem_stred"]
+            du, dv = kotva_konvence(d)
+            foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
+            bb = foto.getbbox()
+            if bb is None:
+                out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); continue
+            out.append((foto.crop(bb), int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))))
+        return out
+    for m in ("T148", "T138"):
+        for t in ["sklapec", "valnik"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")] + ["valnik_zelena"]:
+            vse[f"{m}_{t}"] = sada(f"{m}_{t}")
+    T_OBR_V = sorted({v for v in VRSTVA.values()} | {obr for p in T_PODTYPY.values() for _, obr, _ in p if obr}
+                     | set(T_PLACHTA["oranzova"]) | set(T_PLACHTA["zelena"]) | {"BEER"})
+    T_OBR_V = [o for o in T_OBR_V if not o.startswith("plachta_") or o in ("plachta_vojenska", "plachta_seda", "plachta_sedobila")]
+    T_OBR_S = sorted(set(T_SKLAPEC.values()))
+    for k in T_OBR_V: vse[f"Tv_{k}"] = sada(f"T_valnik_naklad_{k}")
+    for k in T_OBR_S: vse[f"Ts_{k}"] = sada(f"T_sklapec_naklad_{k}")
+
+def tatra_texty():
+    """popisy v nakupu a jmena podtypu Tater, cisla za retezci vejtrasky (Y je jeste v bloku strings)"""
+    global T_TEXT, T_TEXT_PODTYP
+    t = max(max(v) for v in TEXT_PODTYP.values()) + 1
+    T_TEXT = {}
+    for n in T_AUTA:
+        T_TEXT[n] = t
+        Y.append(f'    /* 0xD0{t:02X} */ "{{green}}for {DECOUPLE}{{black}}{{new-line}}Model: {{gold}}hans1240 (Sketchfab), CC BY 4.0";')
+        t += 1
+    T_TEXT_PODTYP = {}
+    for k, p in T_PODTYPY_ORANZ.items():
+        if p is T_PODTYPY[k] or [jm for _, _, jm in p] == [jm for _, jm in PODTYPY[k]]:
+            T_TEXT_PODTYP[k] = TEXT_PODTYP[k]; continue                  # stejna jmena jako u vejtrasky
+        T_TEXT_PODTYP[k] = []
+        for _, _, jm in p:
+            T_TEXT_PODTYP[k].append(t); Y.append(f'    /* 0xD0{t:02X} */ "{jm}";'); t += 1
+    assert t <= 0xFF
+
+def tatra_yagl():
+    global Y
+    # vrstvy nakladu Tatry: sady a skupiny 0xC0 a dal (skupiny vejtrasky tam uz nikdo neodkazuje)
+    obr = [("v", k) for k in T_OBR_V] + [("s", k) for k in T_OBR_S]
+    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, vrstvy nakladu Tatry (valnik Tv_, sklapec Ts_)", "{"]
+    for si, (kde, k) in enumerate(obr):
+        Y += [f"    sprite_set // 0x{si:04X} {'valnik' if kde == 'v' else 'sklapec'} {k}", "    {"]
+        for i in range(8): Y += sprite(f"T{kde}_{k}", i)
+        Y += ["    }"]
+    i_nic = len(obr)
+    Y += [f"    sprite_set // 0x{i_nic:04X} bez nakladu", "    {"]
+    for i in range(8): Y += sprite()
+    Y += ["    }", "}"]
+    G_T = {}
+    for si, (kde, k) in enumerate(obr):
+        G_T[kde, k] = 0xC0 + si
+        assert G_T[kde, k] <= 0xFF
+        Y += [f"sprite_groups<RoadVehicles, 0x{G_T[kde, k]:02X}> // Action02 basic, Tatra {kde} {k}: prazdno, naklad", "{",
+              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
+
+    for n in T_AUTA:
+        h = T_ID[n]; auto = T_ID_AUTO[n] if CUMAK else h
+        m = T_MODEL[n]; zelena = n in T_ZELENA
+        dalsi = [0x10]
+        def nove():
+            i = dalsi[0]; dalsi[0] += 1
+            assert i < 0xC0, "switche Tatry narazily na vrstvy nakladu"
+            return i
+        naklady = NAKLADY["vojenska" if zelena else "modra"]
+        kap_cumak = 1 if CUMAK else 0
+        kap_auto = T_KAPACITA[n] - kap_cumak
+        lidi_auto = T_LIDI[n] - kap_cumak
+        Y += [f"// ---------------- {T_NAZEV[n]}"]
+        dily = [(h, "cumak"), (auto, "auto")] if CUMAK else [(h, "auto")]
+        for eid, co in dily:
+            p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
+                 f"        long_introduction_date: date({T_UVEDENI[n]});", "        model_life_years: 255;",
+                 "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
+                 "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
+                 "        refit_cargo_types: 0x00000000;",
+                 f"        // vozí všechno z tabulky kromě: {nevozi('vojenska' if zelena else 'modra')}",
+                 f"        always_refittable_cargos: {seznam('vojenska' if zelena else 'modra')};",
+                 "        never_refittable_cargos: [ ];",
+                 f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
+                 "        sprite_id: 0xFF;",
+                 f"        miscellaneous_flags: 0x{0x80 if co == 'auto' else 0:02X};",
+                 f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
+                 f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
+            if eid == h:
+                p += ["        climate_availability: Temperate | Arctic | Tropical | Toyland;",
+                      "        speed_2_kmh: 0x8E;",                                   # 71 km/h
+                      f"        power_10_hp: 0x{T_VYKON[m]:02X};",
+                      f"        weight_quarter_tons: 0x{T_HMOTNOST[m]:02X};",
+                      "        cost_factor: 0x60;", "        running_cost_factor: 0x3C;",
+                      "        running_cost_base: 0x00004C48;",
+                      "        sound_effect_type: 0x17;"]
+            maska = 0x18 if co == "cumak" else 0x08
+            maska |= 0x20
+            if eid == h and ZV: maska |= 0x80
+            p += [f"        callback_flags_mask: 0x{maska:02X};"]
+            Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
+                      f'    /* 0x{eid:04X} */ "{T_NAZEV[n] if eid == h else T_NAZEV[n] + " (auto)"}";', "}"]
+        # Action01: nastavby auta a prazdna sada pro cumak
+        tela = ["valnik_zelena"] if zelena else ["valnik", "sklapec"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")]
+        i_prazdny = len(tela)
+        Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01", "{"]
+        for si, t in enumerate(tela):
+            Y += [f"    sprite_set // 0x{si:04X} {m}_{t}", "    {"]
+            for i in range(8): Y += sprite(f"{m}_{t}", i)
+            Y += ["    }"]
+        Y += [f"    sprite_set // 0x{i_prazdny:04X} prazdny cumak", "    {"]
+        for i in range(8): Y += sprite()
+        Y += ["    }", "}"]
+        g = {t: nove() for t in tela}
+        g_prazdny = nove()
+        for si, t in enumerate(tela):
+            Y += [f"sprite_groups<RoadVehicles, 0x{g[t]:02X}> // Action02 basic, {m}_{t}", "{",
+                  f"    primary_spritesets: [ 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
+        Y += [f"sprite_groups<RoadVehicles, 0x{g_prazdny:02X}> // Action02 basic, prazdny cumak", "{",
+              f"    primary_spritesets: [ 0x{i_prazdny:04X} ];", f"    secondary_spritesets: [ 0x{i_prazdny:04X} ];", "}"]
+        g_nakup = nove()
+        Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, obrazek do nakupu", "{", "    sprite_set // 0x0000 nakup", "    {"]
+        Y += sprite(f"{m}_{tela[0]}", 6)
+        Y += ["    }", "}", f"sprite_groups<RoadVehicles, 0x{g_nakup:02X}> // Action02 basic, nakup", "{",
+              "    primary_spritesets: [ 0x0000 ];", "    secondary_spritesets: [ 0x0000 ];", "}"]
+        s_clanky, s_lidi, s_nakup, s_cumak = nove(), nove(), nove(), nove()
+        zvuk_radky, id_zvuk, dalsi[0] = zvukovy_retez(dalsi[0])
+        assert dalsi[0] < 0xC0
+        Y += zvuk_radky
+        zvuk = [(0x33, id_zvuk)] if id_zvuk else []
+        plachta = T_PLACHTA["zelena" if zelena else "oranzova"]
+
+        def urci(k):
+            """(telo, obrazek na valniku 'v' / sklapeci 's' nebo None) pro naklad k"""
+            if zelena:
+                if k in VRSTVA: return "valnik_zelena", ("v", VRSTVA[k])
+                return "valnik_zelena", ("v", plachta[1] if ODSTIN.get(k) == "D" else plachta[0])
+            if k in T_CISTERNA: return f"cisterna_{T_CISTERNA[k]}", None
+            if k in T_SKLAPEC: return "sklapec", ("s", T_SKLAPEC[k])
+            if k in VRSTVA and not VRSTVA[k].startswith("sudy_"): return "valnik", ("v", VRSTVA[k])
+            if k in LIDE: return "valnik", None
+            return "valnik", ("v", plachta[1] if ODSTIN.get(k) == "D" else plachta[0])
+        vrstvy_sw = {}
+        def cil(telo, ob):
+            """graficky cil: nastavba telo a pres ni vrstva ob (nebo nic)"""
+            if ob is None: return g[telo]
+            if (telo, ob) not in vrstvy_sw:
+                sv = nove(); vrstvy_sw[telo, ob] = sv
+                Y.extend(sw(sv, f"vrstvy: {m}_{telo} a pres ni {ob[1]} ({'valnik' if ob[0] == 'v' else 'sklapec'})",
+                            VRSTVY_VYRAZ, [(1, G_T[ob])], g[telo]))
+            return vrstvy_sw[telo, ob]
+        vychozi_g = cil(*urci("GOOD"))
+        podtypy = T_PODTYPY if zelena else T_PODTYPY_ORANZ
+        texty_podtypu = {k: TEXT_PODTYP[k] for k in PODTYPY} if zelena else T_TEXT_PODTYP
+        s_podtyp_text, s_podtyp = {}, {}
+        for k, pt in podtypy.items():
+            if k not in naklady: continue
+            s_podtyp_text[k] = nove()
+            Y += sw(s_podtyp_text[k], f"{k} (callback 0x19): jmena podtypu, dal konec seznamu",
+                    ["value1 = variable[0xF2] & 0x000000FF;"], [(i, 0x8000 | t) for i, t in enumerate(texty_podtypu[k])], 0x8400)
+            s_obr = nove()
+            def cil_podtypu(telo, o):
+                if zelena: telo = "valnik_zelena"
+                return cil(telo, ("v", o) if o else None)
+            Y += sw(s_obr, f"{k}: obrazek podle podtypu (promenna 0xF2)", ["value1 = variable[0xF2] & 0x000000FF;"],
+                    [(i, cil_podtypu(telo, o)) for i, (telo, o, jm) in enumerate(pt) if i > 0], cil_podtypu(pt[0][0], pt[0][1]))
+            s_podtyp[k] = nove()
+            Y += sw(s_podtyp[k], f"{k}: jmena podtypu (callback 0x19), jinak obrazek", CALLBACK, [(0x19, s_podtyp_text[k])], s_obr)
+        g_lide = cil(*urci("PASS"))
+        Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
+                [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), g_lide)
+        popis_nakup = [(0x23, 0x8000 | T_TEXT[n])]
+        if CUMAK:
+            Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
+                    [(1, 0x8000 | auto)], 0xFFFF)
+            Y += sw(s_cumak, "cumak: clanky, zvuky, jinak prazdny sprite", CALLBACK, [(0x16, s_clanky)] + zvuk, g_prazdny)
+            s_cumak_lidi = nove()
+            Y += sw(s_cumak_lidi, "cumak, osoby: kapacita 1, clanky, zvuky", CALLBACK,
+                    [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
+            Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
+            s_cumak_podtyp = {}
+            for k in s_podtyp_text:
+                s_cumak_podtyp[k] = nove()
+                Y += sw(s_cumak_podtyp[k], f"cumak, {k}: clanky, jmena podtypu, zvuky", CALLBACK,
+                        [(0x16, s_clanky), (0x19, s_podtyp_text[k])] + zvuk, g_prazdny)
+            Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE if k in naklady] +
+                         [(INDEX[k], s_cumak_podtyp[k]) for k in s_cumak_podtyp] + [(0xFF, s_nakup)])
+        else:
+            Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
+        mapa = {}
+        for k in naklady:
+            c = s_lidi if k in LIDE else (s_podtyp[k] if k in s_podtyp else cil(*urci(k)))
+            if c != vychozi_g: mapa[INDEX[k]] = c
+        vychozi = vychozi_g
+        if not CUMAK and id_zvuk:
+            obal = {}
+            for c in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, vychozi_g}):
+                obal[c] = nove()
+                Y += sw(obal[c], "zvuk, jinak grafika", CALLBACK, zvuk, c)
+            mapa = {k: obal.get(v, v) for k, v in mapa.items()}
+            vychozi = obal[vychozi_g]
+        if not CUMAK:
+            mapa[0xFF] = s_nakup
+        Y += action3(auto, vychozi, sorted(mapa.items()))
+        print(n, "switchu a skupin do", hex(dalsi[0] - 1))

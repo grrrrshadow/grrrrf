@@ -1,5 +1,18 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 10 (29. 9.): vejtřaska a Tatry v jednom GRF
+
+- **Tatry 148 a 138 ve stejném GRF** (hráč: *„tak je dáme k vejtřaskám, ať ušetříme místo MB za zvukové soubory?“*,
+  *„jo dobrý“*): zvuky jsou v GRF 3,1 MB ze 4,4 MB, takže každý soubor ušetří asi 3 MB. Soubory se jmenují
+  `Praga_V3S_Tatra-v10.grf` (malá, `MAXd`) a `Praga_V3S_Tatra_BRYLE-v10.grf` (velká, `MAXe`), číslo GRF zůstalo,
+  rozehrané hry s vejtřaskou poběží dál. Tatry balí `tatra/grf_tatra.py`, který `pack_v3s.py` spustí, když dostane
+  čtvrtý argument s fotkami Tater: `python3 pack_v3s.py <mala|velka> <fotky vejtřasky> grf/<varianta> <fotky Tater>`.
+  Popis Tater je v `tatra/README.md` (oddíl GRF).
+- **Červenější cihly** (hráč: *„náklad cihly trochu červenější na příště“*).
+- **Výjezd z depa bez startéru** (hráč: *„ustřihni starter ze zvuků, tu první vteřinu, možná dvě vteřiny, když ho
+  pustím z depa“*): `zvuky/syntetizuj_zvuky.py` ořízne zvuk na začátku o 1,3 s (tak dlouho hraje startér), výjezd
+  začíná, jak motor chytne, zatroubí a vyjede; 3,7 s místo 5 s. Ostatní zvuky se nezměnily (stejné md5).
+
 ## Verze 9 (29. 9.)
 
 - **Vojenskou techniku** (`MLTR`) vozí jen zelená (hráč: *„mltr jen zelená“*). Kódy z nevydaného průmyslu CZTR

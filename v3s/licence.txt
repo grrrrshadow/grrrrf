@@ -1,4 +1,4 @@
-V3S Praga, ottd Decouple by Karel Macha – GRF pro OpenTTD
+V3S Praga, Tatra 148, 138, ottd Decouple by Karel Macha – GRF pro OpenTTD
 ottd Decouple by Karel Mácha
 https://karel-macha.itch.io/openttd-decouple-by-karel-macha
 
@@ -13,10 +13,14 @@ No donations allowed. Dary se nepřijímají.
 
 CO JE V BALÍKU
 
-Praga_V3S-v9.grf        malá, original size, na jedno místo v koloně
-Praga_V3S_BRYLE-v9.grf  velká, s neviditelným čumákem vepředu, aby auta
-                        v koloně nestála přes sebe.
-                        Článkové auto, jezdí jen do průjezdných zastávek.
+Praga_V3S_Tatra-v10.grf        malá, original size, na jedno místo v koloně
+Praga_V3S_Tatra_BRYLE-v10.grf  velká, s neviditelným čumákem vepředu, aby auta
+                               v koloně nestála přes sebe.
+                               Článková auta, jezdí jen do průjezdných zastávek.
+
+V každém GRF šest aut: Praga V3S Vejtřaska zelená a modrá, Tatra 148 oranžová,
+Tatra 138 červená a Tatra 148 a 138 zelená. Tatry jsou ve stejném GRF jako
+vejtřaska, aby zvuky byly v souboru jen jednou.
 
 V každém GRF dvě auta: Praga V3S Vejtřaska zelená a modrá. Modrá mění odstín
 podle nákladu (stavby světlá, strojírenství tmavá, zemědělství, zboží). Vozí
@@ -42,9 +46,22 @@ Prototyp od 20. 2. 1952, pro všechny o rok později.
 Praga V3S se používala v zemědělství, ve stavebnictví, v průmyslu a budovala
 socialismus.
 
+TATRA 148 A 138
+
+Tatry mění nástavbu podle nákladu: uhlí, rudy, písek, štěrk a ostatní nerosty
+vozí na sklápěči, co roste, zvířata a kusový náklad na valníku s hnědými
+dřevěnými bočnicemi (náklad je vidět jako u vejtřasky, kupy rozsypané po korbě),
+ocel a výrobky z oceli a ostatní zboží pod plachtou, tekutiny v cisterně:
+modrá voda, mléko a olej, bílá benzín, žlutá chemie, černá ropa. Pivo v sudech,
+přestavbou i v cisterně Plzeň (bílá) nebo Budvar (modrá), v Čechách se pivo
+do hospod vozilo cisternami. Zelené Tatry vozí jako zelená vejtřaska i uran,
+vojenskou techniku a výbušniny, s valníkem a vojenskou plachtou.
+Tatra 138 od roku 1959, červená, Tatra 148 od roku 1969, oranžová; vzduchem
+chlazený osmiválec Tatra, 71 km/h, 12 a 15 jednotek nákladu.
+
 Zvuk je umělý, složený podle motoru Tatra 912: rozjezd ze zastávky s řevem,
-vrčení za jízdy podle rychlosti, volnoběh, výjezd z depa se startérem
-a dvoutónovým klaksonem. Je to vlastní práce, žádná cizí nahrávka v něm není.
+vrčení za jízdy podle rychlosti, volnoběh, výjezd z depa s dvoutónovým
+klaksonem. Tatry mají stejný. Je to vlastní práce, žádná cizí nahrávka v něm není.
 
 Zelené jezdily i v civilu, rozprodané ze skladových zásob armády.
 
@@ -69,9 +86,17 @@ PŘEVZATÉ ČÁSTI
     modelu beze změny, k tomu modrý nátěr ve čtyřech odstínech přebarvený z olivového,
     tmavá lesklá okna, bíle svítící reflektory, náklady na korbě a plachty.
 
+3D model: "Tatra-148", autor hans1240
+    https://sketchfab.com/hans1240
+    https://sketchfab.com/3d-models/tatra-148-f63907789df7437ebd3c3f6ecc689a16
+    licence CC BY 4.0
+    Úpravy: vyfoceno do spritů pro OpenTTD ve dvou velikostech, nátěry oranžový,
+    červený a olivový, mřížka chladiče T 148 a T 138, skla a světla, místo korby
+    sklápěče i valník, plachta a cisterna, náklady na korbě.
+
 -------------------------------------------------------------------------------
 
-V3S Praga, ottd Decouple by Karel Macha – GRF for OpenTTD
+V3S Praga, Tatra 148, 138, ottd Decouple by Karel Macha – GRF for OpenTTD
 ottd Decouple by Karel Mácha
 https://karel-macha.itch.io/openttd-decouple-by-karel-macha
 
@@ -86,10 +111,14 @@ No donations allowed.
 
 WHAT IS IN THE PACKAGE
 
-Praga_V3S-v9.grf        small, original size, fits one queue slot
-Praga_V3S_BRYLE-v9.grf  big, with an invisible front bumper so the trucks do not
-                        overlap in a queue.
-                        Articulated, uses drive-through stops only.
+Praga_V3S_Tatra-v10.grf        small, original size, fits one queue slot
+Praga_V3S_Tatra_BRYLE-v10.grf  big, with an invisible front bumper so the trucks
+                               do not overlap in a queue.
+                               Articulated, uses drive-through stops only.
+
+Each GRF has six trucks: Praga V3S Vejtřaska green and blue, Tatra 148 orange,
+Tatra 138 red and Tatra 148 and 138 green. The Tatras are in the same GRF as the
+V3S so that the sounds are stored only once.
 
 Each GRF has two trucks: Praga V3S Vejtřaska green and blue. The blue one changes
 its shade with the cargo (building light, engineering dark, farming, goods). They
@@ -113,9 +142,22 @@ radiator, and it is half of the Tatra 111 V12.
 Prototype from 20 February 1952, for everyone a year later.
 The Praga V3S worked in farming, construction and industry and built socialism.
 
+TATRA 148 AND 138
+
+The Tatras change their body with the cargo: coal, ores, sand, gravel and other
+minerals on a tipper, crops, animals and piece goods on a flatbed with brown
+wooden sides (the load shows like on the V3S, heaps spread over the bed), steel,
+steel products and other goods under a tarp, liquids in a tank: blue water, milk
+and oil, white petrol, yellow chemicals, black crude oil. Beer in barrels, or when
+refitted in a Plzeň (white) or Budvar (blue) tank: in Bohemia beer was delivered
+to the pubs by tank trucks. The green Tatras carry uranium, military equipment and
+explosives like the green V3S, with a flatbed and a military tarp.
+Tatra 138 from 1959, red, Tatra 148 from 1969, orange; air-cooled Tatra V8,
+71 km/h, 12 and 15 units of cargo.
+
 The sound is synthesized after the Tatra 912 engine: a roaring pull-away from
-stops, a growl that follows the speed, idling, and leaving the depot with the
-starter and a two-tone horn. It is own work, no third-party recordings.
+stops, a growl that follows the speed, idling, and leaving the depot with a
+two-tone horn. The Tatras use the same. It is own work, no third-party recordings.
 
 The green ones ran in civilian life too, sold off from army stock.
 
@@ -139,3 +181,11 @@ THIRD-PARTY PARTS
     Changes: rendered to OpenTTD sprites in two sizes, the olive livery of the
     model unchanged, plus a blue livery in four shades recoloured from the olive one,
     dark glossy windows, white shining headlights, cargo loads on the bed and tarps.
+
+3D model: "Tatra-148" by hans1240
+    https://sketchfab.com/hans1240
+    https://sketchfab.com/3d-models/tatra-148-f63907789df7437ebd3c3f6ecc689a16
+    license CC BY 4.0
+    Changes: rendered to OpenTTD sprites in two sizes, orange, red and olive
+    liveries, Tatra 148 and 138 radiator grilles, windows and lights, besides the
+    tipper also a flatbed, a tarp and a tank, cargo loads on the bed.

@@ -7,6 +7,8 @@
 import bpy, os, sys, math
 import numpy as np
 from mathutils import Vector
+from bpy_extras.object_utils import world_to_camera_view
+import json
 NATER, PX_M, RAM, VYSTUP = sys.argv[-4], float(sys.argv[-3]), int(sys.argv[-2]), sys.argv[-1]
 TU = os.path.dirname(os.path.abspath(__file__))
 MODEL = os.path.join(TU, "model", "tatra-148.glb")
@@ -486,12 +488,30 @@ if SVETLO == "slunce":
     bpy.ops.object.light_add(type='SUN'); sl = bpy.context.object
     sl.data.energy = float(os.environ.get("SLUNCE", "5.0")); sl.data.angle = math.radians(6)
     sl.rotation_euler = odkud.to_track_quat('Z', 'Y').to_euler()
+# Kotvy pro balic jako u vejtrasky (kotvy.json): kde je v kazdem smeru na obrazku zem pod stredem auta (pul delky
+# od predniho narazniku -0,56 po konec nastavby 7,03), pod stredem rozvoru, pod celem a pod zadkem. Stejne pro vsechny
+# nastavby a naklady (kamera ma pevny stred).
+NAPRAVY_Y = [0.515, 4.233, 5.568]                                          # z modelu (kola), metry
+Y_CELO, Y_ZAD = -0.56, 7.03
+STRED_DELKY, STRED_ROZVORU = (Y_CELO + Y_ZAD) / 2, (NAPRAVY_Y[0] + sum(NAPRAVY_Y[1:]) / 2) / 2
+body = {}
+for jm, yy in (("zem_stred", STRED_DELKY), ("zem_rozvor", STRED_ROZVORU), ("celo", Y_CELO), ("zad", Y_ZAD)):
+    bpy.ops.object.empty_add(type='PLAIN_AXES', location=(0.0, yy, REF_MN.z)); e_ = bpy.context.object
+    e_.parent = gramofon; e_.matrix_parent_inverse = gramofon.matrix_world.inverted(); body[jm] = e_
+def na_pixel(obj):
+    bpy.context.view_layer.update()
+    p_ = world_to_camera_view(scene, cam, obj.matrix_world.translation)
+    return (p_.x * RAM, (1 - p_.y) * RAM)
+info = {"nater": NATER, "korba": KORBA, "naklad": NAKLAD_KOD, "mrizka": MRIZKA, "px_m": PX_M, "ram": RAM,
+        "delka_m": Y_ZAD - Y_CELO, "stred_delky_y": STRED_DELKY, "stred_rozvoru_y": STRED_ROZVORU, "napravy_y": NAPRAVY_Y, "smery": {}}
 for d in SMERY:
     gramofon.rotation_euler[2] = math.radians(ROTATION_ANGLES[d])
     bpy.context.view_layer.update()
+    info["smery"][d] = {jm: na_pixel(e_) for jm, e_ in body.items()}
     scene.render.filepath = os.path.join(VYSTUP, f"d{d}.png")
     bpy.ops.render.render(write_still=True)
     print("smer", d, flush=True)
+json.dump(info, open(os.path.join(VYSTUP, "kotvy.json"), "w"), indent=1)
 print("hotovo")
 
 # ---------------------------------------------------------------- cerna cara kolem pytlu (jako u vejtrasky)

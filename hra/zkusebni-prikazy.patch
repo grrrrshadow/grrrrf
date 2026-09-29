@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-29 15:13:19.661826666 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 15:13:19.670400075 +0000
+--- a/openttd/src/console_cmds.cpp	2026-09-29 20:25:07.231223609 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 20:25:07.333199794 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -19,7 +19,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1348,312 @@
+@@ -1344,6 +1348,321 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -273,6 +273,15 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		{"MAXd", 0x0101, "TATO", true, 1}, {"MAXd", 0x0100, "FRUT", true}, {"MAXd", 0x0101, "BEER", true, 1}, {"MAXd", 0x0100, "BEER", true, 2},
 +		{"MAXd", 0x0101, "BDMT", true, 1}, {"MAXe", 0x0100, "HOPS", true},
 +	};
++	/* TEST_FOTO_SADA=tatra: Tatry 148 a 138 (od verze 10 ve stejnem GRF): sklapec, cisterny, valnik, pivo v cisterne,
++	 * plachta, dobytek, zelene s vojenskym nakladem */
++	static const Nakup nakupy_tatra[] = {
++		{"MAXd", 0x0102, "COAL", true}, {"MAXd", 0x0103, "WATR", true}, {"MAXd", 0x0102, "GRAI", true}, {"MAXd", 0x0103, "OIL_", true},
++		{"MAXd", 0x0102, "BEER", true, 1}, {"MAXd", 0x0104, "MLTR", true}, {"MAXe", 0x0102, "STEL", true}, {"MAXe", 0x0103, "LVST", true, 1},
++		{"MAXe", 0x0105, "URAN", true}, {"MAXe", 0x0102, "ACID", true},
++	};
++	const char *sada_foto = getenv("TEST_FOTO_SADA");
++	const bool tatra_foto = sada_foto != nullptr && std::string_view(sada_foto) == "tatra";
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
@@ -285,7 +294,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		V3SLog("V3SFOTO: koupen puvodni nakladak engine {}", e->index.base());
 +		puvodnich++;
 +	}
-+	for (const Nakup &n : nakupy) {
++	for (const Nakup &n : (tatra_foto ? std::span<const Nakup>(nakupy_tatra) : std::span<const Nakup>(nakupy))) {
 +		uint32_t want = (uint8_t)n.grf[0] | (uint8_t)n.grf[1] << 8 | (uint8_t)n.grf[2] << 16 | (uint32_t)(uint8_t)n.grf[3] << 24;
 +		EngineID eid = EngineID::Invalid();
 +		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
@@ -332,7 +341,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1762,17 @@
+@@ -1452,6 +1771,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -350,7 +359,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7564,8 @@
+@@ -7243,6 +7573,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -360,8 +369,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-29 15:13:19.673826667 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-29 15:13:19.677826667 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 20:25:07.327223615 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 20:25:07.333431189 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

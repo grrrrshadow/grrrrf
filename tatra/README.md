@@ -107,3 +107,29 @@ vojenská, oranžový tatrovácky 148 a červený komunistická červená 138“
     horním lemem korby koukaly asi jako na valníku). Obojí dělá `rozsypana_kupa()`.
   - Přehled všech nákladů: `nahledy/naklady.png`.
 - Náhled barev: `nahledy/barvy.png`.
+
+## GRF (verze 10 spolu s vejtřaskou, 29. 9.)
+
+Hráč: *„teď je to opravdu hezký, tak můžem udělat GRF“*, *„tak je dáme k vejtřaskám, ať ušetříme místo MB za zvukové
+soubory?“*, *„dáme zvlášť obrázky pro přesné barvy“*, *„jo zvuk je dobrej“*.
+
+1. **Fotky:** `python3 fotky_tatra.py <adresář> [auta|valnik|sklapec]` pustí `render_sklapec.py` pro obě velikosti
+   (malá 12,2 px/m, velká 14,64 px/m, jako vejtřaska), dva rendery naraz, hotové přeskočí. Auta: 148 oranžová a 138
+   červená se sklápěčem, valníkem a cisternou ve čtyřech barvách, zelená 148 a 138 s valníkem; vrstvy: všechny obrázky
+   nákladu vejtřasky na valníku (kupy rozsypané, pytle, bedny, sudy, dřevo, zvířata, seno, plachty vojenská, šedá,
+   šedobílá) a kupy nerostů na sklápěči. U každé fotky `kotvy.json` jako u vejtřasky.
+2. **Balení:** `v3s/pack_v3s.py <mala|velka> <fotky vejtřasky> v3s/grf/<varianta> <fotky Tater>` spustí
+   `grf_tatra.py` (Tatry do stejného GRF), pak `yagl -e`. Balič bez čtvrtého argumentu dělá GRF jen s vejtřaskou.
+   `TATRA_NANECISTO=1` doplní chybějící fotky prázdnými (zkouška baliče, než doběhnou rendery).
+3. **Auta v GRF:** Tatra 148 (`0x0102`, od 1969, 15 jednotek, 212 k), Tatra 138 (`0x0103`, od 1959, 12, 180 k),
+   Tatra 148 a 138 zelená (`0x0104`, `0x0105`). 71 km/h, lidé 3 v kabině, u zelené 20 pod plachtou. Velká má jako
+   vejtřaska neviditelný čumák 2 (viditelné auto `0x0112` až `0x0115`), malá je bez čumáku (Tatra je 8,2 osminy,
+   o kousek delší než místo v koloně).
+4. **Nástavba podle nákladu** (oranžová a červená): tekutiny cisterna (modrá voda, mléko, olej, melasa; bílá benzín
+   a rafinované produkty; žlutá chemie a plyny; černá ropa a dehet), nerosty sklápěč (uhlí, koks, rudy, vápenec,
+   struska, šrot, štěrk, písek, jíl, síra), obrazy nákladů vejtřasky na valníku (co roste, zvířata, pytle, bedny,
+   sudy s alkoholem, cihly, dřevo), ocel a strojírenství pod šedou plachtou, ostatní pod šedobílou, lidé prázdný
+   valník. Pivo má podtypy sudy, Plzeň (bílá cisterna) a Budvar (modrá cisterna). Zelená vozí jako zelená vejtřaska
+   (i uran, vojenskou techniku a výbušniny), valník s obrázky vejtřasky, ostatní pod vojenskou plachtou.
+5. **Zkouška:** `testv3s` ve zkušební hře (`hra/`) vypíše Tatry jako vejtřasku; fotka na okruhu
+   `TEST_FOTO_SADA=tatra` a `testv3sfoto` (seznam `nakupy_tatra` v `console_cmds.cpp`).
