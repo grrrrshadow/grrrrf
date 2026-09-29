@@ -1,0 +1,132 @@
+yagl_version: "";
+grf_format: Container2;
+grf // Action08
+{
+    grf_id: "MAXn";
+    version: GRF8;
+    name: "Zkušební náklady SAND TATO CMNT GRVL TOUR (jen pro zkušební hru)";
+    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky písku, brambor, cementu a kamene a turisté. Do hry pro hráče nepatří.";
+}
+strings<Cargos, default, 0xDC00*> // Action04
+{
+    /* 0xDC00 */ "Písek";
+    /* 0xDC01 */ "PI";
+    /* 0xDC02 */ "{sw} t písku";
+    /* 0xDC03 */ "Brambory";
+    /* 0xDC04 */ "BR";
+    /* 0xDC05 */ "{sw} t brambor";
+    /* 0xDC06 */ "Cement";
+    /* 0xDC07 */ "CE";
+    /* 0xDC08 */ "{sw} t cementu";
+    /* 0xDC09 */ "Kámen";
+    /* 0xDC0A */ "KA";
+    /* 0xDC0B */ "{sw} t kamene";
+    /* 0xDC0C */ "Turisté";
+    /* 0xDC0D */ "TU";
+    /* 0xDC0E */ "{sw} turistů";
+}
+properties<Cargos, 0x0015> // Action00, volny slot 21 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0015
+    {
+        cargo_type_name_id: 0xDC00;
+        single_unit_name_id: 0xDC00;
+        cargo_type_abbrev_id: 0xDC01;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC02;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "SAND";
+        bit_number: 0x15;
+    }
+}
+properties<Cargos, 0x0016> // Action00, volny slot 22 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0016
+    {
+        cargo_type_name_id: 0xDC03;
+        single_unit_name_id: 0xDC03;
+        cargo_type_abbrev_id: 0xDC04;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC05;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "TATO";
+        bit_number: 0x16;
+    }
+}
+properties<Cargos, 0x0017> // Action00, volny slot 23 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0017
+    {
+        cargo_type_name_id: 0xDC06;
+        single_unit_name_id: 0xDC06;
+        cargo_type_abbrev_id: 0xDC07;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC08;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "CMNT";
+        bit_number: 0x17;
+    }
+}
+properties<Cargos, 0x0018> // Action00, volny slot 24 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0018
+    {
+        cargo_type_name_id: 0xDC09;
+        single_unit_name_id: 0xDC09;
+        cargo_type_abbrev_id: 0xDC0A;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC0B;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "GRVL";
+        bit_number: 0x18;
+    }
+}
+properties<Cargos, 0x0019> // Action00, volny slot 25 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x0019
+    {
+        cargo_type_name_id: 0xDC0C;
+        single_unit_name_id: 0xDC0C;
+        cargo_type_abbrev_id: 0xDC0D;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x01;
+        is_freight: false;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC0E;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0001;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "TOUR";
+        bit_number: 0x19;
+    }
+}

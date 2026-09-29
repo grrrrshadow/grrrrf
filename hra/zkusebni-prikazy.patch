@@ -1,7 +1,15 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-28 23:12:09.897321793 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-28 23:12:09.905839619 +0000
-@@ -37,6 +37,9 @@
+--- a/openttd/src/console_cmds.cpp	2026-09-29 00:23:27.013576037 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-29 00:23:27.021613815 +0000
+@@ -15,6 +15,7 @@
+ #include "water_cmd.h"
+ #include "road_cmd.h"
+ #include "roadveh.h"
++#include "articulated_vehicles.h"
+ #include "industry.h"
+ #include "town.h"
+ #include "spritecache.h"
+@@ -37,6 +38,9 @@
  #include "fileio_func.h"
  #include "fontcache.h"
  #include "screenshot.h"
@@ -11,7 +19,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1347,277 @@
+@@ -1344,6 +1348,289 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -50,11 +58,21 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	}
 +	CommandCost dc = Command<Commands::BuildRoadDepot>::Do(DoCommandFlag::Execute, depot, ROADTYPE_ROAD, DiagDirection::SW);
 +	IConsolePrint(CC_INFO, "V3S: depo {} {}", depot.base(), dc.Succeeded() ? "ok" : "CHYBA");
-+	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "MARI"};
++	static const char *const labels[] = {"GOOD", "PASS", "MAIL", "STEL", "COAL", "IORE", "LVST", "WOOD", "GRAI", "VALU", "SAND", "MARI", "TATO", "CMNT", "GRVL", "TOUR"};
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +		if (e->GetGRFID() != want) continue;
 +		IConsolePrint(CC_INFO, "V3S: engine {} local 0x{:04X} dostupny {} naklady {} kapacita {}", e->index.base(), e->grf_prop.local_id,
 +				e->company_avail.Test(_local_company) ? 1 : 0, e->info.refit_mask.Count(), e->GetDisplayDefaultCapacity());
++		{
++			/* jako okno nakupu (vehicle_gui.cpp, ShowRefitOptionsList): do 7 chybejicich pise "vse krome" */
++			CargoTypes umi = GetUnionOfArticulatedRefitMasks(e->index, false);
++			CargoTypes chybi = CargoTypes{umi}.Flip(_cargo_mask);
++			std::string seznam;
++			for (CargoType c : chybi) seznam += fmt::format(" {}", CargoSpec::Get(c)->label.base() == 0 ? std::string("?") :
++					fmt::format("{:c}{:c}{:c}{:c}", (char)(CargoSpec::Get(c)->label.base() >> 24), (char)(CargoSpec::Get(c)->label.base() >> 16 & 0xFF), (char)(CargoSpec::Get(c)->label.base() >> 8 & 0xFF), (char)(CargoSpec::Get(c)->label.base() & 0xFF)));
++			IConsolePrint(CC_INFO, "V3S:   nakup: umi {} z {}, chybi {}:{} -> {}", umi.Count(), _cargo_mask.Count(), chybi.Count(), seznam,
++					umi == _cargo_mask ? "vse" : (chybi.Count() <= 7 && chybi.Count() < umi.Count() ? "kratce vse krome" : "dlouhy seznam"));
++		}
 +		if (!e->company_avail.Test(_local_company)) continue;
 +		auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depot, e->index, true, INVALID_CARGO, ClientID::Invalid);
 +		if (bc.Failed() || Vehicle::GetIfValid(vid) == nullptr) {
@@ -79,17 +97,19 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +						u->gcache.cached_veh_length, u->cargo_cap, seq.count > 0 ? seq.seq[0].sprite : 0, seq_ne.count > 0 ? seq_ne.seq[0].sprite : 0);
 +			}
 +			IConsolePrint(CC_INFO, "V3S:   {} prestavba {}{}", lab, rc.Succeeded() ? "ok" : "NE", radek);
-+			if (std::string_view(lab) == "MARI") {
-+				/* nalozit plne a znovu se podivat na sprite (kupka), pak zase vylozit */
++			if (rc.Succeeded()) {
++				/* nalozit plne a znovu se podivat na sprite (kupka nebo plachta), pak zase vylozit */
 +				std::string plne;
 +				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
 +					if (u->cargo_cap > 0 && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
 +					VehicleSpriteSeq seq;
 +					u->GetImage(Direction::W, EngineImageType::OnMap, &seq);
-+					plne += fmt::format(" | dil 0x{:04X} nalozeno {} sprite W {}", Engine::Get(u->engine_type)->grf_prop.local_id, u->cargo.StoredCount(), seq.count > 0 ? seq.seq[0].sprite : 0);
++					std::string vrstvy;
++					for (uint s = 0; s < seq.count; s++) vrstvy += fmt::format("{}{}", s == 0 ? "" : "+", seq.seq[s].sprite);
++					plne += fmt::format(" | dil 0x{:04X} nalozeno {} sprite W {} (vrstev {})", Engine::Get(u->engine_type)->grf_prop.local_id, u->cargo.StoredCount(), vrstvy, seq.count);
 +					u->cargo.Truncate();
 +				}
-+				IConsolePrint(CC_INFO, "V3S:   MARI plne{}", plne);
++				IConsolePrint(CC_INFO, "V3S:   {} plne{}", lab, plne);
 +			}
 +		}
 +		/* zvuky (callback 0x33): odjezd v depu (auto schovane) a venku, jizda v ruznych rychlostech, stani;
@@ -227,8 +247,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	/* co koupit: grf, mistni cislo, naklad (prazdny = vychozi) */
 +	struct Nakup { const char *grf; uint16_t local; const char *naklad; bool plne; };
 +	static const Nakup nakupy[] = {
-+		{"MAXe", 0x0101, "MARI", true}, {"MAXe", 0x0100, "MARI", true}, {"MAXe", 0x0101, "STEL", false}, {"MAXe", 0x0101, "GOOD", false},
-+		{"MAXd", 0x0101, "MARI", true}, {"MAXd", 0x0100, "MARI", true}, {"MAXd", 0x0101, "LVST", false}, {"MAXd", 0x0101, "GOOD", false},
++		{"MAXe", 0x0100, "GOOD", true}, {"MAXe", 0x0101, "STEL", true}, {"MAXe", 0x0100, "STEL", true}, {"MAXe", 0x0101, "TATO", true},
++		{"MAXd", 0x0101, "GOOD", true}, {"MAXd", 0x0100, "PASS", true}, {"MAXd", 0x0101, "CMNT", true}, {"MAXd", 0x0100, "COAL", true},
 +	};
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
@@ -289,7 +309,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1726,17 @@
+@@ -1452,6 +1739,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -307,7 +327,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7528,8 @@
+@@ -7243,6 +7541,8 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -317,8 +337,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-28 23:12:09.905839619 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-28 23:12:09.911426532 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-09-29 00:23:27.021613815 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-09-29 00:23:27.026915362 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

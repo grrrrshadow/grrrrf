@@ -215,11 +215,51 @@ NAKLAD = {
     "NUTS": ((118, 78, 44), (176, 126, 80), 0.8, 1.2, 24), "MARI": ((48, 98, 10), (94, 144, 26), 0.85, 1.0, 18),
     "SULP": ((196, 164, 28), (240, 214, 72), 0.85, 0.9, 18),      # sira pevna, zluta (FIRS ji ma jako tekutinu)
 }
+def plachta(barva):
+    """Plachta pres korbu (hrac 29. 9.: "co neni kupka, nech grafiku prazdne. udelame prikladaci plachtu. grafika
+    stovky aut plny jednou plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta"). Model ma na korbe klanice
+    s hornim madlem (z do 1,29, vne x +-1,114, y -3,845 az 0,187), plachta je pres ne: boky svisle od horni hrany
+    bocnic (0,64) kousek dolu, strecha 2,92 m nad zemi (vyska V3S s plachtou, kabina 2,46 m), podelne hrany zaoblene
+    jako oblouky, celo u cela korby (kabina zacina az na y 0,64) a zadni stena rovne."""
+    import bmesh
+    tm, sv = PLACHTY[barva]
+    mat = material("plachta", srgb(tm), srgb(sv), 0.95, 7.0)
+    nt_ = mat.node_tree; bsdf = nt_.nodes["Principled BSDF"]
+    vrasky = nt_.nodes.new("ShaderNodeTexNoise"); vrasky.inputs["Scale"].default_value = 3.0
+    vrasky.inputs["Detail"].default_value = 4.0
+    hrbol = nt_.nodes.new("ShaderNodeBump"); hrbol.inputs["Strength"].default_value = 0.25
+    nt_.links.new(vrasky.outputs["Fac"], hrbol.inputs["Height"]); nt_.links.new(hrbol.outputs["Normal"], bsdf.inputs["Normal"])
+    X, Y0, Y1 = 1.15, -3.88, 0.21                      # tesne vne klanic a madla
+    Z0, Z1, R = 0.56, 2.92 + mn.z, 0.32                # boky kousek pres bocnice, strecha, polomer oblouku
+    profil = [(-X, Z0)]
+    for k in range(9):                                 # levy oblouk
+        a = math.radians(180 - 90 * k / 8); profil.append((-X + R + R * math.cos(a), Z1 - R + R * math.sin(a)))
+    for k in range(9):                                 # pravy oblouk
+        a = math.radians(90 - 90 * k / 8); profil.append((X - R + R * math.cos(a), Z1 - R + R * math.sin(a)))
+    profil.append((X, Z0))
+    bm = bmesh.new()
+    predni = [bm.verts.new((x, Y1, z)) for x, z in profil]
+    zadni = [bm.verts.new((x, Y0, z)) for x, z in profil]
+    for i in range(len(profil) - 1):
+        bm.faces.new((zadni[i], zadni[i + 1], predni[i + 1], predni[i]))
+    bm.faces.new(predni[::-1]); bm.faces.new(zadni)    # celo a zadni stena
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    me = bpy.data.meshes.new("plachta"); bm.to_mesh(me); bm.free()
+    ob = bpy.data.objects.new("plachta", me); scene.collection.objects.link(ob)
+    ob.data.materials.append(mat)
+    return [ob]
+
+# Barvy plachty (hrac 29. 9.: "vojensky vojenskou plachtu, a sedou", "modry zlutou sedobilou plachtu"):
+#   jmeno: (tmava sRGB, svetla sRGB)
+PLACHTY = {"vojenska": ((58, 64, 40), (100, 106, 70)), "seda": ((86, 88, 86), (136, 138, 134)),
+           "zluta": ((168, 136, 36), (224, 190, 74)), "sedobila": ((168, 168, 160), (222, 222, 214)),
+           "rezna": ((170, 160, 128), (220, 212, 178))}
 NAKLAD_KOD = NATER[len("naklad_"):] if NATER.startswith("naklad_") else None
 if NAKLAD_KOD:
     for o in nove: o.is_holdout = True
     if NAKLAD_KOD == "WOOD": nalozeno = klady()
     elif NAKLAD_KOD == "WDPR": nalozeno = prkna()
+    elif NAKLAD_KOD.startswith("plachta_"): nalozeno = plachta(NAKLAD_KOD[len("plachta_"):])
     else:
         tm, sv, dr, hrub, mer = NAKLAD[NAKLAD_KOD]
         nalozeno = kupka(material("naklad", srgb(tm), srgb(sv), dr, mer), hrubost=hrub)

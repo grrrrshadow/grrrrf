@@ -1273,7 +1273,7 @@ Místo celého auta s nákladem pro každý náklad (ve verzi 2 V3S dvě celé s
 se náklad kreslí jako druhý obrázek přes auto:
 
 - Vozidlo potřebuje `miscellaneous_flags` bit 7 (`EngineMiscFlag::SpriteStack`, 0x80). Hra pak
-  grafický řetěz prochází až čtyřikrát (`GetCustomEngineSprite` v `newgrf_engine.cpp`), číslo vrstvy
+  grafický řetěz prochází až osmkrát (od OpenTTD 13, dřív čtyřikrát; `GetCustomEngineSprite` v `newgrf_engine.cpp`), číslo vrstvy
   je v proměnné 0x10 bity 8–15 (dolní bajt je typ obrázku). Další vrstva přijde, jen když GRF zapíše
   do dočasného registru 0x100 bit 31; dolních 16 bitů je paleta (0 = výchozí). Registry se před
   každou vrstvou nulují (`DoResolve` → `temp_store.ClearChanges`), takže náklad bez vrstvy zůstane
@@ -1290,3 +1290,41 @@ se náklad kreslí jako druhý obrázek přes auto:
   zpracovaná a ukazuje na své skupiny.
 - Ověřeno ve zkušební hře: `testv3s` naloží uhlí, dřevo a marihuanu a vypíše vrstvy obrázku
   (auto + náklad, u modré v odstínu podle nákladu).
+
+## V3S verze 4: hráčův systém nákladů a přikládací plachta (2026-09-29)
+
+**Náklady hráčovým systémem.** Hráč: *„já chci, abys používal můj systém mapování nákladů, ať se
+v tom yaglu vyznám“*, *„můj systém je jasnej, vidíš hned“*, *„ale nevíš, co se nevozí“* (to na třídy
+nákladu ve verzi 3). Jak to má být:
+
+- Překladová tabulka = **celý vzor** `prekladova-tabulka-vzor.yagl` ve stejném pořadí, stejná čísla
+  jako ve vzoru (MARI 0x92), i s poznámkami a nadpisy oddílů, ať si hráč v yaglu najde, co je co.
+  Kódy, které ve vzoru nejsou, na konec (za MARI), s poznámkou.
+- U auta **vypsaný seznam** `always_refittable_cargos`, třídy 0, `never_refittable_cargos: [ ];`.
+  Nad seznamem poznámka „vozí všechno z tabulky kromě: …“, aby bylo hned vidět, co auto nevozí.
+- Žádné třídy nákladu. S třídami se nedá říct, co auto ve které hře veze.
+- yagl bere poznámku `// …` i za příkazem na stejném řádku (`cargo_translation_table: "PASS"; // …`)
+  a řádky s poznámkou uvnitř bloku vlastností.
+
+**Marihuana je normální kód.** Hráč: *„ty děláš normální GRF s kódem MARI“*. V GRF je `MARI` v tabulce
+a v seznamu jménem. Že ji hráčova hra škrtá, je věc hry (`PRO-HRU.md`, bod 4), ne GRF. Do cizích
+vozidel, která hra pouští na marihuanu po svém (Sentinel, vagony St a U), mi nic není (hráč:
+*„hovno ti je po Sentinelu“*).
+
+**Jeden obrázek pro víc nákladů.** Hráč: *„jen kupička je míň MB“*, *„písek a brambory žlutá,
+cement, štěrk šedá“*. V `pack_v3s.py` je `VRSTVY` (obrázky) a `VRSTVA` (který náklad jede s kterým
+obrázkem). Další náklad se stejnou barvou nestojí nic. Megabajty v GRF V3S dělá hlavně zvuk
+(3,15 MB ze 3,9), auta 0,34 MB, všechny kupky 0,29 MB.
+
+**Přikládací plachta.** Hráč: *„co není kupka, nech grafiku prázdné. Uděláme přikládací plachtu.
+Grafika stovky aut plný jednou plachtou. Když pojede plná, přiložíme plachtu“*. Plachta je vrstva
+jako kupka (`render_v3s.py naklad_plachta_<barva>`), jeden obrázek pro všechny náklady, které
+nejsou kupka. Barva podle auta a skupiny nákladu: vojenská olivová a šedá (ocel a strojírenství),
+modrá žlutá a šedobílá. Switch vrstev je pro každou dvojici (obrázek nákladu, obrázek auta) jednou.
+V Action 3 stačí vypsat náklady, které nejdou na výchozí (u V3S plachta přes auto v odstínu A).
+
+**Fotky ze hry bez stromů:** v `openttd.cfg` rigu `transparency_options = 2` a
+`invisibility_options = 2` (bit 1 = stromy), stromy pak auta na okruhu nezakryjí.
+
+**Zkušební náklady:** `hra/zkusebni_naklady/` (`MAXn`) přidá do mírného klimatu SAND TATO CMNT GRVL
+a TOUR, `testv3s` pak naloží každý náklad a vypíše vrstvy (kupka, plachta, nic).

@@ -27,8 +27,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 
 # Verze: kazde sestaveni pro hrace o jednu vys, je ve jmenu souboru i v Action14 (VRSN).
 # 1 prvni vydani, 2 jmeno "V3S Praga" zlute bez "for", texty bez "communist", zelena kupka na MARI, pruhy CZTR, zvuk,
-# 3 tmava leskla okna a bile reflektory, prikladaci naklady (vrstva nad autem, barva podle nakladu, klady, prkna)
-VERZE = 3
+# 3 tmava leskla okna a bile reflektory, prikladaci naklady (vrstva nad autem, barva podle nakladu, klady, prkna),
+# 4 naklady hracovym systemem (cela tabulka ze vzoru, vypsany seznam, bez trid), brambory zlute, cement sedy,
+#   prikladaci plachta na vsechno, co neni kupka
+VERZE = 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
@@ -85,53 +87,71 @@ def nacti_sadu(nater):
     return out
 
 # ---------------------------------------------------------------- naklady
-# Hrac 28. 9.: "vwt1 vozi vsechno, tam se inspiruj", "skoro vsechno". Zaklad je seznam VW T1 (0x0082, s MARI),
-# bez skla ("stavebni materialy vsechny kody krome skla") a bez jidla (jidlo jen vojenska).
-VW_T1 = ("PASS BEER MAIL GOOD BDMT ENSP FOOD FARM FMSP FRUT LVPT DYES PACK HOPS TEXT GLAS VPTS WDPR WOOL FISH "
-         "PAPR SUGR NUTS JAVA MNSP COAT TYRE PIPE STWR STCB CMNT VENG POWR CIGR TBCO COLA BEAN FURN MPTS TATO "
-         "BATT ELEC NODC TOYS FZDR SWET CTCD SOAP MEAT SEED OLSD CHSE CERA BUBL TOFF CCPR HWAR BRCK STBL FOCA "
-         "PPWK RBAR SEAL STPP STTB TYCO WELD SESP LVST PUMP MARI").split()
-BEZ = {"GLAS", "FOOD"}
-# Pridano podle hrace: srot, ocel, motory, cely zelezny retezec Steeltownu (FIRS 5.2), repa, konopna vlakna,
-# stavebni materialy. Kody z naklady.md nebo z FIRS 5.2 (rozbalene/firs-5.2.0).
-PRIDANO = ("SCMT STEL STAL STST STSE STSH METL STIG STSL STBR STPL STSW "      # srot a ocel
-           "IORE COAL COKE LIME QLME IRON SLAG FEAL CSTI VBOD PLNT "           # zelezny retezec Steeltown
-           "SGBT FICR "                                                       # repa, konopna vlakna
-           "GRVL SAND "                                                       # stavebni
-           "WOOD "                                                            # drevo (hrac 28. 9.: "a drevo udelej")
-           "SULP RUBR").split()                                               # sira a kaucuk (pevne, viz TRIDY)
-JEN_VOJENSKA = ["FOOD", "BOOM"]                   # jidlo a vybusniny jen vojenska
-# Od verze 3 vozi vsechno krome tekutin (hrac 28. 9.: "napis vsechno vozi", "co nevozi vyjmenuj krom tekutin",
-# "alkohol vozime, pivo v base"): tridy vsechny krome tekutin (0x0040) a zvlastnich (0x8000, auta na ROLU),
-# k tomu seznam vyse (i tekutiny z VW T1 jako pivo, barvy, cistidla) a zakazane NIKDY. Hra pak v nakupu pise
-# kratce "vse krome ...", kdyz chybi nejvys 7 nakladu (vehicle_gui.cpp, ShowRefitOptionsList).
-TRIDY, TRIDY_NE = 0xFFFF, 0x8040
-NIKDY = {"vojenska": ["GLAS"], "modra": ["GLAS", "FOOD", "BOOM"]}
-NAKLADY = {"modra": [k for k in VW_T1 if k not in BEZ] + [k for k in PRIDANO if k not in VW_T1]}
-NAKLADY["vojenska"] = NAKLADY["modra"] + JEN_VOJENSKA
-for _n in NAKLADY:
-    assert len(NAKLADY[_n]) == len(set(NAKLADY[_n])), _n
+# Od verze 4 hracuv system (temata3.md, "Jak hrac dela GRF"; hrac 28. 9.: "ja chci abys pouzival muj system mapovani
+# nakladu, at se v tom yaglu vyznam", "muj system je jasnej, vidis hned"):
+#  - prekladova tabulka je cely hracuv vzor prekladova-tabulka-vzor.yagl, ve stejnem poradi a se stejnymi cisly
+#    (MARI 0x92), kody vejtrasky, ktere ve vzoru nejsou (NAVIC), jdou za MARI;
+#  - kazde auto ma vypsany seznam, co vozi (vlastnost 24, always_refittable_cargos), tridy nakladu 0 a seznam nikdy
+#    povolenych prazdny, jako VW T1. Co v seznamu neni, auto nevozi, v zadne hre.
+# Co vozi: vsechno z tabulky krome NEVOZI (hrac: "napis vsechno vozi", "co nevozi vyjmenuj krom tekutin", "alkohol
+# vozime, pivo v base", "svarovaci material a jidlo nech, barvy nech, cistici prostredky taky nech, to neni tekuty ve
+# flaskach, vojenske jidlo jo"). Marihuana (MARI) je v seznamu jmenem, jako v kazdem normalnim GRF.
+NEVOZI = {                                         # nevozi ani jedna
+    "OIL_": "ropa", "OILD": "ropa", "OILI": "ropa", "PETR": "benzín", "RFPR": "rafinované produkty",
+    "FUEL": "zemní plyn", "CTAR": "dehet", "MILK": "mléko", "WATR": "voda", "EOIL": "jedlý olej", "MOLS": "melasa",
+    "ACID": "kyselina", "LYE_": "louh", "CHLO": "chlor", "NH3_": "čpavek", "O2__": "kyslík",     # tekutiny a plyny
+    "GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy"}
+JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny"}    # modra je nevozi (hrac: "jidlo jenom vojensky",
+                                                             # "vojenska explosives, modra ne")
+# Kody vejtrasky, ktere ve vzoru nejsou: nezname labely ze seznamu VW T1 (naklady.md, "Labely, ktere v zadne tabulce
+# nejsou"; hrac je ma, tak zustaly) a FIRS 5.2 Steeltown (naklady.md). Jdou do tabulky za MARI.
+NAVIC = {
+    "FARM": "? (z VW T1, význam neznámý)", "LVPT": "? (z VW T1, význam neznámý)", "HOPS": "? (z VW T1, význam neznámý)",
+    "ELEC": "? (z VW T1, význam neznámý)", "NODC": "? (z VW T1, význam neznámý)",
+    "CCPR": "betonové výrobky  [Concrete Products]", "HWAR": "železářské zboží  [Hardware]",
+    "STBL": "předvalky  [Billets & Blooms]", "FOCA": "výkovky a odlitky  [Forgings & Castings]",
+    "PPWK": "nádrže a potrubí  [Storage Tanks & Pipework]", "RBAR": "betonářská ocel  [Rebar]",
+    "SEAL": "těsnění, hadice a řemeny  [Seals, Hoses & Belts]", "STPP": "ocelové trubky  [Steel Pipe]",
+    "STTB": "ocelové trubky, tenkostěnné  [Steel Tube]", "TYCO": "kord do pneumatik  [Tyre Cord]",
+    "WELD": "svařovací materiál  [Welding Consumables]", "PUMP": "čerpadla a ventily  [Pumps & Valves]",
+    "STIG": "ocelové ingoty  [Steel Ingots]", "STSL": "bramy  [Steel Slab]", "STBR": "tyčová ocel  [Merchant Bar]",
+    "STPL": "ocelový plech  [Steel Plate]", "STSW": "konstrukční ocel  [Structural Steel]",
+    "FEAL": "feroslitiny  [Ferroalloys]", "PLNT": "stroje a zařízení  [Plant & Machinery]"}
 
-# Odstin modre podle nakladu (hrac: "staveni C, cement a stavebni; tmava strojirenstvi D, A zbozi,
-# B zemedelstvi"). Co neni v B, C ani D, je A.
-ODSTIN = {}
-for k in "TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS WOOD".split(): ODSTIN[k] = "B"
-for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW".split(): ODSTIN[k] = "C"
-for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
-          "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD "
-          "SULP RUBR").split():
-    ODSTIN[k] = "D"
-assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
-
-# prekladova tabulka: poradi z hracova vzoru (prekladova-tabulka-vzor.yagl), co ve vzoru neni, jde za MARI
+# prekladova tabulka: cely hracuv vzor (i s jeho poznamkami a nadpisy oddilu), za MARI kody NAVIC
 vzor = open(os.path.join(TU, "..", "prekladova-tabulka-vzor.yagl"), encoding="utf-8").read()
 blok = vzor[vzor.index("properties<GlobalSettings"):vzor.index("\n}\n")]
-PORADI = re.findall(r'^\s+cargo_translation_table: "([^"]{4})";', blok, re.M)
-assert len(PORADI) == 147 and PORADI[-1] == "MARI", len(PORADI)
-_pouzite = set(NAKLADY["vojenska"]) | {k for v in NIKDY.values() for k in v}
-TABULKA = [k for k in PORADI if k in _pouzite] + [k for k in NAKLADY["vojenska"] if k not in PORADI]
-TABULKA += [k for k in sorted(_pouzite) if k not in TABULKA]
+PORADI, POZNAMKA, ODDIL = [], {}, {}
+for _r in blok.split("\n"):
+    _m = re.match(r'\s+cargo_translation_table: "([^"]{4})";\s*//\s*(.*?)\s*$', _r)
+    if _m:
+        PORADI.append(_m.group(1)); POZNAMKA[_m.group(1)] = _m.group(2)
+    elif _r.strip().startswith("// ----"):
+        ODDIL[len(PORADI)] = _r.strip()
+assert len(PORADI) == 147 and PORADI.index("MARI") == 0x92, len(PORADI)
+assert not set(NAVIC) & set(PORADI), set(NAVIC) & set(PORADI)
+ODDIL[len(PORADI)] = "// ---- NAVÍC PRO VEJTŘASKU — ve vzoru nejsou ----"
+POZNAMKA.update(NAVIC)
+TABULKA = PORADI + list(NAVIC)
 INDEX = {k: i for i, k in enumerate(TABULKA)}
+assert all(k in INDEX for k in list(NEVOZI) + list(JEN_VOJENSKA))
+NAKLADY = {"vojenska": [k for k in TABULKA if k not in NEVOZI]}
+NAKLADY["modra"] = [k for k in NAKLADY["vojenska"] if k not in JEN_VOJENSKA]
+# lide: cestujici, turiste, delnici; kapacitu jim dava callback 0x15 (vojenska 20, modra 3)
+LIDE = ["PASS", "TOUR", "OTI1", "OTI2", "YETI", "YETY"]
+
+# Odstin modre podle nakladu (hrac: "staveni C, cement a stavebni; tmava strojirenstvi D, A zbozi,
+# B zemedelstvi"). Co neni v B, C ani D, je A. Od verze 4 i naklady, ktere prisly s celou tabulkou
+# (obili a plodiny B, jil a kaolin C, rudy a kovy D).
+ODSTIN = {}
+for k in ("TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS WOOD "
+          "GRAI WHEA MAIZ CERE FRVG SGCN CASS TWOD FERT").split(): ODSTIN[k] = "B"
+for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW CLAY KAOL".split(): ODSTIN[k] = "C"
+for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
+          "IRON SLAG FEAL CSTI FOCA VBOD VENG VPTS TYRE TYCO PLNT POWR MPTS ENSP MNSP HWAR PUMP SEAL PPWK WELD "
+          "SULP RUBR AORE CORE NKOR PORE COPR ZINC NICK ALUM COBL MNO2 FECR URAN SCRP VEHI").split():
+    ODSTIN[k] = "D"
+assert all(k in NAKLADY["modra"] for k in ODSTIN), [k for k in ODSTIN if k not in NAKLADY["modra"]]
 
 KAPACITA = 10                                      # jednotek beznych nakladu
 LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojenska nevim, hodne"
@@ -140,12 +160,25 @@ LIDI = {"modra": 3, "vojenska": 20}                # hrac: "modra 3 osoby, vojen
 SADY = {"vojenska": ["vojenska"], "modra": ["modra_A", "modra_B", "modra_C", "modra_D"]}
 # Prikladaci naklady (hrac 28. 9.: "kupku prikladaci, udelame cernou kupku uhli a zlutou pisek a vsechny barvy a drevo
 # udelej"): fotky render_v3s.py naklad_<KOD>, jen naklad, auto neviditelne, ale zakryva, co je za bocnicemi.
-# Sypke naklady jako kupka v barve nakladu, drevo klady, drevarske vyrobky prkna.
-VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "TATO", "SGBT", "SEED", "OLSD",
-          "BEAN", "NUTS", "MARI", "SULP", "WOOD", "WDPR"]
-assert all(k in NAKLADY["modra"] for k in VRSTVY), [k for k in VRSTVY if k not in NAKLADY["modra"]]
+# Sypke naklady jako kupka v barve nakladu, drevo klady, drevarske vyrobky prkna. VRSTVY jsou obrazky, VRSTVA rika,
+# ktery naklad jede s kterym obrazkem. Jeden obrazek pro vic nakladu stoji nula megabajtu navic (hrac 29. 9.:
+# "jen kupicka je min mb", "pisek a brambory zluta, cement, sterk seda"): brambory (TATO, a BEAN, ktere ma CZIS
+# prejmenovane na brambory) jedou se zlutou kupkou pisku, cement se sedou kupkou kamene, tropicke drevo s kladami,
+# stary kod srotu SCRP se srotem.
+VRSTVY = ["COAL", "COKE", "IORE", "LIME", "QLME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS",
+          "MARI", "SULP", "WOOD", "WDPR"]
+VRSTVA = {k: k for k in VRSTVY}
+VRSTVA.update({"TATO": "SAND", "BEAN": "SAND", "CMNT": "GRVL", "TWOD": "WOOD", "SCRP": "SCMT"})
+assert all(k in NAKLADY["modra"] for k in VRSTVA), [k for k in VRSTVA if k not in NAKLADY["modra"]]
+# Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
+# plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou
+# sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede
+# nalozene pod plachtou (render_v3s.py naklad_plachta_<barva>). Vojenska olivova, ocel a strojirenstvi (odstin D) seda;
+# modra zluta, ocel a strojirenstvi sedobila. Vojaci jedou pod plachtou, lide v modre sedi v kabine, ta plachtu nema.
+PLACHTA = {"vojenska": ("plachta_vojenska", "plachta_seda"), "modra": ("plachta_zluta", "plachta_sedobila")}
+OBRAZKY = VRSTVY + [p for v in PLACHTA.values() for p in v]
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
-vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}") for k in VRSTVY})
+vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}") for k in OBRAZKY})
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 ODST = 6; SIRKA = 1024
 polozky = [((nat, i), vse[nat][i][0]) for nat in vse for i in range(8)]
@@ -204,8 +237,9 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              BARVA + VARIANTA_POPIS + "{new-line}"
              "{orange}Two 6×6 flatbed trucks that carry everything but liquids and glass. Military: troops, food and "
              "explosives too. Blue: three people in the cab, the shade follows the cargo. "
-             "Loose cargo rides on the bed in its colour (coal black, sand yellow, ore, stone, lime, potatoes, "
-             "beet, marijuana green...), wood as logs, wood products as planks. Prototype from 1952.{new-line}"
+             "Loose cargo rides on the bed in its colour (coal black, sand and potatoes yellow, stone and cement grey, "
+             "ore, lime, beet, marijuana green...), wood as logs, wood products as planks, everything else under "
+             "a tarp: olive or yellow, grey for steel and engineering. Prototype from 1952.{new-line}"
              "{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}" +
              ("{orange}Sound: synthesized after the Tatra 912 engine, roars when pulling away, leaves the depot "
               "with the starter and a two-tone horn{new-line}" if ZV else "") +
@@ -222,9 +256,11 @@ Y = ['yagl_version: "";', "grf_format: Container2;",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
      f'    description: "{POPIS_GRF}";', "}",
-     "properties<GlobalSettings, 0x0000> // Action00, prekladova tabulka nakladu", "{"]
+     "properties<GlobalSettings, 0x0000> // Action00, překladová tabulka nákladů: hráčův vzor "
+     "prekladova-tabulka-vzor.yagl, stejná čísla, za MARI kódy navíc", "{"]
 for i, k in enumerate(TABULKA):
-    Y += [f"    // instance_id: 0x{i:04X}", "    {", f'        cargo_translation_table: "{k}";', "    }"]
+    if i in ODDIL: Y.append("    " + ODDIL[i])
+    Y += [f"    // instance_id: 0x{i:04X}", "    {", f'        cargo_translation_table: "{k}"; // {POZNAMKA[k]}', "    }"]
 Y += ["}", "strings<RoadVehicles, default, 0xD001*> // Action04, popisy v nakupnim okne", "{"]
 for n in ("vojenska", "modra"):
     Y.append(f'    /* 0xD0{TEXT[n]:02X} */ "{POPIS[n]}";')
@@ -256,6 +292,11 @@ if ZV:
 
 def seznam(n):
     return "[ " + " ".join(f"0x{INDEX[k]:02X}" for k in NAKLADY[n]) + " ]"
+
+def nevozi(n):
+    """co auto nevozi, pro poznamku u seznamu"""
+    nv = dict(NEVOZI, **(JEN_VOJENSKA if n == "modra" else {}))
+    return ", ".join(f"{k} {v}" for k, v in nv.items())
 
 def sw(cid, popis, vyraz, rozsahy, default):
     """switch v yaglu; rozsahy = [(hodnota, cil)] nebo [(od, do, cil)]"""
@@ -320,17 +361,17 @@ ID_AUTO = {"vojenska": 0x0110, "modra": 0x0111}    # u velke viditelne auto, dru
 # se pred kazdou vrstvou nuluji). Vrstva 0 je auto, vrstva 1 naklad. Sady nakladu jsou spolecne pro obe auta
 # (skupiny 0xC0 a dal), naklad je videt od poloviny nakladu (hra bere sadu naklad * pocet / kapacita).
 G_VRSTVA = {}
-if VRSTVY:
-    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, prikladaci naklady (spolecne pro obe auta)", "{"]
-    for si, k in enumerate(VRSTVY):
+if OBRAZKY:
+    Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, prikladaci naklady a plachty (spolecne pro obe auta)", "{"]
+    for si, k in enumerate(OBRAZKY):
         Y += [f"    sprite_set // 0x{si:04X} naklad {k}", "    {"]
         for i in range(8): Y += sprite(f"naklad_{k}", i)
         Y += ["    }"]
-    i_nic = len(VRSTVY)
+    i_nic = len(OBRAZKY)
     Y += [f"    sprite_set // 0x{i_nic:04X} bez nakladu", "    {"]
     for i in range(8): Y += sprite()
     Y += ["    }", "}"]
-    for si, k in enumerate(VRSTVY):
+    for si, k in enumerate(OBRAZKY):
         G_VRSTVA[k] = 0xC0 + si
         Y += [f"sprite_groups<RoadVehicles, 0x{G_VRSTVA[k]:02X}> // Action02 basic, naklad {k}: prazdno, naklad", "{",
               f"    primary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];",
@@ -358,13 +399,14 @@ for n in ("vojenska", "modra"):
         p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
              f"        long_introduction_date: date({UVEDENI});", "        model_life_years: 255;",
              "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
-             f"        refittable_cargo_classes: 0x{TRIDY:04X};", f"        non_refittable_cargo_classes: 0x{TRIDY_NE:04X};",
+             "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
              "        refit_cargo_types: 0x00000000;",
+             f"        // vozí všechno z tabulky kromě: {nevozi(n)}",
              f"        always_refittable_cargos: {seznam(n)};",
-             "        never_refittable_cargos: [ " + " ".join(f"0x{INDEX[k]:02X}" for k in NIKDY[n]) + " ];",
+             "        never_refittable_cargos: [ ];",
              f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
              "        sprite_id: 0xFF;",
-             f"        miscellaneous_flags: 0x{0x80 if (co == 'auto' and VRSTVY) else 0:02X};",   # 0x80: vrstvy (sprite stack)
+             f"        miscellaneous_flags: 0x{0x80 if (co == 'auto' and OBRAZKY) else 0:02X};",   # 0x80: vrstvy (sprite stack)
              f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
              f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
         if eid == h:
@@ -410,9 +452,29 @@ for n in ("vojenska", "modra"):
     assert dalsi[0] < 0xC0
     Y += zvuk_radky
     zvuk = [(0x33, id_zvuk)] if id_zvuk else []
-    # osoby: callback 0x15 vrati kapacitu, jinak grafika (u modre odstin A); u male i zvuk
+    # grafika viditelneho auta podle nakladu: auto (u modre v odstinu podle nakladu) a pres nej vrstva s kupkou nebo
+    # plachtou; switch pro kazdou dvojici (obrazek, auto) jednou
+    telo = lambda k: g["modra_" + ODSTIN.get(k, "A")] if n == "modra" else zaklad
+    def obrazek(k):
+        """obrazek nakladu k na korbe: kupka, jinak plachta; modra s lidmi nic (lide sedi v kabine)"""
+        if k in VRSTVA: return VRSTVA[k]
+        if n == "modra" and k in LIDE: return None
+        return PLACHTA[n][1] if ODSTIN.get(k) == "D" else PLACHTA[n][0]
+    vrstvy_sw = {}
+    def grafika(k):
+        obr, t = obrazek(k), telo(k)
+        if obr is None: return t
+        if (obr, t) not in vrstvy_sw:
+            sv = nove(); vrstvy_sw[obr, t] = sv
+            nat = [jm for jm, gg in g.items() if gg == t][0]
+            Y.extend(sw(sv, f"vrstvy: {nat} a pres nej {obr} (vrstva 0 auto a dalsi vrstva, 1 naklad)", VRSTVY_VYRAZ,
+                        [(1, G_VRSTVA[obr])], t))
+        return vrstvy_sw[obr, t]
+    vychozi_g = grafika("GOOD")                    # vychozi naklad zbozi: plachta (u modre odstin A)
+    # osoby: callback 0x15 vrati kapacitu, jinak grafika (vojaci pod plachtou, modra bez plachty); u male i zvuk
+    g_lide = grafika("PASS")
     Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
-            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), zaklad)
+            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), g_lide)
     popis_nakup = [(0x23, 0x8000 | TEXT[n])]
     if CUMAK:
         Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
@@ -423,35 +485,31 @@ for n in ("vojenska", "modra"):
         Y += sw(s_cumak_lidi, "cumak, osoby: kapacita 1, clanky, zvuky", CALLBACK,
                 [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky)] + zvuk, g_prazdny)
         Y += sw(s_nakup, "nakup: clanky, popis, obrazek", CALLBACK, [(0x16, s_clanky)] + popis_nakup, g_nakup)
-        Y += action3(h, s_cumak, [(INDEX["PASS"], s_cumak_lidi), (0xFF, s_nakup)])
+        Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE] + [(0xFF, s_nakup)])
     else:
         Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
-    # viditelne auto: odstin podle nakladu (jen modra), osoby pres kapacitni callback, naklady jako vrstva
-    telo = lambda k: g["modra_" + ODSTIN.get(k, "A")] if n == "modra" else zaklad
-    mapa = {INDEX["PASS"]: s_lidi}
-    if n == "modra":
-        mapa.update({INDEX[k]: g["modra_" + o] for k, o in ODSTIN.items() if o != "A"})
-    for k in VRSTVY:
-        sv = nove()
-        Y += sw(sv, f"vrstvy {k}: 0 auto a dalsi vrstva, 1 naklad", VRSTVY_VYRAZ, [(1, G_VRSTVA[k])], telo(k))
-        mapa[INDEX[k]] = sv
-    vychozi = zaklad
+    # viditelne auto: osoby pres kapacitni callback, ostatni naklady auto a vrstva; co jde na vychozi, v Action 3 neni
+    mapa = {}
+    for k in NAKLADY[n]:
+        cil = s_lidi if k in LIDE else grafika(k)
+        if cil != vychozi_g: mapa[INDEX[k]] = cil
+    vychozi = vychozi_g
     if not CUMAK and id_zvuk:
         # mala: Action 3 vybira podle nakladu a callback 0x33 jde stejnou cestou, tak kazdy cil grafiky
         # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi)
         obal = {}
-        for cil in [zaklad] + sorted(set(mapa.values()) - {s_lidi, zaklad}):
+        for cil in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, vychozi_g}):
             obal[cil] = nove()
             Y += sw(obal[cil], "zvuk, jinak grafika", CALLBACK, zvuk, cil)
         mapa = {k: obal.get(v, v) for k, v in mapa.items()}
-        vychozi = obal[zaklad]
+        vychozi = obal[vychozi_g]
     if not CUMAK:
         mapa[0xFF] = s_nakup
     Y += action3(auto, vychozi, sorted(mapa.items()))
     print(n, "switchu a skupin do", hex(dalsi[0] - 1))
 
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
-souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN,
+souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "plachta": PLACHTA,
           "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse}}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-souhrn.json"), "w"), indent=1, ensure_ascii=False)
 print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "tabulka", len(TABULKA), "nakladu",

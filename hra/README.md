@@ -11,13 +11,14 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 | `zkusebni-prikazy.patch` | všechny moje změny proti zdrojákům hry (`patch -p1` v kopii `openttd/` na `60283b3`) |
 | `cztr_silnice/` | výstřižek silnice CZTR RT14 „1. třída – venkov“ (`CZTR_silnice_RT14.grf`), v domově už je zapsaný, okruh na fotce se staví z ní |
 | `zkusebni_mari/` | zkušební náklad `MARI` (`zkusebni_MARI.grf`): tahle stará verze hry ho nemá, ve hře hráče je zabudovaný |
+| `zkusebni_naklady/` | zkušební náklady SAND TATO CMNT GRVL TOUR (`zkusebni_naklady.grf`, `MAXn`), mírné klima je nemá; na zkoušku kupek písku, brambor, cementu a kamene a turistů |
 
 ## Zkušební příkazy
 
 | příkaz | co udělá |
 |---|---|
-| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU MARI a vypíše díly, délky, kapacity a čísla spritů; na MARI ho i naloží a vypíše obrázek naložené (zelená kupka); u aut se zvukovým callbackem vypíše, co GRF vrátí pro výjezd z depa, odjezd ze zastávky, jízdu v 0–60 km/h, stání a poruchu (čítač tiků na chvíli posune do taktu zvuku) |
-| `testv3sfoto <tiků> [RTxx] [fotek] [tiků mezi fotkami]` | postaví silniční okruh s depem (ze silnice s daným štítkem, jinak CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm V3S (`MAXd`, `MAXe`, modré přestavěné na různé náklady, některé naložené MARI), po zadaném počtu tiků vyfotí okruh při plném přiblížení, případně víckrát po sobě, a hru ukončí. U každé fotky vypíše počátek pohledu (`V3SPOHLED`) a polohu, směr a posun kreslení každého dílu (`V3SDIL`), takže se dá každé auto vystřihnout |
+| `testv3s` | koupí každé kupovatelné silniční auto z GRF v `TEST_RV_GRF` (např. `MAXd`), přestaví ho na GOOD PASS MAIL STEL COAL IORE LVST WOOD GRAI VALU SAND MARI TATO CMNT GRVL TOUR (co ve hře je) a vypíše díly, délky, kapacity a čísla spritů; každý náklad i naloží a vypíše vrstvy obrázku naložené (auto + kupka nebo plachta); vypíše i, co by psalo okno nákupu (kolik nákladů auto umí a co mu chybí); u aut se zvukovým callbackem vypíše, co GRF vrátí pro výjezd z depa, odjezd ze zastávky, jízdu v 0–60 km/h, stání a poruchu (čítač tiků na chvíli posune do taktu zvuku) |
+| `testv3sfoto <tiků> [RTxx] [fotek] [tiků mezi fotkami]` | postaví silniční okruh s depem (ze silnice s daným štítkem, jinak CZTR RT14, když je načtená, jinak z běžné), dva původní náklaďáky hry a osm naložených V3S (`MAXd`, `MAXe`: zboží, ocel, lidé, brambory, cement, uhlí; seznam `nakupy` v `ConTestV3SFoto`), po zadaném počtu tiků vyfotí okruh při plném přiblížení, případně víckrát po sobě, a hru ukončí. U každé fotky vypíše počátek pohledu (`V3SPOHLED`) a polohu, směr a posun kreslení každého dílu (`V3SDIL`), takže se dá každé auto vystřihnout |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
 Výpisy V3S jdou i na stderr (`dbg: [misc:0] V3S…`), s obrazem by jinak zůstaly jen v okně konzole.
@@ -29,14 +30,17 @@ Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback �
 apt-get install -y libsdl2-2.0-0        # jednou v novém kontejneru; xvfb-run tam už je
 mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-gfx.tar.xz -C /tmp/hra
 H=/tmp/hra/ottd-zkusebni/domov
-cp v3s/grf/mala/Praga_V3S-v2.grf v3s/grf/velka/Praga_V3S_BRYLE-v2.grf hra/zkusebni_mari/zkusebni_MARI.grf $H/.openttd/newgrf/
-sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nPraga_V3S-v2.grf = \nPraga_V3S_BRYLE-v2.grf = /' $H/.openttd/openttd.cfg
+cp v3s/grf/mala/Praga_V3S-v4.grf v3s/grf/velka/Praga_V3S_BRYLE-v4.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S-v4.grf = \nPraga_V3S_BRYLE-v4.grf = /' $H/.openttd/openttd.cfg
 printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
 printf 'testv3sfoto 1500\n' > $H/.openttd/scripts/game_start.scr
 cd /tmp/hra/ottd-zkusebni
 HOME=$H xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r 800x500 -s null -m null > $H/log 2>&1
 # fotka: $H/.openttd/screenshot/v3s_okruh.png (3200 x 2000, přiblížení 4x)
 ```
+
+Stromy, které auta na okruhu zakrývají, schová v `openttd.cfg` `transparency_options = 2`
+a `invisibility_options = 2`.
 
 Víc fotek po sobě: `testv3sfoto 300 RT14 12 100` (první za 300 tiků, pak 11 dalších po 100),
 soubory `v3s_okruh_00.png` až `v3s_okruh_11.png`. Bod fotky, kam hra položí kotvu dílu:
