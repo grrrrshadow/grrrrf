@@ -90,6 +90,8 @@ Celé seznamy jsou v `vwt1-nova-souhrn.json`.
   - TAZ 1500 101 km/h;
   - Pajda 130 km/h, díky lepšímu motoru i naložený.
 
+  Hráč 30. 9.: „silnější motory ostatním nedávej“. VW T1, valníky, plachty, bus a dodávky mají skutečný motor.
+
 ## Jak to složit
 
 ```bash
@@ -131,6 +133,5 @@ Ověřeno 30. 9.:
 
 ## Otevřené
 
-- VW T1 a TAZ 1500 jedou při realistickém zrychlení pod skutečnou max. rychlostí. Silnější motor jako u Pajdy?
 - Zámek a přesun k základní grafice hry, až budou auta hotová.
 - Auta koupená v rozehrané hře před výměnou GRF si nechají zadní nárazník. Nově koupená už ho nemají.

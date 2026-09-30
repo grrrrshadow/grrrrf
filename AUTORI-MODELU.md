@@ -132,3 +132,11 @@ Hráč to 29. 9. rozhodl: *„to je problém hanse a Sketchfabu, oni nám to dal
 starost. Zmenšíme to tak, že nebudou vidět malé součástky … i po zvětšení to bude 120 × 60 pixelů … bereme si model
 jako vzor a ne model.“* Modely od hans1240 tedy používáme podle licence, kterou uvádí (CC BY 4.0), a v GRF ho
 uvádíme jako autora.
+
+## Mod Tatry z Farming Simulatoru (2026-09-30)
+
+- **Co to je:** v releasu `par6` leží `zip6/bar/FS25_Tatra_T_148_S1_S3_TN_converted.zip`, mod do Farming
+  Simulatoru 25 od EmikMODelStudio a Milana #82. Nemá žádnou licenci.
+- **Použití:** nikde. Tatry jsou z modelu od hans1240.
+- **Rozhodnutí hráče 30. 9.:** *„já emika nevyndám ze zipu v repo. necháme to tak. nepoužili jsme to.“* Zůstává
+  v zipu a už se to nepřipomíná.
