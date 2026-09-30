@@ -13,14 +13,19 @@ No donations allowed. Dary se nepřijímají.
 
 CO JE V BALÍKU
 
-Praga_V3S_Tatra-v10.grf        malá, original size, na jedno místo v koloně
-Praga_V3S_Tatra_BRYLE-v10.grf  velká, s neviditelným čumákem vepředu, aby auta
+Praga_V3S_Tatra-v11.grf        malá, original size, na jedno místo v koloně
+Praga_V3S_Tatra_BRYLE-v11.grf  velká, s neviditelným čumákem vepředu, aby auta
                                v koloně nestála přes sebe.
                                Článková auta, jezdí jen do průjezdných zastávek.
 
-V každém GRF šest aut: Praga V3S Vejtřaska zelená a modrá, Tatra 148 oranžová,
-Tatra 138 červená a Tatra 148 a 138 zelená. Tatry jsou ve stejném GRF jako
-vejtřaska, aby zvuky byly v souboru jen jednou.
+V každém GRF jsou v nákupu čtyři auta: Praga V3S Vejtřaska zelená a modrá,
+Tatra 148 oranžová a Tatra 138 červená. Zelená Tatra 148 a 138 v GRF zůstala
+kvůli rozehraným hrám, koupit se už nedá: zelená je teď oranžová a červená
+Tatra, když veze vojenský náklad. Tatry jsou ve stejném GRF jako vejtřaska,
+aby zvuky byly v souboru jen jednou.
+
+GRF funguje jen ve hře ottd Decouple by Karel Mácha. Jinde se vypne s hláškou
+„Tento GRF patří ke hře OpenTTD decouple by Karel Mácha a jinde nefunguje.“
 
 PRAGA V3S VEJTŘASKA
 
@@ -56,8 +61,11 @@ dřevěnými bočnicemi (náklad je vidět jako u vejtřasky, kupy rozsypané po
 ocel a výrobky z oceli a ostatní zboží pod plachtou, tekutiny v cisterně:
 modrá voda, mléko a olej, bílá benzín, žlutá chemie, černá ropa. Pivo v sudech,
 přestavbou i v cisterně Plzeň (bílá) nebo Budvar (modrá), v Čechách se pivo
-do hospod vozilo cisternami. Zelené Tatry vozí jako zelená vejtřaska i uran,
-vojenskou techniku a výbušniny, s valníkem a vojenskou plachtou.
+do hospod vozilo cisternami. Uran a uranovou rudu, jídlo, vojenskou techniku,
+výbušniny, jaderné palivo a odpad veze Tatra celá zelená, na vojenském valníku
+pod vojenskou plachtou. Zelenou přestavbou navíc jedou na zeleném valníku i zvířata, co roste
+(marihuana, seno, vlákna, marihuanové seno, ovoce, zrní), dřevo, cihly,
+stavebniny (cement, vápno, pytle), doutníky, tabák a alkohol.
 Tatra 138 od roku 1959, červená, Tatra 148 od roku 1969, oranžová; vzduchem
 chlazený osmiválec Tatra, 71 km/h, 12 a 15 jednotek nákladu.
 
@@ -113,14 +121,21 @@ No donations allowed.
 
 WHAT IS IN THE PACKAGE
 
-Praga_V3S_Tatra-v10.grf        small, original size, fits one queue slot
-Praga_V3S_Tatra_BRYLE-v10.grf  big, with an invisible front bumper so the trucks
+Praga_V3S_Tatra-v11.grf        small, original size, fits one queue slot
+Praga_V3S_Tatra_BRYLE-v11.grf  big, with an invisible front bumper so the trucks
                                do not overlap in a queue.
                                Articulated, uses drive-through stops only.
 
-Each GRF has six trucks: Praga V3S Vejtřaska green and blue, Tatra 148 orange,
-Tatra 138 red and Tatra 148 and 138 green. The Tatras are in the same GRF as the
-V3S so that the sounds are stored only once.
+Each GRF offers four trucks to buy: Praga V3S Vejtřaska green and blue,
+Tatra 148 orange and Tatra 138 red. The green Tatra 148 and 138 stayed in the GRF
+for games already running, but can no longer be bought: an orange or red Tatra
+turns green now when it carries military cargo. The Tatras are in the same GRF as
+the V3S so that the sounds are stored only once.
+
+The GRF works only in the game ottd Decouple by Karel Mácha. Elsewhere it turns
+itself off with the message "Tento GRF patří ke hře OpenTTD decouple by Karel
+Mácha a jinde nefunguje." (This GRF belongs to the game OpenTTD decouple by Karel
+Mácha and does not work anywhere else.)
 
 PRAGA V3S VEJTŘASKA
 
@@ -154,8 +169,11 @@ wooden sides (the load shows like on the V3S, heaps spread over the bed), steel,
 steel products and other goods under a tarp, liquids in a tank: blue water, milk
 and oil, white petrol, yellow chemicals, black crude oil. Beer in barrels, or when
 refitted in a Plzeň (white) or Budvar (blue) tank: in Bohemia beer was delivered
-to the pubs by tank trucks. The green Tatras carry uranium, military equipment and
-explosives like the green V3S, with a flatbed and a military tarp.
+to the pubs by tank trucks. Uranium and uranium ore, food, military equipment,
+explosives, nuclear fuel and waste turn the whole Tatra army green, with a
+military flatbed. A green refit is offered on top for animals, crops (marijuana,
+hay, fibres, marijuana hay, fruit, grain), wood, bricks, building supplies
+(cement, quicklime, sacks), cigars, tobacco and alcohol.
 Tatra 138 from 1959, red, Tatra 148 from 1969, orange; air-cooled Tatra V8,
 71 km/h, 12 and 15 units of cargo.
 

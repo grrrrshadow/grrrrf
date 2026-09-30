@@ -1,5 +1,39 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 11 (30. 9.): zelená Tatra schovaná pod normální, GRF jen pro naši hru
+
+- **Zelená Tatra 148 a 138 zmizela z nákupu** (hráč: *„hlavně zmizí z menu nákupu ta vojenská 138 148 a schová
+  se“*). V GRF zůstala (`0x0104`, `0x0105`, klima žádné), aby rozehrané hry jezdily dál. Zelená vejtřaska zůstává
+  (*„zelenou v3s neschováme, ta prostě jezdila v civilu běžně“*).
+- **Oranžová 148 a červená 138 vozí i vojenské náklady a jsou s nimi celé zelené** (*„hráč koupí tatru na explosives
+  a dostane zelenou“*): jídlo, výbušniny, uran, uranová ruda, jaderné palivo a odpad, vojenská technika. Jedou na
+  vojenském valníku s obrázkem nákladu, nebo pod vojenskou plachtou. Nevozí jen sklo, elektřinu a přeřazení lokomotivy.
+- **Zelená přestavba navíc**, v okně přestavby další podtyp „… (zelená)“: zvířata (prasátka, kravičky, ovečky), co
+  roste na valníku (marihuana, seno, vlákna, marihuanové seno, ovoce, zrní), dřevo, cihly, stavebniny (cement, vápno,
+  pytle), doutníky, tabák a alkohol. Cisterny Plzeň a Budvar zelenou variantu nemají (*„přestavby na pivovar Plzeň
+  Budvar ne“*), sudy ano. Seznam je `T_ZELENA_NAVIC` v `tatra/grf_tatra.py`.
+- **Řádek 3D** v popisu GRF jako u VW T1: `3D: hans1240 (Praga V3S, Tatra 148, Tatra 138), sketchfab.com/hans1240,
+  CC BY 4.0`.
+- **Jen pro naši hru.** Hráč: *„skupiny nákladů nechcem, máme náklady pěkně vypsaný na řádku“*, *„neuskromněný,
+  využij nový rozsah čísel bloků“*. Každý náklad má u Tatry svoje bloky grafiky a normální Tatra jich potřebuje víc,
+  než kolik jde zapsat jedním bajtem (malá 211, velká 189, bylo 176 volných). GRF se proto v Action 14 před hlavičkou
+  ptá na `decouple_more_action2_ids` (dvoubajtová čísla bloků, hra od forclaude `682797f`,
+  `hra/cisla-bloku/ZPRAVA-OD-HRY.md`) a na zámek `decouple_128_cargo`; hned za hlavičkou je zámek (Action 7 na bit 8
+  proměnné 0x9D, jinak Action B): jinde se GRF vypne s hláškou *„Tento GRF patří ke hře OpenTTD decouple by Karel
+  Mácha a jinde nefunguje.“* Zamčená je i vejtřaska, je ve stejném GRF. Náš yagl umí dvoubajtová čísla od téhož dne
+  (`yagl/NASE-UPRAVY.md`, bod 4). Switche jdou od `0x10` do `0xBF` a pak od `0x100`, vrstvy nákladu zůstaly na
+  `0xC0` až `0xFF`.
+- Malá 6,58 MB (`dbd34c04…`), velká 7,74 MB (`22e454ea…`).
+- **Ověřeno ve zkušební hře s dvoubajtovými čísly** (kolegova hra `c53e895` s mými zkušebními příkazy,
+  `hra/ottd-zkusebni-c53e895-gfx.tar.xz`), `testv3s` pro `MAXd` i `MAXe` na všech 37 nákladech hry a všech podtypech:
+  zelené Tatry nejdou koupit (malá i velká), oranžová a červená umí 36 z 37 (chybí jen `ROLA`, auta na vlaku),
+  s uranem, vojenskou technikou a výbušninami jsou celé zelené, zelená přestavba navíc je u 14 nákladů, které
+  zkušební hra má (LVST GRAI WOOD TATO CMNT BEER SGCN BRCK BDMT FRUT WINE HOPS FICR MARI), vždy stejná vrstva nákladu
+  na zeleném valníku; pivo v cisterně Plzeň a Budvar bez zelené. Všechny čtyři Tatry stejně, zvuky jako u vejtřasky,
+  vejtřaska beze změny. Po uložení a načtení hry stejný výsledek. Fotka okruhu: `tatra/nahledy/ve_hre_v11.png`.
+  Ve staré zkušební hře bez těch vlastností se GRF vypne (Action 7 nepřeskočí, Action B fatální) a žádné auto
+  z něj ve hře není. Rozbalit a znovu složit yaglem: malá bajt po bajtu stejná.
+
 ## Verze 10 (29. 9.): vejtřaska a Tatry v jednom GRF
 
 - **Tatry 148 a 138 ve stejném GRF** (hráč: *„tak je dáme k vejtřaskám, ať ušetříme místo MB za zvukové soubory?“*,
@@ -144,12 +178,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v10.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v10.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v11.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v11.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v10.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v11.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
-(`Praga_V3S_Vejtraska-v1` až `-v9`) zůstávají v repu.
+(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 

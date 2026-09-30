@@ -40,7 +40,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 9 vojenska technika MLTR jen zelena, LETH kuze a FLOU mouka ve vzoru (hrac)
 # 10 cervenejsi cervene cihly (hrac: "naklad cihly trochu cervenejsi na priste"); v GRF jsou i Tatry 148 a 138 (hrac:
 #   "tak je dame k vejtraskam, at usetrime misto MB za zvukove soubory?"), vyjezd z depa bez starteru
-VERZE = 10
+# 11 zelena Tatra 148 a 138 schovana pod normalni (vojenske naklady ji obarvi, zelene prestavby navic), radek 3D
+#   hans1240; GRF s Tatrami jen pro nasi hru: dvoubajtova cisla bloku a zamek (hra, zpravy v hra/cisla-bloku a
+#   hra/zamek-128-nakladu), hrac: "neuskromneny, vyuzij novy rozsah cisel bloku"
+VERZE = 11
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -343,25 +346,43 @@ if TATRA:
     # hrac 29. 9.: Tatry ve stejnem GRF; popis Tater za vejtraskou, autor modelu Tatry je taky hans1240
     POPIS_GRF = POPIS_GRF.replace("{yellow}V3S Praga{green}  {truck} {new-line}",
                                   "{yellow}V3S Praga, Tatra 148, Tatra 138{green}  {truck} {new-line}", 1)
-    POPIS_GRF = POPIS_GRF.replace("{orange}3D: Praga V3S, hans1240",
-        "{green}Tatra 148 orange, Tatra 138 red, Tatra 148 and 138 green  " + BARVA + "{truck}{new-line}"
+    POPIS_GRF = POPIS_GRF.replace("{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}",
+        "{green}Tatra 148 orange, Tatra 138 red  " + BARVA + "{truck}{new-line}"
         "{orange}Tatra 148 and 138, the orange and red Czechoslovak 6×6 trucks: a tipper for coal, ore and stone, "
         "a flatbed with wooden sides for crops, animals and goods, a tarp for steel, a tank for liquids (blue water, "
         "milk and oil, white petrol, yellow chemicals, black crude oil), beer in barrels or in a Plzeň (white) or "
-        "Budvar (blue) tank. The green ones carry uranium, military equipment and explosives like the green V3S. "
+        "Budvar (blue) tank. With uranium, food, military equipment or explosives it turns army green, and animals, "
+        "crops, wood, bricks, building supplies, cigars, tobacco and alcohol can ride in a green one too. "
         "Air-cooled Tatra V8, 71 km/h.{new-line}"
-        "{orange}3D: Praga V3S and Tatra-148, hans1240", 1)
+        # hrac 30. 9.: "takhle udelame radek 3D taky u Praga V3S a Tatra 138, 148. 3D: Hans..." (jako u VW T1)
+        "{orange}3D: hans1240 (Praga V3S, Tatra 148, Tatra 138), sketchfab.com/hans1240, CC BY 4.0{new-line}", 1)
+    assert "3D: hans1240" in POPIS_GRF and "Tatra 148 and 138 green" not in POPIS_GRF
 
 # ---------------------------------------------------------------- yagl
-Y = ['yagl_version: "";', "grf_format: Container2;",
-     "optional_info // Action14", "{", "    INFO: ", "    {",
+Y = ['yagl_version: "";', "grf_format: Container2;"]
+if TATRA:
+    # Od verze 11 jen pro nasi hru (hra/cisla-bloku/ZPRAVA-OD-HRY.md): Tatra se vsemi naklady a podtypy potrebuje vic nez
+    # 255 cisel bloku. Dotazy musi byt pred Action 8, hra je cte jen pri prohlizeni souboru a to na Action 8 konci.
+    Y += ["optional_info // Action14, dotazy na nasi hru: dvoubajtova cisla bloku (bit 9) a zamek (bit 8)", "{"]
+    for vlastnost, bit in (("decouple_more_action2_ids", 0x09), ("decouple_128_cargo", 0x08)):
+        Y += ["    FTST: ", "    {", f'        NAME: default, "{vlastnost}";', "        MINV: [ 0x01 0x00 ];",
+              f"        SETP: [ 0x{bit:02X} ];", "    }"]
+    Y += ["}"]
+Y += ["optional_info // Action14", "{", "    INFO: ", "    {",
      f'        URL_: default, "{ITCH}";',
      f"        VRSN: [ 0x{VERZE:02X} 0x00 0x00 0x00 ];", "        MINV: [ 0x01 0x00 0x00 0x00 ];", "        NPAR: [ 0x00 ];",
      "        PALS: [ 0x44 ];", "        BLTR: [ 0x33 ];", "    }", "}",
      "grf // Action08", "{", f'    grf_id: "{GRF_ID}";', "    version: GRF8;", f'    name: "{GRF_JMENO}";',
-     f'    description: "{POPIS_GRF}";', "}",
-     "properties<GlobalSettings, 0x0000> // Action00, překladová tabulka nákladů: hráčův vzor "
-     "prekladova-tabulka-vzor.yagl, stejná čísla, za MARI kódy navíc", "{"]
+     f'    description: "{POPIS_GRF}";', "}"]
+if TATRA:
+    # zamek (hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md): nase hra na dotaz decouple_128_cargo nastavi bit 8 promenne 0x9D a
+    # hlaska se preskoci; jinde bit nikdo nenastavi a GRF se vypne s hlaskou
+    Y += ["if_act7 (is_bit_set(global_var[0x9D] & 0xFF, 1 << 8)) // Action07, zamek: nase hra hlasku preskoci", "{",
+          "    skip_sprites: 0x01;", "}",
+          "error_message<Fatal, default, 0xFF> // Action0B", "{",
+          '    message: "Tento GRF patří ke hře OpenTTD decouple by Karel Mácha a jinde nefunguje.";', "}"]
+Y += ["properties<GlobalSettings, 0x0000> // Action00, překladová tabulka nákladů: hráčův vzor "
+      "prekladova-tabulka-vzor.yagl, stejná čísla, za MARI kódy navíc", "{"]
 for i, k in enumerate(TABULKA):
     if i in ODDIL: Y.append("    " + ODDIL[i])
     Y += [f"    // instance_id: 0x{i:04X}", "    {", f'        cargo_translation_table: "{k}"; // {POZNAMKA[k]}', "    }"]
@@ -411,7 +432,7 @@ def nevozi(n):
 
 def sw(cid, popis, vyraz, rozsahy, default):
     """switch v yaglu; rozsahy = [(hodnota, cil)] nebo [(od, do, cil)]"""
-    r = [f"switch<RoadVehicles, 0x{cid:02X}, PrimaryDWord> // {popis}", "{", "    expression:", "    {"]
+    r = [f"switch<RoadVehicles, 0x{cid:0{2 if cid <= 0xFF else 4}X}, PrimaryDWord> // {popis}", "{", "    expression:", "    {"]
     r += ["        " + v for v in vyraz] + ["    };", "    ranges:", "    {"]
     for rz in rozsahy:
         od, do, cil = rz if len(rz) == 3 else (rz[0], rz[0], rz[1])

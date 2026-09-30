@@ -137,3 +137,14 @@ soubory?“*, *„dáme zvlášť obrázky pro přesné barvy“*, *„jo zvuk j
    oranžová a červená nevozí uran a vojenskou techniku (33 z 35), zelené je vezou (34 z 35, chybí hračky), uhlí na
    sklápěči, voda, ropa a kyselina v cisterně své barvy, pivo v sudech a přestavbou v cisterně Plzeň a Budvar,
    zvuky jako vejtřaska. Tatry na okruhu: `nahledy/ve_hre_v10.png`.
+7. **Verze 11: zelená schovaná pod normální** (hráč 30. 9.: *„zelenou tatru 138 148 schováme pod normální 138 148.
+   hráč koupí tatru na explosives a dostane zelenou“*, *„hlavně zmizí z menu nákupu ta vojenská 138 148 a schová
+   se“*). Zelené `0x0104` a `0x0105` nejdou koupit (klima žádné), v GRF zůstaly kvůli rozehraným hrám. Oranžová a
+   červená vozí všechno kromě skla, elektřiny a přeřazení lokomotivy; s vojenským nákladem (`JEN_VOJENSKA`: jídlo,
+   výbušniny, uran, uranová ruda, jaderné palivo a odpad, vojenská technika) jsou celé zelené. Zelená přestavba
+   navíc (`T_ZELENA_NAVIC`, další podtyp „… (zelená)“) u zvířat, co roste, dřeva, cihel, stavebnin, doutníků,
+   tabáku a alkoholu; cisterny Plzeň a Budvar ji nemají (*„přestavby na pivovar Plzeň Budvar ne“*). Hráč: *„skupiny
+   nákladů nechcem, máme náklady pěkně vypsaný na řádku“*, takže každý náklad má svoje bloky grafiky; normální Tatra
+   jich potřebuje víc než 255 (malá 211), GRF proto používá dvoubajtová čísla bloků naší hry
+   (`hra/cisla-bloku/ZPRAVA-OD-HRY.md`) a je zamčený pro ottd Decouple. Switche jdou od `0x10` do `0xBF` a pak od
+   `0x100`, vrstvy nákladu zůstávají na `0xC0` až `0xFF`.

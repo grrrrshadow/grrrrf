@@ -44,6 +44,39 @@ T_PODTYPY_ORANZ = dict(T_PODTYPY)
 T_PODTYPY_ORANZ["BEER"] = [("valnik", "BEER", " (sudy)"), ("cisterna_bila", None, " (pivo Plzeň, cisterna)"),
                            ("cisterna_modra", None, " (pivo Budvar, cisterna)")]
 
+# Od verze 11 (hrac 30. 9.): "zelenou tatru 138 148 schovame pod normalni 138 148. hrac koupi tatru na explosives
+# a dostane zelenou", "hlavne zmizi z menu nakupu ta vojenska 138 148 a schova se". Zelene Tatry v nakupu nejsou
+# (klima zadne), jejich cisla a grafika zustavaji kvuli rozehranym hram. Normalni 148 a 138 vozi i to, co dosud vozila
+# jen zelena, a s tim jsou cele zelene (vojensky valnik te Tatry a vrstva nakladu jako u zelene).
+T_SKRYTE = T_ZELENA
+T_JEN_ZELENA = list(JEN_VOJENSKA)
+T_NAKLADY_NORMALNI = [k for k in TABULKA if k not in NEVOZI]
+# "par zelenych nechame jako prestavbu navic": zelena jako dalsi podtyp nakladu (okno prestavby) u dobytka, kup toho,
+# co roste ("marihuana, seno, vlakna, marihuanove seno, ovoce, zrni, armada pomahala zemedelcum pri sklizni"), dreva,
+# cihel a stavebnin ("cement, vapno, pytle") a u toho, co si vojaci uzijou ("cigara, tabak, alkohol"); "prestavby na
+# pivovar Plzen Budvar ne" (cisterny zelenou variantu nemaji)
+T_ZELENA_NAVIC = ("LVST "                                                           # prasatka, kravicky, ovecky
+                  "MARI HOPS FICR SGCN FRUT FRVG GRAI WHEA MAIZ CERE TATO BEAN SGBT SEED OLSD NUTS "   # co roste
+                  "WOOD TWOD BRCK BDMT CMNT QLME "                                  # drevo, cihly, stavebniny
+                  "CIGR TBCO BEER WINE").split()                                    # doutniky, tabak, alkohol
+
+def t_normalni_obrazek(k, zelena_varianta):
+    """(telo, obrazek na valniku) nakladu k bez podtypu u normalni Tatry, nebo jeho zelena varianta"""
+    if k in VRSTVA and not VRSTVA[k].startswith("sudy_"):
+        return ("valnik_zelena" if zelena_varianta else "valnik"), VRSTVA[k]
+    pl = T_PLACHTA["zelena" if zelena_varianta else "oranzova"]
+    return ("valnik_zelena" if zelena_varianta else "valnik"), pl[1] if ODSTIN.get(k) == "D" else pl[0]
+
+def t_zeleny_podtyp(telo, obr, jm):
+    """zelena varianta podtypu: vojensky valnik se stejnym nakladem, plachta vojenska misto sedobile"""
+    if obr == T_PLACHTA["oranzova"][0]: obr = T_PLACHTA["zelena"][0]
+    return ("valnik_zelena", obr, (jm[:-1] + ", zelená)") if jm else " (zelená)")
+
+for _k in T_ZELENA_NAVIC:
+    assert _k in INDEX and _k in T_NAKLADY_NORMALNI, _k
+    _zaklad = T_PODTYPY_ORANZ.get(_k) or [t_normalni_obrazek(_k, False) + ("",)]
+    T_PODTYPY_ORANZ[_k] = list(_zaklad) + [t_zeleny_podtyp(*p) for p in _zaklad if not p[0].startswith("cisterna_")]
+
 def tatra_nacti():
     """fotky Tater do vse: auta a vrstvy nakladu (valnik Tv_, sklapec Ts_), kotvy jako u vejtrasky"""
     global T_OBR_V, T_OBR_S
@@ -77,19 +110,24 @@ def tatra_texty():
     """popisy v nakupu a jmena podtypu Tater, cisla za retezci vejtrasky (Y je jeste v bloku strings)"""
     global T_TEXT, T_TEXT_PODTYP
     t = max(max(v) for v in TEXT_PODTYP.values()) + 1
+    # Action 4 unese nejvys 255 retezcu, dal novy blok. Jmena podtypu smi az do 0xD3FF (callback 0x19 vraci 0x000-0x3FF).
+    zacatek = [min(TEXT.values())]                      # blok strings vejtrasky zacina 0xD001
+    def text(s):
+        nonlocal t
+        if t - zacatek[0] == 255:
+            zacatek[0] = t
+            Y.extend(["}", f"strings<RoadVehicles, default, 0x{0xD000 + t:04X}*> // Action04, dalsi retezce Tater", "{"])
+        Y.append(f'    /* 0x{0xD000 + t:04X} */ "{s}";'); t += 1
+        return t - 1
     T_TEXT = {}
     for n in T_AUTA:
-        T_TEXT[n] = t
-        Y.append(f'    /* 0xD0{t:02X} */ "{{green}}for {DECOUPLE}{{black}}{{new-line}}Model: {{gold}}hans1240 (Sketchfab), CC BY 4.0";')
-        t += 1
+        T_TEXT[n] = text(f"{{green}}for {DECOUPLE}{{black}}{{new-line}}Model: {{gold}}hans1240 (Sketchfab), CC BY 4.0")
     T_TEXT_PODTYP = {}
     for k, p in T_PODTYPY_ORANZ.items():
-        if p is T_PODTYPY[k] or [jm for _, _, jm in p] == [jm for _, jm in PODTYPY[k]]:
+        if k in PODTYPY and (p is T_PODTYPY[k] or [jm for _, _, jm in p] == [jm for _, jm in PODTYPY[k]]):
             T_TEXT_PODTYP[k] = TEXT_PODTYP[k]; continue                  # stejna jmena jako u vejtrasky
-        T_TEXT_PODTYP[k] = []
-        for _, _, jm in p:
-            T_TEXT_PODTYP[k].append(t); Y.append(f'    /* 0xD0{t:02X} */ "{jm}";'); t += 1
-    assert t <= 0xFF
+        T_TEXT_PODTYP[k] = [text(jm) for _, _, jm in p]
+    assert t <= 0x400
 
 def tatra_yagl():
     global Y
@@ -116,10 +154,12 @@ def tatra_yagl():
         m = T_MODEL[n]; zelena = n in T_ZELENA
         dalsi = [0x10]
         def nove():
+            # od verze 11 dvoubajtova cisla bloku (dotaz decouple_more_action2_ids): switche preskoci vrstvy 0xC0-0xFF
+            if dalsi[0] == 0xC0: dalsi[0] = 0x100
             i = dalsi[0]; dalsi[0] += 1
-            assert i < 0xC0, "switche Tatry narazily na vrstvy nakladu"
+            assert i <= 0x7FFD, "hra unese cisla bloku jen do 0x7FFD"
             return i
-        naklady = NAKLADY["vojenska" if zelena else "modra"]
+        naklady = NAKLADY["vojenska"] if zelena else T_NAKLADY_NORMALNI
         kap_cumak = 1 if CUMAK else 0
         kap_auto = T_KAPACITA[n] - kap_cumak
         lidi_auto = T_LIDI[n] - kap_cumak
@@ -131,8 +171,9 @@ def tatra_yagl():
                  "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
                  "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
                  "        refit_cargo_types: 0x00000000;",
-                 f"        // vozí všechno z tabulky kromě: {nevozi('vojenska' if zelena else 'modra')}",
-                 f"        always_refittable_cargos: {seznam('vojenska' if zelena else 'modra')};",
+                 f"        // vozí všechno z tabulky kromě: "
+                 f"{nevozi('vojenska') if zelena else ', '.join(f'{k} {v}' for k, v in NEVOZI.items())}",
+                 f"        always_refittable_cargos: [ {' '.join(f'0x{INDEX[k]:02X}' for k in naklady)} ];",
                  "        never_refittable_cargos: [ ];",
                  f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
                  "        sprite_id: 0xFF;",
@@ -140,7 +181,8 @@ def tatra_yagl():
                  f"        cargo_capacity: 0x{(kap_cumak if co == 'cumak' else kap_auto):02X};",
                  f"        shorten_vehicle: 0x{(8 - CUMAK) if co == 'cumak' else 0:02X};"]
             if eid == h:
-                p += ["        climate_availability: Temperate | Arctic | Tropical | Toyland;",
+                p += ["        climate_availability: " +                              # zelena od verze 11 schovana
+                      ("null;" if n in T_SKRYTE else "Temperate | Arctic | Tropical | Toyland;"),
                       "        speed_2_kmh: 0x8E;",                                   # 71 km/h
                       f"        power_10_hp: 0x{T_VYKON[m]:02X};",
                       f"        weight_quarter_tons: 0x{T_HMOTNOST[m]:02X};",
@@ -154,7 +196,8 @@ def tatra_yagl():
             Y += p + ["    }", "}", f"strings<RoadVehicles, default, 0x{eid:04X}> // Action04", "{",
                       f'    /* 0x{eid:04X} */ "{T_NAZEV[n] if eid == h else T_NAZEV[n] + " (auto)"}";', "}"]
         # Action01: nastavby auta a prazdna sada pro cumak
-        tela = ["valnik_zelena"] if zelena else ["valnik", "sklapec"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")]
+        tela = ["valnik_zelena"] if zelena else (["valnik", "sklapec"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")]
+                                                 + ["valnik_zelena"])        # od verze 11 i zelena (vojenske naklady)
         i_prazdny = len(tela)
         Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01", "{"]
         for si, t in enumerate(tela):
@@ -185,9 +228,10 @@ def tatra_yagl():
 
         def urci(k):
             """(telo, obrazek na valniku 'v' / sklapeci 's' nebo None) pro naklad k"""
-            if zelena:
+            if zelena or k in T_JEN_ZELENA:           # od verze 11 veze normalni Tatra vojenske naklady zelena
                 if k in VRSTVA: return "valnik_zelena", ("v", VRSTVA[k])
-                return "valnik_zelena", ("v", plachta[1] if ODSTIN.get(k) == "D" else plachta[0])
+                zp = T_PLACHTA["zelena"]
+                return "valnik_zelena", ("v", zp[1] if ODSTIN.get(k) == "D" else zp[0])
             if k in T_CISTERNA: return f"cisterna_{T_CISTERNA[k]}", None
             if k in T_SKLAPEC: return "sklapec", ("s", T_SKLAPEC[k])
             if k in VRSTVA and not VRSTVA[k].startswith("sudy_"): return "valnik", ("v", VRSTVA[k])
