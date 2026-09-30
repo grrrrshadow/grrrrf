@@ -4,11 +4,14 @@
 #     stara cisla plati
 #  2. naklady podle hrace 30. 9.: VW T1 je vzor pro dodavky, bedna zvlast, valniky podle barvy kupy, lide 2 / 5 / 8
 #  3. novy valnik 0x8A se zelenou kupou marihuany (kupa brambor z 0x88 prebarvena, plna i nakladaci)
-#  4. neviditelny clanek: cumak delky 2 + auto delky 8, zadni naraznik uz se nepripojuje (poradi kresleni, CUMAK.md)
+#  4. neviditelny clanek: cumak delky 1 + auto delky 8, zadni naraznik uz se nepripojuje (poradi kresleni, CUMAK.md;
+#     verze 1 mela cumak 2, hrac 30. 9.: "je tam velka mezera", rozestup v kolone 9 misto 10)
 #  5. skutecne udaje: rok uvedeni, vykon, max. rychlost, vaha (Pajda karavan 130 km/h a lepsi motor podle hrace)
+#  6. (verze 2) TAZ 1203 bus, bus zahradka a tri dodavky 0x8B-0x8F: kopie TAZ 1500 se svetlejsim lakem, od 1973
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
-#   vznikne <slozka sprites>/<jmeno>.yagl, list se zelenou kupou a <slozka sprites>/../<jmeno>-souhrn.json
+#   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
+import numpy as np
 from PIL import Image
 
 VSTUP, LIST, ZELENA, KODY, VYSTUP, JMENO = sys.argv[1:7]
@@ -60,7 +63,12 @@ AUTA = {
     0x90: ("taz1203", S_BEDNOU, 2, "GOOD"), 0x91: ("taz1203", PLACHTA, 2, "MAIL"), 0x92: ("taz1203", PLACHTA, 2, "MAIL"),
     0x93: ("taz1500", cisla(LIDE_BUS), 8, "PASS"), 0x94: ("taz1500", cisla(LIDE_BUS), 8, "PASS"),
     0x95: ("taz1500", DODAVKA, 2, "MAIL"), 0x96: ("taz1500", S_BEDNOU, 2, "GOOD"), 0x97: ("taz1500", DODAVKA, 2, "MAIL"),
+    # TAZ 1203 bus a dodavky (od verze 2): naklady jako jejich TAZ 1500, udaje dvanacttrojky
+    0x8B: ("taz1203", cisla(LIDE_BUS), 8, "PASS"), 0x8C: ("taz1203", cisla(LIDE_BUS), 8, "PASS"),
+    0x8D: ("taz1203", DODAVKA, 2, "MAIL"), 0x8E: ("taz1203", S_BEDNOU, 2, "GOOD"), 0x8F: ("taz1203", DODAVKA, 2, "MAIL"),
 }
+TAZ1203_Z_1500 = {0x8B: (0x93, "zluta"), 0x8C: (0x94, "zluta"), 0x8D: (0x95, "modra"), 0x8E: (0x96, "modra"),
+                  0x8F: (0x97, "modra")}
 for v, (_, sez, _, vych) in AUTA.items():
     assert SLOT[vych] in sez, (hex(v), vych)
     assert SLOT["FREE"] not in sez
@@ -123,21 +131,21 @@ def akce3(eid, vychozi, naklady):
     r += [f"        0x{a:02X}: 0x{b:04X};" for a, b in naklady]
     return "\n".join(r + ["    };", "}"])
 
-# ---------------- novy valnik 0x8A: kopie bloku 0x88 (sady, vlastnosti, jmeno, ikona, auto, pruhledny cumak, switche)
+# ---------------- nova auta: kopie celeho bloku auta (sady auta, skupina, vlastnosti cumaku, jmeno, ikona, auto,
+# Action 3 auta, pruhledny cumak, switche, Action 3 cumaku), kazdy sprite s novym cislem, zmenene obrazky na novem listu
+velky = np.array(Image.open(LIST).convert("RGBA"))
 zel = pickle.load(open(ZELENA, "rb"))                  # {(sada, smer): (rgba, maska, sprite)}
-i88 = najdi(r"^properties<RoadVehicles, 0x0088>")
-blok = [z for z in zaznamy[i88 - 2:i88 + 11]]
-assert "sprite_sets<" in blok[0] and "0xFF>" in blok[1] and "feature_ids: [ 0x0088 ]" in blok[12]
 dalsi_id = [max(int(x, 16) for x in re.findall(r"sprite_id<(0x[0-9A-F]+)>", t)) + 1]
-LIST_ZEL = f"{JMENO}-zelena-kupa.png"
-bunky = []                                             # (sada, smer) -> pozice na novem listu
+LIST_NOVY = f"{JMENO}-nove-sprity.png"
+bunky = []                                             # obrazky na novy list v poradi zapisu
 
 def nove_id():
     i = dalsi_id[0]; dalsi_id[0] += 1
     return i
 
-def prepis_sprity(z, zelena_sada=None):
-    """kazdy sprite dostane nove cislo; u zelene sady i obrazek z noveho listu"""
+def prepis_sprity(z, obraz=None):
+    """kazdy sprite dostane nove cislo; kdyz obraz(sada, smer, (w, h, xo, yo, soubor, x, y)) vrati obrazek, jde
+    na novy list, jinak zustane obrazek z puvodniho listu"""
     sady = re.split(r"(?=    sprite_set // )", z)
     out = []
     for si, s in enumerate(sady):
@@ -145,42 +153,97 @@ def prepis_sprity(z, zelena_sada=None):
         def jeden(m):
             smer[0] += 1
             w, h, xo, yo, soubor, x, y = m.group(2, 3, 4, 5, 6, 7, 8)
-            sada = si - 1                              # sady[0] je hlavicka zaznamu
-            if zelena_sada is not None and sada in zelena_sada:
-                rgba, _, sp = zel[(sada, smer[0])]
-                assert (sp["w"], sp["h"], sp["xo"], sp["yo"]) == (int(w), int(h), int(xo), int(yo))
-                bunky.append(((sada, smer[0]), rgba))
-                soubor, x, y = LIST_ZEL, "{X%d}" % (len(bunky) - 1), "{Y%d}" % (len(bunky) - 1)
+            sp = (int(w), int(h), int(xo), int(yo), soubor, int(x), int(y))
+            novy_obraz = obraz(si - 1, smer[0], sp) if obraz else None      # sady[0] je hlavicka zaznamu
+            if novy_obraz is not None:
+                assert novy_obraz.shape[:2] == (sp[1], sp[0])
+                bunky.append(novy_obraz)
+                soubor, x, y = LIST_NOVY, "{X%d}" % (len(bunky) - 1), "{Y%d}" % (len(bunky) - 1)
             return (f"sprite_id<0x{nove_id():08X}>\n        {{\n            [{w}, {h}, {xo}, {yo}], zin4, c32bpp | chunked, "
                     f"\"{soubor}\", [{x}, {y}];")
         out.append(re.sub(r"sprite_id<(0x[0-9A-F]+)>\n        \{\n            \[(-?\d+), (-?\d+), (-?\d+), (-?\d+)\], "
                           r"zin4, c32bpp \| chunked, \"([^\"]+)\", \[(\d+), (\d+)\];", jeden, s))
     return "".join(out)
 
-novy = list(blok)
-novy[0] = prepis_sprity(blok[0], zelena_sada={1, 2})   # sada 0 prazdny valnik (stejny obrazek), 1 plna, 2 nakladani
-novy[2] = blok[2].replace("0x0088", "0x008A")
-novy[3] = blok[3].replace("0x0088", "0x008A").replace('"TAZ 1203 valnik zluta brambor"', '"TAZ 1203 valnik zelena marihuana"')
-assert "zelena marihuana" in novy[3]
-novy[4] = prepis_sprity(blok[4])                       # ikona (vsechny valniky maji stejnou prazdnou)
-novy[6] = blok[6].replace("0x00A8", "0x00AA")
-novy[7] = blok[7].replace("0x00A8", "0x00AA")
-novy[8] = prepis_sprity(blok[8])                       # pruhledny cumak
-novy[10] = blok[10].replace("0x80A8", "0x80AA")
-novy[12] = blok[12].replace("0x0088", "0x008A")
+def klonuj(zdroj, nos, jmeno, obraz_auta=None, obraz_ikony=None):
+    """blok auta zdroj (13 zaznamu) jako nove auto nos s cumakem nos a autem nos + 0x20"""
+    zc, nc = zdroj + 0x20, nos + 0x20
+    i = najdi(rf"^properties<RoadVehicles, 0x{zdroj:04X}>")
+    blok = zaznamy[i - 2:i + 11]
+    assert "sprite_sets<" in blok[0] and blok[1].startswith("sprite_groups<RoadVehicles, 0xFF>")
+    assert f"feature_ids: [ 0x{zdroj:04X} ]" in blok[12] and f"0x{zc:04X}" in blok[6]
+    stare = re.search(r'"([^"]*)"', blok[3]).group(1)
+    novy = list(blok)
+    novy[0] = prepis_sprity(blok[0], obraz_auta)
+    novy[2] = blok[2].replace(f"0x{zdroj:04X}", f"0x{nos:04X}")
+    novy[3] = blok[3].replace(f"0x{zdroj:04X}", f"0x{nos:04X}").replace(f'"{stare}"', f'"{jmeno}"')
+    novy[4] = prepis_sprity(blok[4], obraz_ikony)
+    novy[6] = blok[6].replace(f"0x{zc:04X}", f"0x{nc:04X}")
+    novy[7] = blok[7].replace(f"0x{zc:04X}", f"0x{nc:04X}")
+    novy[8] = prepis_sprity(blok[8])                   # pruhledny cumak: stejny obrazek
+    novy[10] = blok[10].replace(f"0x80{zc:02X}", f"0x80{nc:02X}")
+    novy[12] = blok[12].replace(f"0x{zdroj:04X}", f"0x{nos:04X}")
+    assert all(novy[n] != blok[n] for n in (2, 3, 6, 7, 10, 12)) and jmeno in novy[3]
+    return novy
+
+def zesvetli(a, barva, sytost=0.72, jas=1.10, pridat=0.04):
+    """svetlejsi lak: jen syte body v odstinu laku (bus zluta 40-62 stupnu, dodavky modra 190-225), v HSV mene
+    sytosti a vic jasu; tmave stiny a okna se skoro nehnou, sedacky, kufry, kola a naklad zustanou"""
+    lo, hi = {"zluta": (40, 62), "modra": (190, 225)}[barva]
+    f = a.astype(float) / 255
+    r, g, b = f[..., 0], f[..., 1], f[..., 2]
+    mx = np.maximum(np.maximum(r, g), b); mn = np.minimum(np.minimum(r, g), b); d = np.where(mx - mn == 0, 1, mx - mn)
+    h = np.where(mx == r, ((g - b) / d) % 6, np.where(mx == g, (b - r) / d + 2, (r - g) / d + 4)) * 60
+    s = np.where(mx == 0, 0, (mx - mn) / np.where(mx == 0, 1, mx))
+    m = (a[..., 3] > 0) & (h >= lo) & (h <= hi) & (s > 0.25)
+    s2, v2 = s * sytost, np.minimum(1.0, mx * jas + pridat)
+    hh = (h / 60) % 6; i = np.floor(hh).astype(int); fr = hh - i
+    p, q, tt = v2 * (1 - s2), v2 * (1 - s2 * fr), v2 * (1 - s2 * (1 - fr))
+    rgb = np.stack([np.choose(i, [v2, q, p, p, tt, v2]), np.choose(i, [tt, v2, v2, q, p, p]),
+                    np.choose(i, [p, p, tt, v2, v2, q])], -1) * 255
+    out = a.copy()
+    out[..., :3][m] = np.round(rgb[m]).clip(0, 255).astype(np.uint8)
+    return out
+
+# valnik 0x8A: sada 0 prazdny valnik (stejny obrazek), 1 plna a 2 nakladani se zelenou kupou; ikona stejna
+def zelena(sada, smer, sp):
+    if sada not in (1, 2):
+        return None
+    rgba, _, zsp = zel[(sada, smer)]
+    assert (zsp["w"], zsp["h"], zsp["xo"], zsp["yo"]) == sp[:4]
+    return rgba
+novy = klonuj(0x88, 0x8A, "TAZ 1203 valnik zelena marihuana", zelena)
 i89 = najdi(r"^properties<RoadVehicles, 0x0089>")
 zaznamy[i89 + 11:i89 + 11] = novy                      # hned za valnik bedna
 assert zaznamy[i89 + 10].startswith("feature_graphics") and "0x0089" in zaznamy[i89 + 10]
 
-# list se zelenou kupou: 8 sloupcu, mezera 2 px
-sirka = max(a.shape[1] for _, a in bunky) + 4; vyska = max(a.shape[0] for _, a in bunky) + 4
-list_zel = Image.new("RGBA", (8 * sirka, ((len(bunky) + 7) // 8) * vyska), (0, 0, 0, 0))
-pozice = []
-for n, (_, a) in enumerate(bunky):
-    x, y = (n % 8) * sirka + 2, (n // 8) * vyska + 2
-    list_zel.paste(Image.fromarray(a, "RGBA"), (x, y))
-    pozice.append((x, y))
-list_zel.save(os.path.join(VYSTUP, LIST_ZEL))
+# TAZ 1203 bus a dodavky (hrac 30. 9.: TAZ 1500 jsou az od 1988, tak i TAZ 1203, busy svetlejsi zlutou, dodavky
+# svetlejsi modrou): kopie TAZ 1500, vsechny sady i ikona se svetlejsim lakem
+def svetly(barva):
+    def obraz(sada, smer, sp):
+        w, h, xo, yo, soubor, x, y = sp
+        assert soubor == os.path.basename(LIST)
+        return zesvetli(velky[y:y + h, x:x + w], barva)
+    return obraz
+nove = []
+for nos, (zdroj, barva) in TAZ1203_Z_1500.items():
+    jm = re.search(rf'/\* 0x{zdroj:04X} \*/ "([^"]*)"', t).group(1).replace("TAZ 1500", "TAZ 1203")
+    nove += klonuj(zdroj, nos, jm, svetly(barva), svetly(barva))
+i_c0 = najdi(r"^properties<RoadVehicles, 0x00C0>")
+zaznamy[i_c0:i_c0] = nove                              # pred zadni naraznik, za TAZ 1500
+
+# novy list: rady zleva doprava, mezera 2 px
+SIRKA_LISTU, pozice, x, y, vyska_rady = 1024, [], 0, 0, 0
+for a in bunky:
+    h, w = a.shape[:2]
+    if x + w + 4 > SIRKA_LISTU:
+        x, y, vyska_rady = 0, y + vyska_rady + 4, 0
+    pozice.append((x + 2, y + 2))
+    x, vyska_rady = x + w + 4, max(vyska_rady, h)
+list_novy = Image.new("RGBA", (SIRKA_LISTU, y + vyska_rady + 4), (0, 0, 0, 0))
+for (px, py), a in zip(pozice, bunky):
+    list_novy.paste(Image.fromarray(a, "RGBA"), (px, py))
+list_novy.save(os.path.join(VYSTUP, LIST_NOVY))
 for z_i in range(len(zaznamy)):
     if "{X" in zaznamy[z_i]:
         zaznamy[z_i] = re.sub(r"\{X(\d+)\}", lambda m: str(pozice[int(m.group(1))][0]), zaznamy[z_i])
@@ -210,10 +273,10 @@ for nos in sorted(AUTA):
     lide_c = [c for c in sez if TABULKA[c] in LIDE]
     vychozi_lide = vych in LIDE
     valnik = nos in VALNIKY or nos == 0x89
-    # cumak: delka 2 (8 - 6), clanky a kapacita osob, novy vypocet kapacity (nezavisi na vychozim nakladu),
+    # cumak: delka 1 (8 - 7), clanky a kapacita osob, novy vypocet kapacity (nezavisi na vychozim nakladu),
     # skutecne udaje
     z = zaznamy[i]
-    for jm, h in [("shorten_vehicle", "0x06"), ("callback_flags_mask", "0x18"), ("miscellaneous_flags", "0x60"),
+    for jm, h in [("shorten_vehicle", "0x07"), ("callback_flags_mask", "0x18"), ("miscellaneous_flags", "0x60"),
                   ("always_refittable_cargos", seznam(sez)), ("cargo_type", f"0x{SLOT[vych]:02X}"),
                   ("long_introduction_date", f"date({d['uvedeni']})"), ("power_10_hp", f"0x{d['vykon_10']:02X}"),
                   ("weight_quarter_tons", f"0x{d['vaha_q']:02X}"), ("cargo_capacity", "0x01")]:
@@ -267,4 +330,4 @@ json.dump(souhrn, open(os.path.join(VYSTUP, "..", f"{JMENO}-souhrn.json"), "w", 
           ensure_ascii=False)
 print("udaje (vykon/10 k, vaha/4 t, km/h, ve hre prazdne a +1 t)",
       {k: (v["vykon_10"], v["vaha_q"], v["kmh"], v["ve_hre_kmh"]) for k, v in UDAJE.items()})
-print("zaznamu", len(zaznamy), "novych spritu", dalsi_id[0] - 0x408, "list", list_zel.size)
+print("zaznamu", len(zaznamy), "novych spritu", dalsi_id[0] - 0x408, "list", list_novy.size)
