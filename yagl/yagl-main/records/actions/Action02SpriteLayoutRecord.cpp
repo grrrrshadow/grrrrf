@@ -239,7 +239,7 @@ void Action02SpriteLayoutRecord::SpriteRegisters::parse(TokenStream& is, bool is
 void Action02SpriteLayoutRecord::read(std::istream& is, const GRFInfo& info)
 {
     m_feature = static_cast<FeatureType>(read_uint8(is));
-    m_set_id  = read_uint8(is);
+    m_set_id  = read_action02_id(is, info);
 
     // This will be zero for the basic format - meaning only one building sprite.
     // If the value has bit 6 (0x40) set, it is advanced format rather than
@@ -320,7 +320,7 @@ void Action02SpriteLayoutRecord::write(std::ostream& os, const GRFInfo& info) co
     ActionRecord::write(os, info);
 
     write_uint8(os, static_cast<uint8_t>(m_feature));
-    write_uint8(os, m_set_id);
+    write_action02_id(os, m_set_id, info);
 
     // Not sure I've fully understood the relationships here. It appears that
     // you can only have advanced (registers) in extended format. Presumably
@@ -390,7 +390,7 @@ void Action02SpriteLayoutRecord::write(std::ostream& os, const GRFInfo& info) co
 void Action02SpriteLayoutRecord::print(std::ostream& os, const SpriteZoomMap& sprites, uint16_t indent) const
 {
     os << pad(indent) << RecordName(record_type()) << "<" << FeatureName(m_feature);
-    os << ", " << to_hex(m_set_id);
+    os << ", " << action02_id_to_hex(m_set_id);
     os << "> // Action02 sprite layout\n";
     os << pad(indent) << "{\n";
 
@@ -430,7 +430,7 @@ void Action02SpriteLayoutRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
     is.match(TokenType::OpenAngle);
     m_feature = FeatureFromName(is.match(TokenType::Ident));
     is.match(TokenType::Comma);
-    m_set_id = is.match_uint8();
+    m_set_id = is.match_uint16();
     is.match(TokenType::CloseAngle);
 
     is.match(TokenType::OpenBrace);

@@ -51,7 +51,8 @@ void test_yagl_matches(const char* YAGL_IN, const char* YAGL_OUT)
 // out as binary and read back in, and then printed again, to confirm that the binary
 // works as expected.
 template <typename ActionRecord, uint8_t ACTION>
-void test_yagl(const char* YAGL_IN, const char* NFO, const char* YAGL_OUT = nullptr)
+void test_yagl(const char* YAGL_IN, const char* NFO, const char* YAGL_OUT = nullptr,
+               const GRFInfo& info = GRFInfo{}) // Defaults to Container2 and GRF8.
 {
     if (YAGL_OUT == nullptr)
     {
@@ -83,7 +84,6 @@ void test_yagl(const char* YAGL_IN, const char* NFO, const char* YAGL_OUT = null
 
     // Confirm that the written binary matches the sample.
     os.str("");
-    GRFInfo info; // Defaults to Container2 and GRF8.
     action.write(os, info);
     auto str = os.str();
     CHECK(str.size() == (std::strlen(NFO) / 3));

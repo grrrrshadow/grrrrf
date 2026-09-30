@@ -46,7 +46,7 @@ private:
     // The index of this Action02 set. Only a byte is allowed, which seems confusing.
     // This is referenced later by Action02Variable or Action03 to create chains of
     // selection, and to associate graphics with feature instances.
-    uint8_t m_act02_set_id = 0;
+    uint16_t m_act02_set_id = 0;
 
     // There are two sets of entries for some features because they use different
     // graphics depending on their state. For vehicles, for example, the states are

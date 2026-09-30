@@ -57,7 +57,7 @@ public:
 
 private:
     FeatureType           m_feature = FeatureType::Trains;
-    uint8_t               m_set_id  = 0;
+    uint16_t              m_set_id  = 0;
     RandomType            m_type    = RandomType::Object;
 
     // Only present if type is RandomType::Consist

@@ -24,7 +24,7 @@
 void Action02BasicRecord::read(std::istream& is, const GRFInfo& info)
 {
     m_feature             = static_cast<FeatureType>(read_uint8(is));
-    m_act02_set_id        = read_uint8(is);
+    m_act02_set_id        = read_action02_id(is, info);
     uint8_t num_entries_1 = read_uint8(is);
     uint8_t num_entries_2 = read_uint8(is);
 
@@ -45,7 +45,7 @@ void Action02BasicRecord::write(std::ostream& os, const GRFInfo& info) const
     ActionRecord::write(os, info);
 
     write_uint8(os, static_cast<uint8_t>(m_feature));
-    write_uint8(os, m_act02_set_id);
+    write_action02_id(os, m_act02_set_id, info);
     write_uint8(os, uint8_t(m_act01_set_ids_1.size()));
     write_uint8(os, uint8_t(m_act01_set_ids_2.size()));
 
@@ -93,7 +93,7 @@ const IntegerListDescriptorT<uint16_t> secondary_desc{0x01, str_secondary_sprite
 void Action02BasicRecord::print(std::ostream& os, const SpriteZoomMap& sprites, uint16_t indent) const
 {
     os << pad(indent) << RecordName(record_type()) << "<" << FeatureName(m_feature);
-    os << ", " << to_hex(m_act02_set_id);
+    os << ", " << action02_id_to_hex(m_act02_set_id);
     os << "> // Action02 basic\n";
     os << pad(indent) << "{\n";
 
@@ -118,7 +118,7 @@ void Action02BasicRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
     is.match(TokenType::OpenAngle);
     m_feature = FeatureFromName(is.match(TokenType::Ident));
     is.match(TokenType::Comma);
-    m_act02_set_id = is.match_uint8();
+    m_act02_set_id = is.match_uint16();
     is.match(TokenType::CloseAngle);
 
     is.match(TokenType::OpenBrace);

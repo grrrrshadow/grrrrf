@@ -195,5 +195,45 @@ Zbylých 3029 varování u CZTR je na jejich vlastních zástupných
 spritech 2×2, které jsou v GRF opravdu bílé. To pozadím listu
 nesouvisí a spravit se to dá jen v té sadě.
 
+## 4. Dvoubajtová čísla bloků grafiky pro naši hru (2026-09-30)
+
+**Soubory:** `records/Record.h`, `records/Record.cpp`, `records/NewGRFData.h`,
+`records/NewGRFData.cpp`, `records/actions/Action14Record.*`, všech pět
+`records/actions/Action02*Record.*`, testy `tests/Test_Shared.h` a
+`tests/actions/Test_Action02VariableRecord.cpp`
+
+### Proč
+
+Blok grafiky (Action 2) má v GRF číslo na jednom bajtu, takže jich jde
+nanejvýš 255 najednou. Tatra se všemi 128 náklady, zelenými přestavbami
+a podtypy jich potřebuje víc. Hra (forclaude, commit 682797f, zpráva
+`hra/cisla-bloku/ZPRAVA-OD-HRY.md`) proto umí dvoubajtová čísla pro GRF,
+který se v Action 14 zeptá na vlastnost `decouple_more_action2_ids`.
+
+### Co yagl dělá
+
+- GRF, který má v Action 14 **před Action 8** dotaz (`FTST`, `NAME`
+  `decouple_more_action2_ids`), píše i čte číslo bloku v každé Action 2
+  a číslo podprogramu u proměnné 0x7E na **dvou bajtech**, nejvýš 0x7FFD.
+  Odkazy na bloky (rozsahy, výchozí výsledek, Action 3) byly dvoubajtové
+  vždycky a nemění se.
+- Stejně jako hra se dotaz počítá jen před Action 8, protože hra čte
+  Action 14 jen při prohlížení souboru a to končí na Action 8. Při
+  skládání je dotaz za Action 8 chyba, yagl skončí s hláškou.
+- Bez dotazu je číslo nad 0xFF chyba při skládání, dřív by se tiše uřízlo.
+- V yaglu se čísla do 0xFF píšou dál dvěma číslicemi (`0x12`), větší
+  čtyřmi (`0x012C`).
+
+### Ověřeno
+
+- Vlastní testy yaglu: 76 případů, vše prošlo; nový případ skládá a
+  čte blok 1000 s podprogramem 600 a hlídá, že bez dotazu to nejde.
+- Kolegův zkušební GRF `tests/rig/grf/bloky_siroke.nfo` (forclaude):
+  rozbalený yagl ukazuje bloky 7, 300, 600 a 1000 a podprogram 600,
+  znovu složený soubor se liší jen v jednom bajtu: Action 7 s testem bitu
+  má velikost proměnné 1 místo 4, hra ji u testu bitu stejně bere jako 1.
+- Starý GRF bez dotazu vyjde bajt po bajtu stejně: V3S+Tatra v10 malá
+  `99c75468…` i velká `4a26765e…` složené novým yaglem ze svých skriptů.
+
 ## Pozor: sprite_id 0
 Sprite se `sprite_id<0x00000000>` yagl zabalí, ale při rozbalení je prázdný: v kontejneru 2 znamená id 0 konec grafické sekce. Číslovat od 1 (zjištěno u `vagony-mari/`, 25. 9. 2026).

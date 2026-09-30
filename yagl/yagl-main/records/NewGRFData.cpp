@@ -382,7 +382,8 @@ std::unique_ptr<Record> NewGRFData::read_record(std::istream& is, uint32_t size,
         case 0x02:
             // Action02 (variants): Defines graphics set IDs
             // This byte is in the basic case a number of graphics sets, presumably always less than 0x80.
-            switch (static_cast<uint8_t>(data[2]))
+            // decouple: one byte further on in a file with two-byte Action02 IDs.
+            switch (static_cast<uint8_t>(data[m_info.wide_action2_ids ? 3 : 2]))
             {
                 case 0x80: // Use 80 to randomize the object (vehicle, station, building, industry, object) based on its own triggers and bits.
                 case 0x83: // Use 83 to randomize the object based on its "related" object (s.b.).
@@ -455,7 +456,7 @@ std::unique_ptr<Record> NewGRFData::read_record(std::istream& is, uint32_t size,
     std::istringstream iss(data);
     record->read(iss, m_info);
     record->read_data = data;
-    update_version_info(*record);
+    update_version_info(*record, false);
 
     return record;
 }
@@ -795,7 +796,7 @@ void NewGRFData::parse(TokenStream& is, const std::string& output_dir, const std
 
             std::unique_ptr<Record> record = make_record(type);
             record->parse(is, m_sprites);
-            update_version_info(*record);
+            update_version_info(*record, true);
             m_records.push_back(std::move(record));
         }
         catch (const std::exception& e)
@@ -816,7 +817,7 @@ void NewGRFData::parse(TokenStream& is, const std::string& output_dir, const std
 }
 
 
-void NewGRFData::update_version_info(const Record& record)
+void NewGRFData::update_version_info(const Record& record, bool parsing)
 {
     // We need to know the GRF version so we can pass it to the other records, some
     // of which are interpreted differently depending on the version.
@@ -824,6 +825,26 @@ void NewGRFData::update_version_info(const Record& record)
     {
         auto action08  = dynamic_cast<const Action08Record*>(&record);
         m_info.version = action08->grf_version();
+        m_seen_action08 = true;
+    }
+
+    // decouple: a file that asks the feature test 'decouple_more_action2_ids' writes its Action02 IDs
+    // and the subroutines of variable 0x7E in two bytes. The game reads feature tests only while it
+    // scans a file, and the scan ends at the Action08, so a test after it would never be seen.
+    if (record.record_type() == RecordType::ACTION_14)
+    {
+        auto action14 = dynamic_cast<const Action14Record*>(&record);
+        if (action14->asks_feature("decouple_more_action2_ids"))
+        {
+            if (!m_seen_action08)
+            {
+                m_info.wide_action2_ids = true;
+            }
+            else if (parsing)
+            {
+                throw RUNTIME_ERROR("The feature test 'decouple_more_action2_ids' must come before the Action08");
+            }
+        }
     }
 }
 

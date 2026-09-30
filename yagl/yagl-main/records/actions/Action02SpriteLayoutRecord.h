@@ -89,7 +89,7 @@ private:
 
 private:
     FeatureType     m_feature       = FeatureType::Trains;
-    uint8_t         m_set_id        = 0x00;
+    uint16_t        m_set_id        = 0x00;
     uint32_t        m_ground_sprite = 0x00;
     SpriteRegisters m_ground_regs   = {};
     Format          m_format        = Format::Basic;

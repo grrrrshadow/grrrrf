@@ -93,7 +93,8 @@ private:
 
         Operation  operation;     // Ignored for first varaction.
         uint8_t    variable;
-        uint8_t    parameter;     // Additional byte following 60+ variables - but not 80+?
+        uint16_t   parameter;     // Additional byte following 60+ variables - but not 80+?
+                                 // decouple: two bytes for the subroutine of 0x7E in a file with wide Action02 IDs.
         uint8_t    shift_num;     // Bit5 means advanced, bit6 and bit7 mutex
         uint8_t    action;
         uint32_t   and_mask;
@@ -110,7 +111,7 @@ private:
 
 private:
     FeatureType m_feature;
-    UInt8       m_set_id;
+    uint16_t    m_set_id = 0;
     VarType     m_var_type;
 
     std::vector<VarAction> m_actions;

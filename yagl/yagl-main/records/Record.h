@@ -131,7 +131,19 @@ struct GRFInfo
 {
     GRFFormat  format  = GRFFormat::Container2;  // Container format
     GRFVersion version = GRFVersion::GRF8;       // Version of the NewGRF spe
+    // decouple: the file asks the feature test 'decouple_more_action2_ids' in an Action14 before
+    // its Action08, so the ID of every Action02 and the subroutine of variable 0x7E take two bytes.
+    bool       wide_action2_ids = false;
 };
+
+
+// decouple: Action02 IDs in one byte, or in two (little endian, up to 0x7FFD) for a file that
+// asks 'decouple_more_action2_ids'. 0x7FFE and 0x7FFF are taken in the references.
+constexpr uint16_t MAX_WIDE_ACTION02_ID = 0x7FFD;
+uint16_t read_action02_id(std::istream& is, const GRFInfo& info);
+void write_action02_id(std::ostream& os, uint16_t id, const GRFInfo& info);
+// Two hex digits up to 0xFF as ever, four above.
+std::string action02_id_to_hex(uint16_t id);
 
 
 class Record;

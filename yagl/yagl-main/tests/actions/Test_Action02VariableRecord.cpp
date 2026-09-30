@@ -60,11 +60,58 @@ static constexpr const char* str_NFO =
           "23 00 00 00 "
     "FD 00 ";            // Default
 
+// decouple: a file that asks 'decouple_more_action2_ids' has two-byte IDs, also for the
+// subroutine of variable 0x7E. Block 1000 calls 600 and goes to 300 on 5, else to 7.
+static constexpr const char* str_YAGL_wide =
+    "switch<RoadVehicles, 0x03E8, PrimaryByte> // Action02 variable\n"
+    "{\n"
+    "    expression:\n"
+    "    {\n"
+    "        value1 = variable[0x7E, 0x0258] & 0x000000FF;\n"
+    "    };\n"
+    "    ranges:\n"
+    "    {\n"
+    "        0x00000005: 0x012C;\n"
+    "    };\n"
+    "    default: 0x0007;\n"
+    "}\n";
+static constexpr const char* str_NFO_wide =
+    "02 "                // Action02
+    "01 "                // Road vehicles
+    "E8 03 "             // This set's ID, two bytes
+    "81 "                // VarAction type - primary object, byte size
+    "7E "                // Variable - call a subroutine
+       "58 02 "          // Its ID, two bytes
+       "00 "             // Shift num
+       "FF "             // AND mask
+    "01 "                // 1 range
+       "2C 01 "          // Value
+          "05 "          // Range min
+          "05 "          // Range max
+    "07 00 ";            // Default
+
 } // namespace {
 
 
 TEST_CASE("Action02VariableRecord", "[actions]")
 {
     test_yagl<Action02VariableRecord, 0x02>(str_YAGL, str_NFO);
+}
+
+
+TEST_CASE("Action02VariableRecord wide IDs", "[actions]")
+{
+    GRFInfo wide;
+    wide.wide_action2_ids = true;
+    test_yagl<Action02VariableRecord, 0x02>(str_YAGL_wide, str_NFO_wide, nullptr, wide);
+
+    // Without the feature test an ID above 0xFF cannot be written.
+    SpriteZoomMap sprites;
+    std::istringstream is(str_YAGL_wide);
+    TokenStream ts{is};
+    Action02VariableRecord action;
+    action.parse(ts, sprites);
+    std::ostringstream os;
+    CHECK_THROWS(action.write(os, GRFInfo{}));
 }
 

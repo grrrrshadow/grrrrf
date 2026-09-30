@@ -235,6 +235,20 @@ void Action14Record::print(std::ostream& os, const SpriteZoomMap& sprites, uint1
 }
 
 
+bool Action14Record::asks_feature(const std::string& name) const
+{
+    for (const auto& test: m_chunks)
+    {
+        if ((test.type != 'C') || (test.label.to_string() != "FTST")) continue;
+        for (const auto& chunk: test.chunks)
+        {
+            if ((chunk.type == 'T') && (chunk.label.to_string() == "NAME") && (chunk.text.readable() == name)) return true;
+        }
+    }
+    return false;
+}
+
+
 void Action14Record::parse(TokenStream& is, SpriteZoomMap& sprites)
 {
     is.match_ident(RecordName(record_type()));

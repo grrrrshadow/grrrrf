@@ -25,7 +25,7 @@
 void Action02RandomRecord::read(std::istream& is, const GRFInfo& info)
 {
     m_feature = static_cast<FeatureType>(read_uint8(is));
-    m_set_id  = read_uint8(is);
+    m_set_id  = read_action02_id(is, info);
 
     m_type = static_cast<RandomType>(read_uint8(is));
     if (m_type == RandomType::Consist)
@@ -66,7 +66,7 @@ void Action02RandomRecord::write(std::ostream& os, const GRFInfo& info) const
     ActionRecord::write(os, info);
 
     write_uint8(os, static_cast<uint8_t>(m_feature));
-    write_uint8(os, m_set_id);
+    write_action02_id(os, m_set_id, info);
 
     write_uint8(os, static_cast<uint8_t>(m_type));
     if (m_type == RandomType::Consist)
@@ -146,7 +146,7 @@ const IntegerDescriptorT<uint8_t> randbit_desc { 0x03, str_rand_bit, UIntFormat:
 void Action02RandomRecord::print(std::ostream& os, const SpriteZoomMap& sprites, uint16_t indent) const
 {
     os << pad(indent) << RecordName(record_type()) << "<" << FeatureName(m_feature);
-    os << ", " << to_hex(m_set_id);
+    os << ", " << action02_id_to_hex(m_set_id);
     os << ", " << random_desc.value(m_type);
 
     if (m_type == RandomType::Consist)
@@ -180,7 +180,7 @@ void Action02RandomRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
     is.match(TokenType::OpenAngle);
     m_feature = FeatureFromName(is.match(TokenType::Ident));
     is.match(TokenType::Comma);
-    m_set_id = is.match_uint8();
+    m_set_id = is.match_uint16();
     is.match(TokenType::Comma);
     random_desc.parse(m_type, is);
 

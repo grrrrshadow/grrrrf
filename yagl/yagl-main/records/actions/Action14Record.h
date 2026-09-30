@@ -58,6 +58,9 @@ public:
     void print(std::ostream& os, const SpriteZoomMap& sprites, uint16_t indent) const override;
     void parse(TokenStream& is, SpriteZoomMap& sprites) override;
 
+    // decouple: whether a feature test (FTST) asks for the feature of this name.
+    bool asks_feature(const std::string& name) const;
+
 private:
     struct Chunk
     {

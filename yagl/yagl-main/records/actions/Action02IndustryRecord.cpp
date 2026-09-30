@@ -25,7 +25,7 @@
 void Action02IndustryRecord::read(std::istream& is, const GRFInfo& info)
 {
     m_feature      = static_cast<FeatureType>(read_uint8(is));
-    m_act02_set_id = read_uint8(is);
+    m_act02_set_id = read_action02_id(is, info);
     m_format       = static_cast<Format>(read_uint8(is));
 
     if (m_format == Format::Version0)
@@ -67,7 +67,7 @@ void Action02IndustryRecord::write(std::ostream& os, const GRFInfo& info) const
     ActionRecord::write(os, info);
 
     write_uint8(os, static_cast<uint8_t>(m_feature));
-    write_uint8(os, m_act02_set_id);
+    write_action02_id(os, m_act02_set_id, info);
     write_uint8(os, static_cast<uint8_t>(m_format));
 
     if (m_format == Format::Version0)
@@ -127,7 +127,7 @@ const EnumDescriptorT<Action02IndustryRecord::Format> desc_format =
 void Action02IndustryRecord::print(std::ostream& os, const SpriteZoomMap& sprites, uint16_t indent) const
 {
     os << pad(indent) << RecordName(record_type()) << "<" << FeatureName(m_feature);
-    os << ", " << to_hex(m_act02_set_id);
+    os << ", " << action02_id_to_hex(m_act02_set_id);
     os << ", " << desc_format.value(m_format);
     os << "> // Action02 industry\n";
     os << pad(indent) << "{\n";
@@ -155,7 +155,7 @@ void Action02IndustryRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
     is.match(TokenType::OpenAngle);
     m_feature = FeatureFromName(is.match(TokenType::Ident));
     is.match(TokenType::Comma);
-    m_act02_set_id = is.match_uint8();
+    m_act02_set_id = is.match_uint16();
     is.match(TokenType::Comma);
     desc_format.parse(m_format, is);
     is.match(TokenType::CloseAngle);

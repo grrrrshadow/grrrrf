@@ -69,7 +69,7 @@ static void write_action(std::ostream& os, VarType type, uint32_t value)
 void Action02VariableRecord::read(std::istream& is, const GRFInfo& info)
 {
     m_feature  = static_cast<FeatureType>(read_uint8(is));
-    m_set_id.read(is);
+    m_set_id   = read_action02_id(is, info);
     m_var_type = static_cast<VarType>(read_uint8(is));
 
     // It's a little involved, but basically a chain of variable operations
@@ -92,7 +92,8 @@ void Action02VariableRecord::read(std::istream& is, const GRFInfo& info)
         // 0x60+x variables require an additional byte - an index?
         if (var_action.variable >= 0x60 && var_action.variable < 0x80)
         {
-            var_action.parameter = read_uint8(is);
+            // decouple: the subroutine of variable 0x7E is an Action02 ID, which may take two bytes.
+            var_action.parameter = (var_action.variable == 0x7E) ? read_action02_id(is, info) : read_uint8(is);
         }
 
         // This section is the <varadjust> that appears in the online documentation.
@@ -155,7 +156,7 @@ void Action02VariableRecord::write(std::ostream& os, const GRFInfo& info) const
     ActionRecord::write(os, info);
 
     write_uint8(os, static_cast<uint8_t>(m_feature));
-    m_set_id.write(os);
+    write_action02_id(os, m_set_id, info);
     write_uint8(os, static_cast<uint8_t>(m_var_type));
 
     uint16_t num_actions = uint16_t(m_actions.size());
@@ -169,9 +170,13 @@ void Action02VariableRecord::write(std::ostream& os, const GRFInfo& info) const
         }
 
         write_uint8(os, varaction.variable);
-        if (varaction.variable >= 0x60 && varaction.variable < 0x80)
+        if (varaction.variable == 0x7E)
         {
-            write_uint8(os, varaction.parameter);
+            write_action02_id(os, varaction.parameter, info);
+        }
+        else if (varaction.variable >= 0x60 && varaction.variable < 0x80)
+        {
+            write_uint8(os, uint8_t(varaction.parameter));
         }
 
         // Whether there is a following calculation.
@@ -285,7 +290,7 @@ std::string Action02VariableRecord::variable_name(const VarAction& va) const
     // Some variables take an additional argument
     if (va.variable >= 0x60 && va.variable < 0x80)
     {
-        os << ", " << to_hex(va.parameter);
+        os << ", " << action02_id_to_hex(va.parameter);
     }
     os  << "]";
 
@@ -326,7 +331,7 @@ void Action02VariableRecord::print(std::ostream& os, const SpriteZoomMap& sprite
 {
     os << pad(indent) << RecordName(record_type()) << "<" << FeatureName(m_feature);
     os << ", ";
-    m_set_id.print(os, 0);
+    os << action02_id_to_hex(m_set_id);
     os << ", " << desc_var_type.value(m_var_type);
     os << "> // Action02 variable" << '\n';
     os << pad(indent) << "{" << '\n';
@@ -360,7 +365,7 @@ void Action02VariableRecord::parse(TokenStream& is, SpriteZoomMap& sprites)
     is.match(TokenType::OpenAngle);
     m_feature = FeatureFromName(is.match(TokenType::Ident));
     is.match(TokenType::Comma);
-    m_set_id.parse(is);
+    m_set_id = is.match_uint16();
     is.match(TokenType::Comma);
     desc_var_type.parse(m_var_type, is);
     is.match(TokenType::CloseAngle);
@@ -457,7 +462,8 @@ void Action02VariableRecord::parse_expression(TokenStream& is)
         if (is.peek().type == TokenType::Comma)
         {
             is.match(TokenType::Comma);
-            action.parameter = is.match_uint8();
+            // decouple: the subroutine of variable 0x7E is an Action02 ID, which may take two bytes.
+            action.parameter = (action.variable == 0x7E) ? is.match_uint16() : is.match_uint8();
         }
         is.match(TokenType::CloseBracket);
 

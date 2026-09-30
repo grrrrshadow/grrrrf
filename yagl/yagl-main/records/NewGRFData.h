@@ -53,7 +53,7 @@ private:
 
     friend void append_real_sprite(uint32_t sprite_id, std::unique_ptr<Record> sprite);
     void append_sprite(uint32_t sprite_id, std::unique_ptr<Record> sprite);
-    void update_version_info(const Record& record);
+    void update_version_info(const Record& record, bool parsing);
 
     // Helpers for writing a GRF binary file
     void write_format(std::ostream& os, uint32_t sprite_offs = 0) const;
@@ -63,6 +63,7 @@ private:
 
 private:
     GRFInfo m_info;
+    bool    m_seen_action08 = false;
 
     // Simple list of all records in the data section.
     // Should be consistent between Format1 and Format2, so manufacture sprite references

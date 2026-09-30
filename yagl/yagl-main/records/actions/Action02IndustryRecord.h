@@ -135,7 +135,7 @@ private:
     // The index of this Action02 set. Only a byte is allowed, which seems confusing.
     // This is referenced later by Action02Variable or Action03 to create chains of
     // selection, and to associate graphics with feature instances.
-    uint8_t m_act02_set_id = 0;
+    uint16_t m_act02_set_id = 0;
 
     // Version for the production callback. Value currently supported
     // are 00 (words), 01 (bytes) and 02.

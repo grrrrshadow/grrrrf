@@ -28,6 +28,40 @@
 int Record::alloc_count = 0;
 
 
+uint16_t read_action02_id(std::istream& is, const GRFInfo& info)
+{
+    return info.wide_action2_ids ? read_uint16(is) : read_uint8(is);
+}
+
+
+void write_action02_id(std::ostream& os, uint16_t id, const GRFInfo& info)
+{
+    if (info.wide_action2_ids)
+    {
+        if (id > MAX_WIDE_ACTION02_ID)
+        {
+            throw RUNTIME_ERROR("Action02 ID " + to_hex(id) + " is above " + to_hex(MAX_WIDE_ACTION02_ID));
+        }
+        write_uint16(os, id);
+    }
+    else
+    {
+        if (id > 0xFF)
+        {
+            throw RUNTIME_ERROR("Action02 ID " + to_hex(id) + " needs the feature test 'decouple_more_action2_ids' "
+                "(Action14 before the Action08)");
+        }
+        write_uint8(os, uint8_t(id));
+    }
+}
+
+
+std::string action02_id_to_hex(uint16_t id)
+{
+    return (id > 0xFF) ? to_hex(id) : to_hex(uint8_t(id));
+}
+
+
 void ActionRecord::write(std::ostream& os, const GRFInfo& info) const
 {
     // The read and write methods for this class are unbalanced because
