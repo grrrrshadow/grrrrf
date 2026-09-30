@@ -492,11 +492,17 @@ Zkouška ve zkušební hře (`testpruhy`, obrázek `hra/poradi-kresleni/clanky_s
 | 1203 s nárazníky 1, 1, 1 | špatně proti všemu, i proti sobě |
 | 1203 bez článků (auto 8) | správně |
 | 1203 čumák 2 + auto 8, bez zadního nárazníku | správně, rozestup v koloně 10 jako dnes |
+| 1203 „dlouhé auto“ (1, 8, 1, `VWT1-S1203-clanky-oba-dlouhe-auto.grf`) | správně, ale rozestup 17 (`clanky_dlouhe_auto.png`) |
 | Tatry proti sobě, i s čumákem 2 | správně |
 | Tatra proti 1203 | špatně jen kvůli krabici dvanácttrojky |
 | CZTR Liaz, Avia, Tatra 148 | správně, obrázky jsou krátké jako jejich díly |
 
 Neviditelný článek tedy sám nevadí. Vadí, že kvůli dvěma nárazníkům bylo auto zkrácené na 1.
+
+Mezera mezi obrázky aut v koloně (obrázek 7): dnes 1, 1, 1 → 3; čumák 2 + auto 8 → 3; dlouhé auto 1, 8, 1 → 10,
+tedy víc než celé auto. Dlouhé auto má stejná čísla dílů jako dnešní varianta, takže jezdící auta se po výměně
+GRF přestaví samy; varianta bez zadního nárazníku ho jezdícím autům nechá. Obě varianty s autem 8 mají soupravu
+dlouhou 10, na Rolu tedy potřebují vagon aspoň 10 dlouhý (dnes stačí 3).
 
 **Náprava v GRF:** čumák délky 2 a auto délky 8, bez zadního nárazníku. Rozestup zůstane 10 (+25 %),
 krabice auta má 8 a kreslí se správně i ve vanilce. Stojí to dvě věci:
