@@ -4,13 +4,38 @@
 |---|---|---|---|
 | 1 | `dodavky_BRYLE_v1.grf` | `8ea92f1db2a1a9eeddd56856409989e4` | náklady, zelený valník, čumák 2 + auto 8, skutečné údaje |
 | 2 | `dodavky_BRYLE_v2.grf` | `012303618c0e34e225621d9c6ce62343` | TAZ 1203 bus a dodávky, čumák 1 (menší mezera v koloně) |
+| 3 | `dodavky_BRYLE_v3.grf` | `aa348bbae9aaf135405355cb8e882dc5` | roky: prototyp na zkoušku rok před výrobou, zahrádky TAZ 1203 od 1981 |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v3`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v4`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 3 (30. 9.): roky
+
+Hráč: *„Škoda 1203 z Vrchlabí prototyp od roku 1963 na zkoušku ve hře a od roku 1968 výroba. TAZ je z Trnavy,
+TAZ 1203 od 1973 … 1981 pusť zahrádky, ať mají radost, od 1973 bez zahrádek … U 1985 to je jedno, nech tvých 1988,
+to může být prototyp na zkoušku 1985. Můj zdroj roku výroby je pochybný.“*
+
+- **Jak to hra dělá:** v den uvedení nabídne auto jedné firmě na rok na zkoušku (prototyp) a za rok ho mají všichni.
+  Proto je v GRF datum uvedení o rok dřív než výroba. Zkouška trvá ve hře vždycky rok, delší prototyp (1963 až 1968)
+  zapsat nejde. Když hra začne až po datu uvedení, auto je hned pro všechny. A když začne víc než dva roky před ním,
+  hra k datu přičte náhodně 0 až 511 dní.
+- **Roky (výroba, zkouška rok předtím):**
+  - VW T1: výroba 8. 3. 1950, prototyp 1949 (VW je opravdu stavěl v roce 1949);
+  - Škoda 1203 Pajda karavan: výroba 20. 11. 1968 ve Vrchlabí, zkouška od listopadu 1967;
+  - TAZ 1203 valníky, plachty, bus a dodávka bez zahrádky: výroba 1. 4. 1973 v Trnavě, zkouška od dubna 1972;
+  - TAZ 1203 se zahrádkou (bus zahrádka 0x8B, dodávka zahrádka 0x8D, dodávka zahrádka bedna 0x8E): 1981, hráč;
+  - TAZ 1500: výroba 1988, zkouška 1987.
+- **Zdroje k hráčovým rokům:**
+  - Škoda 1203: první prototypy typ 979 počátkem roku 1957, pět kusů do 1958, od 1959 typ 997, konečná podoba
+    představena 14. 9. 1968, výroba od 20. 11. 1968 (Škoda Storyboard). Rok 1963 zdroje neuvádějí.
+  - TAZ 1500: anglická Wikipedia má 1985 (modernizace, motor 1433 cm³), Škoda Storyboard 1988. Nechán 1988.
+- **Zkouška:**
+  - hra od 1979: TAZ 1203 valníky, plachty, bus a dodávka bez zahrádky jsou, zahrádky a TAZ 1500 ne;
+  - hra od 1985: i zahrádky, TAZ 1500 ne.
 
 ## Verze 2 (30. 9.)
 
@@ -108,11 +133,12 @@ Celé seznamy jsou v `vwt1-nova-souhrn.json`.
 
 ## Skutečné údaje
 
-| auto | uvedení | výkon | max. rychlost | váha | zdroj |
+| auto | výroba (od verze 3 zkouška rok předtím) | výkon | max. rychlost | váha | zdroj |
 |---|---|---|---|---|---|
 | VW T1 | 8. 3. 1950 | 25 k, ve hře 30 k | 80 km/h | 975 kg, ve hře 1 t | Wikipedia (T1), automobile.at |
 | Škoda 1203 Pajda karavan | 20. 11. 1968 | 110 k (lepší motor, hráč) | 130 km/h (hráč) | 1 170 kg | Škoda Storyboard |
-| TAZ 1203 valníky, plachty, bus a dodávky | 1. 4. 1973 (Trnava) | 47 k (35 kW), ve hře 50 k | 90 km/h | 1 170 kg | Škoda Storyboard |
+| TAZ 1203 valníky, plachty, bus a dodávka bez zahrádky | 1. 4. 1973 (Trnava) | 47 k (35 kW), ve hře 50 k | 90 km/h | 1 170 kg | Škoda Storyboard |
+| TAZ 1203 bus a dodávky se zahrádkou | 1981 (hráč) | 47 k (35 kW), ve hře 50 k | 90 km/h | 1 170 kg | Škoda Storyboard |
 | TAZ 1500 bus a dodávky | 1988 (motor 1433 cm³) | 57 k (42 kW), ve hře 60 k | 110 km/h | 1 260 kg | Škoda Storyboard, Wikipedia |
 
 - **Jednotky ve hře:** výkon jde jen po 10 k, váha po čtvrt tuně.
@@ -135,14 +161,14 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v2
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v3
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v2.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v3.grf sprites
 ```
 
 Ověřeno 30. 9.:
 
-- postup dal bajt po bajtu stejné GRF: verze 1 skriptem z verze 1, verze 2 skriptem z verze 2;
+- postup dal bajt po bajtu stejné GRF: každá verze skriptem ze své verze (v gitu u jejího commitu);
 - zpětné rozbalení se shoduje se sestaveným yaglem, liší se jen poznámky a rozmístění spritů na listu;
 - původní GRF po rozbalení a novém složení vyjde beze změny.
 
@@ -170,4 +196,6 @@ Ověřeno 30. 9.:
 ## Otevřené
 
 - Zámek a přesun k základní grafice hry, až budou auta hotová.
+- Fialový TAZ 1900 D s motorem VW 1,9 D z modré dodávky (hráč: „uděláme pak“). Škoda Storyboard: motor VW 1,9 l
+  od roku 1996. Výkon TAZ se zatím nenašel, VW s tímhle motorem měl 47 kW (64 k).
 - Auta koupená v rozehrané hře před výměnou GRF si nechají zadní nárazník. Nově koupená už ho nemají.

@@ -224,10 +224,11 @@
  ],
  "udaje": {
   "vw": {
-   "uvedeni": "1950/3/8",
+   "vyroba": "1950/3/8",
    "vykon_k": 25,
    "kmh": 80,
    "vaha_kg": 975,
+   "uvedeni": "1949/3/8",
    "vykon_10": 3,
    "vaha_q": 4,
    "ve_hre_kmh": [
@@ -236,10 +237,11 @@
    ]
   },
   "karavan": {
-   "uvedeni": "1968/11/20",
+   "vyroba": "1968/11/20",
    "vykon_k": 110,
    "kmh": 130,
    "vaha_kg": 1170,
+   "uvedeni": "1967/11/20",
    "vykon_10": 11,
    "vaha_q": 5,
    "ve_hre_kmh": [
@@ -248,10 +250,24 @@
    ]
   },
   "taz1203": {
-   "uvedeni": "1973/4/1",
+   "vyroba": "1973/4/1",
    "vykon_k": 47,
    "kmh": 90,
    "vaha_kg": 1170,
+   "uvedeni": "1972/4/1",
+   "vykon_10": 5,
+   "vaha_q": 5,
+   "ve_hre_kmh": [
+    89,
+    86
+   ]
+  },
+  "taz1203z": {
+   "vyroba": "1981/1/1",
+   "vykon_k": 47,
+   "kmh": 90,
+   "vaha_kg": 1170,
+   "uvedeni": "1980/1/1",
    "vykon_10": 5,
    "vaha_q": 5,
    "ve_hre_kmh": [
@@ -260,10 +276,11 @@
    ]
   },
   "taz1500": {
-   "uvedeni": "1988/1/1",
+   "vyroba": "1988/1/1",
    "vykon_k": 57,
    "kmh": 110,
    "vaha_kg": 1260,
+   "uvedeni": "1987/1/1",
    "vykon_10": 6,
    "vaha_q": 5,
    "ve_hre_kmh": [
@@ -657,7 +674,7 @@
   },
   "0x8B": {
    "jmeno": "TAZ 1203 bus zahradka",
-   "druh": "taz1203",
+   "druh": "taz1203z",
    "lidi": 8,
    "vychozi": "PASS",
    "naklady": [
@@ -693,7 +710,7 @@
   },
   "0x8D": {
    "jmeno": "TAZ 1203 dodavka zahradka",
-   "druh": "taz1203",
+   "druh": "taz1203z",
    "lidi": 2,
    "vychozi": "MAIL",
    "naklady": [
@@ -793,7 +810,7 @@
   },
   "0x8E": {
    "jmeno": "TAZ 1203 dodavka zahradka bedna",
-   "druh": "taz1203",
+   "druh": "taz1203z",
    "lidi": 2,
    "vychozi": "GOOD",
    "naklady": [

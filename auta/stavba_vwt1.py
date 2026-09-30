@@ -8,6 +8,8 @@
 #     verze 1 mela cumak 2, hrac 30. 9.: "je tam velka mezera", rozestup v kolone 9 misto 10)
 #  5. skutecne udaje: rok uvedeni, vykon, max. rychlost, vaha (Pajda karavan 130 km/h a lepsi motor podle hrace)
 #  6. (verze 2) TAZ 1203 bus, bus zahradka a tri dodavky 0x8B-0x8F: kopie TAZ 1500 se svetlejsim lakem, od 1973
+#  7. (verze 3) roky: vyroba = auto maji vsichni, rok predtim prototyp na zkousku (hra ho nabidne jedne firme
+#     na rok); TAZ 1203 se zahradkou az od 1981
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -64,8 +66,9 @@ AUTA = {
     0x93: ("taz1500", cisla(LIDE_BUS), 8, "PASS"), 0x94: ("taz1500", cisla(LIDE_BUS), 8, "PASS"),
     0x95: ("taz1500", DODAVKA, 2, "MAIL"), 0x96: ("taz1500", S_BEDNOU, 2, "GOOD"), 0x97: ("taz1500", DODAVKA, 2, "MAIL"),
     # TAZ 1203 bus a dodavky (od verze 2): naklady jako jejich TAZ 1500, udaje dvanacttrojky
-    0x8B: ("taz1203", cisla(LIDE_BUS), 8, "PASS"), 0x8C: ("taz1203", cisla(LIDE_BUS), 8, "PASS"),
-    0x8D: ("taz1203", DODAVKA, 2, "MAIL"), 0x8E: ("taz1203", S_BEDNOU, 2, "GOOD"), 0x8F: ("taz1203", DODAVKA, 2, "MAIL"),
+    # (verze 3) se zahradkou az od 1981, bez zahradky od 1973 (hrac 30. 9.)
+    0x8B: ("taz1203z", cisla(LIDE_BUS), 8, "PASS"), 0x8C: ("taz1203", cisla(LIDE_BUS), 8, "PASS"),
+    0x8D: ("taz1203z", DODAVKA, 2, "MAIL"), 0x8E: ("taz1203z", S_BEDNOU, 2, "GOOD"), 0x8F: ("taz1203", DODAVKA, 2, "MAIL"),
 }
 TAZ1203_Z_1500 = {0x8B: (0x93, "zluta"), 0x8C: (0x94, "zluta"), 0x8D: (0x95, "modra"), 0x8E: (0x96, "modra"),
                   0x8F: (0x97, "modra")}
@@ -77,12 +80,18 @@ for v, (_, sez, _, vych) in AUTA.items():
 # vykon po 10 k (hra jinak neumi), vaha po 1/4 t, rychlost: vlastnost 0x08 po 0,5 km/h do 127 km/h, nad to 0x15 po 2 km/h
 # Pajda karavan: 130 km/h podle hrace (dva svedci, Shell V-Power) a lepsi motor, 110 k, aby na 130 dojel i nalozeny;
 # hra se nemeni, odpor vzduchu zustava vychozi (hra ho pocita z max. rychlosti)
+# vyroba: od tohoto dne auto maji vsichni; hra ho rok predtim nabidne jedne firme na zkousku (prototyp), proto je
+# datum uvedeni v GRF o rok driv (hrac 30. 9.: "prototyp na zkousku ve hre a pak vyroba")
 UDAJE = {
-    "vw":      dict(uvedeni="1950/3/8",   vykon_k=25,  kmh=80,  vaha_kg=975),
-    "karavan": dict(uvedeni="1968/11/20", vykon_k=110, kmh=130, vaha_kg=1170),
-    "taz1203": dict(uvedeni="1973/4/1",   vykon_k=47,  kmh=90,  vaha_kg=1170),
-    "taz1500": dict(uvedeni="1988/1/1",   vykon_k=57,  kmh=110, vaha_kg=1260),
+    "vw":       dict(vyroba="1950/3/8",   vykon_k=25,  kmh=80,  vaha_kg=975),    # prototypy 1949
+    "karavan":  dict(vyroba="1968/11/20", vykon_k=110, kmh=130, vaha_kg=1170),   # Vrchlabi
+    "taz1203":  dict(vyroba="1973/4/1",   vykon_k=47,  kmh=90,  vaha_kg=1170),   # Trnava
+    "taz1203z": dict(vyroba="1981/1/1",   vykon_k=47,  kmh=90,  vaha_kg=1170),   # se zahradkou (hrac)
+    "taz1500":  dict(vyroba="1988/1/1",   vykon_k=57,  kmh=110, vaha_kg=1260),   # motor 1433 cm3
 }
+for d in UDAJE.values():
+    r, m, den = map(int, d["vyroba"].split("/"))
+    d["uvedeni"] = f"{r - 1}/{m}/{den}"
 
 def rychlost_ve_hre(vykon_hp, kmh, vaha_t, dilu=2):
     """nejvyssi rychlost na rovine pri realistickem zrychleni (vzorce z ground_vehicle.cpp: sila z vykonu, cep
