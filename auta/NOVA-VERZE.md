@@ -1,6 +1,9 @@
 # Nová verze VW T1, Škody 1203 a TAZ (30. 9.)
 
-Zkušební GRF (grf_id `MAX\x08`), hráči zatím nevydané. Jméno souboru a verzi určí hráč.
+Vydáno hráči 30. 9. jako **`dodavky_BRYLE_v1.grf`** (grf_id `MAX\x08`, md5 `8ea92f1db2a1a9eeddd56856409989e4`).
+Jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to zatím nech“).
+Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo`
+a hře jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v2`.
 Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
 `stavba_vwt1.py`.
 
@@ -28,8 +31,8 @@ Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené ya
   - potravinářská aditiva, surový cukr, balíky, tiskoviny;
   - kovové a plastové díly, kůže (LEAT, LETH), plasty (PLAS, PLST), kaučuk, chemikálie;
   - dělníci a vězni (WORK, PRIS, YETI, YETY);
-  - k tomu mléko, jedlý olej, sůl, kaolín, pálené vápno, soda, hnojivo, saze a stroje. Na tyhle hráč ještě
-    neodpověděl.
+  - k tomu mléko, jedlý olej, sůl, kaolín, pálené vápno, soda, hnojivo, saze a stroje (hráč 30. 9.: „bod 1 jo,
+    pod plachtu a do dodávky jde skoro všechno“).
 - **Věci z bedny:** zboží, zemědělské, strojírenské a výrobní zásoby, hračky, baterie, železářské zboží, díly
   vozidel, strojní součásti a obaly.
 - **Modrá dodávka a modrá dodávka zahrádka:** jako VW T1 bez věcí z bedny.
@@ -128,8 +131,6 @@ Ověřeno 30. 9.:
 
 ## Otevřené
 
-- Mléko, jedlý olej, sůl, kaolín, pálené vápno, soda, hnojivo, saze a stroje u VW T1 (a tím u dodávek
-  a plachet): zatím dané, hráč neodpověděl.
 - VW T1 a TAZ 1500 jedou při realistickém zrychlení pod skutečnou max. rychlostí. Silnější motor jako u Pajdy?
-- Jméno a verze GRF pro hráče.
+- Zámek a přesun k základní grafice hry, až budou auta hotová.
 - Auta koupená v rozehrané hře před výměnou GRF si nechají zadní nárazník. Nově koupená už ho nemají.
