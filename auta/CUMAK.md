@@ -513,3 +513,5 @@ krabice auta má 8 a kreslí se správně i ve vanilce. Stojí to dvě věci:
 
 Zkušební soubor (jen na zkoušku, nevydaný) vznikl z `VWT1-S1203-clanky-oba-na-stred.grf`: pryč
 `0x00000002: 0x80C0` v článkovacích callbackách, čumáky 0x0080–0x0097 `shorten_vehicle 0x06`, auta 0x00A0–0x00B7 `0x00`.
+
+Použito v nové verzi GRF (30. 9.), celá změna je v `NOVA-VERZE.md`.
