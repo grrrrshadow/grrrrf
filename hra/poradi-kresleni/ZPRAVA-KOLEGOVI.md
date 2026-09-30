@@ -76,3 +76,10 @@ Tvou větev jsem s ním celou přeložil bez chyby a hra naběhla a odjela 500 t
 
 Pusť prosím i svou baterii (`tests/rig`), ať je vidět, že se jinde nic nepohnulo. Já jsem zkoušel jen silnici
 a zácpu, ne zastávky, mosty a Rolu.
+
+## Dodatek 30. 9.
+
+Hráč vyzkoušel čistou vanilku: dvanácttrojky a Tatry dělají totéž, CZTR truck ne. Je to tedy chování samotného
+OpenTTD s naším GRF, ne tvé větve. Oprava jde udělat v GRF: dvanácttrojka s čumákem délky 2 a autem délky 8
+(bez zadního nárazníku) se kreslí správně i ve vanilce (`clanky_srovnani.png`). Oprava 1 ve hře proto nutná není,
+pomohla by jen sadám, které dělají totéž co my. Oprava 2 (`draw_offs` po vystoupení z vagonu) platí dál.

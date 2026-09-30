@@ -469,3 +469,41 @@ přepínače a přeskok Action07 mezi nimi, yagl Action07 umí.
 Názvy chunků TYPE, MASK, LIMI, VALU jsou ze specifikace NewGRF.
 Yagl je bere jako obecné čtyřpísmenné značky, takže je projede, ale
 **jestli je OpenTTD pochopí, se musí ověřit až na hotovém souboru.**
+
+---
+
+## Pořadí kreslení: auto délky 1 leze přes protisměr (2026-09-30)
+
+Hráč: na silnici SV–JZ se auto jedoucí na jihozápad v zadním pruhu kreslí přes auto v předním pruhu.
+Dělají to dvanácttrojky a Tatry, i v čisté vanilce. CZTR truck to nedělá.
+
+- Hra řadí kreslení podle krabice každého dílu. Krabice je dlouhá jako díl a sedí u jeho čela. Varianta
+  na střed (1, 1, 1) má auto délky 1, jeho obrázek je ale dlouhý 7, takže krabice pokryje jen osminu obrázku.
+- Když se dvě auta míjejí na silnici podél X a jejich krabice se nepřekrývají, hra nepozná, které je
+  vpředu: každé je „za“ tím druhým v jiné ose. Pořadí pak určí náhoda. Hra navíc kreslí obrazovku
+  po kusech a každý kus se rozhodne sám, proto je obrázek useknutý vodorovnou čarou (hráč: *„linka
+  rozdělení zadního a předního spritu prochází od levého rohu dlaždice k pravému rohu“*).
+- Na silnici podél Y leží krabice míjejících se aut vždycky tak, že pořadí vyjde správně.
+
+Zkouška ve zkušební hře (`testpruhy`, obrázek `hra/poradi-kresleni/clanky_srovnani.png`):
+
+| co | výsledek |
+|---|---|
+| 1203 s nárazníky 1, 1, 1 | špatně proti všemu, i proti sobě |
+| 1203 bez článků (auto 8) | správně |
+| 1203 čumák 2 + auto 8, bez zadního nárazníku | správně, rozestup v koloně 10 jako dnes |
+| Tatry proti sobě, i s čumákem 2 | správně |
+| Tatra proti 1203 | špatně jen kvůli krabici dvanácttrojky |
+| CZTR Liaz, Avia, Tatra 148 | správně, obrázky jsou krátké jako jejich díly |
+
+Neviditelný článek tedy sám nevadí. Vadí, že kvůli dvěma nárazníkům bylo auto zkrácené na 1.
+
+**Náprava v GRF:** čumák délky 2 a auto délky 8, bez zadního nárazníku. Rozestup zůstane 10 (+25 %),
+krabice auta má 8 a kreslí se správně i ve vanilce. Stojí to dvě věci:
+
+- Auto už není uprostřed soupravy, na vagonu se posune o 1.
+- Auta, která ve hře už jezdí, si nechají starou soupravu i se zadním nárazníkem. S novými délkami by měla
+  rozestup 8 + 8 + 2 = 18, je potřeba je koupit znovu.
+
+Zkušební soubor (jen na zkoušku, nevydaný) vznikl z `VWT1-S1203-clanky-oba-na-stred.grf`: pryč
+`0x00000002: 0x80C0` v článkovacích callbackách, čumáky 0x0080–0x0097 `shorten_vehicle 0x06`, auta 0x00A0–0x00B7 `0x00`.

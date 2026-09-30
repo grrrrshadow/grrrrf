@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 --- a/openttd/src/console_cmds.cpp	2026-09-29 22:23:42.885088003 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-29 22:23:42.892969894 +0000
++++ b/openttd/src/console_cmds.cpp	2026-09-30 12:16:33.157188444 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -19,7 +19,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -1344,6 +1348,478 @@
+@@ -1344,6 +1348,526 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -430,16 +430,55 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	V3SLog("PRUHY: osa {} misto ({},{}) silnice a depo {}", osa == Axis::X ? "X" : "Y", x0, y0, ok ? "ok" : "CHYBA");
 +
 +	/* zadni pruh (X: jihozapad v y 5, Y: severozapad v x 5) a predni pruh (X: severovychod v y 9, Y: jihovychod v x 9) */
-+	struct Typ { const char *grf; uint16_t local; };
-+	static const Typ zadni[3] = {{"MAX\x08", 0x0093}, {"MAXd", 0x0103}, {"MAX\x08", 0x0091}};
-+	static const Typ predni[3] = {{"MAXd", 0x0102}, {"MAX\x08", 0x0092}, {"MAX\x08", 0x0080}};
++	struct Typ { uint32_t grf; uint16_t local; };
++	auto ctyri = [](const char *s) { return (uint32_t)(uint8_t)s[0] | (uint8_t)s[1] << 8 | (uint8_t)s[2] << 16 | (uint32_t)(uint8_t)s[3] << 24; };
++	Typ zadni[3] = {{ctyri("MAX\x08"), 0x0093}, {ctyri("MAXd"), 0x0103}, {ctyri("MAX\x08"), 0x0091}};
++	Typ predni[3] = {{ctyri("MAXd"), 0x0102}, {ctyri("MAX\x08"), 0x0092}, {ctyri("MAX\x08"), 0x0080}};
++	/* TEST_PRUHY_AUTA="MAXd:0102/MAXd:0103;4D490203:0060/4D490203:005D;..." po radach: zadni pruh / predni pruh,
++	 * GRF jako 4 znaky nebo 8 sestnactkovych cislic (bajty v poradi, jak se pise grf_id) */
++	if (const char *env = getenv("TEST_PRUHY_AUTA"); env != nullptr) {
++		auto sestnact = [](std::string_view s) {
++			uint32_t v = 0;
++			for (char c : s) {
++				v <<= 4;
++				if (c >= '0' && c <= '9') v |= (uint32_t)(c - '0');
++				else if (c >= 'a' && c <= 'f') v |= (uint32_t)(c - 'a' + 10);
++				else if (c >= 'A' && c <= 'F') v |= (uint32_t)(c - 'A' + 10);
++			}
++			return v;
++		};
++		auto typ = [&](std::string_view s, Typ &out) {
++			auto dvojt = s.find(':');
++			if (dvojt == std::string_view::npos) return;
++			std::string_view g = s.substr(0, dvojt), l = s.substr(dvojt + 1);
++			uint32_t grf = 0;
++			if (g.size() == 8) {
++				for (int i = 0; i < 4; i++) grf |= sestnact(g.substr(i * 2, 2)) << (8 * i);
++			} else if (g.size() == 4) {
++				grf = (uint8_t)g[0] | (uint8_t)g[1] << 8 | (uint8_t)g[2] << 16 | (uint32_t)(uint8_t)g[3] << 24;
++			}
++			out.grf = grf;
++			out.local = (uint16_t)sestnact(l);
++		};
++		std::string_view v(env);
++		for (uint r = 0; r < 3 && !v.empty(); r++) {
++			auto konec = v.find(';');
++			std::string_view rada = v.substr(0, konec);
++			auto lomitko = rada.find('/');
++			if (lomitko != std::string_view::npos) {
++				typ(rada.substr(0, lomitko), zadni[r]);
++				typ(rada.substr(lomitko + 1), predni[r]);
++			}
++			v = konec == std::string_view::npos ? std::string_view{} : v.substr(konec + 1);
++		}
++	}
 +	auto kup = [&](const Typ &t) -> RoadVehicle * {
-+		const uint32_t want = (uint8_t)t.grf[0] | (uint8_t)t.grf[1] << 8 | (uint8_t)t.grf[2] << 16 | (uint32_t)(uint8_t)t.grf[3] << 24;
++		const uint32_t want = t.grf;
 +		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
 +			if (e->GetGRFID() != want || e->grf_prop.local_id != t.local) continue;
 +			auto [bc, vid, bcap, bmail, bcaps] = Command<Commands::BuildVehicle>::Do(DoCommandFlag::Execute, depo, e->index, true, INVALID_CARGO, ClientID::Invalid);
 +			if (bc.Failed()) {
-+				V3SLog("PRUHY: koupe {:08X} 0x{:04X} SELHALA", want, t.local);
++				V3SLog("PRUHY: koupe {:08X} 0x{:04X} SELHALA: {} (dostupny {}, uveden {})", want, t.local, bc.GetErrorMessage() == INVALID_STRING_ID ? std::string("?") : GetString(bc.GetErrorMessage()), e->company_avail.Test(_local_company), e->intro_date.base());
 +				return nullptr;
 +			}
 +			return RoadVehicle::From(Vehicle::Get(vid));
@@ -463,12 +502,21 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +			if (b != nullptr) PolozAutoNaSilnici(b, osa, osa != Axis::X, b_celo, napric);
 +		}
 +	}
++	/* 'mrizka': v kazde rade stejny odstup cel (TEST_PRUHY_ODSTUP, jinak 6), ale dvojice posunuta po dlazdici:
++	 * celo predniho auta 0, 2, ..., 14 od kraje dlazdice (hrac: prevraci se to na care z leveho do praveho rohu dlazdice) */
++	const bool mrizka = argv.size() > 3 && argv[3] == "mrizka";
++	const char *odstup_env = getenv("TEST_PRUHY_ODSTUP");
++	int odstup_mrizky = 6;
++	if (odstup_env != nullptr && *odstup_env != '\0') {
++		odstup_mrizky = 0;
++		for (const char *c = odstup_env; *c >= '0' && *c <= '9'; c++) odstup_mrizky = odstup_mrizky * 10 + (*c - '0');
++	}
 +	for (uint r = 0; r < 3 && !kolona; r++) {
 +		const int napric = (int)(osa == Axis::X ? y0 : x0) + 2 + 3 * (int)r;
 +		for (uint k = 0; k < 8; k++) {
-+			const int d = 2 * (int)k;
++			const int d = mrizka ? odstup_mrizky : 2 * (int)k;
 +			const int zaklad = ((int)(osa == Axis::X ? x0 : y0) + 3 + 2 * (int)k) * (int)TILE_SIZE;
-+			const int b_celo = zaklad + (osa == Axis::X ? 4 : 12);
++			const int b_celo = zaklad + (mrizka ? 2 * (int)k : (osa == Axis::X ? 4 : 12));
 +			const int a_celo = osa == Axis::X ? b_celo + d : b_celo - d;
 +			RoadVehicle *a = kup(zadni[r]);
 +			RoadVehicle *b = kup(predni[r]);
@@ -498,7 +546,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -1452,6 +1928,17 @@
+@@ -1452,6 +1976,17 @@
  		}
  		if (eid_loco != EngineID::Invalid() && eid_wagon2 != EngineID::Invalid()) break;
  	}
@@ -516,7 +564,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -7243,6 +7730,9 @@
+@@ -7243,6 +7778,9 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
