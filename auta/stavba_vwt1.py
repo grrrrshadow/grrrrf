@@ -10,6 +10,7 @@
 #  6. (verze 2) TAZ 1203 bus, bus zahradka a tri dodavky 0x8B-0x8F: kopie TAZ 1500 se svetlejsim lakem, od 1973
 #  7. (verze 3) roky: vyroba = auto maji vsichni, rok predtim prototyp na zkousku (hra ho nabidne jedne firme
 #     na rok); TAZ 1203 se zahradkou az od 1981
+#  8. (verze 4) fialova TAZ 1900 D dodavka 0x98 s naftovym motorem VW 1,9 (kopie modre dodavky TAZ 1500)
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -69,6 +70,8 @@ AUTA = {
     # (verze 3) se zahradkou az od 1981, bez zahradky od 1973 (hrac 30. 9.)
     0x8B: ("taz1203z", cisla(LIDE_BUS), 8, "PASS"), 0x8C: ("taz1203", cisla(LIDE_BUS), 8, "PASS"),
     0x8D: ("taz1203z", DODAVKA, 2, "MAIL"), 0x8E: ("taz1203z", S_BEDNOU, 2, "GOOD"), 0x8F: ("taz1203", DODAVKA, 2, "MAIL"),
+    # (verze 4) fialova TAZ 1900 D (hrac 30. 9.: "udelame jeden fialovej TAZ 1,9D motor z Volkswagenu, asi z modry dodavky")
+    0x98: ("taz1900d", DODAVKA, 2, "MAIL"),
 }
 TAZ1203_Z_1500 = {0x8B: (0x93, "zluta"), 0x8C: (0x94, "zluta"), 0x8D: (0x95, "modra"), 0x8E: (0x96, "modra"),
                   0x8F: (0x97, "modra")}
@@ -88,6 +91,7 @@ UDAJE = {
     "taz1203":  dict(vyroba="1973/4/1",   vykon_k=47,  kmh=90,  vaha_kg=1170),   # Trnava
     "taz1203z": dict(vyroba="1981/1/1",   vykon_k=47,  kmh=90,  vaha_kg=1170),   # se zahradkou (hrac)
     "taz1500":  dict(vyroba="1988/1/1",   vykon_k=57,  kmh=110, vaha_kg=1260),   # motor 1433 cm3
+    "taz1900d": dict(vyroba="1996/1/1",   vykon_k=54,  kmh=110, vaha_kg=1260),   # VW 1,9 D 40 kW (cs Wikipedia)
 }
 for d in UDAJE.values():
     r, m, den = map(int, d["vyroba"].split("/"))
@@ -238,6 +242,27 @@ nove = []
 for nos, (zdroj, barva) in TAZ1203_Z_1500.items():
     jm = re.search(rf'/\* 0x{zdroj:04X} \*/ "([^"]*)"', t).group(1).replace("TAZ 1500", "TAZ 1203")
     nove += klonuj(zdroj, nos, jm, svetly(barva), svetly(barva))
+# fialova TAZ 1900 D: kopie modre dodavky TAZ 1500 bez zahradky, modry lak otoceny na fialovou
+def fialova(a, cil=285):
+    """fialovy lak: syte body modre (odstin 190-225 stupnu) otocene o (cil - 205) stupnu, sytost a jas zustanou"""
+    f = a.astype(float) / 255
+    r, g, b = f[..., 0], f[..., 1], f[..., 2]
+    mx = np.maximum(np.maximum(r, g), b); mn = np.minimum(np.minimum(r, g), b); d = np.where(mx - mn == 0, 1, mx - mn)
+    h = np.where(mx == r, ((g - b) / d) % 6, np.where(mx == g, (b - r) / d + 2, (r - g) / d + 4)) * 60
+    s = np.where(mx == 0, 0, (mx - mn) / np.where(mx == 0, 1, mx))
+    m = (a[..., 3] > 0) & (h >= 190) & (h <= 225) & (s > 0.25)
+    hh = ((h + cil - 205) % 360 / 60) % 6; i = np.floor(hh).astype(int); fr = hh - i
+    p, q, tt = mx * (1 - s), mx * (1 - s * fr), mx * (1 - s * (1 - fr))
+    rgb = np.stack([np.choose(i, [mx, q, p, p, tt, mx]), np.choose(i, [tt, mx, mx, q, p, p]),
+                    np.choose(i, [p, p, tt, mx, mx, q])], -1) * 255
+    out = a.copy()
+    out[..., :3][m] = np.round(rgb[m]).clip(0, 255).astype(np.uint8)
+    return out
+def fialovy(sada, smer, sp):
+    w, h, xo, yo, soubor, x, y = sp
+    assert soubor == os.path.basename(LIST)
+    return fialova(velky[y:y + h, x:x + w])
+nove += klonuj(0x97, 0x98, "TAZ 1900 D dodavka", fialovy, fialovy)
 i_c0 = najdi(r"^properties<RoadVehicles, 0x00C0>")
 zaznamy[i_c0:i_c0] = nove                              # pred zadni naraznik, za TAZ 1500
 

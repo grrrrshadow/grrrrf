@@ -5,13 +5,30 @@
 | 1 | `dodavky_BRYLE_v1.grf` | `8ea92f1db2a1a9eeddd56856409989e4` | náklady, zelený valník, čumák 2 + auto 8, skutečné údaje |
 | 2 | `dodavky_BRYLE_v2.grf` | `012303618c0e34e225621d9c6ce62343` | TAZ 1203 bus a dodávky, čumák 1 (menší mezera v koloně) |
 | 3 | `dodavky_BRYLE_v3.grf` | `aa348bbae9aaf135405355cb8e882dc5` | roky: prototyp na zkoušku rok před výrobou, zahrádky TAZ 1203 od 1981 |
+| 4 | `dodavky_BRYLE_v4.grf` | `56d1797382f742dbf43831627bbf53c6` | fialová TAZ 1900 D dodávka s naftovým motorem VW |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v4`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v5`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 4 (30. 9.): fialová TAZ 1900 D
+
+- **Nové auto 0x98 „TAZ 1900 D dodavka“:** kopie modré dodávky TAZ 1500 bez zahrádky (0x97). Modrý lak (syté
+  body v odstínu 190–225°) je otočený na fialovou, odstín 285°, sytost a jas zůstaly. Hráč dostal na výběr tři
+  odstíny (275, 285, 295) v náhledu `nahled_taz1900d_fialova.png`, vzal jsem prostřední.
+- **Údaje:**
+  - motor VW 1,9 l diesel, 40 kW (54 k), max. 110 km/h (česká Wikipedia, u fotky mikrobusu TAZ 1900 roky 1998–99);
+  - motor VW 1,9 l v řadě od roku 1996 (Škoda Storyboard), proto výroba 1996 a zkouška od 1995;
+  - ve hře 50 k, na rovině jede nejvýš asi 95 km/h (silnější motor hráč nechce);
+  - náklady jako modrá dodávka bez bedny, 2 lidi, výchozí pošta.
+- **Zkouška:**
+  - hra od 1994: TAZ 1900 D není, od 1997 je;
+  - čumák má délku 1, auto 8, lidé 1 + 1, pošta 2 + 2;
+  - zpětné rozbalení se shoduje;
+  - proti verzi 3 v yaglu jen přibyl blok nového auta.
 
 ## Verze 3 (30. 9.): roky
 
@@ -31,7 +48,12 @@ to může být prototyp na zkoušku 1985. Můj zdroj roku výroby je pochybný.�
   - TAZ 1500: výroba 1988, zkouška 1987.
 - **Zdroje k hráčovým rokům:**
   - Škoda 1203: první prototypy typ 979 počátkem roku 1957, pět kusů do 1958, od 1959 typ 997, konečná podoba
-    představena 14. 9. 1968, výroba od 20. 11. 1968 (Škoda Storyboard). Rok 1963 zdroje neuvádějí.
+    představena 14. 9. 1968, výroba od 20. 11. 1968 (Škoda Storyboard). Hráčův rok 1963 sedí:
+    - prototypu 997 z roku 1961 se v závodě už říkalo 1203;
+    - v letech 1962–1964 vznikla řada prototypů, na kterých je budoucí 1203 hned poznat;
+    - v roce 1963 byl hotový prototyp valníku (kniha Jana Králíka).
+
+    Zdroje: tipcars.com, denik.cz. Hra ale nabízí auto na zkoušku jen rok, zůstává tedy zkouška 1967 a výroba 1968.
   - TAZ 1500: anglická Wikipedia má 1985 (modernizace, motor 1433 cm³), Škoda Storyboard 1988. Nechán 1988.
 - **Zkouška:**
   - hra od 1979: TAZ 1203 valníky, plachty, bus a dodávka bez zahrádky jsou, zahrádky a TAZ 1500 ne;
@@ -196,6 +218,4 @@ Ověřeno 30. 9.:
 ## Otevřené
 
 - Zámek a přesun k základní grafice hry, až budou auta hotová.
-- Fialový TAZ 1900 D s motorem VW 1,9 D z modré dodávky (hráč: „uděláme pak“). Škoda Storyboard: motor VW 1,9 l
-  od roku 1996. Výkon TAZ se zatím nenašel, VW s tímhle motorem měl 47 kW (64 k).
 - Auta koupená v rozehrané hře před výměnou GRF si nechají zadní nárazník. Nově koupená už ho nemají.
