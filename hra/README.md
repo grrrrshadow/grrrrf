@@ -13,6 +13,35 @@ s mými zkušebními příkazy. Uložená sem, ať se příště nemusí 20 minu
 | `zkusebni_mari/` | zkušební náklad `MARI` (`zkusebni_MARI.grf`): tahle stará verze hry ho nemá, ve hře hráče je zabudovaný |
 | `zkusebni_naklady/` | zkušební náklady SAND TATO CMNT GRVL TOUR BEER FICR CHEM TOYS URAN WATR ACID JAVA CLAY SGCN KAOL BRCK BDMT FRUT STUD WINE HOPS MLTR (`zkusebni_naklady.grf`, `MAXn`), mírné klima je nemá; na zkoušku kupek, pytlů, sudů, sena, turistů a toho, co které auto nevozí |
 
+## Druhá zkušební hra: dvoubajtová čísla bloků (30. 9.)
+
+GRF od verze 11 vejtřasky s Tatrami se ptá na vlastnosti naší hry (`decouple_more_action2_ids`,
+`decouple_128_cargo`) a ve staré zkušební hře se sám vypne. Proto druhá kopie, přeložená z kolegovy větve
+(`forclaude`, `claude/github-connection-check-m6m898`, commit `c53e895` z 30. 9., jen čteno) se stejnými příkazy:
+
+| soubor | co to je |
+|---|---|
+| `ottd-zkusebni-c53e895-gfx.tar.xz` | přeložená hra (SDL2, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a čistý domov `domov/` jako u staré |
+| `zkusebni-prikazy-c53e895.patch` | moje změny proti `c53e895` (`patch -p1` ve složce, kde je `openttd/`) |
+
+Oproti staré: `testv3s` zkouší **všechny náklady hry** (ne pevný seznam) a u každého **všechny podtypy**,
+dokud přestavba jde a podtyp má jméno; fotka `TEST_FOTO_SADA=tatra11` koupí Tatry z verze 11 (zelené z vojenského
+nákladu a zelené přestavby, oranžový sklápěč a červený valník pro srovnání, seznam `nakupy_tatra11`).
+Stará hra zůstává na zkoušku zámku: jiná hra ty vlastnosti nezná a GRF se musí vypnout.
+
+```bash
+mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-c53e895-gfx.tar.xz -C /tmp/hra
+H=/tmp/hra/ottd-zkusebni-c53e895/domov
+cp v3s/grf/mala/Praga_V3S_Tatra-v11.grf v3s/grf/velka/Praga_V3S_Tatra_BRYLE-v11.grf hra/zkusebni_mari/zkusebni_MARI.grf hra/zkusebni_naklady/zkusebni_naklady.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\nzkusebni_MARI.grf = \nzkusebni_naklady.grf = \nPraga_V3S_Tatra-v11.grf = \nPraga_V3S_Tatra_BRYLE-v11.grf = /' $H/.openttd/openttd.cfg
+printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
+printf 'script /tmp/hra/vystup.txt\ntestv3s\nscript\nquit\n' > $H/.openttd/scripts/game_start.scr
+cd /tmp/hra/ottd-zkusebni-c53e895 && HOME=$H TEST_RV_GRF=MAXd ./openttd -vnull:ticks=200 -snull -mnull -G 11
+```
+
+Uložená hra: `save <jméno>` v `game_start.scr`, načíst `-g <soubor>`, ale v `autoexec.scr` pak nesmí být
+`newgame`, jinak hra místo načtení založí novou.
+
 ## Zkušební příkazy
 
 | příkaz | co udělá |
