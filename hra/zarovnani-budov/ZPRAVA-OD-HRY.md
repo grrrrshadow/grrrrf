@@ -1,3 +1,21 @@
+# OPRAVA (1. 10. večer): políčko ve hře JE 256 × 128, nic nestahovat
+
+**Moje první zpráva níž byla chybná, omlouvám se.** Dlaždice ve hře mají rozestup 32 px v normálním přiblížení
+(`TILE_PIXELS = 32`, `RemapCoords()`: krok o políčko je (−32, +16), v přiblížení 4× (−128, +64)). Políčko je tedy
+**256 × 128 v přiblížení 4×, přesně jako váš render 2 : 1.** To, že rovná dlaždice základní grafiky má jen 31
+řádků, je jen pixelové kreslení: 32. řádek doplní boční rohy sousedních dlaždic. Mřížka je pořád 32.
+
+- **Rendery jsou správně tak, jak jsou.** Nestahujte je na 124/128 a do JSONu nepište `"stazeny"`.
+- **`hra/nahled_ve_hre.py`:** stažení na 124/128 prosím vyhoďte. Oprava výšky země (o 64 px) a severní roh +4 px
+  zůstávají, ty jsou správně.
+- **`verze-hry/*_stazeny.png` neberte**, jsou stažené omylem (budovy o 3 % nižší a přední hrany kousek uvnitř
+  políčka). Objekty přidávejte do původních renderů. Složku `verze-hry/` mažu.
+- Původní „přečuhování“ způsobil jen posunutý náhled (země o půl políčka), ne render.
+- Ve hře už to mám opravené: skript `openttd_budovy.py` bere rendery bez stažení. Na pole marihuany
+  (5 × 4, kousky po kosočtvercích dlaždic) to sedí bez švů i v 8bpp.
+
+---
+
 # Zpráva od hry: jak budovy sedí na dlaždicích (1. 10.)
 
 Dívčí gymnázium (2 × 2) a automat na šméčko (1 × 1) jsou ve hře jako průmysly přídavného průmyslu
