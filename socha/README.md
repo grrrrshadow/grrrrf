@@ -34,7 +34,10 @@ dvě na jednu lavičku, jednu na jednu a na třetí nezbyde“*, *„měřítko 
 
 - **Na podstavci:** dívka ve školní uniformě (College Girl) stojí Karlovi po levici, čelem k němu, objímá ho
   a hlavu má zvednutou k němu. Pusa vidět není.
-- **Kráčí:** dívka v bikinách jde přes náměstíčko vlevo vpředu, kde by byla čtvrtá lavička, k jihovýchodu.
+- **Kráčí:** dívka v bikinách jde přes náměstíčko vlevo vpředu, kde by byla čtvrtá lavička, posunutá kousek
+  k jihovýchodu, aby neměla hlavu u nohou dívky na lavičce. Model stojí jako modelka (nohy od sebe, hlava zakloněná
+  k nebi), proto jsou jí nohy srovnané pod kyčle do krátkého klidného kroku a hlava narovnaná dopředu. Jde šikmo
+  k divákovi (hráč: *„zdá se mi nepřirozená, klidně ji nějak pootoč“*).
 - **Na lavičkách:** na severozápadní (vlevo nahoře) dvě, bělovlasá anime dívka a dívka v tyrkysovém tílku
   s kabelkou, na severovýchodní (vpravo nahoře) sama zrzavá anime dívka. Jihovýchodní (vpravo dole) zůstala prázdná.
 - **Měřítko k lavičce:** dívky mají 1,58 až 1,68 m a jsou dvakrát zvětšené jako lavičky, sedí zadkem na sedáku

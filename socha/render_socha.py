@@ -375,6 +375,10 @@ if os.environ.get("POSTAVY", "") == "1":
         v = 0.05                                      # kousek dozadu k operadlu
         do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47, uhel)
 
+    # divka v bikinach: krok (stehno vpred, vzad, koleno zadni nohy), kolik z rozkroku srovnat (vic = chodidlo na hranu),
+    # posun k jihovychodu a smer chuze ve stupnich (45 = k divakovi, 90 = k jihovychodu)
+    BK_VPRED, BK_VZAD, BK_KOLENO, BK_K = (float(os.environ.get(n, d)) for n, d in (("BK_VPRED", "-12"), ("BK_VZAD", "5"), ("BK_KOLENO", "6"), ("BK_K", "0.5")))
+    BK_Y, BK_SMER = float(os.environ.get("BK_Y", "0.55")), float(os.environ.get("BK_SMER", "70"))
     LAV_SZ = (C, C - R_LAV, math.pi / 2)              # severozapadni (na obrazku vlevo nahore): dve divky
     LAV_SV = (C - R_LAV, C, 0.0)                      # severovychodni (vpravo nahore): jedna, jihovychodni prazdna
 
@@ -409,15 +413,20 @@ if os.environ.get("POSTAVY", "") == "1":
     print("anime: stehna %d st, chodidla mimo zem o %.3f m" % (st, chyba))
     na_lavicku(an, kotva, LAV_SV, 0.12)
 
-    # girl_bikini: krok tam, kde by byla ctvrta lavicka (jihozapadni), jde k jihovychodu; nohy napred k sobe pod kycle
+    # girl_bikini: krok tam, kde by byla ctvrta lavicka, a kousek k jihovychodu (hrac: "at nema u hlavy nohu te holky
+    # na lavicce"). Model stoji jako modelka (nohy od sebe, hlava zaklonena k nebi), proto: nohy k sobe pod kycle,
+    # kratky klidny krok, hlava o 35 st dopredu a 15 st zpet nad ramena. Jde k vychodu-jihovychodu, ze strany je
+    # krok videt (hrac: "zda se mi neprirozena, klidne ji nejak pootoc").
     bk = PO.nacti("girl_bikini", 1.66)
     (xr, xfr, zfr), (xl, xfl, zfl) = PO.stredy_nohou(bk, 1.66)
     odklon_r = math.atan2(xfr - xr, 0.42 * 1.66 - zfr); odklon_l = math.atan2(xfl - xl, 0.42 * 1.66 - zfl)
     PO.ohni_nohy(bk, 1.66, 0.50, 0.285,
-                 [(xr, Matrix.Rotation(math.radians(-22), 3, 'X') @ Matrix.Rotation(-odklon_r, 3, 'Y'), ((1, 0, 0), math.radians(8))),
-                  (xl, Matrix.Rotation(math.radians(14), 3, 'X') @ Matrix.Rotation(-odklon_l, 3, 'Y'), ((1, 0, 0), math.radians(20)))])
+                 [(xr, Matrix.Rotation(math.radians(BK_VPRED), 3, 'X') @ Matrix.Rotation(-BK_K * odklon_r, 3, 'Y'), ((1, 0, 0), math.radians(4))),
+                  (xl, Matrix.Rotation(math.radians(BK_VZAD), 3, 'X') @ Matrix.Rotation(-BK_K * odklon_l, 3, 'Y'), ((1, 0, 0), math.radians(BK_KOLENO)))])
+    PO.otoc_cast(bk, 1.66, 0.855, (-0.06 * 1.66, 0.02 * 1.66, 0.85 * 1.66),
+                 Matrix.Rotation(math.radians(15), 3, 'Y') @ Matrix.Rotation(math.radians(35), 3, 'X'))
     lo, hi, _ = PO.rozmery_siti(bk)
-    do_sceny(bk, Vector((0, 0, lo[2])), C + R_LAV, C - 0.1, Z_D, math.pi / 2)
+    do_sceny(bk, Vector((0, 0, lo[2])), C + R_LAV, C + BK_Y, Z_D, math.radians(BK_SMER))
 
     # college_girl: na podstavci u Karla zleva zpredu, celem k nemu, objima ho (ruce dopredu, predlokti kolem nej)
     def divka_a(o):

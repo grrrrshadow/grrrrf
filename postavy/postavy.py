@@ -221,3 +221,15 @@ def bod_sedu(meshe, vyska, y_kycel):
     lo, hi, vse = rozmery_siti(meshe)
     okolo = vse[(np.abs(vse[:, 1] - y_kycel) < 0.1 * vyska) & (vse[:, 2] > lo[2] + 0.15 * vyska) & (np.abs(vse[:, 0]) < 0.1 * vyska)]
     return Vector((0.0, float(y_kycel), float(okolo[:, 2].min()))), float(okolo[:, 2].min() - lo[2])
+
+
+def otoc_cast(meshe, vyska, z_od, pivot, otoceni, sirka=0.012):
+    """Otoci horni cast staticke postavy (vse nad vyskou z_od, podil vysky; hladce v pasu +-sirka) kolem bodu
+    pivot (m) o otoceni (osa, uhel) nebo matici 3x3. Na hlavu: z_od u krku, ruce musi byt niz."""
+    R = _rot(otoceni)
+    p = np.array(pivot, dtype=float)
+    for o in meshe:
+        v = _vrcholy(o)
+        w = 1.0 - _pod(v[:, 2], z_od * vyska, sirka * vyska)
+        nove = (v - p) @ R.T + p
+        _zapis(o, v + w[:, None] * (nove - v))
