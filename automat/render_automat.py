@@ -6,7 +6,9 @@
 # klapka se zelenym stitkem PULL, bok polepeny zelenou folii s listy konopi, paprsky a bilym napisem CBD MAT.
 # Skupina je ctverec (hrac: "to mas obdelnicek, neco jako 2x1 policko", "lavicku postav pred automat, otoc ji
 # sedadlem k automatu a mas ctverec"): automat vzadu, lavicka pred nim sedadlem k nemu, ker vedle, dlazba 4 x 4 m
-# s obrubnikem uprostred policka. MERITKO=2 zvetsi celou skupinu i s dlazbou kolem stredu policka.
+# s obrubnikem. Hrac: "2x vetsi jo, dame do rohu policka a zbytek policka krovi", "vedle lavicky dej odpadkovy kos
+# a odpadky rozhazene po zemi": skupina je v severnim rohu policka (MERITKO, vychozi 2), zbytek zarostly divokym
+# neudrzovanym krovim stejne zvetsenym, mezi nim plevel.
 #   python3 render_automat.py <vystup.png>
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu policka.
 import bpy, bmesh, os, sys, math, json, random
@@ -18,7 +20,7 @@ from PIL import Image, ImageDraw, ImageFont
 VYSTUP = sys.argv[-1]
 PX_M = 12.2
 RAM = 384
-K = float(os.environ.get("MERITKO", "1"))
+K = float(os.environ.get("MERITKO", "2"))
 T = 256 / (math.sqrt(2) * PX_M)               # policko 14,84 m
 C = T / 2                                       # stred policka
 TU = os.path.dirname(os.path.abspath(__file__))
@@ -160,16 +162,35 @@ M = {
     "lavicka": mat("lavicka", (138, 92, 52), 0.7),
     "kov": mat("kov", (52, 58, 54), 0.5, kov=0.5),
     "ker": mat("ker", (54, 98, 40), 0.9, sum_=0.32, meritko=9.0),
+    "kos": mat("kos", (38, 70, 46), 0.5, kov=0.3),
+    "cerna": mat("cerna", (14, 14, 14), 0.9),
 }
+# divoke krovi: nekolik zeleni (i zlutava a tmava), suche hnede, plevel
+KRE = [mat(f"krovi{i}", c, 0.9, sum_=0.3, meritko=9.0) for i, c in
+       enumerate([(54, 98, 40), (70, 108, 44), (44, 82, 36), (88, 112, 50), (62, 92, 46)])]
+SUCHE = mat("suche", (122, 104, 62), 0.95, sum_=0.25, meritko=9.0)
+PLEVEL = [mat("plevel0", (124, 140, 66), 0.95, sum_=0.25, meritko=12.0), mat("plevel1", (146, 136, 84), 0.95, sum_=0.25, meritko=12.0)]
+ODPAD = {"papir": [mat(f"papir{i}", c, 0.9) for i, c in enumerate([(236, 234, 226), (214, 206, 186), (200, 200, 204)])],
+         "plech": [mat(f"plech{i}", c, 0.35, kov=0.6) for i, c in enumerate([(196, 30, 34), (190, 192, 196), (36, 80, 170), (40, 140, 60)])],
+         "lahev": [mat(f"lahev{i}", c, 0.2) for i, c in enumerate([(160, 196, 214), (70, 140, 70), (120, 80, 40)])],
+         "kelimek": [mat(f"kelimek{i}", c, 0.7) for i, c in enumerate([(240, 240, 236), (150, 100, 60)])],
+         "sacek": [mat(f"sacek{i}", c, 0.6) for i, c in enumerate([(232, 232, 232), (60, 90, 170), (30, 30, 30)])],
+         "balicek": [mat("balicek", (96, 200, 58), 0.5)]}
 
 SITE = {}
 def bm_pro(m):
     if m.name not in SITE: SITE[m.name] = (m, bmesh.new())
     return SITE[m.name][1]
 
+OKRAJ = 0.3                                     # dlazba od severnich hran policka
+PC = OKRAJ + 2.0 * K                            # stred dlazby (4 x 4 m krat K) v severnim rohu
 def B(x, y, z):
-    """policko -> Blender; skupina je kolem stredu policka zvetsena K krat"""
-    return Vector((C + (y - C) * K, -(C + (x - C) * K), z * K))
+    """skupina -> Blender: skupina je navrzena kolem stredu policka C, zvetsena K krat a posunuta do severniho rohu"""
+    return Vector((PC + (y - C) * K, -(PC + (x - C) * K), z * K))
+
+def Bp(x, y, z):
+    """policko -> Blender bez zvetseni (divoke krovi)"""
+    return Vector((y, -x, z))
 
 def kvadr(m, x0, x1, y0, y1, z0, z1, pevne=False):
     """kvadr; pevne = na policku bez zvetseni (dlazba)"""
@@ -226,18 +247,110 @@ for i in range(n_):
         x, y = D0 + OBR + kr * i, D0 + OBR + kr * j
         kvadr(M["dlazba"], x + 0.012, x + kr - 0.012, y + 0.012, y + kr - 0.012, 0.0, Z_D)
 
-# kericek vpravo za automatem: par koul s hrbolky, mekce stinovany
-rnd = random.Random(5)
-KX, KY, KR = AX0 + 0.6, AY1 + 0.95, 0.6               # vpravo vedle automatu
-for i in range(9):                                     # hrbolaty ker z mensich chumacu, ne hladka koule
-    a = rnd.random() * 2 * math.pi; d = KR * 0.6 * math.sqrt(rnd.random())
-    rr = KR * (0.38 + 0.16 * rnd.random())
-    zc = KR * (0.45 + 0.5 * rnd.random()) * (1 - 0.4 * d / KR)
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=rr * K, location=B(KX + d * math.cos(a), KY + d * math.sin(a), zc))
-    o = bpy.context.object; o.data.materials.append(M["ker"])
-    for p in o.data.polygons: p.use_smooth = True
-    dm = o.modifiers.new("hrbol", 'DISPLACE'); tx = bpy.data.textures.new(f"ker{i}", 'CLOUDS'); tx.noise_scale = 0.09 * K
-    dm.texture = tx; dm.strength = rr * 0.55 * K
+from mathutils import Matrix, noise
+def ker(cx, cy, r, vyska, materialy, seed, v_policku=False, chumacu=9, deleni=3):
+    """hrbolaty ker z chumacu koul: ve skupine (souradnice skupiny, zvetsi se K krat), nebo na policku (metry).
+    Koule jdou rovnou do site materialu (bmesh) a hrbolky dela sum na vrcholech, ne objekt s modifikatorem na kazdou
+    kouli: s divokym krovim je jich stovky a Blender by se s tolika objekty vlekl."""
+    rnd = random.Random(seed)
+    mapa, s = (Bp, 1.0) if v_policku else (B, K)
+    for i in range(chumacu):
+        a = rnd.random() * 2 * math.pi; d = r * 0.6 * math.sqrt(rnd.random())
+        rr = r * (0.38 + 0.16 * rnd.random())
+        zc = max(rr * 0.55, vyska * (0.45 + 0.5 * rnd.random()) * (1 - 0.4 * d / r) - rr * 0.3)
+        stred_ = mapa(cx + d * math.cos(a), cy + d * math.sin(a), zc)
+        bm = bm_pro(rnd.choice(materialy))
+        nove_v = bmesh.ops.create_icosphere(bm, subdivisions=deleni, radius=rr * s, matrix=Matrix.Translation(stred_))["verts"]
+        posun = Vector((rnd.random(), rnd.random(), rnd.random())) * 100
+        for v in nove_v:                                   # hrbolky: sum podel normaly jako drive Clouds a Displace
+            smer = (v.co - stred_).normalized()
+            n_ = noise.noise(v.co / (0.09 * s * 4) + posun) * 0.5 + noise.noise(v.co / (0.09 * s * 2) + posun) * 0.25
+            v.co += smer * n_ * rr * 0.55 * s
+        for f in {f for v in nove_v for f in v.link_faces}: f.smooth = True
+
+# kericek vpravo vedle automatu
+ker(AX0 + 0.6, AY1 + 0.95, 0.6, 1.0, [M["ker"]], 5)
+
+# odpadkovy kos vlevo vedle lavicky: zeleny plechovy valec s okrajem, plny az pres okraj
+LX, LY = AX1 + 1.4, (AY0 + AY1) / 2                  # stred lavicky
+KOSX, KOSY = LX, LY - 1.2
+def valec(m, x, y, z0, z1, r, n=16):
+    bm = bm_pro(m)
+    dole = [bm.verts.new(B(x + r * math.cos(2 * math.pi * k / n), y + r * math.sin(2 * math.pi * k / n), z0)) for k in range(n)]
+    nahore = [bm.verts.new(B(x + r * math.cos(2 * math.pi * k / n), y + r * math.sin(2 * math.pi * k / n), z1)) for k in range(n)]
+    bm.faces.new(dole[::-1]); bm.faces.new(nahore)
+    for k in range(n):
+        bm.faces.new((dole[k], dole[(k + 1) % n], nahore[(k + 1) % n], nahore[k]))
+valec(M["kos"], KOSX, KOSY, 0.04, 0.76, 0.22)
+valec(M["kov"], KOSX, KOSY, 0.74, 0.79, 0.24)
+valec(M["cerna"], KOSX, KOSY, 0.79, 0.792, 0.19)
+
+# odpadky: papiry, plechovky, PET lahve, kelimky, sacky a zelene balicky z automatu, nejvic kolem kose a pod lavickou
+rnd_o = random.Random(11)
+def odpadek(x, y, z0=0.0):
+    x = min(max(x, D0 + 0.12), D1 + 0.5); y = min(max(y, D0 + 0.12), D1 + 0.5)    # jen na dlazbe a u ni, ne za policko
+    druh = rnd_o.choices(["papir", "plech", "lahev", "kelimek", "sacek", "balicek"], [30, 18, 14, 10, 12, 16])[0]
+    m = rnd_o.choice(ODPAD[druh]); uhel = rnd_o.random() * 2 * math.pi
+    if druh in ("papir", "sacek"):
+        r = 0.09 if druh == "papir" else 0.14
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=r * K, location=B(x, y, z0 + r * 0.35))
+        o = bpy.context.object; o.scale = (1.0, 0.8 + 0.4 * rnd_o.random(), 0.45 if druh == "papir" else 0.22)
+        o.rotation_euler[2] = uhel
+    elif druh == "balicek":
+        bpy.ops.mesh.primitive_cube_add(size=1, location=B(x, y, z0 + 0.012)); o = bpy.context.object
+        o.scale = (0.12 * K, 0.08 * K, 0.026 * K); o.rotation_euler[2] = uhel
+    else:
+        r, delka = {"plech": (0.04, 0.14), "lahev": (0.05, 0.28), "kelimek": (0.045, 0.1)}[druh]
+        bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=r * K, depth=delka * K, location=B(x, y, z0 + r),
+                                            rotation=(math.radians(90), 0, uhel))
+        o = bpy.context.object
+    o.data.materials.append(m)
+for i in range(22):                                                              # kolem kose
+    odpadek(KOSX + rnd_o.gauss(0, 0.5), KOSY + rnd_o.gauss(0, 0.5))
+for i in range(5):                                                               # pres okraj kose
+    a = rnd_o.random() * 2 * math.pi
+    odpadek(KOSX + 0.1 * math.cos(a), KOSY + 0.1 * math.sin(a), 0.79)
+for i in range(12):                                                              # pod lavickou a pred ni
+    odpadek(LX + rnd_o.uniform(-0.6, 0.6), LY + rnd_o.uniform(-0.85, 0.85))
+for i in range(25):                                                              # po cele dlazbe
+    odpadek(rnd_o.uniform(D0 + 0.25, D1 - 0.25), rnd_o.uniform(D0 + 0.25, D1 - 0.25))
+for i in range(10):                                                              # zafoukane do krovi u dlazby
+    if rnd_o.random() < 0.5: odpadek(D1 + rnd_o.uniform(0.0, 0.5), rnd_o.uniform(D0, D1))
+    else: odpadek(rnd_o.uniform(D0, D1), D1 + rnd_o.uniform(0.0, 0.5))
+
+# divoke neudrzovane krovi na zbytku policka (metry na policku, stejne zvetsene jako skupina), u dlazby nizsi,
+# at lavicka a automat zustanou videt; v mezerach plevel
+D_KRAJ = OKRAJ + 4.0 * K                              # jizni a vychodni hrana dlazby na policku
+rnd_k = random.Random(21)
+kere = []
+for pokus in range(4000):
+    r = K * rnd_k.uniform(0.45, 0.95)
+    x, y = rnd_k.uniform(0.15 + r, T - 0.15 - r), rnd_k.uniform(0.15 + r, T - 0.15 - r)
+    if x - r < D_KRAJ + 0.25 and y - r < D_KRAJ + 0.25:                            # na dlazbe ne
+        continue
+    if any(math.hypot(x - a, y - b) < 0.72 * (r + c) for a, b, c, _ in kere):
+        continue
+    u_dlazby = math.hypot(max(x - D_KRAJ, 0), max(y - D_KRAJ, 0)) - r          # mezera mezi kerem a dlazbou
+    vyska = K * rnd_k.uniform(0.75, 1.6)
+    if u_dlazby < 2.2 * K: vyska = min(vyska, K * 0.6 + 0.3 * u_dlazby)                 # u dlazby nizsi
+    kere.append((x, y, r, vyska))
+for i, (x, y, r, vyska) in enumerate(kere):
+    mats = rnd_k.sample(KRE, 2) + ([SUCHE] if rnd_k.random() < 0.3 else [])
+    ker(x, y, r, vyska, mats, 100 + i, v_policku=True, chumacu=rnd_k.randint(7, 12))
+plevel, trsy = 0, []
+for pokus in range(1500):
+    x, y = rnd_k.uniform(0.4, T - 0.4), rnd_k.uniform(0.4, T - 0.4)
+    if x < D_KRAJ + 0.15 and y < D_KRAJ + 0.15:
+        continue
+    if any(math.hypot(x - a, y - b) < c * 0.95 for a, b, c, _ in kere):
+        continue
+    r = K * rnd_k.uniform(0.18, 0.3)
+    if any(math.hypot(x - a, y - b) < 1.6 * (r + c) for a, b, c in trsy):
+        continue
+    trsy.append((x, y, r))
+    ker(x, y, r, r * 1.6, PLEVEL + [SUCHE], 500 + plevel, v_policku=True, chumacu=4, deleni=2)
+    plevel += 1
+print("kru", len(kere), "plevele", plevel)
 
 for jmeno, (m, bm) in SITE.items():
     me = bpy.data.meshes.new(jmeno); bm.to_mesh(me); bm.free()
