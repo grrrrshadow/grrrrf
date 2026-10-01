@@ -34,6 +34,19 @@ zastávce“*, *„zálivovou dělat nebudem“*. Tady se to promýšlí, do hry
   ohraničení, které by se hádalo s přístřeškem nebo s autobusy.
 - **Velikost:** 1,5× (budovy jsou 2×) sedí k přístřeškům i autobusům. Ve 2× je skoro tak vysoká jako střecha.
 
+**Druhá dívka jen u silnice podél X** (hráč: *„podél X se vejde do jižního rohu dlaždice druhá, jiná holka, zády
+otočená. Podél Y asi ne, naproti na zastávku se nevejde“*, *„úplně do rohu“*):
+
+| silnice | bod | čelem k | posun od severního rohu, 4× | 1× | kreslit po |
+|---|---|---|---|---|---|
+| podél X | x 15, y 15 (jižní roh, blízký okraj) | silnici, k severozápadu (260 st), k divákovi zády | (0, 120) | (0, 30) | blízkém přístřešku `X_E` |
+
+- **Originál:** stojí na konci blízkého přístřešku před sloupkem. **CZTR:** na konci chodníku, přístřešek je až
+  na druhém konci.
+- **Která:** tmavovlasá dívka v tmavé sukni (College Girl) je zezadu na světlém chodníku vidět. Bělovlasá
+  (Galaxia) na něm skoro splývá (`druha_divka_srovnani.png`).
+- Slabý stín u nohou může přesáhnout přední hranu dlaždice o pár pixelů.
+
 ## Soubory
 
 | soubor | co to je |
@@ -41,6 +54,9 @@ zastávce“*, *„zálivovou dělat nebudem“*. Tady se to promýšlí, do hry
 | `zastavky_4x.png` | obě zastávky (originál OpenGFX a CZTR), silnice podél X i Y, ze hry v přiblížení 4× |
 | `zastavky_mrizka.png` | totéž zvětšené 2× s mřížkou dlaždice po 2/16 a rohy N, W, E, S |
 | `divka_na_zastavce_k1.5.png`, `divka_na_zastavce_k2.png` | ukázka: dívka vložená na místo do obou zastávek, 1,5× a 2× |
+| `divky_na_zastavce_k1.5.png`, `divky_na_zastavce_k2.png` | obě dívky: podél X dvě, podél Y jedna |
+| `druha_divka_srovnani.png` | druhá dívka v jižním rohu: bělovlasá a tmavovlasá vedle sebe |
+| `divka2_co_k*_s260.png`, `divka2_ga_k*_s260.png` (+ `.json`) | druhá dívka sama zády (College Girl, Galaxia), ruce podél těla |
 | `divka_k*_s90.png`, `divka_k*_s0.png` (+ `.json`) | dívka sama (Character People Girl 001, stojí), čelem k jihovýchodu a k jihozápadu, 160 × 160 px, 4×, chodidla přesně uprostřed |
 
 Fotky zastávek: zkušební hra s příkazem `testzastavky` (`hra/zkusebni-prikazy-c53e895.patch`), mapa `-G 11`,

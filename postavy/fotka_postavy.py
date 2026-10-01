@@ -2,7 +2,7 @@
 # Fotka jedne postavy samotne (pruhledne pozadi, slaby stin) stejnou kamerou a svetlem jako budovy (socha), aby sla
 # prilozit na obrazek budovy, zastavky nebo nastupiste. Bod pod chodidly je presne uprostred obrazku a pise se do JSONu.
 #   python3 fotka_postavy.py <vystup.png>
-# Promenne: POSTAVA (jmeno GLB v postavy/), POZA (stoji = jak je v modelu, sedi), SMER (stupne, kam se diva: 0 = k
+# Promenne: POSTAVA (jmeno GLB v postavy/), POZA (stoji = jak je v modelu, sedi, ruce_dolu = z pozice T), SMER (stupne, kam se diva: 0 = k
 # jihozapadu, 90 = k jihovychodu, jako u lavicek), MERITKO (2 jako budovy), VYSKA (m, skutecna), RAM (px), SAMPLES.
 import bpy, os, sys, math, json
 import numpy as np
@@ -38,7 +38,35 @@ env.image = bpy.data.images.load(HDRI)
 nt.links.new(env.outputs['Color'], bg.inputs['Color']); nt.links.new(bg.outputs['Background'], wo.inputs['Surface'])
 bg.inputs["Strength"].default_value = float(os.environ.get("OKOLI", "0.9"))     # svetlo jako u sochy
 
-meshe = P.nacti(JMENO, VYSKA, emise=0.0 if "anime" in JMENO else None)
+def kost(arm, zacatek):
+    return next(b.name for b in arm.pose.bones if b.name.startswith(zacatek))
+
+def ruce_dolu(arm, meshe):
+    """modely v pozici T (galaxia): ruce podel tela, kousek dopredu, lokty mirne pokrcene"""
+    for st in ("L", "R"):
+        zn = 1 if st == "L" else -1
+        P.otoc_kost(arm, kost(arm, f"J_Bip_{st}_UpperArm"), (0, 1, 0), zn * math.radians(76))
+        P.otoc_kost(arm, kost(arm, f"J_Bip_{st}_UpperArm"), (1, 0, 0), math.radians(-6))
+        P.otoc_kost(arm, kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-14))
+
+def ruce_dolu_college(arm, meshe):
+    """college_girl (pozice T ze snimku akce): ruce podel tela"""
+    for st, zn in (("L", 1), ("R", -1)):
+        P.otoc_kost(arm, kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(76))
+        P.otoc_kost(arm, kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-6))
+        P.otoc_kost(arm, kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-14))
+
+def divka_a(o):
+    """z college_girl jen prvni divka na kostre (ostatni tri pryc)"""
+    if o.parent is None or o.parent.type != 'ARMATURE':
+        return False
+    dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me_ = e.to_mesh()
+    x = sum((o.matrix_world @ v.co).x for v in me_.vertices) / max(1, len(me_.vertices)); e.to_mesh_clear()
+    return x < -1.0
+
+priprava = (ruce_dolu_college if "college" in JMENO else ruce_dolu) if POZA == "ruce_dolu" else None
+nechat = (lambda o: "Icosphere" not in o.name) if "galaxia" in JMENO else divka_a if "college" in JMENO else None
+meshe = P.nacti(JMENO, VYSKA, priprava=priprava, nechat=nechat, emise=0.0 if "anime" in JMENO else None)
 if POZA == "sedi":
     nohy = P.stredy_nohou(meshe, VYSKA)
     kotva, _, _ = P.sed(meshe, VYSKA, 0.49, 0.28, [nohy[0][1], nohy[1][1]])
