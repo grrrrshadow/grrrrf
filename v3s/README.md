@@ -1,5 +1,41 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 13 (1. 10.): studentky na korbě
+
+Hráč:
+- *„dáme dvacet studentek na valník, který vozí STUD, bez plachty, dvacet asi je moc, to se nevejde“*;
+- *„stejnou velikost dáme k autům, aby to ladilo se zastávkou“*;
+- *„studentky na valník Tatra a V3S, nemusí jich být dvacet“*;
+- *„STUD povolíme přestavbu na zelenou Tatru“*.
+
+Co je nové:
+- **Se studenty (STUD) stojí na korbě holky místo plachty.** Platí to pro obě vejtřasky, modrou i zelenou, a pro
+  Tatru 148 a 138 na valníku.
+  - Holky jsou College Girl, holka v tyrkysovém tílku a bělovlasá Galaxia z `postavy/`.
+  - Stojí v řadách po dvou čelem ke kabině, každá trochu natočená, některé bokem ven.
+  - Velikost je 2× jako dívky na zastávce: na vejtřasku se vejde 8 holek (4 řady), na Tatru 10 (5 řad).
+  - Náklad `studentky` je v `render_v3s.py`. Tatra si stavitele nákladu bere odtud, kabinu má na druhé straně
+    (`SMER_KABINY`).
+  - Jako ostatní náklad je vidět od poloviny naložení.
+  - Srovnání 2× a 1,5× (12 holek) je v `kontrola/studentky_2x_1_5x.png`, hráč nechal 2×.
+- **Kapacita se nemění:** zelená vejtřaska 20, modrá a Tatry 3 (u velké čumák 1 a zbytek auto). Ostatní lidé jedou
+  jako dřív: vojáci pod plachtou, v modré a v Tatře v kabině.
+- **Tatra:** STUD má zelenou přestavbu navíc (`T_ZELENA_NAVIC`), v okně přestavby je „(zelená)“ se studentkami
+  na vojenském valníku. U velké odpovídá na jména podtypů i čumák, jinak by je okno přestavby nevzalo.
+- **V popisu GRF** přibyl řádek s autory holek „Students: kiemtruongkts, Rotmill, Tatenashi (Sketchfab), CC BY 4.0“
+  a v `licence.txt` jejich modely s odkazy.
+- Malá 6,68 MB (`49b3b1f5…`), velká 7,88 MB (`644b7dd6…`), balík `Praga_V3S_Tatra-v13.zip`. Rozbalit a znovu
+  složit yaglem: malá bajt po bajtu stejná.
+- **Ověřeno ve zkušební hře:**
+  - **Fotka** `TEST_FOTO_SADA=studentky` (`tatra/nahledy/ve_hre_v13_studentky.png`): modrá a zelená vejtřaska,
+    Tatra 148 a 138 i v zelené přestavbě, malá i velká.
+  - **`testv3s`** pro `MAXd` i `MAXe`:
+    - STUD: zelená 20, modrá a Tatry 3;
+    - obrázek holek je stejný u vejtřasek a stejný u Tater;
+    - Tatry mají podtypy „“ a „(zelená)“;
+    - ostatní náklady beze změny proti verzi 12.
+- **Ve hře zatím není průmysl se studenty** (hráč: *„ještě není build s průmyslem studentky, až to doděláme“*).
+
 ## Verze 12 (1. 10.): naše brambory BRAM, fazole v hnědých pytlích
 
 Hráč: *„valník brambory, vem mu kód BEAN a dej mu kód BRAM, uděláme si svoje brambory a fazole dáme do hnědých
@@ -206,12 +242,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v12.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v12.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v13.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v13.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v12.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v13.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
-(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` a `-v11`) zůstávají v repu.
+(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v12`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 
@@ -478,4 +514,4 @@ zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen 
 i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin;
 8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel;
 9 vojenská technika jen zelená, FREE mezi nevozí; 10 Tatry ve stejném GRF; 11 zelená Tatra schovaná, jen pro naši hru;
-12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích.
+12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích; 13 studentky na korbě.

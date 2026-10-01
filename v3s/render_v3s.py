@@ -604,12 +604,53 @@ def seno(barva="vlakna", seed=31):
     ob.data.materials.append(mat)
     return [ob]
 
+# Studentky (hrac 1. 10.: "dame dvacet studentek na valnik, ktery vozi STUD, bez plachty, dvacet asi je moc, to se
+# nevejde", "studentky na valnik Tatra a V3S, nemusi jich byt dvacet", velikost jako divky na zastavce): divky
+# z postavy/ (College Girl, Character Girl, Galaxia) stoji na korbe v radach celem ke kabine, kazda trochu natocena,
+# kolik se jich vejde. MERITKO_STUDENTEK (vychozi 2 jako zastavka), SMER_KABINY +1 kabina na +y (vejtraska),
+# -1 na -y (Tatra si ho prepise).
+MERITKO_STUDENTEK = float(os.environ.get("MERITKO_STUDENTEK", "2"))
+SMER_KABINY = 1
+def studentky(seed=83):
+    import sys, random
+    from mathutils import Matrix
+    d = globals().get("TU")
+    kde = os.path.normpath(os.path.join(d if d else os.getcwd(), "..", "postavy"))
+    if kde not in sys.path: sys.path.insert(0, kde)
+    import postavy as P
+    random.seed(seed)
+    K = MERITKO_STUDENTEK
+    DRUHY = [("college_girl", 1.62, "ruce_dolu"), ("character_people_girl_001", 1.68, "stoji"),
+             ("galaxia_anime_girl", 1.58, "ruce_dolu")]
+    vzory = {jm: P.nacti_stojici(jm, v, poza) for jm, v, poza in DRUHY}
+    sx, sy = 0.46 * K, 0.40 * K                     # misto na jednu: sirka ramen a hloubka tela s mezerou
+    nx = max(1, int(2 * KX // sx)); ny = max(1, int((KY1 - KY0) // sy))
+    poradi = ["college_girl", "character_people_girl_001", "college_girl", "galaxia_anime_girl"]
+    obs = []
+    for j in range(ny):
+        for i in range(nx):
+            jm = poradi[(i + nx * j) % len(poradi)]
+            x = (i - (nx - 1) / 2) * (2 * KX / nx) + random.uniform(-0.04, 0.04) * K
+            y = KY0 + (j + 0.5) * (KY1 - KY0) / ny + random.uniform(-0.04, 0.04) * K
+            # postava je celem k -y: ke kabine na +y otocit o 180 st, kazda trochu jinak, obcas bokem ven
+            u = (math.pi if SMER_KABINY > 0 else 0.0) + math.radians(random.uniform(-25, 25))
+            if random.random() < 0.25: u += math.radians(70) * (1 if x > 0 else -1) * SMER_KABINY
+            M = Matrix.Translation((x, y, PODLAHA)) @ Matrix.Rotation(u, 4, 'Z') @ Matrix.Scale(K, 4)
+            kopie = []
+            for o in vzory[jm]:
+                n_ = o.copy(); n_.data = o.data.copy(); scene.collection.objects.link(n_); kopie.append(n_)
+            obs += P.postav(kopie, M)
+    for meshe in vzory.values():
+        for o in meshe: bpy.data.objects.remove(o, do_unlink=True)
+    print("studentek", nx * ny, "v", ny, "radach po", nx, "meritko", K)
+    return obs
+
 KUSOVE = {"CMNT": pytle, "pytle_hnede": lambda: pytle("hnede", 59), "GOOD": bedny, "BEER": sudy,
           "cihly_cervene": lambda: cihly("cervene", 71), "cihly_sede": lambda: cihly("sede", 73),
           "brambory": lambda: kulata_kupa("brambory", 67), "ovoce": lambda: kulata_kupa("ovoce", 79),
           "sudy_bile": lambda: sudy("bile", 41), "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
           "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno,
-          "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute")}
+          "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute"), "studentky": studentky}
 
 NAKLAD_KOD = NATER[len("naklad_"):] if NATER.startswith("naklad_") else None
 if NAKLAD_KOD:

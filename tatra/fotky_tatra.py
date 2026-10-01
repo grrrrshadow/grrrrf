@@ -26,7 +26,8 @@ for mrizka in ("148", "138"):
 VALNIK = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT", "SEED", "OLSD", "NUTS", "MARI", "SULP",
           "CORE", "CLAY", "WOOD", "WDPR", "CMNT", "pytle_hnede", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR",
           "seno_mari", "seno_zlute", "sudy_cerne", "sudy_bile", "sudy_cervene", "cihly_cervene", "cihly_sede",
-          "brambory", "ovoce", "plachta_vojenska", "plachta_seda", "plachta_sedobila"]
+          "brambory", "ovoce", "plachta_vojenska", "plachta_seda", "plachta_sedobila",
+          "studentky"]                                      # od verze 13 studentky na valniku (STUD)
 # Kupy nerostu na sklapeci (hrac: "mineraly, uhli sklapec")
 SKLAPEC = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "CLAY", "CORE", "SULP"]
 

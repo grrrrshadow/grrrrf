@@ -58,7 +58,8 @@ T_NAKLADY_NORMALNI = [k for k in TABULKA if k not in NEVOZI]
 T_ZELENA_NAVIC = ("LVST "                                                           # prasatka, kravicky, ovecky
                   "MARI HOPS FICR SGCN FRUT FRVG GRAI WHEA MAIZ CERE TATO BRAM BEAN SGBT SEED OLSD NUTS "   # co roste
                   "WOOD TWOD BRCK BDMT CMNT QLME "                                  # drevo, cihly, stavebniny
-                  "CIGR TBCO BEER WINE").split()                                    # doutniky, tabak, alkohol
+                  "CIGR TBCO BEER WINE "                                            # doutniky, tabak, alkohol
+                  "STUD").split()             # od verze 13 studentky (hrac 1. 10.: "stud povolime prestavbu na zelenou Tatru")
 
 def t_normalni_obrazek(k, zelena_varianta):
     """(telo, obrazek na valniku) nakladu k bez podtypu u normalni Tatry, nebo jeho zelena varianta"""
@@ -249,7 +250,7 @@ def tatra_yagl():
         vychozi_g = cil(*urci("GOOD"))
         podtypy = T_PODTYPY if zelena else T_PODTYPY_ORANZ
         texty_podtypu = {k: TEXT_PODTYP[k] for k in PODTYPY} if zelena else T_TEXT_PODTYP
-        s_podtyp_text, s_podtyp = {}, {}
+        s_podtyp_text, s_podtyp, s_obr_k = {}, {}, {}
         for k, pt in podtypy.items():
             if k not in naklady: continue
             s_podtyp_text[k] = nove()
@@ -261,11 +262,20 @@ def tatra_yagl():
                 return cil(telo, ("v", o) if o else None)
             Y += sw(s_obr, f"{k}: obrazek podle podtypu (promenna 0xF2)", ["value1 = variable[0xF2] & 0x000000FF;"],
                     [(i, cil_podtypu(telo, o)) for i, (telo, o, jm) in enumerate(pt) if i > 0], cil_podtypu(pt[0][0], pt[0][1]))
+            s_obr_k[k] = s_obr
             s_podtyp[k] = nove()
             Y += sw(s_podtyp[k], f"{k}: jmena podtypu (callback 0x19), jinak obrazek", CALLBACK, [(0x19, s_podtyp_text[k])], s_obr)
         g_lide = cil(*urci("PASS"))
         Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
                 [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), g_lide)
+        # od verze 13 studentky: kapacita jako osoby, holky na korbe misto prazdneho valniku, u normalni Tatry i zelena
+        # prestavba (podtypy)
+        s_stud = None
+        if "STUD" in naklady:
+            s_stud = nove()
+            Y += sw(s_stud, f"studentky: kapacita {'auta ' if CUMAK else ''}{lidi_auto}, jmena podtypu, jinak holky na korbe",
+                    CALLBACK, [(0x15, 0x8000 | lidi_auto)] + ([(0x19, s_podtyp_text["STUD"])] if "STUD" in s_podtyp_text else [])
+                    + ([] if CUMAK else zvuk), s_obr_k.get("STUD") or cil(*urci("STUD")))
         popis_nakup = [(0x23, 0x8000 | T_TEXT[n])]
         if CUMAK:
             Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
@@ -280,18 +290,24 @@ def tatra_yagl():
                 s_cumak_podtyp[k] = nove()
                 Y += sw(s_cumak_podtyp[k], f"cumak, {k}: clanky, jmena podtypu, zvuky", CALLBACK,
                         [(0x16, s_clanky), (0x19, s_podtyp_text[k])] + zvuk, g_prazdny)
-            Y += action3(h, s_cumak, [(INDEX[k], s_cumak_lidi) for k in LIDE if k in naklady] +
-                         [(INDEX[k], s_cumak_podtyp[k]) for k in s_cumak_podtyp] + [(0xFF, s_nakup)])
+            cumak_mapa = {INDEX[k]: s_cumak_lidi for k in LIDE if k in naklady}
+            cumak_mapa.update({INDEX[k]: s_cumak_podtyp[k] for k in s_cumak_podtyp})
+            if "STUD" in s_cumak_podtyp:              # studentky: kapacita cumaku 1 a jmena podtypu dohromady
+                s_cumak_stud = nove()
+                Y += sw(s_cumak_stud, "cumak, studentky: kapacita 1, clanky, jmena podtypu, zvuky", CALLBACK,
+                        [(0x15, 0x8000 | kap_cumak), (0x16, s_clanky), (0x19, s_podtyp_text["STUD"])] + zvuk, g_prazdny)
+                cumak_mapa[INDEX["STUD"]] = s_cumak_stud
+            Y += action3(h, s_cumak, list(cumak_mapa.items()) + [(0xFF, s_nakup)])   # poradi jako drive
         else:
             Y += sw(s_nakup, "nakup: popis, obrazek", CALLBACK, popis_nakup, g_nakup)
         mapa = {}
         for k in naklady:
-            c = s_lidi if k in LIDE else (s_podtyp[k] if k in s_podtyp else cil(*urci(k)))
+            c = (s_stud if k == "STUD" and s_stud else s_lidi) if k in LIDE else (s_podtyp[k] if k in s_podtyp else cil(*urci(k)))
             if c != vychozi_g: mapa[INDEX[k]] = c
         vychozi = vychozi_g
         if not CUMAK and id_zvuk:
             obal = {}
-            for c in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, vychozi_g}):
+            for c in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, s_stud, vychozi_g}):
                 obal[c] = nove()
                 Y += sw(obal[c], "zvuk, jinak grafika", CALLBACK, zvuk, c)
             mapa = {k: obal.get(v, v) for k, v in mapa.items()}

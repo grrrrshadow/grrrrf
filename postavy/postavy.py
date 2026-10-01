@@ -233,3 +233,42 @@ def otoc_cast(meshe, vyska, z_od, pivot, otoceni, sirka=0.012):
         w = 1.0 - _pod(v[:, 2], z_od * vyska, sirka * vyska)
         nove = (v - p) @ R.T + p
         _zapis(o, v + w[:, None] * (nove - v))
+
+
+# ---------------------------------------------------------------- divky stojici samotne (fotky na prilozeni, naklad)
+def _kost(arm, zacatek):
+    return next(b.name for b in arm.pose.bones if b.name.startswith(zacatek))
+
+
+def ruce_dolu(arm, meshe):
+    """modely v pozici T (galaxia): ruce podel tela, kousek dopredu, lokty mirne pokrcene"""
+    for st in ("L", "R"):
+        zn = 1 if st == "L" else -1
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (0, 1, 0), zn * math.radians(76))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (1, 0, 0), math.radians(-6))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-14))
+
+
+def ruce_dolu_college(arm, meshe):
+    """college_girl (pozice T ze snimku akce): ruce podel tela"""
+    for st, zn in (("L", 1), ("R", -1)):
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(76))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-6))
+        otoc_kost(arm, _kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-14))
+
+
+def divka_a(o):
+    """z college_girl jen prvni divka na kostre (ostatni tri pryc)"""
+    if o.parent is None or o.parent.type != 'ARMATURE':
+        return False
+    dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me_ = e.to_mesh()
+    x = sum((o.matrix_world @ v.co).x for v in me_.vertices) / max(1, len(me_.vertices)); e.to_mesh_clear()
+    return x < -1.0
+
+
+def nacti_stojici(jmeno, vyska, poza="stoji"):
+    """divka stojici (poza "stoji" jak je v modelu, "ruce_dolu" z pozice T) jako staticke meshe, chodidla v 0, celem k -y;
+    u kazdeho modelu s jeho upravami (u college_girl jen prvni divka, u galaxie bez koule, anime bez emise)"""
+    priprava = (ruce_dolu_college if "college" in jmeno else ruce_dolu) if poza == "ruce_dolu" else None
+    nechat = (lambda o: "Icosphere" not in o.name) if "galaxia" in jmeno else divka_a if "college" in jmeno else None
+    return nacti(jmeno, vyska, priprava=priprava, nechat=nechat, emise=0.0 if "anime" in jmeno else None)

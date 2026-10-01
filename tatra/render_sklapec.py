@@ -448,7 +448,7 @@ if NAKLAD_KOD:
         nalozeno = rozsypana_kupa(mk, 1.13, 2.77, 6.73, float(os.environ.get("DNO_KUPY", "2.33")), hrubost, vysky=(0.45, 0.60), seed=7)
     elif KORBA in ("valnik", "plachta"):
         # valnik: podlaha z 1,36, vnitrek bocnic x +-1,20, cela y 2,74 a 6,96; okraje jako u vejtrasky (asi 8 cm)
-        V3.update(PODLAHA=ZP_, KX=1.12, KY0=Y0N + 0.10, KY1=Y1N - 0.10)
+        V3.update(PODLAHA=ZP_, KX=1.12, KY0=Y0N + 0.10, KY1=Y1N - 0.10, SMER_KABINY=-1)   # kabina Tatry je na -y
         if NAKLAD_KOD == "WOOD": nalozeno = V3["klady"]()
         elif NAKLAD_KOD == "WDPR": nalozeno = V3["prkna"]()
         elif NAKLAD_KOD.startswith("plachta_"): nalozeno = [plachta_tatra(NAKLAD_KOD[len("plachta_"):])]

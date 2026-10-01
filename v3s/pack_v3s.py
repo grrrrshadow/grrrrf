@@ -45,7 +45,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   hra/zamek-128-nakladu), hrac: "neuskromneny, vyuzij novy rozsah cisel bloku"
 # 12 nas kod brambor BRAM na konci vzorove tabulky (kupa a pytle jako TATO), fazole BEAN v hnedych pytlich jako kava
 #   (hrac 1. 10.: "udelame si svoje brambory a fazole dame do hnedych pytlu na kafe, v pytlich se ztrati i brambory BEAN")
-VERZE = 12
+# 13 studentky na korbe (STUD bez plachty, holky ve 2x jako na zastavce; hrac 1. 10.: "dame dvacet studentek na valnik,
+#   ktery vozi STUD, bez plachty, dvacet asi je moc, to se nevejde", "studentky na valnik Tatra a V3S, nemusi jich byt
+#   dvacet"), u Tatry i zelena prestavba STUD ("stud povolime prestavbu na zelenou Tatru")
+VERZE = 13
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -204,8 +207,10 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           "CLAY",                                                              # od verze 7 jil (hrac: "jil kupu")
           # od verze 8 cihly, brambory a ovoce (hrac 29. 9.: "cihly udelej ... livery cerveny a sedy cihly", "brambory kupa
           # a livery brambor pytle hnedy", "ovoce a zelenina cerveny zluty zeleny oranzovy jablicka, jako brambor")
-          "cihly_cervene", "cihly_sede", "brambory", "ovoce"]
+          "cihly_cervene", "cihly_sede", "brambory", "ovoce",
+          "studentky"]                                                         # od verze 13 studentky na korbe (STUD)
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
+VRSTVA["STUD"] = "studentky"                       # od verze 13: holky stoji na korbe, bez plachty (render_v3s.py)
 VRSTVA.update({"TWOD": "WOOD", "SCRP": "SCMT"})   # brambory (TATO, od verze 12 i BRAM) s podtypy, viz PODTYPY
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
 VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
@@ -361,6 +366,11 @@ if TATRA:
         # hrac 30. 9.: "takhle udelame radek 3D taky u Praga V3S a Tatra 138, 148. 3D: Hans..." (jako u VW T1)
         "{orange}3D: hans1240 (Praga V3S, Tatra 148, Tatra 138), sketchfab.com/hans1240, CC BY 4.0{new-line}", 1)
     assert "3D: hans1240" in POPIS_GRF and "Tatra 148 and 138 green" not in POPIS_GRF
+# od verze 13 studentky na korbe: autori modelu divek (AUTORI-MODELU.md)
+POPIS_GRF = POPIS_GRF.replace("CC BY 4.0{new-line}{new-line}{green}for ottd Decouple",
+                              "CC BY 4.0{new-line}{orange}Students: kiemtruongkts, Rotmill, Tatenashi (Sketchfab), CC BY 4.0"
+                              "{new-line}{new-line}{green}for ottd Decouple", 1)
+assert "Students: kiemtruongkts" in POPIS_GRF
 
 # ---------------------------------------------------------------- yagl
 Y = ['yagl_version: "";', "grf_format: Container2;"]
@@ -634,6 +644,10 @@ for n in ("modra", "vojenska"):
     g_lide = grafika("PASS")
     Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
             [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), g_lide)
+    # od verze 13 studentky: stejna kapacita jako osoby, ale obrazek holek na korbe (u vojenske bez plachty)
+    s_stud = nove()
+    Y += sw(s_stud, f"studentky: kapacita {'auta ' if CUMAK else ''}{lidi_auto}, jinak holky na korbe", CALLBACK,
+            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), grafika("STUD"))
     popis_nakup = [(0x23, 0x8000 | TEXT[n])]
     if CUMAK:
         Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
@@ -657,14 +671,14 @@ for n in ("modra", "vojenska"):
     # viditelne auto: osoby pres kapacitni callback, ostatni naklady auto a vrstva; co jde na vychozi, v Action 3 neni
     mapa = {}
     for k in NAKLADY[n]:
-        cil = s_lidi if k in LIDE else (s_podtyp[k] if k in PODTYPY else grafika(k))
+        cil = (s_stud if k == "STUD" else s_lidi) if k in LIDE else (s_podtyp[k] if k in PODTYPY else grafika(k))
         if cil != vychozi_g: mapa[INDEX[k]] = cil
     vychozi = vychozi_g
     if not CUMAK and id_zvuk:
         # mala: Action 3 vybira podle nakladu a callback 0x33 jde stejnou cestou, tak kazdy cil grafiky
         # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi)
         obal = {}
-        for cil in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, vychozi_g}):
+        for cil in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, s_stud, vychozi_g}):
             obal[cil] = nove()
             Y += sw(obal[cil], "zvuk, jinak grafika", CALLBACK, zvuk, cil)
         mapa = {k: obal.get(v, v) for k, v in mapa.items()}

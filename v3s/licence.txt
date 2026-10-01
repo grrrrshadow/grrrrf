@@ -104,6 +104,16 @@ PŘEVZATÉ ČÁSTI
     červený a olivový, mřížka chladiče T 148 a T 138, skla a světla, místo korby
     sklápěče i valník, plachta a cisterna, náklady na korbě.
 
+Studentky na korbě (od verze 13), 3D modely ze Sketchfabu, licence CC BY 4.0:
+    "Character People Girl 001", autor kiemtruongkts
+    https://sketchfab.com/3d-models/character-people-girl-001-35d1d9521b8c4e3a8b282045dd243017
+    "College Girl", autor Rotmill
+    https://sketchfab.com/3d-models/college-girl-5395dfd1871c41f29aa02e05c4e58eb7
+    "Galaxia anime girl", autor Tatenashi
+    https://sketchfab.com/3d-models/galaxia-anime-girl-485f95459fa747fdbe42c87203e1a156
+    Úpravy: postavené do stoje s rukama podél těla, zvětšené a vyfocené na korbě
+    do spritů nákladu.
+
 -------------------------------------------------------------------------------
 
 V3S Praga, Tatra 148, 138, ottd Decouple by Karel Macha – GRF for OpenTTD
@@ -211,3 +221,13 @@ THIRD-PARTY PARTS
     Changes: rendered to OpenTTD sprites in two sizes, orange, red and olive
     liveries, Tatra 148 and 138 radiator grilles, windows and lights, besides the
     tipper also a flatbed, a tarp and a tank, cargo loads on the bed.
+
+Students on the bed (since version 13), 3D models from Sketchfab, license CC BY 4.0:
+    "Character People Girl 001" by kiemtruongkts
+    https://sketchfab.com/3d-models/character-people-girl-001-35d1d9521b8c4e3a8b282045dd243017
+    "College Girl" by Rotmill
+    https://sketchfab.com/3d-models/college-girl-5395dfd1871c41f29aa02e05c4e58eb7
+    "Galaxia anime girl" by Tatenashi
+    https://sketchfab.com/3d-models/galaxia-anime-girl-485f95459fa747fdbe42c87203e1a156
+    Changes: posed standing with arms down, scaled and rendered on the bed into
+    the cargo sprites.
