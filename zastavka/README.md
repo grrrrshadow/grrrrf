@@ -44,9 +44,17 @@ otočená. Podél Y asi ne, naproti na zastávku se nevejde“*, *„úplně do 
 
 - **Originál:** stojí na konci blízkého přístřešku před sloupkem. **CZTR:** na konci chodníku, přístřešek je až
   na druhém konci.
-- **Která:** tmavovlasá dívka v tmavé sukni (College Girl) je zezadu na světlém chodníku vidět. Bělovlasá
-  (Galaxia) na něm skoro splývá (`druha_divka_srovnani.png`).
+- **Která:** jen tmavovlasá dívka v tmavé sukni (College Girl), hráč: *„jen tmavovlasá“*. Zezadu je na světlém
+  chodníku vidět, bělovlasá (Galaxia) na něm skoro splývá (`druha_divka_srovnani.png`).
 - Slabý stín u nohou může přesáhnout přední hranu dlaždice o pár pixelů.
+
+## Rozhodnuto (hráč 1. 10.)
+
+- **Dívky jsou na zastávce, jen když tam čekají cestující** (*„jo bude tam jen když budou cestující“*).
+- **Velikost 2×** (*„vemem tu verzi 2x velkou“*). Stejně velké budou i dívky u aut (*„stejnou velikost dáme
+  k autům, aby to ladilo se zastávkou“*), viz `holky-u-aut/`.
+- **Podél Y je jen jedna** (*„na Y není místo naproti, to je škoda“*).
+- Podél X tedy dvě: dívka v tyrkysovém tílku na vzdáleném okraji a tmavovlasá zády v jižním rohu.
 
 ## Soubory
 

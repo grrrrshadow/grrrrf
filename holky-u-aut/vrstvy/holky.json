@@ -1,0 +1,119 @@
+{
+ "meritko": 2.0,
+ "za": [
+  {
+   "soubor": "za_0.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_1.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_2.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_3.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_4.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_5.png",
+   "w": 13,
+   "h": 41,
+   "xo": -30,
+   "yo": -25
+  },
+  {
+   "soubor": "za_6.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "za_7.png",
+   "w": 10,
+   "h": 39,
+   "xo": 49,
+   "yo": -12
+  }
+ ],
+ "pred": [
+  {
+   "soubor": "pred_0.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "pred_1.png",
+   "w": 52,
+   "h": 56,
+   "xo": -15,
+   "yo": -9
+  },
+  {
+   "soubor": "pred_2.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "pred_3.png",
+   "w": 45,
+   "h": 60,
+   "xo": -46,
+   "yo": -20
+  },
+  {
+   "soubor": "pred_4.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "pred_5.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "pred_6.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  },
+  {
+   "soubor": "pred_7.png",
+   "w": 1,
+   "h": 1,
+   "xo": 0,
+   "yo": 0
+  }
+ ]
+}

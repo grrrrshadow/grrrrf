@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-# Fotka jedne postavy samotne (pruhledne pozadi, slaby stin) stejnou kamerou a svetlem jako budovy (socha), aby sla
-# prilozit na obrazek budovy, zastavky nebo nastupiste. Bod pod chodidly je presne uprostred obrazku a pise se do JSONu.
+# Fotka jedne postavy samotne (pruhledne pozadi, bez stinu) stejnou kamerou a svetlem jako budovy (socha), aby sla
+# prilozit na obrazek budovy, zastavky, auta nebo nastupiste. Bod pod chodidly je presne uprostred obrazku a pise se do JSONu.
+# Vychozi je bez stinu (hrac 1. 10.: "prikladaci obrazky bys mel fotit fakt uplne bez stinu"), tak jsou divky u aut.
+# STIN > 0 prida slaby stin na zem: divky na zastavce jsou s STIN=0.2 (hrac: "neni to videt, na zastavce dobry").
 #   python3 fotka_postavy.py <vystup.png>
 # Promenne: POSTAVA (jmeno GLB v postavy/), POZA (stoji = jak je v modelu, sedi, ruce_dolu = z pozice T), SMER (stupne, kam se diva: 0 = k
 # jihozapadu, 90 = k jihovychodu, jako u lavicek), MERITKO (2 jako budovy), VYSKA (m, skutecna), RAM (px), SAMPLES.
@@ -99,11 +101,12 @@ def render_do_pole():
     a = np.asarray(Image.open(scene.render.filepath).convert("RGBA"), dtype=np.float64) / 255
     os.remove(scene.render.filepath)
     return a
-A = render_do_pole()
+STIN = float(os.environ.get("STIN", "0"))
+A = render_do_pole() if STIN > 0 else None
 zem.hide_render = True
 Bp = render_do_pole()
-STIN = float(os.environ.get("STIN", "0.2"))
-aB = Bp[..., 3]; aS = np.clip((A[..., 3] - aB) / np.maximum(1 - aB, 1e-6), 0, 1) * STIN
+aB = Bp[..., 3]
+aS = np.clip((A[..., 3] - aB) / np.maximum(1 - aB, 1e-6), 0, 1) * STIN if STIN > 0 else np.zeros_like(aB)
 alfa = aB + (1 - aB) * aS
 barva = np.where(alfa[..., None] > 0, Bp[..., :3] * aB[..., None] / np.maximum(alfa[..., None], 1e-6), 0)
 Image.fromarray((np.dstack([barva, alfa]) * 255 + 0.5).clip(0, 255).astype(np.uint8), "RGBA").save(VYSTUP)

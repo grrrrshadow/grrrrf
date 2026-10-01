@@ -11,6 +11,9 @@
 #  7. (verze 3) roky: vyroba = auto maji vsichni, rok predtim prototyp na zkousku (hra ho nabidne jedne firme
 #     na rok); TAZ 1203 se zahradkou az od 1981
 #  8. (verze 4) fialova TAZ 1900 D dodavka 0x98 s naftovym motorem VW 1,9 (kopie modre dodavky TAZ 1500)
+#  9. (verze 5) divky u otevrenych dveri busu a Pajdy na zastavce (vrstvy za autem a pred autem, holky-u-aut/),
+#     novy kod BRAM (nase brambory) na konci tabulky: valnik brambor misto BEAN, k tomu vsude, kde jsou TATO;
+#     v popisu GRF autori 3D modelu (Rabatin.B, divky)
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -20,8 +23,9 @@ from PIL import Image
 VSTUP, LIST, ZELENA, KODY, VYSTUP, JMENO = sys.argv[1:7]
 t = open(VSTUP, encoding="utf-8").read()
 kody = json.load(open(KODY, encoding="utf-8"))
-TABULKA = kody["grf"] + kody["nove"]                   # 96 hracovych (do FREE) + 125 ze vzoru = 221
-assert TABULKA[0x5F] == "FREE" and len(TABULKA) == 221 and len(TABULKA) == len(set(TABULKA)) + 1  # CERA je 2x
+TABULKA = kody["grf"] + kody["nove"]                   # 96 hracovych (do FREE) + 125 ze vzoru + BRAM = 222
+assert TABULKA[0x5F] == "FREE" and len(TABULKA) == 222 and len(TABULKA) == len(set(TABULKA)) + 1  # CERA je 2x
+assert TABULKA[-1] == "BRAM"                           # (verze 5) novy kod na konci, stara cisla plati
 SLOT = {}
 for i, k in enumerate(TABULKA):
     SLOT.setdefault(k, i)                              # CERA: prvni vyskyt 0x4B (0x5A zustava v seznamu VW T1)
@@ -35,12 +39,21 @@ BEDNA = ["GOOD", "FMSP", "ENSP", "MNSP", "TOYS", "BATT", "HWAR", "VPTS", "MPTS",
 NEZNAME = ["CRAN", "LFEQ", "SCPR", "STTP", "SWRP", "TIN_", "WDCH"]   # nevime co to je: pod plachtu
 VW_PRIPSAT = ["FRVG", "MARI", "WINE", "BAKE", "FLOU", "OYST", "ENUM", "RSGR", "PCL_", "PRNT", "MPAR", "PPAR",
               "LEAT", "LETH", "PLAS", "PLST", "RUBR", "CHEM", "WORK", "PRIS", "YETI", "YETY",
-              "MILK", "EOIL", "SALT", "KAOL", "QLME", "SASH", "FERT", "CBLK", "PLNT"]
+              "MILK", "EOIL", "SALT", "KAOL", "QLME", "SASH", "FERT", "CBLK", "PLNT",
+              "BRAM"]                                  # (verze 5) nase brambory: VW T1, dodavky a plachty jako TATO
 VALNIKY = {0x83: ["WOOD", "TWOD"], 0x84: ["COAL", "COKE", "MNO2"],
            0x85: ["CLAY", "PEAT", "BIOM", "AORE", "IORE", "CORE", "COCO"],
            0x86: ["SAND", "SULP", "GRAI", "WHEA", "MAIZ", "CERE"],
            0x87: ["GRVL", "LIME", "SLAG", "SCMT", "SCRP", "NKOR", "PORE", "POTA", "PHOS"],
-           0x88: ["TATO", "BEAN", "CASS", "SGBT"], 0x8A: ["MARI", "HOPS"]}   # zeleny: i chmel (hrac 30. 9.)
+           0x88: ["TATO", "BRAM", "CASS", "SGBT"], 0x8A: ["MARI", "HOPS"]}   # zeleny: i chmel (hrac 30. 9.)
+# (verze 5) hrac 1. 10.: "valnik brambory, vem mu kod BEAN a dej mu kod BRAM, udelame si svoje brambory, a fazole dame
+# do hnedych pytlu na kafe": BEAN uz na valniku brambor neni, v dodavkach a pod plachtou jede dal (jako kava JAVA)
+
+# (verze 5) divky u otevrenych dveri na zastavce: busy a Pajda karavan (hrac 1. 10.), obrazky vrstev z holky-u-aut/
+S_HOLKAMI = [0x82, 0x8B, 0x8C, 0x93, 0x94]
+HOLKY_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "holky-u-aut", "vrstvy")
+HOLKY = json.load(open(os.path.join(HOLKY_DIR, "holky.json"), encoding="utf-8"))
+assert all(len(HOLKY[d]) == 8 for d in ("za", "pred"))
 
 def cisla(seznam):
     return sorted({SLOT[k] for k in seznam})
@@ -266,6 +279,40 @@ nove += klonuj(0x97, 0x98, "TAZ 1900 D dodavka", fialovy, fialovy)
 i_c0 = najdi(r"^properties<RoadVehicles, 0x00C0>")
 zaznamy[i_c0:i_c0] = nove                              # pred zadni naraznik, za TAZ 1500
 
+# (verze 5) divky u otevrenych dveri: jedna Action 1 se dvema sadami (0 za autem, 1 pred autem, 8 smeru, prazdne smery
+# pruhledne 4 x 4) a skupiny 0xE0 (za) a 0xE3 (pred): za jizdy vysledek callbacku (hra nekresli nic), pri nakladani
+# na zastavce divky. Stoji pred blokem prvniho auta, jejich cisla skupin zadne auto nepouziva, takze plati pro vsechny.
+r = ["sprite_sets<RoadVehicles, 0x0000> // Action01, divky u otevrenych dveri: 0 za autem, 1 pred autem", "{"]
+for si, druh in enumerate(("za", "pred")):
+    r += [f"    sprite_set // 0x{si:04X} divky {druh} autem", "    {"]
+    for p in HOLKY[druh]:
+        a = np.array(Image.open(os.path.join(HOLKY_DIR, p["soubor"])).convert("RGBA"))
+        w, h, xo, yo = p["w"], p["h"], p["xo"], p["yo"]
+        if a[..., 3].max() == 0:                       # prazdny smer: pruhledny 4 x 4 jako cumak
+            a, w, h, xo, yo = np.zeros((4, 4, 4), np.uint8), 4, 4, -2, -2
+        assert a.shape[:2] == (h, w)
+        bunky.append(a)
+        n = len(bunky) - 1
+        r += [f"        sprite_id<0x{nove_id():08X}>", "        {",
+              f"            [{w}, {h}, {xo}, {yo}], zin4, c32bpp | chunked, \"{LIST_NOVY}\", [{{X{n}}}, {{Y{n}}}];",
+              "        }"]
+    r += ["    }"]
+r += ["}"]
+for gid, si, druh in ((0xE0, 0, "za"), (0xE3, 1, "pred")):
+    r += [f"sprite_groups<RoadVehicles, 0x{gid:02X}> // Action02 basic, divky {druh} autem: za jizdy nic, na zastavce divky",
+          "{", "    primary_spritesets: [ 0x8000 ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
+i80 = najdi(r"^properties<RoadVehicles, 0x0080>")
+assert zaznamy[i80 - 2].startswith("sprite_sets<")
+zaznamy[i80 - 2:i80 - 2] = ["\n".join(r)]
+assert not re.search(r"^(sprite_groups|switch)<RoadVehicles, 0xE[0-3]", "\n".join(zaznamy[i80 - 1:]), re.M)
+
+# (verze 5) autori 3D modelu v popisu GRF: Skoda 1203 Rabatin.B (hracuv listek), divky u dveri (AUTORI-MODELU.md)
+i_grf = najdi(r"^grf // Action08")
+assert zaznamy[i_grf].count("3D: renderatnight {new-line}") == 1
+zaznamy[i_grf] = zaznamy[i_grf].replace(
+    "3D: renderatnight {new-line}",
+    "3D: renderatnight, Rabatin.B {new-line}{orange} Girls: kiemtruongkts, Rotmill (CC BY 4.0) {new-line}")
+
 # novy list: rady zleva doprava, mezera 2 px
 SIRKA_LISTU, pozice, x, y, vyska_rady = 1024, [], 0, 0, 0
 for a in bunky:
@@ -321,9 +368,11 @@ for nos in sorted(AUTA):
         z = nastav(z, "speed_2_kmh", "0xFF")
         z = nastav(z, "speed_half_kmh", f"0x{d['kmh'] // 2:02X}")   # jednotka 2 km/h
     zaznamy[i] = z
-    # viditelne auto: delka 8, kapacita osob callbackem
+    # viditelne auto: delka 8, kapacita osob callbackem; s divkami i vrstvy (sprite stack, bit 7)
+    holky = nos in S_HOLKAMI
     z = zaznamy[i + 4]
-    for jm, h in [("shorten_vehicle", "0x00"), ("callback_flags_mask", "0x08"), ("miscellaneous_flags", "0x60"),
+    for jm, h in [("shorten_vehicle", "0x00"), ("callback_flags_mask", "0x08"),
+                  ("miscellaneous_flags", "0xE0" if holky else "0x60"),
                   ("always_refittable_cargos", seznam(sez)), ("cargo_type", f"0x{SLOT[vych]:02X}"),
                   ("cargo_capacity", "0x01")]:
         z = nastav(z, jm, h)
@@ -332,15 +381,32 @@ for nos in sorted(AUTA):
     if valnik:
         zaznamy[i - 1] += ("\nsprite_groups<RoadVehicles, 0xFD> // Action02 basic, lide: prazdny valnik\n{\n"
                            "    primary_spritesets: [ 0x0000 ];\n    secondary_spritesets: [ 0x0000 ];\n}")
-    g_lide = 0xFD if valnik else 0xFF
-    auto_sw = [switch(0xFC, f"auto s lidmi: kapacita {lidi - 1}", "value1 = variable[0x0C] & 0x0000FFFF;",
-                      [(0x15, 0x8000 | (lidi - 1))], g_lide)]
+    # (verze 5) divky: kresleni na mape jde pres tri vrstvy (hra je kresli po sobe): 0 divky za autem, 1 auto,
+    # 2 divky pred autem. Promenna 0x10: vrstva v bitech 8-15, druh obrazku v 0-7 (0 = na mape). U vrstvy 0 a 1 na mape
+    # zapise switch bit 31 do registru 0x100 (hra pak chce dalsi vrstvu). Callbacky a obrazky mimo mapu (depo, seznamy,
+    # nakup) jdou rovnou na auto. Divky jsou jen pri nakladani na zastavce, za jizdy skupiny 0xE0 a 0xE3 nic nekresli.
+    holky_sw = []
+    if holky:
+        holky_sw = [switch(0xE1, "vrstvy: 0 divky za autem, 1 auto, 2 divky pred autem", "\n        ".join([
+                        "value1 = variable[0x10] & 0x0000FEFF;",
+                        "value2 = variable[0x1A] & 0x00000001;", "value1 = UnsignedMin(value1, value2);",
+                        "value2 = variable[0x1A] & 0x00000001;", "value1 = BitwiseXor(value1, value2);",
+                        "value2 = variable[0x1A] & 0x0000001F;", "value1 = ShiftLeft(value1, value2);",
+                        "value2 = variable[0x1A] & 0x00000100;", "value1 = TempStore(value1, value2);",
+                        "value2 = variable[0x10] & 0x0000FFFF;", "value1 = Assign(value1, value2);"]),
+                        [(0x000, 0xE0), (0x100, 0xFF), (0x200, 0xE3)], 0xFF),
+                    switch(0xE2, "kresleni (bez callbacku) pres vrstvy s divkami", "value1 = variable[0x0C] & 0x0000FFFF;",
+                           [(0x00, 0xE1)], 0xFF)]
+    g_auto = 0xE2 if holky else 0xFF
+    g_lide = 0xFD if valnik else g_auto
+    auto_sw = holky_sw + [switch(0xFC, f"auto s lidmi: kapacita {lidi - 1}", "value1 = variable[0x0C] & 0x0000FFFF;",
+                                 [(0x15, 0x8000 | (lidi - 1))], g_lide)]
     auto_a3 = [(c, 0xFC) for c in lide_c]
     if vychozi_lide:                                   # v nakupu je vychozi naklad lide: kapacita i tam
         auto_sw.append(switch(0xFB, f"auto v nakupu: kapacita {lidi - 1}", "value1 = variable[0x0C] & 0x0000FFFF;",
                               [(0x15, 0x8000 | (lidi - 1))], 0xFF))
         auto_a3.append((0xFF, 0xFB))
-    zaznamy[i + 5] = "\n".join(auto_sw) + "\n" + akce3(auto, 0xFF, auto_a3)
+    zaznamy[i + 5] = "\n".join(auto_sw) + "\n" + akce3(auto, g_auto, auto_a3)
     # cumak: clanek 1 = auto, dal nic (zadni naraznik 0x00C0 se nepripojuje, jeho definice zustava kvuli starym hram)
     assert f"0x00000002: 0x80C0;" in zaznamy[i + 8]
     zaznamy[i + 8] = zaznamy[i + 8].replace("        0x00000002: 0x80C0;\n", "")

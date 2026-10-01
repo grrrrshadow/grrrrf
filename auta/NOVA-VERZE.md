@@ -6,13 +6,44 @@
 | 2 | `dodavky_BRYLE_v2.grf` | `012303618c0e34e225621d9c6ce62343` | TAZ 1203 bus a dodávky, čumák 1 (menší mezera v koloně) |
 | 3 | `dodavky_BRYLE_v3.grf` | `aa348bbae9aaf135405355cb8e882dc5` | roky: prototyp na zkoušku rok před výrobou, zahrádky TAZ 1203 od 1981 |
 | 4 | `dodavky_BRYLE_v4.grf` | `56d1797382f742dbf43831627bbf53c6` | fialová TAZ 1900 D dodávka s naftovým motorem VW |
+| 5 | `dodavky_BRYLE_v5.grf` | `94b3f4ea2dec56f6c3132ffa383ee780` | holky u otevřených dveří busů a Pajdy na zastávce, kód BRAM, autoři 3D v popisu |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v5`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v6`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 5 (1. 10.): holky u dveří, brambory BRAM
+
+- **Holky u otevřených dveří**, když auto nakládá na zastávce:
+  - auta: TAZ 1203 bus a bus zahrádka, TAZ 1500 bus a bus zahrádka, Škoda 1203 Pajda karavan;
+  - holky stojí na straně k chodníku, jedna u předních dveří, druhá z boku u kufru;
+  - jsou ve 2× jako dívky na zastávce a bez stínu.
+
+  Je to samostatná vrstva přes auto (a ve dvou směrech pod autem), obrázky a rozmístění jsou v `holky-u-aut/`.
+  Viditelné auto má navíc bit 7 ve `miscellaneous_flags` (vrstvy), skupiny `0xE0` a `0xE3` a switche `0xE1` a `0xE2`
+  (`holky-u-aut/README.md`).
+- **Nový kód BRAM** (hráč: *„valník brambory, vem mu kód BEAN a dej mu kód BRAM, uděláme si svoje brambory, a fazole
+  dáme do hnědých pytlů na kafe“*):
+  - v překladové tabulce je na konci, slot 0xDD, tabulka má 222 kódů a stará čísla platí;
+  - valník brambor (0x88) veze TATO, BRAM, CASS a SGBT, BEAN už ne;
+  - BRAM vezou i VW T1, modré dodávky a plachty, všude, kde jsou TATO;
+  - fazole BEAN jedou v dodávkách a pod plachtou jako dosud, hnědé pytle jsou na V3S a Tatrách.
+- **Popis GRF:** k „3D: renderatnight“ přibyl Rabatin.B (Škoda 1203, z hráčova lístku) a řádek s autory holek
+  „Girls: kiemtruongkts, Rotmill (CC BY 4.0)“ (`AUTORI-MODELU.md`).
+- **Kontrola:** rozbalená v5 proti rozbalené v4 se liší jen o:
+  - popis a překladovou tabulku;
+  - tři nové záznamy s holkami;
+  - seznamy nákladů aut s BRAM;
+  - u pěti aut s holkami vlastnosti viditelného dílu, jeho switche a Action 3.
+
+  Všechny sady spritů aut jsou beze změny.
+- **Zkouška ve hře:**
+  - příkaz `testholky` pro TAZ 1203 bus, Pajdu a TAZ 1500 bus na CZTR silnicích a pro TAZ 1203 bus na původních;
+  - všechna auta zastavila ve všech čtyřech směrech a holky jsou na místě (`holky-u-aut/ve_hre.png`);
+  - za jízdy holky nejsou.
 
 ## Verze 4 (30. 9.): fialová TAZ 1900 D
 
@@ -183,9 +214,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v3
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v5
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v3.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v5.grf sprites
 ```
 
 Ověřeno 30. 9.:

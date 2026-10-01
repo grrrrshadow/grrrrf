@@ -114,6 +114,13 @@ zastávku, vyfotí je (`v3s_okruh.png`) a hru ukončí. Dlaždice zastávek jsou
 pohledu v `V3SPOHLED`. S vlastním configem (`-c`) se fotka uloží do složky configu, ne do `HOME`. Rozbor, kam
 na zastávku postavit dívku: `zastavka/`.
 
+## Holky u aut na zastávce (1. 10.)
+
+`testholky [tiků] [auto hex] [RTxx]` postaví křižovatku s depem a čtyřmi průjezdnými zastávkami a na každou pošle
+jedno auto z GRF dodávek (`MAX\x08`, místní číslo, výchozí 0x8C = TAZ 1203 bus) s příkazem plně naložit. Auta pak
+stojí s otevřenými dveřmi ve všech čtyřech směrech (SV, JV, JZ, SZ). Vyfotí je a hru ukončí. Zastávky a směry jsou
+v logu (`HOLKY: zastavka …`). Výsledek: `holky-u-aut/ve_hre.png`.
+
 ## Jak přeložit znova
 
 ```bash

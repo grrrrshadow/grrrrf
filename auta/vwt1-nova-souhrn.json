@@ -220,7 +220,8 @@
   "STTP",
   "SWRP",
   "TIN_",
-  "WDCH"
+  "WDCH",
+  "BRAM"
  ],
  "udaje": {
   "vw": {
@@ -410,7 +411,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x81": {
@@ -520,7 +522,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x82": {
@@ -637,14 +640,14 @@
    "vychozi": "TATO",
    "naklady": [
     "PASS",
-    "BEAN",
     "SGBT",
     "TATO",
     "CASS",
     "YETI",
     "YETY",
     "WORK",
-    "PRIS"
+    "PRIS",
+    "BRAM"
    ]
   },
   "0x89": {
@@ -818,7 +821,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x8E": {
@@ -941,7 +945,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x90": {
@@ -1071,7 +1076,8 @@
     "STTP",
     "SWRP",
     "TIN_",
-    "WDCH"
+    "WDCH",
+    "BRAM"
    ]
   },
   "0x92": {
@@ -1178,7 +1184,8 @@
     "STTP",
     "SWRP",
     "TIN_",
-    "WDCH"
+    "WDCH",
+    "BRAM"
    ]
   },
   "0x93": {
@@ -1314,7 +1321,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x96": {
@@ -1437,7 +1445,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   },
   "0x98": {
@@ -1537,7 +1546,8 @@
     "PRNT",
     "WINE",
     "FLOU",
-    "LETH"
+    "LETH",
+    "BRAM"
    ]
   }
  }
