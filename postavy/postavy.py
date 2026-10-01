@@ -286,16 +286,30 @@ def sed_galaxia(arm, meshe):
         otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-55))
 
 
+def sed_college(arm, meshe):
+    """college_girl (pozice T ze snimku akce): sed kostrou, stehna dopredu, lytka dolu, ruce podel tela a dlane
+    na stehnech"""
+    for st, zn in (("L", 1), ("R", -1)):
+        otoc_kost(arm, _kost(arm, f"Hip_{st}_"), (1, 0, 0), math.radians(-84))
+        otoc_kost(arm, _kost(arm, f"Knee_{st}_"), (1, 0, 0), math.radians(80))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(74))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-18))
+        otoc_kost(arm, _kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-50))
+
+
 #: modely bez kostry, ktere sedi ohnutim nohou v siti: vyska, kycle a kolena (podil vysky)
 SEDICI = {"character_people_girl_001": (1.68, 0.49, 0.28), "anime_girl": (1.6, 0.52, 0.285)}
 
 
 def sedici(jmeno):
     """divka posazena na sedak 0,47 m jako u sochy: (meshe, kotva), kotva = bod sedu (stred mezi kycli, zadek dole);
-    galaxia kostrou, ostatni ohnutim nohou (sed())"""
+    galaxia a college_girl kostrou, ostatni ohnutim nohou (sed())"""
     if "galaxia" in jmeno:
         g = nacti(jmeno, 1.58, priprava=sed_galaxia, nechat=lambda o: "Icosphere" not in o.name)
         return g, bod_sedu(g, 1.58, 0.0)[0]
+    if "college" in jmeno:
+        c = nacti(jmeno, 1.62, priprava=sed_college, nechat=divka_a)
+        return c, bod_sedu(c, 1.62, 0.0)[0]
     vyska, z_kycel, z_koleno = SEDICI[jmeno]
     m = nacti(jmeno, vyska, emise=0.0 if "anime" in jmeno else None)
     nohy = stredy_nohou(m, vyska)

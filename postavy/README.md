@@ -20,7 +20,7 @@ Použití:
 - druhé obrázky budov do animace (`POSTAVY=1`): socha (`socha/render_socha.py`), automat (`automat/render_automat.py`)
   a gymnázium (`gymnazium/render_gymnazium.py`);
 - `fotka_postavy.py`: jedna dívka samotná na přiložení (zastávka, holky u aut);
-- studentky na korbě V3S a Tater (`v3s/render_v3s.py`).
+- studentky na korbě V3S a Tater (`v3s/render_v3s.py`): stojící (na zastávce) a od verze 14 sedící na lavicích (za jízdy).
 
-`sedici(jmeno)` posadí Galaxii (kostrou), Character Girl nebo Anime Girl (ohnutím nohou) na sedák 0,47 m jako u sochy
+`sedici(jmeno)` posadí Galaxii nebo College Girl (kostrou), Character Girl nebo Anime Girl (ohnutím nohou) na sedák 0,47 m jako u sochy
 a vrátí bod sedu; `nacti_stojici(jmeno, vyska, poza)` dá stojící.

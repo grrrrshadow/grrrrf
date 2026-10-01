@@ -48,7 +48,7 @@ Je pro náklad BRAM (naše brambory), ve hře by to byl nový průmysl. Jeden ob
 - **Průhlednost:** pole je neprůhledné, jen úplně na kraji (25 cm od hran pozemku) je průhledno a je vidět tráva hry.
 - **Nic nepřečuhuje** pod přední hrany ani do stran. Rostliny jsou celé uvnitř pozemku, jen nahoru můžou. Změřeno:
   mimo kosočtverec je jen pár pixelů okraje stínu s alfou nejvýš 8 z 255.
-- **Políčko 256 × 128:** obrázky nejsou stažené, hra je stáhne na 124/128 jako gymnázium.
+- **Políčko 256 × 128:** render 2 : 1 sedí na dlaždice hry, jak je (hra ho podle opravy 1. 10. večer nestahuje).
 
 | soubor | co to je | obrázek | rohy: sever, východ, západ, jih |
 |---|---|---|---|

@@ -14,6 +14,9 @@
 #  9. (verze 5) divky u otevrenych dveri busu a Pajdy na zastavce (vrstvy za autem a pred autem, holky-u-aut/),
 #     novy kod BRAM (nase brambory) na konci tabulky: valnik brambor misto BEAN, k tomu vsude, kde jsou TATO;
 #     v popisu GRF autori 3D modelu (Rabatin.B, divky)
+# 10. (verze 6) podle vypisu prumyslu (hrac 1. 10.): kovy pod plachtou (plachta a plachta seda), odpad (TRSH, WSTE,
+#     RCYC) na valniku s kamennou kupou; cennosti, zlato a diamanty dvanacttrojky nevozi (pojede na ne Avia VB),
+#     tekutiny vozi sudy V3S a cisterny Tater
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -44,7 +47,8 @@ VW_PRIPSAT = ["FRVG", "MARI", "WINE", "BAKE", "FLOU", "OYST", "ENUM", "RSGR", "P
 VALNIKY = {0x83: ["WOOD", "TWOD"], 0x84: ["COAL", "COKE", "MNO2"],
            0x85: ["CLAY", "PEAT", "BIOM", "AORE", "IORE", "CORE", "COCO"],
            0x86: ["SAND", "SULP", "GRAI", "WHEA", "MAIZ", "CERE"],
-           0x87: ["GRVL", "LIME", "SLAG", "SCMT", "SCRP", "NKOR", "PORE", "POTA", "PHOS"],
+           0x87: ["GRVL", "LIME", "SLAG", "SCMT", "SCRP", "NKOR", "PORE", "POTA", "PHOS",
+                  "TRSH", "WSTE", "RCYC"],     # (verze 6) odpad na sede kupe (hrac: "odpad bude ta seda kupa na valniku")
            0x88: ["TATO", "BRAM", "CASS", "SGBT"], 0x8A: ["MARI", "HOPS"]}   # zeleny: i chmel (hrac 30. 9.)
 # (verze 5) hrac 1. 10.: "valnik brambory, vem mu kod BEAN a dej mu kod BRAM, udelame si svoje brambory, a fazole dame
 # do hnedych pytlu na kafe": BEAN uz na valniku brambor neni, v dodavkach a pod plachtou jede dal (jako kava JAVA)
@@ -67,7 +71,10 @@ assert vw == seznam_z_grf(0x81), "VW T1 obe velikosti maji mit stejny seznam"
 VW = sorted(set(vw) | set(cisla(VW_PRIPSAT)))          # hracuv seznam VW T1 + pripsane, vynechane zustava vynechane
 BEDNA_C = set(cisla(BEDNA))
 DODAVKA = [c for c in VW if c not in BEDNA_C]          # modre dodavky bez bedny: jako VW T1 bez veci z bedny
-PLACHTA = sorted(set(DODAVKA) | set(cisla(NEZNAME)))   # plachta: jako dodavka a navic nezname kody
+# (verze 6) hrac 1. 10.: "kovy muzou byt pod plachtou": oceli a kovy, ktere dvanacttrojky dosud nevozily
+KOVY = [k for k in ("STEL STAL STSH STBR STIG STPL STSL STSW STCB STST STWR STSE STBL STPP STTB PIPE RBAR ALUM IRON "
+                    "ZINC NICK COBL CSTI FEAL METL COPR TINP RAMT FECR").split() if k in SLOT]
+PLACHTA = sorted(set(DODAVKA) | set(cisla(NEZNAME)) | set(cisla(KOVY)))   # plachta: jako dodavka, nezname kody a kovy
 S_BEDNOU = sorted(BEDNA_C | set(cisla(LIDE_2)))        # dodavka bedna, plachta bedna, valnik bedna
 
 # druh: skupina skutecnych udaju; naklady; lidi; vychozi naklad (s nim se auto koupi)

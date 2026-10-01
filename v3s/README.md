@@ -1,5 +1,49 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 14 (1. 10. večer): studentky sedí, zlato jen zelená, odpad na kupě
+
+Hráč:
+- *„tenhle současný obrázek bude zastávka, jako že stojej a vystupujou, když se ti povede studentky posadit“*;
+- *„podél bočnic má V3S dvě lavice proti sobě a Tatra valník, můžem si myslet, že tam jsou taky lavice, seděli by
+  bokem ke směru jízdy a koukali by na protější řadu sedících studentek“*;
+- k výpisu průmyslu: *„to zlato dvakrát“*, *„nemůžem dát cennosti, zlato, diamanty do dvanácttrojek, uděláme pak na
+  to auto pěkný, Avia VB, nebudem tyhle věci z banky dávat ani do Tater, zlato je z dolu, zlato Tatry zelený a V3S
+  zelený, obyčejný Tatry a V3S nebudou vozit zlato“*, *„zlato plachta“*, *„odpad bude ta šedá kupa na valníku V3S,
+  Tatra, TAZ“*.
+
+Co je nové:
+- **Studentky za jízdy sedí na lavicích, na zastávce stojí.**
+  - Sedí po třech na každé straně, bokem ke směru jízdy, čelem k protější řadě. Proti sobě jsou posunuté o půl
+    místa, aby se jim kolena minula.
+  - Holky jsou 2× jako dosud, proto i lavice: dřevěný sedák 0,94 m nad podlahou podél obou bočnic (vlastní lavice
+    V3S je 0,34 m, holka 2× by na ní seděla s koleny u brady).
+  - Holky: tmavovlasá College Girl (nově posazená kostrou, `postavy/postavy.py`), holka v tyrkysovém tílku
+    a bělovlasá Galaxia. Náklad `studentky_sedi` je v `render_v3s.py`, Tatra ho bere odtud jako ostatní náklady.
+  - Ve hře: vrstva studentek má dvě sady. Za jízdy (primární sady) jsou sedící, při nakládání (sekundární sady) stojící
+    z verze 13. Hra je střídá sama podle toho, jestli auto nakládá (`ResolveReal`, jako holky u dveří busů).
+  - Zblízka: `kontrola/studentky_sedi_a_stoji.png` (nahoře sedí, dole stojí).
+- **Zlato vozí jen zelená vejtřaska a zelená Tatra, pod plachtou.** Obyčejná Tatra se zlatem zezelená jako u
+  vojenských nákladů, modrá vejtřaska zlato nevozí.
+- **Zlato je ve hře dvakrát se stejným kódem GOLD:** zlato z ECS a vlastní zlato hry (zlatý důl a banka hry).
+  - GRF podle kódu najde jen první, proto auta se zlatem mají navíc přestavbu podle třídy nákladu cennosti (0x0008).
+    V nabídce přestavby je pak „zlato“ dvakrát.
+  - Co auto nevozí, je v `never_refittable_cargos`, aby to třída nepřidala.
+  - Druhé zlato hra kreslí výchozím obrázkem. U Tatry jsou to bedny, proto výchozí obrázek Tatry nejdřív podle
+    nákladu (proměnná 0x47 dává místo v naší tabulce podle kódu i pro druhé zlato) pošle zlato na zelenou Tatru
+    s plachtou. Vejtřaska má výchozí plachtu, tam se nic dělat nemuselo.
+- **Cennosti (VALU) a diamanty (DIAM) nevozí žádná vejtřaska ani Tatra:** pojede na ně Avia VB.
+- **Odpad na šedé kupě kamene:** odpadky (TRSH), odpad (WSTE) a recyklovatelný odpad (RCYC) na valníku vejtřasky
+  i Tatry.
+- **Překladová tabulka se nemění:** z obou výpisů průmyslu v ní chyběl jen kód ROLA (silniční vozidla na vagonech),
+  zvláštní náklad hry, a ten do tabulky nepatří (hráč: *„rola je speciální náklad, to nedávej do tabulky“*).
+- Malá 6,77 MB (`e8ac6d0b…`), velká 8,01 MB (`7199e9e6…`), balík `Praga_V3S_Tatra-v14.zip`.
+- **Ověřeno ve zkušební hře:**
+  - **Fotky** `TEST_FOTO_SADA=studentky` a `TEST_FOTO_NAKLADANI=1` (`tatra/nahledy/ve_hre_v14_studentky.png`):
+    - první fotka za jízdy: všechny vejtřasky i Tatry, malé i velké, vezou sedící;
+    - druhá fotka s auty ve stavu nakládání: stojící.
+  - **`testv3s`** pro `MAXd` i `MAXe`: cennosti nenabízí žádné auto, modrá nevozí vojenské náklady jako dřív,
+    žádná chyba. Zlato ve zkušební hře (mírné klima) není, druhé zlato je ověřené jen rozborem GRF.
+
 ## Verze 13 (1. 10.): studentky na korbě
 
 Hráč:
@@ -242,10 +286,10 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v13.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v13.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v14.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v14.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v13.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v14.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
 (`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v12`) zůstávají v repu.
 
@@ -514,4 +558,6 @@ zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen 
 i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin;
 8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel;
 9 vojenská technika jen zelená, FREE mezi nevozí; 10 Tatry ve stejném GRF; 11 zelená Tatra schovaná, jen pro naši hru;
-12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích; 13 studentky na korbě.
+12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích; 13 studentky na korbě; 14 studentky za jízdy
+sedí na lavicích (na zastávce stojí), zlato jen zelená pod plachtou i druhé zlato hry, cennosti a diamanty ne, odpad
+na šedé kupě.

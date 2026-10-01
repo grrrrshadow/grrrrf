@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-10-01 16:52:11.759625822 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-10-01 17:33:02.794597930 +0000
+--- a/openttd/src/console_cmds.cpp	2026-10-01 23:28:26.710854163 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-01 23:28:26.718541291 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -27,7 +27,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "tree_cmd.h"
  #include "order_cmd.h"
  #include "order_func.h"
-@@ -2461,6 +2466,734 @@
+@@ -2461,6 +2466,747 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -199,6 +199,19 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +{
 +	uint cislo = _v3s_foto_cislo++;
 +	std::string jmeno = _v3s_foto_pocet == 1 ? std::string("v3s_okruh") : fmt::format("v3s_okruh_{:02}", cislo);
++	if (std::getenv("TEST_FOTO_NAKLADANI") != nullptr && cislo % 2 == 1) {
++		/* zkouska obrazku pri nakladani (od verze 14 studentky na zastavce stoji, za jizdy sedi): kazda licha fotka
++		 * s auty zastavenymi ve stavu nakladani; zastavene auto hra nenaklada (RoadVehController konci pred
++		 * HandleLoading), takze nevadi, ze nestoji v zastavce */
++		for (RoadVehicle *v : RoadVehicle::Iterate()) {
++			if (!v->IsFrontEngine()) continue;
++			v->vehstatus.Set(VehState::Stopped);
++			v->current_order.MakeLoading(false);
++			for (RoadVehicle *u = v; u != nullptr; u = u->Next()) u->sprite_cache.revalidate_before_draw = true;
++			v->MarkDirty();
++		}
++		V3SLog("V3SFOTO: fotka {} pri nakladani", cislo);
++	}
 +	bool foto = MakeScreenshot(SC_ZOOMEDIN, jmeno);
 +	V3SLog("V3SFOTO: fotka {} {}", jmeno, foto ? "ok" : "CHYBA");
 +	VideoDriver::GetInstance()->QueueOnMainThread([cislo] {
@@ -762,7 +775,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2639,6 +3372,17 @@
+@@ -2639,6 +3385,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -780,7 +793,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13129,6 +13873,11 @@
+@@ -13129,6 +13886,11 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -793,8 +806,8 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-10-01 16:52:11.763625822 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-10-01 16:52:11.772497747 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-10-01 23:28:26.718854163 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-10-01 23:28:26.986854157 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

@@ -101,7 +101,7 @@ def tatra_nacti():
         for t in ["sklapec", "valnik"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")] + ["valnik_zelena"]:
             vse[f"{m}_{t}"] = sada(f"{m}_{t}")
     T_OBR_V = sorted({v for v in VRSTVA.values()} | {obr for p in T_PODTYPY.values() for _, obr, _ in p if obr}
-                     | set(T_PLACHTA["oranzova"]) | set(T_PLACHTA["zelena"]) | {"BEER"})
+                     | set(T_PLACHTA["oranzova"]) | set(T_PLACHTA["zelena"]) | {"BEER", "studentky_sedi"})   # od v14 sedici
     T_OBR_V = [o for o in T_OBR_V if not o.startswith("plachta_") or o in ("plachta_vojenska", "plachta_seda", "plachta_sedobila")]
     T_OBR_S = sorted(set(T_SKLAPEC.values()))
     for k in T_OBR_V: vse[f"Tv_{k}"] = sada(f"T_valnik_naklad_{k}")
@@ -147,8 +147,11 @@ def tatra_yagl():
     for si, (kde, k) in enumerate(obr):
         G_T[kde, k] = 0xC0 + si
         assert G_T[kde, k] <= 0xFF
-        Y += [f"sprite_groups<RoadVehicles, 0x{G_T[kde, k]:02X}> // Action02 basic, Tatra {kde} {k}: prazdno, naklad", "{",
-              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
+        # primarni sady za jizdy, sekundarni pri nakladani: od verze 14 studentky za jizdy sedi, na zastavce stoji
+        sj = obr.index(("v", "studentky_sedi")) if (kde, k) == ("v", "studentky") and ("v", "studentky_sedi") in obr else si
+        Y += [f"sprite_groups<RoadVehicles, 0x{G_T[kde, k]:02X}> // Action02 basic, Tatra {kde} {k}: prazdno, naklad"
+              + (", za jizdy sedi" if sj != si else ""), "{",
+              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{sj:04X} ];", f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
 
     for n in T_AUTA:
         h = T_ID[n]; auto = T_ID_AUTO[n] if CUMAK else h
@@ -170,12 +173,15 @@ def tatra_yagl():
             p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
                  f"        long_introduction_date: date({T_UVEDENI[n]});", "        model_life_years: 255;",
                  "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
-                 "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
+                 # od verze 14 u zlata i trida cennosti (0x0008) kvuli druhemu zlatu hry (kod GOLD dvakrat, tabulka
+                 # najde jen prvni); co Tatra nevozi, je v never_refittable_cargos, at to trida neprida
+                 f"        refittable_cargo_classes: 0x{0x0008 if 'GOLD' in naklady else 0:04X};",
+                 "        non_refittable_cargo_classes: 0x0000;",
                  "        refit_cargo_types: 0x00000000;",
                  f"        // vozí všechno z tabulky kromě: "
                  f"{nevozi('vojenska') if zelena else ', '.join(f'{k} {v}' for k, v in NEVOZI.items())}",
                  f"        always_refittable_cargos: [ {' '.join(f'0x{INDEX[k]:02X}' for k in naklady)} ];",
-                 "        never_refittable_cargos: [ ];",
+                 f"        never_refittable_cargos: [ {' '.join(f'0x{INDEX[k]:02X}' for k in TABULKA if k not in naklady and k in INDEX)} ];",
                  f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
                  "        sprite_id: 0xFF;",
                  f"        miscellaneous_flags: 0x{0x80 if co == 'auto' else 0:02X};",
@@ -304,14 +310,22 @@ def tatra_yagl():
         for k in naklady:
             c = (s_stud if k == "STUD" and s_stud else s_lidi) if k in LIDE else (s_podtyp[k] if k in s_podtyp else cil(*urci(k)))
             if c != vychozi_g: mapa[INDEX[k]] = c
-        vychozi = vychozi_g
+        # od verze 14: druhe zlato hry (stejny kod GOLD jako zlato ECS, Action 3 ho tabulkou nenajde) jde na vychozi,
+        # u Tatry bedny; proto vychozi nejdriv podle nakladu (promenna 0x47, spodni bajt je misto nakladu v nasi tabulce,
+        # hra ho hleda podle kodu, takze plati i pro druhe zlato) na zlato: zelena Tatra s plachtou
+        vychozi_cil = vychozi_g
+        if "GOLD" in naklady:
+            vychozi_cil = nove()
+            Y += sw(vychozi_cil, "vychozi: i druhe zlato hry jako zlato (zelena s plachtou), jinak vychozi",
+                    ["value1 = variable[0x47] & 0x000000FF;"], [(INDEX["GOLD"], cil(*urci("GOLD")))], vychozi_g)
+        vychozi = vychozi_cil
         if not CUMAK and id_zvuk:
             obal = {}
-            for c in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, s_stud, vychozi_g}):
+            for c in [vychozi_cil] + sorted(set(mapa.values()) - {s_lidi, s_stud, vychozi_cil}):
                 obal[c] = nove()
                 Y += sw(obal[c], "zvuk, jinak grafika", CALLBACK, zvuk, c)
             mapa = {k: obal.get(v, v) for k, v in mapa.items()}
-            vychozi = obal[vychozi_g]
+            vychozi = obal[vychozi_cil]
         if not CUMAK:
             mapa[0xFF] = s_nakup
         Y += action3(auto, vychozi, sorted(mapa.items()))

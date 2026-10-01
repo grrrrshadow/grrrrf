@@ -4,14 +4,15 @@
 # - zeme v okruhu lezi ve vysce 16 (dve urovne, auta tam maji z 16), dlazdice je proto o 4 * 16 = 64 px vys, nez
 #   by byla dole. Tuhle vysku jsem driv vynechaval a vsechny nahledy byly o pul policka niz (u automatu pak krovi
 #   lezlo na silnici, i kdyz ve hre nepresahuje).
-# - policko ve hre ma 256 x 124 px (render 256 x 128), obrazek se proto svisle stahne na 124/128 jako ve hre.
 # - severni roh rovne dlazdice lezi ve hre o 4 px vpravo od hranice pixelu, kam ho klade render.
-# Posledni dve veci podle zpravy od hry (zarovnani-budov/ZPRAVA-OD-HRY.md, skript hry openttd_gymnazium.py).
+# - policko ve hre ma 256 x 128 px jako render 2 : 1, nic se nestahuje (oprava od hry 1. 10. vecer: dlazdice maji
+#   rozestup 32 px, 31 radku rovne dlazdice je jen pixelove kresleni; driv se tu stahovalo na 124/128 omylem).
+# Podle zpravy od hry (zarovnani-budov/ZPRAVA-OD-HRY.md, skript hry openttd_budovy.py).
 #
 #   python3 nahled_ve_hre.py <vystup.png> <obrazek.png>@<x>,<y>[=popisek] ... [--vyrez L,T,R,B] [--zvetsit N]
 #
-# x, y je severni dlazdice budovy. Rohy pozemku se ctou z JSONu vedle obrazku; "stazeny": true znamena, ze obrazek
-# uz ma vysku hry a nestahuje se. Popisek se napise pod jizni roh pozemku. Vyrez je v pixelech fotky od severniho
+# x, y je severni dlazdice budovy. Rohy pozemku se ctou z JSONu vedle obrazku. Popisek se napise pod jizni roh
+# pozemku. Vyrez je v pixelech fotky od severniho
 # rohu prvni budovy (vychozi -330,-150,330,330), zvetseni bez vyhlazovani (vychozi 2).
 # Dlazdice v okruhu: silnice vede po y = 12 a y = 18 (x 40 az 51) a po x = 40 a x = 51 (y 12 az 18), uvnitr je
 # trava; napr. (44,17) je primo u silnice, (45,16) o policko dal.
@@ -22,7 +23,6 @@ TU = os.path.dirname(os.path.abspath(__file__))
 FOTKA = os.path.join(TU, "fotka_okruh_v11.png")       # v3s_okruh_02.png ze zkousky v11, pohled vlevo -5440 nahore 2840
 VLEVO, NAHORE, Z_ZEME = -5440, 2840, 16
 SEVER_POSUN = 4
-RENDER_VYSKA, HRA_VYSKA = 128, 124
 PISMO = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 
@@ -32,15 +32,10 @@ def sever_dlazdice(x, y):
 
 
 def nacti(cesta):
-    """obrazek ve vysce hry a rohy pozemku na nem"""
+    """obrazek a rohy pozemku na nem (render 2 : 1 sedi na dlazdice hry, jak je)"""
     im = Image.open(cesta).convert("RGBA")
     info = json.load(open(os.path.splitext(cesta)[0] + ".json"))
-    rohy = {k: tuple(v) for k, v in info["rohy"].items()}
-    if not info.get("stazeny"):
-        k = HRA_VYSKA / RENDER_VYSKA
-        im = im.resize((im.width, round(im.height * k)), Image.LANCZOS)
-        rohy = {n: (v[0], v[1] * k) for n, v in rohy.items()}
-    return im, rohy
+    return im, {k: tuple(v) for k, v in info["rohy"].items()}
 
 
 def main(argv):

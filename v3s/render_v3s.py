@@ -645,12 +645,61 @@ def studentky(seed=83):
     print("studentek", nx * ny, "v", ny, "radach po", nx, "meritko", K)
     return obs
 
+def studentky_sedi(seed=89):
+    """Studentky sedi za jizdy (hrac 1. 10.: "podel bocnic ma v3s dve lavice proti sobe a tatra valnik muzem si myslet,
+    ze tam jsou taky lavice, sedeli by bokem ke smeru jizdy a koukali by na protejsi radu sedicich studentek"; stojici
+    obrazek je pro zastavku, "jako ze stojej a vystupujou"). Divky jsou 2x jako stojici, proto i lavice 2x: sedak
+    0,94 m nad podlahou (lavice modelu V3S je 0,34 m), drevena prkna podel obou bocnic. Na kazde strane tri, celem
+    k protejsi strane, proti sobe posunute o pul mista, at se jim kolena minou."""
+    import sys, random
+    from mathutils import Matrix
+    d = globals().get("TU")
+    kde = os.path.normpath(os.path.join(d if d else os.getcwd(), "..", "postavy"))
+    if kde not in sys.path: sys.path.insert(0, kde)
+    import postavy as P
+    random.seed(seed)
+    K = MERITKO_STUDENTEK
+    STENA = KX + 0.09                                # vnitrek bocnic (V3S 1,095, Tatra 1,2)
+    Z_SED = PODLAHA + 0.47 * K
+    HLOUBKA = 0.62                                   # sedak od bocnice
+    obs = []
+    lav = material("lavice", srgb((86, 60, 38)), srgb((138, 98, 60)), 0.8, 30.0)
+    for zn in (-1, 1):                               # leva (x < 0) a prava lavice
+        x0, x1 = sorted((zn * STENA, zn * (STENA - HLOUBKA)))
+        bpy.ops.mesh.primitive_cube_add(size=1, location=((x0 + x1) / 2, (KY0 + KY1) / 2, Z_SED - 0.035))
+        o = bpy.context.object; o.scale = (x1 - x0, KY1 - KY0, 0.07); o.data.materials.append(lav); obs.append(o)
+        for y in (KY0 + 0.15, (KY0 + KY1) / 2, KY1 - 0.15):                     # nohy u predni hrany sedaku
+            xn = zn * (STENA - HLOUBKA + 0.06)
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(xn, y, (PODLAHA + Z_SED - 0.07) / 2))
+            o = bpy.context.object; o.scale = (0.07, 0.07, Z_SED - 0.07 - PODLAHA); o.data.materials.append(lav); obs.append(o)
+    vzory = {jm: P.sedici(jm) for jm in ("college_girl", "character_people_girl_001", "galaxia_anime_girl")}
+    n = max(1, int((KY1 - KY0) / 1.2)); krok = (KY1 - KY0) / n
+    poradi = {-1: ["college_girl", "galaxia_anime_girl", "character_people_girl_001"],
+              1: ["character_people_girl_001", "college_girl", "galaxia_anime_girl"]}
+    for zn in (-1, 1):
+        for i in range(n):
+            jm = poradi[zn][i % 3]
+            meshe, kotva = vzory[jm]
+            y = KY0 + krok * (i + (0.3 if zn < 0 else 0.7))
+            x = zn * (STENA - 0.06 - 0.16 * K)       # zady kousek od bocnice
+            u = (math.pi / 2 if zn < 0 else -math.pi / 2) + math.radians(random.uniform(-10, 10))   # celem k protejsi lavici
+            M = Matrix.Translation((x, y, Z_SED)) @ Matrix.Rotation(u, 4, 'Z') @ Matrix.Scale(K, 4) @ Matrix.Translation(-kotva)
+            kopie = []
+            for o in meshe:
+                n_ = o.copy(); n_.data = o.data.copy(); scene.collection.objects.link(n_); kopie.append(n_)
+            obs += P.postav(kopie, M)
+    for meshe, _ in vzory.values():
+        for o in meshe: bpy.data.objects.remove(o, do_unlink=True)
+    print("sedicich studentek", 2 * n, "po", n, "na lavici, sedak z", round(Z_SED, 3), "meritko", K)
+    return obs
+
 KUSOVE = {"CMNT": pytle, "pytle_hnede": lambda: pytle("hnede", 59), "GOOD": bedny, "BEER": sudy,
           "cihly_cervene": lambda: cihly("cervene", 71), "cihly_sede": lambda: cihly("sede", 73),
           "brambory": lambda: kulata_kupa("brambory", 67), "ovoce": lambda: kulata_kupa("ovoce", 79),
           "sudy_bile": lambda: sudy("bile", 41), "sudy_cerne": lambda: sudy("cerne", 43), "sudy_cervene": lambda: sudy("cervene", 47),
           "LVST": prasata, "kravy": kravy, "ovce": ovce, "FICR": seno,
-          "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute"), "studentky": studentky}
+          "seno_mari": lambda: seno("mari"), "seno_zlute": lambda: seno("zlute"), "studentky": studentky,
+          "studentky_sedi": studentky_sedi}
 
 NAKLAD_KOD = NATER[len("naklad_"):] if NATER.startswith("naklad_") else None
 if NAKLAD_KOD:

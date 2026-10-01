@@ -25,20 +25,22 @@ Vlastní model, žádný cizí: `render_gymnazium.py` ho postaví v Blenderu (mo
 
 Složit znovu: `python3 render_gymnazium.py <výstup.png>` (128 vzorků, asi 40 s; `SAMPLES=32` na zkoušku).
 
-Ve hře je gymnázium od forclaude `2366825`: hra si obrázek sama stáhne na políčko 256 × 124 a rozkrájí na svislé
-pruhy po políčkách (`hra/zarovnani-budov/ZPRAVA-OD-HRY.md`).
+Ve hře je gymnázium od forclaude `2366825`: hra obrázek rozkrájí po políčkách (`openttd_budovy.py`). Render 2 : 1 sedí
+na dlaždice, jak je (oprava od hry 1. 10. večer: políčko je 256 × 128, nic se nestahuje; `hra/zarovnani-budov/`).
 
 ## Druhý obrázek do animace: holky kolem školy
 
 Hráč 1. 10.: *„spawnem holky kolem školy a automatu“*. Jako u sochy (`socha/`) se ve hře střídá obrázek bez holek
 (`gymnazium_zin4.png`, ten, co už hra má) a s holkami (`gymnazium_postavy_zin4.png`).
 
-- **Ve skutečné velikosti** jako budova, lavičky a koše na hřišti (u automatu a sochy jsou dvakrát větší, protože
-  tam je dvakrát větší všechno). Při přiblížení 4× mají asi 17 px.
+- **1,5× větší než budova, lavičky taky** (hráč 1. 10. večer: *„škola zvětšit studentky, zvětšíme i lavičky, dveře
+  do školy jsou velké dost, můžem zvětšit studentky“*). Holka měří 2,43 až 2,52 m a dveře 2,55 m, takže projde; ve 2×
+  (3,2 m) by už neprošla. Všech šest laviček je 1,5× (sedák 0,71 m, délka 2,4 m), proto se změnil i obrázek bez holek.
+  Předtím byly holky ve skutečné velikosti (asi 17 px při přiblížení 4×).
 - **Na lavičce před školou** (vpravo od vchodu) sedí bělovlasá anime dívka (Galaxia) a dívka v tyrkysovém tílku
   (Character Girl), jako u sochy.
-- **Před schody** si povídají dívka v tyrkysovém tílku a tmavovlasá ve školní uniformě (College Girl), z profilu.
-  Bělovlasá na světlých schodech splývala, proto tam je tmavovlasá.
+- **Před schody** si povídají dívka v tyrkysovém tílku a tmavovlasá ve školní uniformě (College Girl), z profilu,
+  1,2 m od sebe, lampa je na obrázku mezi nimi. Bělovlasá na světlých schodech splývala, proto tam je tmavovlasá.
 - **Po hlavní cestě** jde k bráně další tmavovlasá. College Girl má školní uniformu, víc stejných ve škole sedí.
 - **Na hřišti** hází tmavovlasá na koš, ruce nahoře, oranžový míč nad nimi.
 - **Na zadní lavičce v parku** sedí zrzavá anime dívka (Anime Girl) čelem k divákovi.
@@ -48,7 +50,8 @@ Hráč 1. 10.: *„spawnem holky kolem školy a automatu“*. Jako u sochy (`soc
 - **Modely:** dívky od hráče (`postavy/`, Sketchfab, CC BY 4.0), autoři a text uvedení pro hru jsou
   v `AUTORI-MODELU.md` v oddílu „Postavy u automatu a gymnázia“.
 
-Složit znovu: `POSTAVY=1 python3 render_gymnazium.py <s_postavami.png>` (asi 50 s) a pak
-`python3 ../postavy/animace.py gymnazium_zin4.png <s_postavami.png> gymnazium_postavy_zin4.png`.
+Složit znovu: `python3 render_gymnazium.py <bez_postav.png>` a `POSTAVY=1 python3 render_gymnazium.py <s_postavami.png>`
+(asi 30 a 45 s; `LAVICKY` a `POSTAVY_K` mění zvětšení laviček a holek, teď 1,5) a pak
+`python3 ../postavy/animace.py <bez_postav.png> <s_postavami.png> gymnazium_postavy_zin4.png`.
 Náhled: `hra/nahled_ve_hre.py` se dvěma obrázky na `@46,16` (gymnázium) a `@44,16` (automat), jednou bez holek
 a jednou s nimi, a oba snímky do GIFu se společnou paletou.

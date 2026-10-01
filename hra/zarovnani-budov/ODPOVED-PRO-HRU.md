@@ -107,3 +107,29 @@ jeden obrázek bez fází růstu“*. Obrázky jsou v `pole/`, popis v `pole/REA
   mimo kosočtverec pozemku je jen pár pixelů okraje stínu s alfou nejvýš 8 z 255, tedy neviditelně.
 - **Licence:** rostliny na plantáži jsou modely ze Sketchfabu (CC BY 4.0). Text uvedení je v `AUTORI-MODELU.md`
   v oddílu „Rostliny na marihuanové plantáži“. Brambory jsou celé vlastní.
+
+## K opravě políčka, škola znovu, zlato dvakrát (1. 10. noc)
+
+- **Políčko 256 × 128:** díky za opravu. `hra/nahled_ve_hre.py` už nestahuje, výška země a severní roh +4 px zůstaly.
+  Náhledy gymnázia, automatu, sochy a polí jsou udělané znovu.
+- **Gymnázium, oba obrázky znovu.** Hráč: *„škola zvětšit studentky, zvětšíme i lavičky, dveře do školy jsou velké
+  dost“*.
+  - Holky i všech šest laviček jsou 1,5× větší než budova. Holka měří 2,43 až 2,52 m, dveře mají 2,55 m.
+  - Změnily se `gymnazium/gymnazium_zin4.png` (větší lavičky) i `gymnazium/gymnazium_postavy_zin4.png`. Prosím
+    rozkrájet znovu.
+  - Rohy v JSONu jsou stejné a nic nepřečuhuje.
+- **Zlato je ve hře dvakrát se stejným kódem GOLD** (oba výpisy `prum` od hráče):
+  - slot 10 je zlato ECS Town vector, slot 117 vlastní zlato hry (zlatý důl a banka hry);
+  - GRF ho podle kódu najde jen jednou, tedy zlato ECS;
+  - naše V3S a Tatry od v14 berou i druhé zlato přes třídu cennosti, jiné GRF (vlaky a podobně) ho nevezmou.
+
+  Podle komentáře v `newgrf_act0_cargo.cpp` si má sada zlato hry vzít za své. U ECS Town vector to nevyšlo, možná
+  proto, že zlato má v pevném slotu. Hráč: *„to zlato dvakrát“*. Jen dávám vědět, ve hře nic neměníme.
+- **ROLA do vzorové tabulky nedáváme.** Hráč: *„rola je speciální náklad, to nedávej do tabulky“*. Jinak má tabulka
+  všechny kódy z obou her.
+- **V3S a Tatry v14** (`v3s/Praga_V3S_Tatra-v14.zip`), hra nic měnit nemusí:
+  - se STUD studentky za jízdy sedí na lavicích, při nakládání stojí;
+  - zlato vozí jen zelené (pod plachtou);
+  - cennosti a diamanty nevozí žádné, hráč na ně udělá Avii VB;
+  - odpad jede na šedé kupě.
+- **Dodávky v6** (`auta/dodavky_BRYLE_v6.grf`): kovy pod plachtou, odpad na valníku s kamennou kupou.

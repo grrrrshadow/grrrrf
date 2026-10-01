@@ -286,11 +286,16 @@ for i in range(70):                                                     # kvetin
     kvadr(KVETY[i % len(KVETY)], x - 0.09, x + 0.09, y - 0.09, y + 0.09, Z_ZEM + 0.08, Z_ZEM + 0.08 + 0.12 + 0.12 * random.random())
 kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, YC + 1.25, PY_ - 3.1, 0.0, Z_ZEM)
 kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, PY_ + 3.1, P, 0.0, Z_ZEM)
+# Holky a lavicky 1,5x vetsi nez budova (hrac 1. 10.: "skola zvetsit studentky, zvetsime i lavicky, dvere do skoly jsou
+# velke dost, muzem zvetsit studentky"): holka 2,43 az 2,52 m, dvere 2,55 m, ve 2x (3,2 m) by uz dvermi neprosla.
+K_LAV = float(os.environ.get("LAVICKY", "1.5"))
+K_POSTAV = float(os.environ.get("POSTAVY_K", "1.5"))
+
 def lavicka(x, y, uhel):
-    """lavicka 1,6 m, sedak a operadlo ze dreva, nohy kov; uhel: kam se sedici diva (rad)"""
+    """lavicka 1,6 m (krat K_LAV), sedak a operadlo ze dreva, nohy kov; uhel: kam se sedici diva (rad)"""
     c, s = math.cos(uhel), math.sin(uhel)
     def bod(u, v, z):                    # u podel lavicky, v dozadu (od pohledu sediciho)
-        return (x + u * -s + v * -c, y + u * c + v * -s, z)
+        return (x + K_LAV * (u * -s + v * -c), y + K_LAV * (u * c + v * -s), K_LAV * z)
     def kus(m, u0, u1, v0, v1, z0, z1):
         b = [bod(u, v, z) for z in (z0, z1) for v in (v0, v1) for u in (u0, u1)]
         mnohostena(m, b, [(0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)])
@@ -361,14 +366,15 @@ if os.environ.get("POSTAVY", "") == "1":
 
     def do_sceny(meshe, kotva, gx, gy, gz, uhel):
         """postava (celem k -y, kotva = jeji bod, ktery ma stat v bode gx gy gz) celem ve smeru uhel"""
-        PO.postav(meshe, Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Translation(-kotva))
+        PO.postav(meshe, Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Scale(K_POSTAV, 4)
+                  @ Matrix.Translation(-kotva))
 
     def na_lavicku(meshe, kotva, lavicka_, u):
         """bod sedu na sedak lavicky (x, y, uhel) ve vzdalenosti u od jejiho stredu, zady k operadlu"""
         x, y, uhel = lavicka_
         c, s = math.cos(uhel), math.sin(uhel)
-        v = 0.05                                      # kousek dozadu k operadlu
-        do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47, uhel)
+        u, v = u * K_LAV, 0.05 * K_LAV                # v: kousek dozadu k operadlu
+        do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47 * K_LAV, uhel)
 
     LAV_SKOLA = (X1 + 1.6, Y1 - 2.5, 0.0)                                         # pred prucelim vpravo
     LAV_PARK = (PX_ + 2.75 * math.cos(math.radians(225)), PY_ + 2.75 * math.sin(math.radians(225)), math.radians(45))
@@ -377,11 +383,11 @@ if os.environ.get("POSTAVY", "") == "1":
     an, kotva = PO.sedici("anime_girl"); na_lavicku(an, kotva, LAV_PARK, 0.0)
     cg = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")
     do_sceny(cg, Vector((0, 0, 0)), 21.0, YC - 0.6, Z_ZEM, 0.0)                  # po hlavni ceste k brane
-    # pred schody si dve povidaji, z profilu (ne za lampou)
+    # pred schody si dve povidaji, z profilu; od zvetseni 1,2 m od sebe a lampa na obrazku mezi nimi, ne pres ne
     ch2 = PO.nacti_stojici("character_people_girl_001", 1.68)
-    do_sceny(ch2, Vector((0, 0, 0)), 15.3, YC + 0.55, Z_ZEM, math.radians(135))
+    do_sceny(ch2, Vector((0, 0, 0)), 15.4, 12.8, Z_ZEM, math.atan2(13.7 - 12.8, 14.6 - 15.4))
     cg2 = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")                   # tmava, na svetlych schodech
-    do_sceny(cg2, Vector((0, 0, 0)), 14.7, YC + 1.15, Z_ZEM, math.radians(315))  # bela Galaxia splyvala
+    do_sceny(cg2, Vector((0, 0, 0)), 14.6, 13.7, Z_ZEM, math.atan2(12.8 - 13.7, 15.4 - 14.6))   # bela Galaxia splyvala
 
     def strela(arm, meshe):
         """obe ruce z pozice T dopredu nahoru, jako kdyz hazi na kos"""
@@ -396,7 +402,7 @@ if os.environ.get("POSTAVY", "") == "1":
     do_sceny(hrac, Vector((0, 0, 0)), HX, HY, Z_ZEM, math.atan2(OBRUC[1] - HY, OBRUC[0] - HX))
     _, hi, vse = PO.rozmery_siti(hrac)
     ruce = vse[vse[:, 2] > hi[2] - 0.04]                                           # nejvys jsou ruce, mic nad nimi
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.12, location=(ruce[:, 0].mean(), ruce[:, 1].mean(), hi[2] + 0.08))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.12 * K_POSTAV, location=(ruce[:, 0].mean(), ruce[:, 1].mean(), hi[2] + 0.08 * K_POSTAV))
     mic = bpy.context.object; mic.data.materials.append(M["obruc"])
     for p_ in mic.data.polygons: p_.use_smooth = True
 

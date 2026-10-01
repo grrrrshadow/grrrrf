@@ -7,13 +7,31 @@
 | 3 | `dodavky_BRYLE_v3.grf` | `aa348bbae9aaf135405355cb8e882dc5` | roky: prototyp na zkoušku rok před výrobou, zahrádky TAZ 1203 od 1981 |
 | 4 | `dodavky_BRYLE_v4.grf` | `56d1797382f742dbf43831627bbf53c6` | fialová TAZ 1900 D dodávka s naftovým motorem VW |
 | 5 | `dodavky_BRYLE_v5.grf` | `94b3f4ea2dec56f6c3132ffa383ee780` | holky u otevřených dveří busů a Pajdy na zastávce, kód BRAM, autoři 3D v popisu |
+| 6 | `dodavky_BRYLE_v6.grf` | `4571e1e71efd6c0fc4fe25cc6c4e3f81` | kovy pod plachtou, odpad na valníku s kamennou kupou |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v6`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v7`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 6 (1. 10. večer): kovy pod plachtou, odpad na kupě
+
+Podle výpisu průmyslu ze dvou her hráče (všechny kódy už ve vzorové tabulce jsou, chyběl jen zvláštní náklad hry ROLA,
+ten do tabulky nepatří). Hráč k tomu, co dvanácttrojky nevozily:
+- *„kovy můžou být pod plachtou“*: plachta a plachta šedá (0x91, 0x92) nově vozí 22 kovů a ocelí: ocel (STEL),
+  ocelové slitiny, plechy, pláty, tyče, ingoty, bramy, profily, konstrukční, uhlíková a nerezová ocel, hliník, surové
+  železo, zinek, nikl, kobalt, měď, kov, litina, feroslitiny, ferochrom, bílý plech a vzácné kovy;
+- *„odpad bude ta šedá kupa na valníku V3S, Tatra, TAZ“*: valník s kamennou kupou (0x87) nově vozí odpadky (TRSH),
+  odpad (WSTE) a recyklovatelný odpad (RCYC);
+- *„nemůžem dát cennosti, zlato, diamanty do dvanácttrojek, uděláme pak na to auto pěkný, Avia VB“*: cennosti, zlato
+  a diamanty dvanácttrojky dál nevozí;
+- *„tekutiny máme sudy a cisterny, to půjde“*: tekutiny vozí sudy vejtřasky a cisterny Tater, dvanácttrojky ne;
+- vozidla, těžká vozidla a karoserie se do dvanácttrojky nevejdou.
+
+Ostatní auta beze změny (srovnání seznamů v5 a v6 po rozbalení). Ověřeno ve zkušební hře: GRF se načte, `testv3s`
+s `TEST_RV_GRF=MAX\x08` projde všechna auta bez chyby.
 
 ## Verze 5 (1. 10.): holky u dveří, brambory BRAM
 
@@ -148,13 +166,13 @@ to může být prototyp na zkoušku 1985. Můj zdroj roku výroby je pochybný.�
   vozidel, strojní součásti a obaly.
 - **Modré dodávky bez bedny (TAZ 1203 i TAZ 1500, se zahrádkou i bez):** jako VW T1 bez věcí z bedny.
 - **Dodávka bedna (TAZ 1203 i TAZ 1500), plachta bedna, valník bedna:** jen věci z bedny.
-- **Plachta a plachta šedá:** jako dodávka a navíc neznámé kódy (CRAN LFEQ SCPR STTP SWRP TIN_ WDCH).
+- **Plachta a plachta šedá:** jako dodávka a navíc neznámé kódy (CRAN LFEQ SCPR STTP SWRP TIN_ WDCH), od verze 6 i kovy.
 - **Valníky podle barvy kupy:**
   - dřevo: WOOD, TWOD;
   - uhlí: COAL, COKE, MNO2;
   - jíl: CLAY, PEAT, BIOM, AORE, IORE, CORE, COCO;
   - písek: SAND, SULP, GRAI, WHEA, MAIZ, CERE;
-  - kámen: GRVL, LIME, SLAG, SCMT, SCRP, NKOR, PORE, POTA, PHOS;
+  - kámen: GRVL, LIME, SLAG, SCMT, SCRP, NKOR, PORE, POTA, PHOS, od verze 6 i odpad TRSH, WSTE, RCYC;
   - brambory: TATO, BEAN, CASS, SGBT;
   - zelený: MARI, HOPS.
 
@@ -214,9 +232,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v5
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v6
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v5.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v6.grf sprites
 ```
 
 Ověřeno 30. 9.:

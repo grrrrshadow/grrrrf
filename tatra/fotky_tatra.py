@@ -27,7 +27,8 @@ VALNIK = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           "CORE", "CLAY", "WOOD", "WDPR", "CMNT", "pytle_hnede", "GOOD", "BEER", "LVST", "kravy", "ovce", "FICR",
           "seno_mari", "seno_zlute", "sudy_cerne", "sudy_bile", "sudy_cervene", "cihly_cervene", "cihly_sede",
           "brambory", "ovoce", "plachta_vojenska", "plachta_seda", "plachta_sedobila",
-          "studentky"]                                      # od verze 13 studentky na valniku (STUD)
+          "studentky",                                      # od verze 13 studentky na valniku (STUD)
+          "studentky_sedi"]                                 # od verze 14 za jizdy sedi na lavicich (stojici na zastavce)
 # Kupy nerostu na sklapeci (hrac: "mineraly, uhli sklapec")
 SKLAPEC = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "CLAY", "CORE", "SULP"]
 

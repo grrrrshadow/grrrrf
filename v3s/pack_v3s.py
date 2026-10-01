@@ -48,7 +48,12 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 13 studentky na korbe (STUD bez plachty, holky ve 2x jako na zastavce; hrac 1. 10.: "dame dvacet studentek na valnik,
 #   ktery vozi STUD, bez plachty, dvacet asi je moc, to se nevejde", "studentky na valnik Tatra a V3S, nemusi jich byt
 #   dvacet"), u Tatry i zelena prestavba STUD ("stud povolime prestavbu na zelenou Tatru")
-VERZE = 13
+# 14 studentky za jizdy sedi na lavicich podel bocnic proti sobe, stojici obrazek jen na zastavce (hrac 1. 10.: "tenhle
+#   soucasny obrazek bude zastavka jako ze stojej a vystupujou", "podel bocnic ma v3s dve lavice proti sobe"); druhe
+#   zlato hry: GOLD je ve hre dvakrat (ECS a hra), tabulka najde jen prvni, proto prestavba i podle tridy cennosti
+#   (hrac: "to zlato dvakrat"); zlato jen zelena pod plachtou, cennosti a diamanty nevozi (pojede Avia VB), odpad
+#   (TRSH, WSTE, RCYC) na sede kupe kamene
+VERZE = 14
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -122,14 +127,20 @@ def nacti_sadu(nater):
 # nejak vozit", "vodu vozit v sudech", "prostě udělej i tekutiny, barevný sudy a je to"); sklo dal ne ("sklo nevozime
 # vejtraskou").
 NEVOZI = {"GLAS": "sklo", "ELTR": "elektřina", "GEAR": "přeřazení lokomotivy",      # nevozi ani jedna
-          "FREE": "volný slot, není náklad"}          # hrac: "free je opravdu free slot", "free jsem si znacil konec,
+          "FREE": "volný slot, není náklad",          # hrac: "free je opravdu free slot", "free jsem si znacil konec,
                                                       # kde jsem koncil, ze tam muzu pokracovat"
+          # od verze 14 veci z banky jen Avia VB (hrac 1. 10.: "nemuzem dat cennosti zlato diamanty do dvanacttrojek,
+          # udelame pak na to auto pekny, avia VB, nebudem tyhle veci z banky davat ani do tater")
+          "VALU": "cennosti (pojede Avia VB)", "DIAM": "diamanty (pojede Avia VB)"}
 JEN_VOJENSKA = {"FOOD": "potraviny", "BOOM": "výbušniny",   # modra je nevozi (hrac: "jidlo jenom vojensky",
                 "URAN": "uran", "NUKF": "jaderné palivo",     # "vojenska explosives, modra ne", 29. 9.:
                 "NUKW": "jaderný odpad",                      # "vojenska radioaktivni veci, modra ne")
                 "NWST": "jaderný odpad", "UORE": "uranová ruda",   # od verze 8 (hrac: "odpad jaderny vojenska jenom,
                                                                     # vsechno co je uran jenom zelena")
-                "MLTR": "vojenská technika"}                  # od verze 9 (hrac: "mltr jen zelena")
+                "MLTR": "vojenská technika",                  # od verze 9 (hrac: "mltr jen zelena")
+                "GOLD": "zlato"}                              # od verze 14 (hrac: "zlato je z dolu, zlato tatry zeleny a
+                                                              # v3s zeleny, obycejny tatry a v3s nebudou vozit zlato",
+                                                              # "zlato plachta"): pod plachtou, nema vlastni obrazek
 JEN_MODRA = {"TOYS": "hračky"}                               # vojenska je nevozi (hrac 29. 9.: "vojenska ne hracky")
 # Kody vejtrasky, ktere ve vzoru nejsou. Od verze 8 zadne: hrac 29. 9.: "budem muset aktualizovat vzorovou tabulku,
 # ja si ji pak stahnu od tebe", takze kody z VW T1, FIRS 5.2 Steeltown a CHEM jsou ve vzoru (na stejnych cislech jako
@@ -208,7 +219,8 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           # od verze 8 cihly, brambory a ovoce (hrac 29. 9.: "cihly udelej ... livery cerveny a sedy cihly", "brambory kupa
           # a livery brambor pytle hnedy", "ovoce a zelenina cerveny zluty zeleny oranzovy jablicka, jako brambor")
           "cihly_cervene", "cihly_sede", "brambory", "ovoce",
-          "studentky"]                                                         # od verze 13 studentky na korbe (STUD)
+          "studentky",                                                         # od verze 13 studentky na korbe (STUD)
+          "studentky_sedi"]                                                    # od verze 14 za jizdy sedi, stojici na zastavce
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
 VRSTVA["STUD"] = "studentky"                       # od verze 13: holky stoji na korbe, bez plachty (render_v3s.py)
 VRSTVA.update({"TWOD": "WOOD", "SCRP": "SCMT"})   # brambory (TATO, od verze 12 i BRAM) s podtypy, viz PODTYPY
@@ -228,6 +240,8 @@ VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
 VRSTVA["JAVA"] = "pytle_hnede"
 VRSTVA["BEAN"] = "pytle_hnede"                    # od verze 12 fazole v hnedych pytlich jako kava (hrac 1. 10.)
 VRSTVA["SGCN"] = "FICR"
+VRSTVA.update({k: "GRVL" for k in "TRSH WSTE RCYC".split()})   # od verze 14 odpad na sede kupe (hrac: "odpad bude ta seda
+                                                                 # kupa na valniku v3s tatra taz")
 # od verze 8: kyseliny a plyny ze sad v hracove hre v cervenych sudech jako ostatni chemie (hrac: "prostě udělej
 # i tekutiny, barevný sudy a je to"), medeny koncentrat jako medena ruda (hrac: "vsechny ore kupu"), chmel
 # s obrazkem marihuanoveho sena (hrac: "uz dej naklad chmel kod chme, grafika marihuanove seno"), vino v drevenych
@@ -439,6 +453,10 @@ if ZV:
 def seznam(n):
     return "[ " + " ".join(f"0x{INDEX[k]:02X}" for k in NAKLADY[n]) + " ]"
 
+def seznam_nevozi(n):
+    """kody z tabulky, ktere auto nevozi (aby je neprida trida cennosti)"""
+    return "[ " + " ".join(f"0x{INDEX[k]:02X}" for k in TABULKA if k not in NAKLADY[n] and k in INDEX) + " ]"
+
 def nevozi(n):
     """co auto nevozi, pro poznamku u seznamu"""
     nv = dict(NEVOZI, **(JEN_VOJENSKA if n == "modra" else JEN_MODRA))
@@ -519,8 +537,11 @@ if OBRAZKY:
     Y += ["    }", "}"]
     for si, k in enumerate(OBRAZKY):
         G_VRSTVA[k] = 0xC0 + si
-        Y += [f"sprite_groups<RoadVehicles, 0x{G_VRSTVA[k]:02X}> // Action02 basic, naklad {k}: prazdno, naklad", "{",
-              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];",
+        # primarni sady jsou za jizdy, sekundarni pri nakladani; od verze 14 studentky za jizdy sedi, na zastavce stoji
+        sj = OBRAZKY.index("studentky_sedi") if k == "studentky" and "studentky_sedi" in OBRAZKY else si
+        Y += [f"sprite_groups<RoadVehicles, 0x{G_VRSTVA[k]:02X}> // Action02 basic, naklad {k}: prazdno, naklad"
+              + (", za jizdy sedi" if sj != si else ""), "{",
+              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{sj:04X} ];",
               f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
 VRSTVY_VYRAZ = ["value1 = variable[0x1A] & 0x00000001;", "value2 = variable[0x10] >> 8 & 0x000000FF;",
                 "value1 = Subtraction(value1, value2);",                                          # 1 - vrstva
@@ -545,11 +566,14 @@ for n in ("modra", "vojenska"):
         p = [f"properties<RoadVehicles, 0x{eid:04X}> // Action00 ({co})", "{", "    {",
              f"        long_introduction_date: date({UVEDENI});", "        model_life_years: 255;",
              "        vehicle_life_years: 15;", "        reliability_decay_speed: 20;",
-             "        refittable_cargo_classes: 0x0000;", "        non_refittable_cargo_classes: 0x0000;",
+             # od verze 14 u zlata i trida cennosti (0x0008): vlastni zlato hry ma stejny kod GOLD jako zlato ECS
+             # a tabulka najde jen to prvni; co auto nevozi, je v never_refittable_cargos, at to trida neprida
+             f"        refittable_cargo_classes: 0x{0x0008 if 'GOLD' in NAKLADY[n] else 0:04X};",
+             "        non_refittable_cargo_classes: 0x0000;",
              "        refit_cargo_types: 0x00000000;",
              f"        // vozí všechno z tabulky kromě: {nevozi(n)}",
              f"        always_refittable_cargos: {seznam(n)};",
-             "        never_refittable_cargos: [ ];",
+             f"        never_refittable_cargos: {seznam_nevozi(n)};",
              f"        cargo_type: 0x{INDEX['GOOD']:02X};", "        loading_speed: 0x05;", "        refit_cost: 0x00;",
              "        sprite_id: 0xFF;",
              f"        miscellaneous_flags: 0x{0x80 if (co == 'auto' and OBRAZKY) else 0:02X};",   # 0x80: vrstvy (sprite stack)

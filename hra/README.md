@@ -51,6 +51,7 @@ Uložená hra: `save <jméno>` v `game_start.scr`, načíst `-g <soubor>`, ale v
 | `TEST_FOTO_SADA=tatra` + `testv3sfoto …` | místo vejtřasek koupí na okruh deset Tater z verze 10 (`MAXd`, `MAXe`, čísla `0x0102` až `0x0105`): sklápěč s uhlím, cisterny s vodou, ropou a kyselinou, valník s obilím, pivo v cisterně Plzeň, zelená s vojenskou technikou a uranem, plachta s ocelí, kravičky (seznam `nakupy_tatra`) |
 | `TEST_FOTO_SADA=brambory` + `testv3sfoto …` | od verze 12: vejtřaska modrá s BRAM na kupě a v pytlích, s BEAN a pro srovnání s JAVA, zelená s BRAM a BEAN, Tatra 148 s BRAM a BEAN, Tatra 138 s BRAM v pytlích a valník brambor TAZ 1203 z dodávek v5 (`MAX\x08` `0x0088`) s BRAM (seznam `nakupy_brambory`; potřebuje `zkusebni_naklady.grf` s BRAM a BEAN) |
 | `TEST_FOTO_SADA=studentky` + `testv3sfoto …` | od verze 13: studentky na korbě (STUD) u modré a zelené vejtřasky, Tatry 148 a 138 v normální i zelené přestavbě, malé i velké (seznam `nakupy_studentky`) |
+| `TEST_FOTO_NAKLADANI=1` + `testv3sfoto … 2 300` | od verze 14: každá lichá fotka s auty zastavenými ve stavu nakládání (obrázek „na zastávce“, u studentek stojící; za jízdy sedí). Zastavené auto hra nenakládá, takže nevadí, že nestojí v zastávce |
 | `testpruhy x\|y [tiků] [kolona]` | pořadí kreslení aut proti sobě (29. 9.): postaví tři rovné silnice podél osy X (SV–JZ) nebo Y (SZ–JV) a na každou osm dvojic stojících aut proti sobě, zadní a přední pruh, čela od sebe 0 až 14/16 dlaždice (celé míjení); s `kolona` místo dvojic zácpu v obou pruzích. Auta: TAZ 1500 bus zahrádka, TAZ 1203 plachta a VW T1 z GRF VW T1 (`auta/VWT1-S1203-clanky-oba-na-stred.grf` musí být v domově) a Tatry z verze 10. Vypíše krabice dílů (`PRUHY: … box x … y …`), vyfotí a skončí; vystřihnout dvojice umí `hra/poradi-kresleni/vystrih.py`. Jiná auta: `TEST_PRUHY_AUTA="MAXe:0102/MAXe:0103;4D415808:0093/4D415808:0092;…"` (po řadách zadní/přední pruh, GRF jako 4 znaky nebo 8 šestnáctkových číslic); s `mrizka` stejná dvojice (odstup `TEST_PRUHY_ODSTUP`, jinak 6) posunutá po dlaždici. CZTR Truck Set chce svoje silnice, na zkoušku mu stačí přesměrovat je na `RT14`, a starší auta chtějí `setting vehicle.never_expire_vehicles 1` |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
 
@@ -103,7 +104,8 @@ python3 hra/nahled_ve_hre.py socha/nahled_ve_hre.png "socha/socha_kamen_zin4.png
 - **Země v okruhu leží ve výšce 16** (auta tam mají `z 16`), dlaždice je proto o 64 px výš. Do 1. 10. jsem to
   vynechával a všechny náhledy (gymnázium, automat, socha) byly o půl políčka níž; u automatu pak křoví lezlo na
   silnici, ve hře ne.
-- **Políčko ve hře má 256 × 124 px**, ne 256 × 128 jako render: obrázek se svisle stáhne na 124/128.
+- **Políčko ve hře má 256 × 128 px** jako render 2 : 1, nic se nestahuje (oprava od hry 1. 10. večer: dlaždice
+  mají rozestup 32 px, 31 řádků rovné dlaždice je jen pixelové kreslení; do té doby se tu omylem stahovalo na 124/128).
 - **Severní roh dlaždice leží ve hře o 4 px vpravo** od hranice pixelu, kam ho klade render.
 
 Poslední dvě věci jsou ze zprávy od hry (`zarovnani-budov/ZPRAVA-OD-HRY.md`). Silnice okruhu vede po y = 12 a 18
