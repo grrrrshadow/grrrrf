@@ -34,3 +34,26 @@ Obrázky sochy jsou nové, oba páry (bez dívek a s dívkami, kamenná i bronzo
 dlažby je tmavě zelený pás keřů a jsou tam rostliny marihuany, velké vzadu za lavičkami až 5 m. Velké rostliny lezou
 jen nahoru (nejvyšší pixel je 28 px od horního okraje obrázku po stažení), pod přední hranu ani do stran nic. Rohy
 pozemku v JSONu zůstaly stejné. Text uvedení autorů v `AUTORI-MODELU.md` má nově i dvě rostliny marihuany.
+
+## Zastávka, auta a brambory (1. 10. večer)
+
+Rozhodnutí hráče, která se týkají hry:
+
+- **Dívky na zastávce** (`zastavka/README.md`):
+  - jsou tam **jen když na zastávce čekají cestující** (*„jo bude tam jen když budou cestující“*);
+  - velikost 2× jako budovy;
+  - podél X dvě (druhá je jen tmavovlasá College Girl), podél Y jedna;
+  - obrázky a posuny od severního rohu dlaždice jsou v README.
+- **Holky u dveří aut** jsou hotové v GRF dodávek (`auta/dodavky_BRYLE_v5.grf`) a ve hře se nic měnit nemusí:
+  - kreslí je samo GRF jako další obrázek přes auto (sprite stack), když auto na zastávce nakládá;
+  - týká se TAZ 1203 a TAZ 1500 busů a Pajdy karavanu;
+  - popis je v `holky-u-aut/README.md`.
+
+  Na původních zastávkách hry je u bližšího pruhu schová zadní stěna přístřešku. Hráč to tak chce nechat (*„radši
+  předělám původní zastávku než holky“*).
+- **Nový náklad BRAM** (naše brambory, hráč: *„uděláme si svoje brambory“*):
+  - kód je na konci vzorové tabulky (`prekladova-tabulka-vzor.yagl`, slot 0xDC);
+  - vozí ho V3S a Tatry v12 (kupa a pytle), valník brambor a dodávky v5;
+  - fazole BEAN jsou nově v hnědých pytlích.
+
+  Aby BRAM ve hře existoval, musí ho nadefinovat průmysl (Action 0 feature 0B, label BRAM).
