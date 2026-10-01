@@ -3,7 +3,8 @@
 # z kamene a bronzovou, karel macha bude mit kapucu, vousy a obrovskyho dzonta v ruce, ruce bude mit od sebe jako by
 # se chystal obejmout neco velkyho, okolo lavicky, male krovicko, odpadak, odpadky").
 # Pak (hrac): "ruce trochu niz, ne podel tela, neco mezi tim, vousy po pupek dlouhy a jointa vic do trychtyre, sirsi na
-# konci" a "mnohem mene stinu".
+# konci" a "mnohem mene stinu". Pak zhavy popel a kour z jointu, tmave zeleny pas keru kolem dlazby a rostliny
+# marihuany (velke vzadu za lavickami, male vpredu, zelene jako naklad MARI; rostliny/rostliny.py).
 # Vlastni model, kamera a meritko jako automat (automat/render_automat.py), vsechno dvakrat vetsi (MERITKO 2) jako
 # automat, at to k sobe sedi. Slunce slabsi a okoli silnejsi nez u automatu, stin na travu jen 20 %.
 #   python3 render_socha.py <vystup.png>          SOCHA=kamen (sediva z kamene) nebo SOCHA=bronz
@@ -194,11 +195,56 @@ def ker(cx, cy, r, vyska, materialy, seed, chumacu=9, deleni=3):
             n2 = noise.noise(v.co / (0.09 * K * 4) + posun) * 0.5 + noise.noise(v.co / (0.09 * K * 2) + posun) * 0.25
             v.co += smer * n2 * rr * 0.55 * K
         for f in {f for v in nove_v for f in v.link_faces}: f.smooth = True
-# male krovicko v rozich policka mimo namesticko
-OKR = C - (T / 2) / K                          # hrana policka v souradnicich skupiny
-for i, (x, y) in enumerate(((OKR + 0.5, OKR + 0.5), (OKR + 0.5, 2 * C - OKR - 0.5), (2 * C - OKR - 0.5, OKR + 0.5),
-                            (2 * C - OKR - 0.55, 2 * C - OKR - 0.55))):
-    ker(x, y, 0.42, 0.7, [M["ker"], M["ker2"]], 40 + i, chumacu=8)
+# tmave zeleny pas nizkych keru kolem dlazby az k hrane policka (hrac: "to krovi je stejnou barvou jako zem, zanika,
+# neni videt. udelej tam tmavou zelenou okolo dlazby"). Chomacky primo v siti jako ker(), nahodne hustě vedle sebe;
+# zadny nesmi presahnout hranu policka (dosah = polomer i s hrbolky), dovnitr kousek pres obrubnik.
+M["ker_t1"] = mat("ker_t1", (26, 56, 22), 0.9, sum_=0.35, meritko=9.0)
+M["ker_t2"] = mat("ker_t2", (36, 72, 30), 0.9, sum_=0.3, meritko=9.0)
+M["ker_t3"] = mat("ker_t3", (31, 64, 25), 0.9, sum_=0.3, meritko=11.0)
+POLE = T / 2 / K                                   # od stredu k hrane policka (skupina)
+def pas_keru():
+    rnd = random.Random(77)
+    hotove = []
+    for _ in range(9000):
+        dx, dy = rnd.uniform(-POLE, POLE), rnd.uniform(-POLE, POLE)
+        rr = rnd.uniform(0.13, 0.2)
+        dosah = rr * 1.45
+        mx = max(abs(dx), abs(dy))
+        if mx + dosah > POLE - 0.04 or mx < 2.8 - 0.06:
+            continue
+        if any((dx - hx) ** 2 + (dy - hy) ** 2 < (0.55 * (rr + hr)) ** 2 for hx, hy, hr in hotove):
+            continue
+        hotove.append((dx, dy, rr))
+    for i, (dx, dy, rr) in enumerate(hotove):
+        zc = rr * 0.55 + rnd.uniform(0.0, 0.14)
+        stred_ = B(C + dx, C + dy, zc)
+        bm = bm_pro(rnd.choice([M["ker_t1"], M["ker_t2"], M["ker_t3"]]))
+        nove_v = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=rr * K, matrix=Matrix.Translation(stred_))["verts"]
+        posun = Vector((rnd.random(), rnd.random(), rnd.random())) * 100
+        for v in nove_v:
+            smer_ = (v.co - stred_).normalized()
+            n2 = noise.noise(v.co / (0.09 * K * 4) + posun) * 0.5 + noise.noise(v.co / (0.09 * K * 2) + posun) * 0.25
+            v.co += smer_ * n2 * rr * 0.55 * K
+            if v.co.z < 0: v.co.z = 0.0
+        for f in {f for v in nove_v for f in v.link_faces}: f.smooth = True
+    print("pas keru:", len(hotove), "chomacku")
+pas_keru()
+
+# rostliny marihuany, zelene jako naklad MARI (hrac: "odstinem je odlis od krovi", "odstin zelene z nakladu mari"):
+# velke na severovychodni a severozapadni strane za lavickami a v rohu mezi nimi (hrac: "kytky rostou 5 metru vysoko,
+# na severovychodni a severozapadni strane muzou byt kytky marihuany velky jako socha", "dopredu maly, velky sv a sz
+# dozadu za lavicky"), male vpredu v pasu keru. Koruna velkych nejvys 0,9 m od kmene, at nesaha na operadla, malych
+# 0,38 m, at nepresahnou predni hranu policka.
+sys.path.insert(0, os.path.join(TU, "..", "rostliny"))
+import rostliny as RO
+VYSOKA = RO.nacti("cannabis_plant"); KOSATA = RO.nacti("cannabis_sativa_plant")       # mala ridka (small_cannabis_plant) neni videt
+for dx, dy, vys, druh, ot in ((-3.35, -3.35, 5.0, VYSOKA, 0.4),                                  # roh mezi lavickami
+                              (-0.65, -3.4, 4.4, KOSATA, 3.0), (0.65, -3.4, 4.7, VYSOKA, 4.1),   # za severozapadni
+                              (-3.4, -0.65, 4.6, VYSOKA, 2.2), (-3.4, 0.65, 4.3, KOSATA, 1.3)):  # za severovychodni
+    RO.postav(druh[0], druh[1], Matrix.Translation(B(C + dx, C + dy, 0)), vys * K, 0.9 * K, ot)
+for dx, dy, vys, ot in ((3.28, -2.3, 1.35, 0.3), (3.28, -1.0, 1.2, 2.0), (3.28, 2.3, 1.4, 4.4),          # jihozapadni strana
+                        (-2.3, 3.28, 1.4, 1.1), (-1.0, 3.28, 1.25, 3.3), (2.3, 3.28, 1.3, 5.2)):          # jihovychodni
+    RO.postav(KOSATA[0], KOSATA[1], Matrix.Translation(B(C + dx, C + dy, 0)), vys * K, 0.38 * K, ot)   # mala kosata
 
 rnd_o = random.Random(11)
 def odpadek(x, y, z0=0.0):
@@ -337,18 +383,96 @@ for o in VOUSY_OBJ: o.data.materials[0] = M["vousy"]
 elipsoid("kapsa", (0, 0.13, 1.0), (0.15, 0.028, 0.075))                      # klokani kapsa mikiny, kousek pod vousy
 
 # obrovsky joint v prave ruce jako trychtyr (hrac: "zvyraznit trychtyrovitost, sirsi na konci"; rovny tlusty kuzel byl
-# "americky typu fat"): u prstu tenky filtr, pak rovny kuzel az do sirokeho konce, ten je useknuty a uprostred
-# zakrouceny do male spicky
+# "americky typu fat"): u prstu tenky filtr, pak rovny kuzel az do sirokeho konce. Ten hori (hrac: "udelame na konci
+# zhavej popel a dym z dzonta"): na useknutem okraji papiru je nizka kupka popela, mista na ni zhavi, a z ni stoupa kour.
 ruka = Vector(KOSTI["ruka_p"])
 smer = Vector((0.55, 0.2, 0.8)).normalized()
 u_ = smer.orthogonal().normalized(); v_ = smer.cross(u_)
 PROFIL = [(0.0, 0.016), (0.08, 0.018), (0.085, 0.022), (0.10, 0.022)]                       # (od konce v puse, polomer)
 PROFIL += [(0.10 + 0.74 * i / 8, 0.022 + 0.11 * i / 8) for i in range(1, 9)]              # rozevira se az na 0,132
-PROFIL += [(0.85, 0.128), (0.862, 0.11), (0.872, 0.075), (0.878, 0.04), (0.885, 0.018), (0.905, 0.008)]
 zac = ruka - smer * 0.06                                                                     # filtr mezi prsty
-kruhy = [[zac + smer * s + (u_ * math.cos(2 * math.pi * k / 24) + v_ * math.sin(2 * math.pi * k / 24)) * r for k in range(24)]
-         for s, r in PROFIL]
-loft("joint", kruhy, konec=zac + smer * 0.925)
+def kruh_j(s, r, n=24):
+    return [zac + smer * s + (u_ * math.cos(2 * math.pi * k / n) + v_ * math.sin(2 * math.pi * k / n)) * r for k in range(n)]
+loft("joint", [kruh_j(s, r) for s, r in PROFIL])                  # konec je rovny, zakryje ho popel
+
+def zhavy_popel():
+    """popel: tmave sedy a drsny; kde je sum vys, zhavi oranzove, a v zhavem cervene body (hrac: "cerveny body v tom
+    zhavym"). Barvy svitu jsou syte a ne moc silne, jinak je prevod barev (AgX) vybeli do ruzova."""
+    m = bpy.data.materials.new("zhavy_popel"); m.use_nodes = True
+    t = m.node_tree; b = t.nodes["Principled BSDF"]
+    b.inputs["Roughness"].default_value = 1.0
+    tc = t.nodes.new('ShaderNodeTexCoord')
+    sm = t.nodes.new('ShaderNodeTexNoise'); sm.inputs["Scale"].default_value = 40.0; sm.inputs["Detail"].default_value = 4.0
+    t.links.new(tc.outputs["Object"], sm.inputs["Vector"])
+    zar = t.nodes.new('ShaderNodeMapRange'); zar.inputs["From Min"].default_value = 0.40; zar.inputs["From Max"].default_value = 0.52
+    t.links.new(sm.outputs["Fac"], zar.inputs["Value"])
+    vor = t.nodes.new('ShaderNodeTexVoronoi'); vor.inputs["Scale"].default_value = 11.0           # body asi 2 px ve hre
+    t.links.new(tc.outputs["Object"], vor.inputs["Vector"])
+    body = t.nodes.new('ShaderNodeMapRange'); body.inputs["From Min"].default_value = 0.22; body.inputs["From Max"].default_value = 0.38
+    body.inputs["To Min"].default_value = 1.0; body.inputs["To Max"].default_value = 0.0
+    t.links.new(vor.outputs["Distance"], body.inputs["Value"])
+    # cervene body hlavne v zhavem: body * (0,4 + 0,6 * zar)
+    zz = t.nodes.new('ShaderNodeMapRange'); zz.inputs["To Min"].default_value = 0.4; zz.inputs["To Max"].default_value = 1.0
+    t.links.new(zar.outputs["Result"], zz.inputs["Value"])
+    bz = t.nodes.new('ShaderNodeMath'); bz.operation = 'MULTIPLY'
+    t.links.new(body.outputs["Result"], bz.inputs[0]); t.links.new(zz.outputs["Result"], bz.inputs[1])
+    barva = t.nodes.new('ShaderNodeMix'); barva.data_type = 'RGBA'
+    barva.inputs["A"].default_value = (1.0, 0.22, 0.0, 1.0); barva.inputs["B"].default_value = (1.0, 0.0, 0.0, 1.0)
+    t.links.new(bz.outputs[0], barva.inputs["Factor"])
+    t.links.new(barva.outputs["Result"], b.inputs["Emission Color"])
+    s1 = t.nodes.new('ShaderNodeMath'); s1.operation = 'MULTIPLY'; s1.inputs[1].default_value = float(os.environ.get("ZAR", "1.3"))
+    t.links.new(zar.outputs["Result"], s1.inputs[0])
+    s2 = t.nodes.new('ShaderNodeMath'); s2.operation = 'MULTIPLY_ADD'; s2.inputs[1].default_value = 1.6
+    t.links.new(bz.outputs[0], s2.inputs[0]); t.links.new(s1.outputs[0], s2.inputs[2])
+    t.links.new(s2.outputs[0], b.inputs["Emission Strength"])
+    zaklad = t.nodes.new('ShaderNodeMix'); zaklad.data_type = 'RGBA'
+    zaklad.inputs["A"].default_value = srgb((56, 53, 50)); zaklad.inputs["B"].default_value = srgb((120, 10, 2))
+    mx = t.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'
+    t.links.new(zar.outputs["Result"], mx.inputs[0]); t.links.new(bz.outputs[0], mx.inputs[1])
+    t.links.new(mx.outputs[0], zaklad.inputs["Factor"]); t.links.new(zaklad.outputs["Result"], b.inputs["Base Color"])
+    return m
+popel = loft("popel", [kruh_j(0.836, 0.130), kruh_j(0.848, 0.125), kruh_j(0.858, 0.108), kruh_j(0.866, 0.078),
+                       kruh_j(0.871, 0.042)], konec=zac + smer * 0.874)
+popel.data.materials[0] = zhavy_popel()
+
+# kour: tenky pramen z popela rovnou nahoru, kousek se stacuje stranou od Karlovy hlavy (k jeho pravici, na obrazku
+# doleva) a dozadu, smerem nahoru se rozsiruje a ridne. Objem s hustotou ze sumu (chomacky), zespodu hustsi.
+P0 = zac + smer * 0.874
+DYM_V = 0.85                                                       # jak vysoko (mistni jednotky postavy 1,8 m)
+def dym_material():
+    m = bpy.data.materials.new("dym"); m.use_nodes = True
+    t = m.node_tree
+    for n in list(t.nodes):
+        if n.type != 'OUTPUT_MATERIAL':
+            t.nodes.remove(n)
+    out = next(n for n in t.nodes if n.type == 'OUTPUT_MATERIAL')
+    pv = t.nodes.new('ShaderNodeVolumePrincipled')
+    pv.inputs["Color"].default_value = (0.93, 0.93, 0.95, 1.0); pv.inputs["Anisotropy"].default_value = 0.25
+    pv.inputs["Absorption Color"].default_value = (0.75, 0.75, 0.77, 1.0)        # svetly kour, ne tmave sedy
+    tc = t.nodes.new('ShaderNodeTexCoord')
+    sep = t.nodes.new('ShaderNodeSeparateXYZ'); t.links.new(tc.outputs["Object"], sep.inputs[0])
+    sm = t.nodes.new('ShaderNodeTexNoise'); sm.inputs["Scale"].default_value = 14.0; sm.inputs["Detail"].default_value = 3.0
+    t.links.new(tc.outputs["Object"], sm.inputs["Vector"])
+    chom = t.nodes.new('ShaderNodeMapRange'); chom.inputs["From Min"].default_value = 0.35; chom.inputs["From Max"].default_value = 0.62
+    t.links.new(sm.outputs["Fac"], chom.inputs["Value"])
+    vys = t.nodes.new('ShaderNodeMapRange')
+    vys.inputs["From Min"].default_value = P0.z; vys.inputs["From Max"].default_value = P0.z + DYM_V
+    vys.inputs["To Min"].default_value = 1.0; vys.inputs["To Max"].default_value = 0.0
+    t.links.new(sep.outputs["Z"], vys.inputs["Value"])
+    m1 = t.nodes.new('ShaderNodeMath'); m1.operation = 'MULTIPLY'
+    t.links.new(chom.outputs["Result"], m1.inputs[0]); t.links.new(vys.outputs["Result"], m1.inputs[1])
+    m2 = t.nodes.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = float(os.environ.get("DYM", "18.0"))
+    t.links.new(m1.outputs[0], m2.inputs[0]); t.links.new(m2.outputs[0], pv.inputs["Density"])
+    t.links.new(pv.outputs["Volume"], out.inputs["Volume"])
+    return m
+kruhy_dym = []
+for i in range(22):
+    tt = i / 21
+    stred = P0 + Vector((0.18 * tt + 0.04 * math.sin(2 * math.pi * 1.3 * tt), -0.08 * tt, DYM_V * tt))
+    r = 0.026 + 0.15 * tt ** 0.8
+    kruhy_dym.append([stred + Vector((math.cos(2 * math.pi * k / 16), math.sin(2 * math.pi * k / 16), 0)) * r for k in range(16)])
+dym = loft("dym", kruhy_dym)
+dym.data.materials[0] = dym_material()
 
 koren.location = B(C, C, Z_PODST)
 koren.rotation_euler = (0, 0, math.radians(-135))     # misto +y (dopredu) miri k jihu (na policku +x +y)

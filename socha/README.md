@@ -16,13 +16,22 @@ Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfot
   špičky. Stojí čelem k divákovi (k jihu).
 - **Dvě verze:** šedá z kamene a bronzová (kov se zelenavou patinou na místech). U kamenné jsou vousy hrubě tesané
   a o kousek tmavší, jinak by se při slabých stínech ztratily na mikině. Jinak jsou obě stejné.
+- **Joint hoří** (hráč: *„uděláme na konci žhavej popel a dým z džonta“*, *„červený body v tom žhavym“*): na
+  širokém konci je místo zakroucené špičky nízká kupka popela, na ní žhaví oranžová místa s červenými body, a z ní
+  stoupá tenký pramen kouře, nahoře se rozšiřuje, řídne a stáčí stranou od Karlovy hlavy.
 - **Podstavec** ze žuly: schod, kvádr a římsa, nahoře 1,4 m. Na obou předních stěnách (ty, co jsou vidět)
   bronzová deska s vystouplým nápisem KAREL MÁCHA.
 - **Kolem:** náměstíčko z dlaždic 50 cm s obrubníkem uprostřed políčka. Tři lavičky čelem k soše: dvě za ní,
   jedna vpravo vpředu; vlevo vpředu je volno, aby byla vidět deska. Vedle pravé zadní lavičky zelený koš,
   plný až přes okraj. **Odpadky** jako u automatu (papíry, sáčky, plechovky, PET lahve, kelímky, zelené balíčky
-  z automatu), nejvíc kolem koše a pod lavičkami, pod podstavcem nic. **Malé křovíčko** v rozích políčka mimo
-  dlažbu (to v severním rohu je schované za sochou).
+  z automatu), nejvíc kolem koše a pod lavičkami, pod podstavcem nic. Kolem dlažby až k okraji políčka **tmavě
+  zelený pás nízkých keřů** (hráč: *„to křoví je stejnou barvou jako zem, zaniká, udělej tam tmavou zelenou okolo
+  dlažby“*).
+- **Rostliny marihuany** (hráč: *„kytky rostou 5 metrů vysoko, na severovýchodní a severozápadní straně můžou být
+  kytky marihuany velký jako socha“*, *„dopředu malý, velký SV a SZ dozadu za lavičky“*, *„odstín zelené z nákladu
+  MARI“*): za oběma zadními lavičkami a v rohu mezi nimi pět velkých, 4,3 až 5 m, vpředu v pásu keřů šest malých,
+  1,2 až 1,4 m. Zelené jako kupka MARI na korbě V3S, světlejší než keře. Koruny velkých jsou jen 0,9 m od kmene,
+  aby nesahaly na operadla a dívky, a žádná rostlina nepřečuhuje do stran ani pod přední hranu, jen nahoru.
 - **Dvakrát větší** jako automat: postava i s kapucí asi 4,8 m, s podstavcem 7,6 m, náměstíčko 11,2 × 11,2 m
   (políčko má 14,8 m). Ve skutečné velikosti by postava měla při přiblížení 4× jen asi 25 px.
 
@@ -58,8 +67,8 @@ dvě na jednu lavičku, jednu na jednu a na třetí nezbyde“*, *„měřítko 
 | `animace_ve_hre.gif` | obě sochy ve fotce ze hry, střídá se bez postav a s postavami |
 | `zblizka_postavy.png` | obě sochy s postavami vedle sebe zblízka |
 
-Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 15 s).
-S postavami `POSTAVY=1 SOCHA=kamen python3 render_socha.py <s_postavami.png>` (asi 25 s) a pak
+Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 35 s, výstup s celou cestou).
+S postavami `POSTAVY=1 SOCHA=kamen python3 render_socha.py <s_postavami.png>` (asi 45 s) a pak
 `python3 ../postavy/animace.py socha_kamen_zin4.png <s_postavami.png> socha_kamen_postavy_zin4.png`.
 `MERITKO=1` dá skutečnou velikost, `SLUNCE`, `OKOLI` a `STIN` mění světlo (teď 2,0, 0,9 a 0,2; automat má 5,0, 0,35
 a 0,55). Tělo je kostra s modifikátorem Skin a vyhlazením, takže je hladké jako tesané nebo lité; kapuce je

@@ -29,11 +29,11 @@ musí NC převzít.
 | [Shonan](https://sketchfab.com/shonan) | Just a truck (`zukvalnik.glb`) | CC-BY-4.0 | par6 |
 | [Soviet Model Magic](https://sketchfab.com/mckadefasel) | Energia Rocket (untextured) (`energia_rocket_untextured.glb`) | CC-BY-4.0 | par6 |
 | [squalll_999](https://sketchfab.com/squalll_999) | Girl Bikini (`girl_bikini.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
-| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6 |
+| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`) |
 | [tashtego](https://sketchfab.com/tashtego) | Space Shuttle Buran (`space_shuttle_buran.glb`) | CC-BY-NC-4.0 | par6 |
 | [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
 | [Thcyrax](https://sketchfab.com/thcyrax) | Vehicle - Ural Truck 44202 (`vehicle_-_ural_truck_44202.glb`) | CC-BY-4.0 | par6 |
-| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6 |
+| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`) |
 | ? (v souboru není) | v3s_praga.glb (`v3s_praga.glb`); bsg_shuttle_mk_ii_olympic_carriers_fanon.glb (`bsg_shuttle_mk_ii_olympic_carriers_fanon.glb`) | ? | par6 |
 
 Bez metadat v par6:
@@ -61,7 +61,13 @@ vezme i uvedení autorů níže. Vzkaz pro ni je v `hra/zarovnani-budov/ODPOVED-
 | Galaxia anime girl | Tatenashi | sedí na severozápadní lavičce | bez koule, která je v souboru navíc, posazená kostrou |
 | Girl Bikini | squalll_999 | kráčí přes náměstíčko, kde by byla čtvrtá lavička | nohy v síti k sobě a do kroku |
 
-U všech: zmenšené k lavičkám (1,58 až 1,68 m) a vyfocené do obrázku ve hře. Uvedení pro hru:
+U všech: zmenšené k lavičkám (1,58 až 1,68 m) a vyfocené do obrázku ve hře.
+
+Na obou obrázcích sochy (s dívkami i bez nich) jsou navíc rostliny marihuany z releasu `par6` (`rostliny/`):
+**Cannabis Plant** od streetpharmacy (vysoké) a **Cannabis Sativa plant** od Zbrojmistrz (košaté, bez květináče),
+obě CC BY 4.0, přebarvené na zelenou nákladu MARI a zvětšené (velké 4,3 až 5 m, malé 1,2 až 1,4 m, koruny zúžené).
+
+Uvedení pro hru:
 
 ```
 Figures at the statue of Karel Mácha (Postavy u sochy Karla Máchy):
@@ -77,6 +83,14 @@ Figures at the statue of Karel Mácha (Postavy u sochy Karla Máchy):
     https://sketchfab.com/3d-models/girl-bikini-e37d927aabc44044abfd22041eb1a1bd
 All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
 Changes: posed (sitting, walking, hugging), scaled to the benches and rendered into the sprite.
+
+Cannabis plants at the statue of Karel Mácha (Rostliny marihuany u sochy Karla Máchy):
+"Cannabis Plant" by streetpharmacy
+    https://sketchfab.com/3d-models/cannabis-plant-79fe78fd6c6a426b8584115e772a5818
+"Cannabis Sativa plant" by Zbrojmistrz
+    https://sketchfab.com/3d-models/cannabis-sativa-plant-ea31a5768c06457ea2fd67c3eb3458b8
+Both licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Changes: recoloured, scaled, the pot removed, rendered into the sprite.
 ```
 
 Budovy samotné (dívčí gymnázium, automat, socha Karla Máchy s lavičkami, košem, keři a odpadky) jsou vlastní

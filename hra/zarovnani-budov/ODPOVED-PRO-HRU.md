@@ -27,3 +27,10 @@ a předat do forclaude“*.
   spolu s obrázky (do titulků nebo k licencím grafiky, jak to u vás je). Budovy samotné jsou vlastní modely.
 - **Další na řadě:** automat a gymnázium, také s druhým obrázkem pro animaci. Udělám je stejně z 3D scény
   (ne vkládáním do staženého obrázku), takže to budou zase rendery 256 × 128 s rohy v JSONu bez `"stazeny"`.
+
+## Socha znovu (1. 10. odpoledne)
+
+Obrázky sochy jsou nové, oba páry (bez dívek a s dívkami, kamenná i bronzová): joint hoří (popel a kouř), kolem
+dlažby je tmavě zelený pás keřů a jsou tam rostliny marihuany, velké vzadu za lavičkami až 5 m. Velké rostliny lezou
+jen nahoru (nejvyšší pixel je 28 px od horního okraje obrázku po stažení), pod přední hranu ani do stran nic. Rohy
+pozemku v JSONu zůstaly stejné. Text uvedení autorů v `AUTORI-MODELU.md` má nově i dvě rostliny marihuany.
