@@ -29,11 +29,11 @@ musí NC převzít.
 | [Shonan](https://sketchfab.com/shonan) | Just a truck (`zukvalnik.glb`) | CC-BY-4.0 | par6 |
 | [Soviet Model Magic](https://sketchfab.com/mckadefasel) | Energia Rocket (untextured) (`energia_rocket_untextured.glb`) | CC-BY-4.0 | par6 |
 | [squalll_999](https://sketchfab.com/squalll_999) | Girl Bikini (`girl_bikini.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
-| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`) |
+| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`), Small Cannabis Plant a Cannabis Plant na marihuanové plantáži (`pole/`) |
 | [tashtego](https://sketchfab.com/tashtego) | Space Shuttle Buran (`space_shuttle_buran.glb`) | CC-BY-NC-4.0 | par6 |
 | [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13), automat a gymnázium s holkami |
 | [Thcyrax](https://sketchfab.com/thcyrax) | Vehicle - Ural Truck 44202 (`vehicle_-_ural_truck_44202.glb`) | CC-BY-4.0 | par6 |
-| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`) |
+| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`) a na marihuanové plantáži (`pole/`) |
 | ? (v souboru není) | v3s_praga.glb (`v3s_praga.glb`); bsg_shuttle_mk_ii_olympic_carriers_fanon.glb (`bsg_shuttle_mk_ii_olympic_carriers_fanon.glb`) | ? | par6 |
 
 Bez metadat v par6:
@@ -128,6 +128,32 @@ Figures at the vending machine and the girls' grammar school (Postavy u automatu
 All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
 Changes: posed (sitting, standing, paying at the machine, shooting a basket), scaled to the benches and rendered
 into the sprite.
+```
+
+## Rostliny na marihuanové plantáži (2026-10-01)
+
+Obrázky plantáže (`pole/pole_marihuany_faze1_zin4.png`, `pole/pole_marihuany_faze2_zin4.png`) mají rostliny
+z `rostliny/` (release `par6`, CC BY 4.0), hráč: *„vem si objekty kytek na to pole marihuany“*. Políčko brambor
+(`pole/pole_brambor_zin4.png`) je celé vlastní.
+
+| model | autor | kde |
+|---|---|---|
+| Cannabis Sativa plant | Zbrojmistrz | v první fázi se zkráceným vrškem jako keř, ve druhé fázi jak je |
+| Small Cannabis Plant | streetpharmacy | v první fázi přes keř, kvůli velkým listům |
+| Cannabis Plant | streetpharmacy | ve druhé fázi čtvrtina rostlin (štíhlé) |
+
+Uvedení pro hru:
+
+```
+Cannabis plants on the marijuana plantation (Rostliny na marihuanové plantáži):
+"Cannabis Sativa plant" by Zbrojmistrz
+    https://sketchfab.com/3d-models/cannabis-sativa-plant-ea31a5768c06457ea2fd67c3eb3458b8
+"Small Cannabis Plant" by streetpharmacy
+    https://sketchfab.com/3d-models/small-cannabis-plant-73637ede37884a56bcb0f7e5d75b2ff8
+"Cannabis Plant" by streetpharmacy
+    https://sketchfab.com/3d-models/cannabis-plant-79fe78fd6c6a426b8584115e772a5818
+All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Changes: recoloured, reshaped into bushes (first stage), scaled, the pot removed, rendered into the sprite.
 ```
 
 ## Opis hráčova lístku (2026-09-28)

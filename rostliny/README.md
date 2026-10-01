@@ -5,9 +5,9 @@ jsou v `../AUTORI-MODELU.md`.
 
 | soubor | model, autor | použití |
 |---|---|---|
-| `cannabis_plant.glb` | Cannabis Plant, streetpharmacy | vysoká štíhlá rostlina, u sochy velké vzadu |
-| `cannabis_sativa_plant.glb` | Cannabis Sativa plant, Zbrojmistrz | košatá, v souboru je i s květináčem (ten se zahodí), u sochy velké i malé |
-| `small_cannabis_plant.glb` | Small Cannabis Plant, streetpharmacy | řídká mladá rostlinka; ve velikosti hry skoro není vidět, zatím nepoužitá |
+| `cannabis_plant.glb` | Cannabis Plant, streetpharmacy | vysoká štíhlá rostlina, u sochy velké vzadu, na plantáži (`pole/`) ve druhé fázi |
+| `cannabis_sativa_plant.glb` | Cannabis Sativa plant, Zbrojmistrz | košatá, v souboru je i s květináčem (ten se zahodí), u sochy velké i malé, na plantáži v obou fázích |
+| `small_cannabis_plant.glb` | Small Cannabis Plant, streetpharmacy | řídká mladá rostlinka s velkými listy; sama ve velikosti hry skoro není vidět, na plantáži v první fázi přes keř |
 
 `rostliny.py`: načtení bez květináče, přebarvení listů na zelenou nákladu MARI (jas textury → přechod mezi
 (48, 98, 10) a (94, 144, 26) jako kupka marihuany na V3S) a postavení více kusů se společnou sítí; když by

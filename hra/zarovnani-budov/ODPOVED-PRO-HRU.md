@@ -82,3 +82,28 @@ Hráč: *„spawnem holky kolem školy a automatu“*. Jsou to druhé obrázky d
   (čtyři dívky ze Sketchfabu, CC BY 4.0). Prosím vezměte ho do hry spolu s obrázky.
 - **Váš náklad STUD** (`efec273`): studentky na korbě V3S a Tater v13 hledají náklad podle štítku STUD, takže by se
   měly ukázat i s vaším nákladem. Ve hře s průmyslem to ještě vyzkoušené není, hráč to projede, až bude build hotový.
+
+## Marihuanová plantáž a políčko brambor (1. 10. večer)
+
+Hráč: *„uděláme pole marihuany 4x5 a políčko brambor 3x3“*, *„obrázek nahradí marihuanovou plantáž“*, *„to bude
+první fáze růstu na marihuanovým poli a druhá fáze udělej ty špičatý smrčky vysoký“*, u brambor *„to stačí tenhle
+jeden obrázek bez fází růstu“*. Obrázky jsou v `pole/`, popis v `pole/README.md`.
+
+| obrázek | políček (x × y) | velikost | rohy: sever, východ, západ, jih |
+|---|---|---|---|
+| `pole/pole_marihuany_faze1_zin4.png` | 5 × 4 | 1216 × 704 | (672, 96), (1184, 352), (32, 416), (544, 672) |
+| `pole/pole_marihuany_faze2_zin4.png` | 5 × 4 | 1216 × 704 | stejné |
+| `pole/pole_brambor_zin4.png` | 3 × 3 | 832 × 512 | (416, 96), (800, 288), (32, 288), (416, 480) |
+
+- **Plantáž je na rozložení vaší plantáže**, tedy ovocné plantáže základní grafiky (`_tile_table_fruit_plantation_0`:
+  x 0 až 4, y 0 až 3). Hráč chce, aby obrázek nahradil její grafiku.
+- **Dvě fáze růstu plantáže:** keře, pak vysoké špičaté rostliny. Rostliny stojí v obou fázích na stejných místech,
+  kůlna, cesta a záhony jsou stejné. Jak fáze použít (třeba jako růst polí u farmy), je na vás.
+- **Brambory** jsou obrázek pro průmysl s nákladem BRAM (ten zatím ve hře není, viz výš).
+- **Jako gymnázium:** rendery s políčkem 256 × 128, bez `"stazeny"`, severní roh na celém pixelu dělitelném 4. JSON
+  má navíc `policek` a `obrazek` (šířka, výška), protože obrázky nejsou čtvercové.
+- **Země:** pole je neprůhledné (zemina, záhony, cesta). Jen 25 cm u hran pozemku je průhledno, tam bude tráva hry.
+- **Nic nepřečuhuje** pod přední hrany ani do stran, rostliny jsou celé uvnitř pozemku a lezou jen nahoru. Změřeno:
+  mimo kosočtverec pozemku je jen pár pixelů okraje stínu s alfou nejvýš 8 z 255, tedy neviditelně.
+- **Licence:** rostliny na plantáži jsou modely ze Sketchfabu (CC BY 4.0). Text uvedení je v `AUTORI-MODELU.md`
+  v oddílu „Rostliny na marihuanové plantáži“. Brambory jsou celé vlastní.
