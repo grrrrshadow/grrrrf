@@ -2,17 +2,20 @@
 
 Hráč 1. 10.: *„udělej Karel Mácha statue, políčko 1x1 sochu uprostřed, šedou z kamene a bronzovou, karel mácha bude
 mít kapucu, vousy a obrovskýho džonta v ruce, ruce bude mít od sebe jako by se chystal obejmout něco velkýho, okolo
-lavičky, malé křovíčko, odpaďák, odpadky“*. Jen obrázek jako u gymnázia a automatu, do hry ho zabuduje session hry
-ve forclaude.
+lavičky, malé křovíčko, odpaďák, odpadky“*. Pak *„ruce trochu níž, ne podél těla, asi tak něco mezi tím, vousy po
+pupek dlouhý a jointa víc do trychtýře, zvýraznit trychtýřovitost, širší na konci“* (předtím to byl *„americký džont
+typu fat“*) a *„mnohem méně stínů“*. Jen obrázek jako u gymnázia a automatu, do hry ho zabuduje session hry ve forclaude.
 
-Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfotí. Kamera, světlo a stín na trávu
-(55 %) jako u automatu (`automat/`), aby k sobě seděly.
+Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfotí. Kamera jako u automatu (`automat/`).
+**Stíny mnohem slabší než u automatu:** slabší slunce, silnější světlo okolí a stín na trávu jen 20 % (automat 55 %).
 
-- **Karel Mácha:** v mikině s kapucí nasazenou na hlavě, obličej v ní zapadlý, plnovous až na prsa a knír, na
-  břiše klokaní kapsa. Ruce roztažené dopředu od sebe, jako by se chystal obejmout něco velkého. V pravé ruce
-  obrovský joint: u prstů úzký, na konci široký se zakroucenou špičkou. Stojí čelem k divákovi (k jihu), takže
-  roztažené ruce jsou na obrázku vodorovně.
-- **Dvě verze:** šedá z kamene a bronzová (kov se zelenavou patinou na místech). Jinak jsou stejné.
+- **Karel Mácha:** v mikině s kapucí nasazenou na hlavě, obličej v ní zapadlý, knír a plnovous s prameny až po
+  pupek, pod ním klokaní kapsa. Ruce od sebe, jako by se chystal obejmout něco velkého, ale níž: ne podél těla,
+  nadloktí šikmo dolů do stran, dlaně ve výšce hrudi. V pravé ruce obrovský joint jako trychtýř: u prstů tenký
+  filtr, pak rovný kužel, který se rozevírá až do širokého konce, ten je useknutý a uprostřed zakroucený do malé
+  špičky. Stojí čelem k divákovi (k jihu).
+- **Dvě verze:** šedá z kamene a bronzová (kov se zelenavou patinou na místech). U kamenné jsou vousy hrubě tesané
+  a o kousek tmavší, jinak by se při slabých stínech ztratily na mikině. Jinak jsou obě stejné.
 - **Podstavec** ze žuly: schod, kvádr a římsa, nahoře 1,4 m. Na obou předních stěnách (ty, co jsou vidět)
   bronzová deska s vystouplým nápisem KAREL MÁCHA.
 - **Kolem:** náměstíčko z dlaždic 50 cm s obrubníkem uprostřed políčka. Tři lavičky čelem k soše: dvě za ní,
@@ -31,6 +34,9 @@ Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfot
 | `nahled_ve_hre.png` | obě sochy ve fotce ze zkušební hry u silnice s Tatrami, zvětšeno 2× |
 | `zblizka.png` | obě sochy vedle sebe zblízka |
 
-Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 20 s).
-`MERITKO=1` dá skutečnou velikost. Tělo je kostra s modifikátorem Skin a vyhlazením, takže je hladké jako
-tesané nebo lité; kapuce je skořepina s otvorem pro obličej, vousy, nos a kapsa jsou elipsoidy.
+Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 15 s).
+`MERITKO=1` dá skutečnou velikost, `SLUNCE`, `OKOLI` a `STIN` mění světlo (teď 2,0, 0,9 a 0,2; automat má 5,0, 0,35
+a 0,55). Tělo je kostra s modifikátorem Skin a vyhlazením, takže je hladké jako tesané nebo lité; kapuce je
+skořepina s otvorem pro obličej, nos, líce s bradou, knír a kapsa jsou elipsoidy. Dlouhé vousy a joint jsou
+poskládané z kroužků: vousy leží kousek zanořené na mikině (její předek je změřený přímo z modelu), joint je
+kroužek po kroužku podle profilu trychtýře.

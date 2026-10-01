@@ -2,14 +2,16 @@
 # Socha Karla Máchy na 1 policko (hrac 1. 10.: "udelej Karel Macha statue, policko 1x1 sochu uprostred, sedou
 # z kamene a bronzovou, karel macha bude mit kapucu, vousy a obrovskyho dzonta v ruce, ruce bude mit od sebe jako by
 # se chystal obejmout neco velkyho, okolo lavicky, male krovicko, odpadak, odpadky").
-# Vlastni model, kamera, meritko, svetlo a stin jako automat (automat/render_automat.py), vsechno dvakrat vetsi
-# (MERITKO 2) jako automat, at to k sobe sedi.
+# Pak (hrac): "ruce trochu niz, ne podel tela, neco mezi tim, vousy po pupek dlouhy a jointa vic do trychtyre, sirsi na
+# konci" a "mnohem mene stinu".
+# Vlastni model, kamera a meritko jako automat (automat/render_automat.py), vsechno dvakrat vetsi (MERITKO 2) jako
+# automat, at to k sobe sedi. Slunce slabsi a okoli silnejsi nez u automatu, stin na travu jen 20 %.
 #   python3 render_socha.py <vystup.png>          SOCHA=kamen (sediva z kamene) nebo SOCHA=bronz
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu policka; skupina je
 # navrzena ve skutecne velikosti kolem stredu policka C a zvetsi se K krat.
 # Postava stoji na podstavci cela k divakovi (k jihu), aby roztazene ruce byly na obrazku vodorovne: mikina s kapuci
-# na hlave, plnovous, ruce dopredu od sebe jako k objeti, v prave ruce obrovsky joint. Telo je kostra s modifikatorem
-# Skin a vyhlazenim, takze je hladke jako tesane nebo lite.
+# na hlave, plnovous po pupek, ruce od sebe jako k objeti, v prave ruce obrovsky joint jako trychtyr. Telo je kostra
+# s modifikatorem Skin a vyhlazenim, takze je hladke jako tesane nebo lite.
 import bpy, bmesh, os, sys, math, json, random
 import numpy as np
 from mathutils import Vector, Matrix, noise
@@ -42,7 +44,7 @@ bg = nt.nodes.new('ShaderNodeBackground'); env = nt.nodes.new('ShaderNodeTexEnvi
 env.image = bpy.data.images.load(HDRI)
 nt.links.new(env.outputs['Color'], bg.inputs['Color']); nt.links.new(bg.outputs['Background'], wo.inputs['Surface'])
 scene.world.cycles_visibility.shadow = True
-bg.inputs["Strength"].default_value = float(os.environ.get("OKOLI", "0.35"))
+bg.inputs["Strength"].default_value = float(os.environ.get("OKOLI", "0.9"))      # hrac: "mnohem mene stinu"
 
 def srgb(c):
     return tuple(((v / 255) ** 2.2) for v in c) + (1.0,)
@@ -88,6 +90,8 @@ M = {
     "cerna": mat("cerna", (14, 14, 14), 0.9),
 }
 M["socha"] = bronz() if SOCHA == "bronz" else mat("socha", (178, 176, 170), 0.9, sum_=0.08, meritko=10.0)
+# vousy u kamenne hrube tesane, o kus tmavsi, jinak by se pri slabych stinech ztratily na mikine (bronz stejny)
+M["vousy"] = M["socha"] if SOCHA == "bronz" else mat("vousy", (146, 144, 138), 0.95, sum_=0.16, meritko=40.0)
 ODPAD = {"papir": [mat(f"papir{i}", c, 0.9) for i, c in enumerate([(236, 234, 226), (214, 206, 186), (200, 200, 204)])],
          "plech": [mat(f"plech{i}", c, 0.35, kov=0.6) for i, c in enumerate([(196, 30, 34), (190, 192, 196), (36, 80, 170), (40, 140, 60)])],
          "lahev": [mat(f"lahev{i}", c, 0.2) for i, c in enumerate([(160, 196, 214), (70, 140, 70), (120, 80, 40)])],
@@ -246,9 +250,10 @@ KOSTI = {
     "panev": (0, 0, 0.98), "bricho": (0, 0.01, 1.15), "hrud": (0, 0, 1.33), "krk": (0, 0, 1.50),
     "kycel_p": (0.10, 0, 0.93), "koleno_p": (0.12, 0.04, 0.52), "kotnik_p": (0.13, 0, 0.10), "spicka_p": (0.15, 0.18, 0.05),
     "kycel_l": (-0.10, 0, 0.93), "koleno_l": (-0.12, 0.04, 0.52), "kotnik_l": (-0.13, 0, 0.10), "spicka_l": (-0.15, 0.18, 0.05),
-    # ruce od sebe dopredu jako k objeti neceho velkeho: nadlokti do stran a malo dopredu, predlokti dopredu a ven
-    "rameno_p": (0.23, 0, 1.43), "loket_p": (0.50, 0.16, 1.46), "zapesti_p": (0.62, 0.40, 1.58), "ruka_p": (0.64, 0.52, 1.63),
-    "rameno_l": (-0.23, 0, 1.43), "loket_l": (-0.50, 0.16, 1.46), "zapesti_l": (-0.62, 0.40, 1.58), "ruka_l": (-0.64, 0.52, 1.63),
+    # ruce od sebe jako k objeti neceho velkeho, ale niz (hrac: "ne podel tela, neco mezi tim"): nadlokti sikmo dolu
+    # do stran a malo dopredu, predlokti dopredu a ven, dlane ve vysce hrudi
+    "rameno_p": (0.23, 0, 1.43), "loket_p": (0.446, 0.075, 1.235), "zapesti_p": (0.611, 0.281, 1.29), "ruka_p": (0.667, 0.37, 1.323),
+    "rameno_l": (-0.23, 0, 1.43), "loket_l": (-0.446, 0.075, 1.235), "zapesti_l": (-0.611, 0.281, 1.29), "ruka_l": (-0.667, 0.37, 1.323),
 }
 HRANY = [("panev", "bricho"), ("bricho", "hrud"), ("hrud", "krk")]
 for s in ("p", "l"):
@@ -291,23 +296,58 @@ def otvor_kapuce(p):
 kapuce = elipsoid("kapuce", (0, -0.035, 1.65), (0.17, 0.185, 0.23), otvor_kapuce)                # vyssi nad hlavou
 sol = kapuce.modifiers.new("tloustka", 'SOLIDIFY'); sol.thickness = 0.016; sol.offset = -1.0
 kapuce.modifiers.new("hladke", 'SUBSURF').levels = 1
-# plnovous: brada, lice a knir
-elipsoid("vousy", (0, 0.07, 1.48), (0.105, 0.08, 0.15))                      # plnovous az na prsa
-elipsoid("knir", (0, 0.11, 1.585), (0.055, 0.025, 0.02))
-elipsoid("kapsa", (0, 0.135, 1.08), (0.15, 0.028, 0.08))                     # klokani kapsa mikiny
+def loft(jmeno, kruhy, konec=None, deleni=1):
+    """sit z kruhu bodu (vsechny stejne dlouhe) spojenych pasy; prvni kruh zavre stena, posledni stena nebo spicka konec"""
+    bm = bmesh.new()
+    vk = [[bm.verts.new(p) for p in k] for k in kruhy]
+    n = len(vk[0])
+    for a, b in zip(vk, vk[1:]):
+        for k in range(n):
+            bm.faces.new((a[k], a[(k + 1) % n], b[(k + 1) % n], b[k]))
+    bm.faces.new(vk[0])
+    if konec is None:
+        bm.faces.new(vk[-1])
+    else:
+        v = bm.verts.new(konec)
+        for k in range(n):
+            bm.faces.new((vk[-1][k], vk[-1][(k + 1) % n], v))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    m_ = bpy.data.meshes.new(jmeno); bm.to_mesh(m_); bm.free()
+    o = bpy.data.objects.new(jmeno, m_); scene.collection.objects.link(o)
+    sub = o.modifiers.new("hladke", 'SUBSURF'); sub.levels = sub.render_levels = deleni
+    pridej(o)
+    return o
 
-# obrovsky joint v prave ruce: kuzel od prstu ven a nahoru, u prstu uzky, na konci siroky se zakroucenou spickou
+# plnovous: lice a brada, knir a dlouhe vousy po pupek (hrac): od brady pres prsa a bricho do spicky. Vzadu lezi
+# kousek zanorene na mikine (predek tela zmereny z modelu: y 0,09 u krku, 0,15 na bricho), vpredu pramenky.
+VOUSY_OBJ = [elipsoid("vousy", (0, 0.07, 1.48), (0.105, 0.08, 0.15)), elipsoid("knir", (0, 0.11, 1.585), (0.055, 0.025, 0.02))]
+def kruh_vousu(z, w, d, yc, n=48):
+    body = []
+    for k in range(n):
+        a = 2 * math.pi * k / n
+        pramen = 1 + 0.07 * math.cos(12 * a) * max(0.0, math.sin(a))
+        body.append((w * math.cos(a) * pramen, yc + d * math.sin(a) * pramen, z))
+    return body
+# kruhy dlouhych vousu: (vyska, pulsirka, pulhloubka, stred y)
+VOUSY = [(1.57, 0.085, 0.04, 0.095), (1.50, 0.105, 0.05, 0.125), (1.42, 0.11, 0.047, 0.147), (1.33, 0.102, 0.041, 0.158),
+         (1.25, 0.09, 0.036, 0.164), (1.18, 0.072, 0.03, 0.166), (1.12, 0.048, 0.024, 0.162), (1.075, 0.022, 0.015, 0.152)]
+VOUSY_OBJ.append(loft("vousy_dlouhe", [kruh_vousu(*v) for v in VOUSY], konec=(0, 0.149, 1.048), deleni=2))
+for o in VOUSY_OBJ: o.data.materials[0] = M["vousy"]
+elipsoid("kapsa", (0, 0.13, 1.0), (0.15, 0.028, 0.075))                      # klokani kapsa mikiny, kousek pod vousy
+
+# obrovsky joint v prave ruce jako trychtyr (hrac: "zvyraznit trychtyrovitost, sirsi na konci"; rovny tlusty kuzel byl
+# "americky typu fat"): u prstu tenky filtr, pak rovny kuzel az do sirokeho konce, ten je useknuty a uprostred
+# zakrouceny do male spicky
 ruka = Vector(KOSTI["ruka_p"])
-smer = Vector((0.5, 0.35, 0.8)).normalized()
-DELKA, R_UZKY, R_SIROKY = 0.8, 0.022, 0.065
-bm = bmesh.new()
-bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=16, radius1=R_UZKY, radius2=R_SIROKY, depth=DELKA)
-bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=16, radius1=R_SIROKY * 0.95, radius2=0.004, depth=0.09,
-                      matrix=Matrix.Translation((0, 0, DELKA / 2 + 0.045)))
-rot = Vector((0, 0, 1)).rotation_difference(smer).to_matrix().to_4x4()
-bmesh.ops.transform(bm, matrix=Matrix.Translation(ruka + smer * (DELKA / 2 - 0.08)) @ rot, verts=bm.verts)
-m_ = bpy.data.meshes.new("joint"); bm.to_mesh(m_); bm.free()
-joint = bpy.data.objects.new("joint", m_); scene.collection.objects.link(joint); pridej(joint)
+smer = Vector((0.55, 0.2, 0.8)).normalized()
+u_ = smer.orthogonal().normalized(); v_ = smer.cross(u_)
+PROFIL = [(0.0, 0.016), (0.08, 0.018), (0.085, 0.022), (0.10, 0.022)]                       # (od konce v puse, polomer)
+PROFIL += [(0.10 + 0.74 * i / 8, 0.022 + 0.11 * i / 8) for i in range(1, 9)]              # rozevira se az na 0,132
+PROFIL += [(0.85, 0.128), (0.862, 0.11), (0.872, 0.075), (0.878, 0.04), (0.885, 0.018), (0.905, 0.008)]
+zac = ruka - smer * 0.06                                                                     # filtr mezi prsty
+kruhy = [[zac + smer * s + (u_ * math.cos(2 * math.pi * k / 24) + v_ * math.sin(2 * math.pi * k / 24)) * r for k in range(24)]
+         for s, r in PROFIL]
+loft("joint", kruhy, konec=zac + smer * 0.925)
 
 koren.location = B(C, C, Z_PODST)
 koren.rotation_euler = (0, 0, math.radians(-135))     # misto +y (dopredu) miri k jihu (na policku +x +y)
@@ -329,7 +369,7 @@ c = cam.constraints.new(type='TRACK_TO'); c.target = cil
 ke_kamere = Vector((math.sin(az), -math.cos(az), 0.0)); vlevo = Vector((-math.cos(az), -math.sin(az), 0.0))
 odkud = (vlevo * 1.0 + ke_kamere * -0.25 + Vector((0, 0, 1.0))).normalized()
 bpy.ops.object.light_add(type='SUN'); sl = bpy.context.object
-sl.data.energy = float(os.environ.get("SLUNCE", "5.0")); sl.data.angle = math.radians(6)
+sl.data.energy = float(os.environ.get("SLUNCE", "2.0")); sl.data.angle = math.radians(6)
 sl.rotation_euler = odkud.to_track_quat('Z', 'Y').to_euler()
 
 def na_pixel(p):
@@ -340,7 +380,7 @@ rohy = {"sever": na_pixel(Vector((0, 0, 0))), "vychod": na_pixel(Vector((T, 0, 0
         "zapad": na_pixel(Vector((0, -T, 0))), "jih": na_pixel(Vector((T, -T, 0)))}
 print("rohy policka na obrazku", {k: tuple(round(c, 2) for c in v) for k, v in rohy.items()})
 
-# stin na travu na 55 % jako automat
+# stin na travu jen na 20 % (automat ma 55 %), hrac chtel u sochy mnohem mene stinu
 def render_do_pole():
     scene.render.filepath = os.path.splitext(VYSTUP)[0] + "_tmp.png"
     bpy.ops.render.render(write_still=True)
@@ -350,7 +390,7 @@ def render_do_pole():
 A = render_do_pole()
 zem.hide_render = True
 Bp = render_do_pole()
-STIN = float(os.environ.get("STIN", "0.55"))
+STIN = float(os.environ.get("STIN", "0.2"))
 aB = Bp[..., 3]; aS = np.clip((A[..., 3] - aB) / np.maximum(1 - aB, 1e-6), 0, 1) * STIN
 alfa = aB + (1 - aB) * aS
 barva = np.where(alfa[..., None] > 0, Bp[..., :3] * aB[..., None] / np.maximum(alfa[..., None], 1e-6), 0)
