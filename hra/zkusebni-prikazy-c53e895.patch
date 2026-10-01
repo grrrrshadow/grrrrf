@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-09-30 23:23:14.179742645 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-09-30 23:23:14.182524144 +0000
+--- a/openttd/src/console_cmds.cpp	2026-10-01 15:26:05.107419129 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-01 15:26:05.111485634 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -19,7 +19,15 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "genworld.h"
  #include "strings_func.h"
  #include "viewport_func.h"
-@@ -2461,6 +2465,542 @@
+@@ -71,6 +75,7 @@
+ #include "articulated_vehicles.h"
+ #include "cargopacket.h"
+ #include "station_cmd.h"
++#include "newgrf_roadstop.h"
+ #include "tree_cmd.h"
+ #include "order_cmd.h"
+ #include "order_func.h"
+@@ -2461,6 +2466,615 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -354,6 +362,79 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	return true;
 +}
 +
++/* ZASTAVKY (jen tahle kopie hry, 1. 10.): hrac chce videt zastavku pro cestujici v originalni grafice a s CZTR silnicemi
++ * (ta zastavky prepisuje), aby se naslo misto na postavu, ktere funguje na obou. 'testzastavky [tiku] [RTxx]' postavi na
++ * rovine silnici podel X a podel Y, na kazdou pruchozi autobusovou zastavku (zalivovou ne, hrac: "zalivovou delat
++ * nebudem"), vyfoti je a hru ukonci. Dlazdice zastavek vypise do logu. */
++static bool ConTestZastavky(std::span<std::string_view> argv)
++{
++	if (argv.empty()) {
++		IConsolePrint(CC_HELP, "Zastavky na focen. Usage: 'testzastavky [tiku] [RTxx]'.");
++		return true;
++	}
++	if (_game_mode != GameMode::Normal) return true;
++	if (Company::GetIfValid(_local_company) == nullptr) {
++		extern Company *DoStartupNewCompany(bool is_ai, CompanyID company);
++		Company *made = DoStartupNewCompany(false, CompanyID::Invalid());
++		if (made == nullptr) return true;
++		SetLocalCompany(made->index);
++	}
++	Command<Commands::MoneyCheat>::Do(DoCommandFlag::Execute, 100000000);
++	uint tiku = 200;
++	if (argv.size() > 1) {
++		tiku = 0;
++		for (char c : argv[1]) if (c >= '0' && c <= '9') tiku = tiku * 10 + (c - '0');
++	}
++	const uint W = 12, H = 12;
++	TileIndex zac = INVALID_TILE;
++	for (uint y = 10; y + H < Map::SizeY() - 10 && zac == INVALID_TILE; y++) {
++		for (uint x = 10; x + W < Map::SizeX() - 10; x++) {
++			bool ok = true;
++			int z0 = GetTileZ(TileXY(x, y));
++			for (uint dy = 0; dy < H && ok; dy++) for (uint dx = 0; dx < W && ok; dx++) {
++				TileIndex t = TileXY(x + dx, y + dy);
++				ok = (IsTileType(t, TileType::Clear) || IsTileType(t, TileType::Trees)) && GetTileSlope(t) == SLOPE_FLAT && GetTileZ(t) == z0;
++			}
++			if (ok) { zac = TileXY(x, y); break; }
++		}
++	}
++	if (zac == INVALID_TILE) {
++		V3SLog("ZASTAVKY: neni misto");
++		return true;
++	}
++	std::string stitek = argv.size() > 2 ? std::string(argv[2]) : std::string("RT14");
++	RoadType rt = INVALID_ROADTYPE;
++	if (stitek.size() == 4) rt = GetRoadTypeByLabel((uint32_t)(uint8_t)stitek[0] << 24 | (uint8_t)stitek[1] << 16 | (uint8_t)stitek[2] << 8 | (uint8_t)stitek[3], false);
++	if (rt == INVALID_ROADTYPE) rt = ROADTYPE_ROAD;
++	const uint x0 = TileX(zac), y0 = TileY(zac);
++	const uint ya = y0 + 3, xb = x0 + 8;                    /* silnice A podel X v y = ya, silnice B podel Y v x = xb */
++	auto usek = [rt](TileIndex a, TileIndex b, Axis ax) {
++		return Command<Commands::BuildRoadLong>::Do(DoCommandFlag::Execute, b, a, rt, ax, DisallowedRoadDirections{}, true, true, false).Succeeded();
++	};
++	bool ok = usek(TileXY(x0 + 1, ya), TileXY(x0 + 11, ya), Axis::X) && usek(TileXY(xb, y0 + 1), TileXY(xb, y0 + 11), Axis::Y);
++	struct Z { uint x, y; bool pruchozi; DiagDirection d; RoadBits napojeni; uint nx, ny; const char *popis; };
++	const Z zast[] = {
++		{x0 + 3, ya, true, DiagDirection::NE, RoadBits{}, 0, 0, "pruchozi podel X (SV-JZ)"},
++		{xb, y0 + 7, true, DiagDirection::NW, RoadBits{}, 0, 0, "pruchozi podel Y (SZ-JV)"},
++	};
++	for (const Z &z : zast) {
++		if (z.napojeni.Any()) {
++			Command<Commands::BuildRoad>::Do(DoCommandFlag::Execute, TileXY(z.nx, z.ny), z.napojeni, rt, DisallowedRoadDirections{}, TownID::Invalid());
++		}
++		CommandCost c = Command<Commands::BuildRoadStop>::Do(DoCommandFlag::Execute, TileXY(z.x, z.y), 1, 1, RoadStopType::Bus, z.pruchozi, z.d, rt,
++				ROADSTOP_CLASS_DFLT, 0, StationID::Invalid(), false);
++		V3SLog("ZASTAVKY: ({},{}) {} {}", z.x, z.y, z.popis, c.Succeeded() ? "ok" : "CHYBA");
++	}
++	V3SLog("ZASTAVKY: silnice {} {}, oblast od ({},{})", rt == ROADTYPE_ROAD ? "bezna ROAD" : stitek, ok ? "ok" : "CHYBA", x0, y0);
++	_v3s_stred = TileXY(x0 + 6, y0 + 6);
++	ScrollMainWindowToTile(_v3s_stred, true);
++	_v3s_foto_pocet = _v3s_foto_zbyva = 1;
++	_v3s_foto_krok = 100;
++	_v3s_foto_cislo = 0;
++	_v3s_foto_dalsi = TimerGameTick::counter + tiku;
++	return true;
++}
++
 +/* ZKOUSKA PORADI KRESLENI (jen tahle kopie hry, 29. 9.): hrac videl na silnici SV-JZ, ze auto jedouci na jihozapad
 + * v zadnim pruhu se kresli pres auto v prednim pruhu (dvanacttrojky VW T1 s naraznikem vepredu i vzadu, sestava 1, 1, 1).
 + * 'testpruhy x|y [tiku]' postavi tri rovne silnice podel osy X (SV-JZ) nebo Y (SZ-JV) a na kazdou osm dvojic stojicich
@@ -562,7 +643,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2639,6 +3179,17 @@
+@@ -2639,6 +3253,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -580,19 +661,20 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13129,6 +13680,9 @@
+@@ -13129,6 +13754,10 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
 +	IConsole::CmdRegister("testv3s",                 ConTestV3S);
 +	IConsole::CmdRegister("testv3sfoto",             ConTestV3SFoto);
++	IConsole::CmdRegister("testzastavky",            ConTestZastavky);
 +	IConsole::CmdRegister("testpruhy",               ConTestPruhy);
  	IConsole::CmdRegister("testnaklad",              ConTestCargoScene);
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-09-30 23:23:14.180185599 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-09-30 23:23:14.182998854 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-10-01 15:26:05.115419129 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-10-01 15:26:05.120212708 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

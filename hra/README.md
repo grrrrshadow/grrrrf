@@ -107,6 +107,13 @@ python3 hra/nahled_ve_hre.py socha/nahled_ve_hre.png "socha/socha_kamen_zin4.png
 Poslední dvě věci jsou ze zprávy od hry (`zarovnani-budov/ZPRAVA-OD-HRY.md`). Silnice okruhu vede po y = 12 a 18
 (x 40 až 51) a po x = 40 a 51 (y 12 až 18), uvnitř je tráva; (44,17) je hned u silnice.
 
+## Fotka zastávek (1. 10.)
+
+`testzastavky [tiků] [RTxx]` postaví na rovině silnici podél X a podél Y, na každou průjezdnou autobusovou
+zastávku, vyfotí je (`v3s_okruh.png`) a hru ukončí. Dlaždice zastávek jsou v logu (`ZASTAVKY: (x,y) …`), počátek
+pohledu v `V3SPOHLED`. S vlastním configem (`-c`) se fotka uloží do složky configu, ne do `HOME`. Rozbor, kam
+na zastávku postavit dívku: `zastavka/`.
+
 ## Jak přeložit znova
 
 ```bash
