@@ -4,7 +4,9 @@
 # ortho 30 st. shora, 12,2 px/m v zin4, slunce zleva shora se silnejsimi stiny jako u Tatry, stin na travu na 55 %.
 # Automat podle fotek: tmave seda skrin, prosklena dvirka s regaly, vpravo zeleny pruh s placenim, dole vydejni
 # klapka se zelenym stitkem PULL, bok polepeny zelenou folii s listy konopi, paprsky a bilym napisem CBD MAT.
-# MERITKO=2 udela skupinu (automat, lavicku, ker, dlazbu) dvakrat vetsi, aby byl automat ve hre videt.
+# Skupina je ctverec (hrac: "to mas obdelnicek, neco jako 2x1 policko", "lavicku postav pred automat, otoc ji
+# sedadlem k automatu a mas ctverec"): automat vzadu, lavicka pred nim sedadlem k nemu, ker vedle, dlazba 4 x 4 m
+# s obrubnikem uprostred policka. MERITKO=2 zvetsi celou skupinu i s dlazbou kolem stredu policka.
 #   python3 render_automat.py <vystup.png>
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu policka.
 import bpy, bmesh, os, sys, math, json, random
@@ -154,6 +156,7 @@ M = {
     "predek": mat("predek", (0, 0, 0), 0.25, obrazek=os.path.join(TEX, "predek.png")),
     "dlazba": mat("dlazba", (182, 178, 170), 0.9, sum_=0.07, meritko=6.0),
     "spara": mat("spara", (140, 136, 128), 0.95),
+    "obrubnik": mat("obrubnik", (150, 146, 138), 0.9, sum_=0.06, meritko=8.0),
     "lavicka": mat("lavicka", (138, 92, 52), 0.7),
     "kov": mat("kov", (52, 58, 54), 0.5, kov=0.5),
     "ker": mat("ker", (54, 98, 40), 0.9, sum_=0.32, meritko=9.0),
@@ -168,9 +171,10 @@ def B(x, y, z):
     """policko -> Blender; skupina je kolem stredu policka zvetsena K krat"""
     return Vector((C + (y - C) * K, -(C + (x - C) * K), z * K))
 
-def kvadr(m, x0, x1, y0, y1, z0, z1):
-    bm = bm_pro(m)
-    v = [bm.verts.new(B(x, y, z)) for z in (z0, z1) for y in (y0, y1) for x in (x0, x1)]
+def kvadr(m, x0, x1, y0, y1, z0, z1, pevne=False):
+    """kvadr; pevne = na policku bez zvetseni (dlazba)"""
+    bm = bm_pro(m); b_ = (lambda x, y, z: Vector((y, -x, z))) if pevne else B
+    v = [bm.verts.new(b_(x, y, z)) for z in (z0, z1) for y in (y0, y1) for x in (x0, x1)]
     for f in ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)):
         bm.faces.new([v[i] for i in f])
 
@@ -187,8 +191,8 @@ def obraz(m, rohy):
         smycka[uv].uv = (u, v)
 
 # ---------------------------------------------------------------- automat, lavicka, ker, dlazba
-AX1 = C + 0.2; AX0 = AX1 - 0.85                 # predek k jihozapadu (+x), hloubka 85 cm
-AY0 = C + 0.2; AY1 = AY0 + 0.9                  # sirka 90 cm, bok s polepem k jihovychodu (+y)
+AX0 = C - 1.45; AX1 = AX0 + 0.85                # predek k jihozapadu (+x), hloubka 85 cm
+AY0 = C - 1.05; AY1 = AY0 + 0.9                  # sirka 90 cm, bok s polepem k jihovychodu (+y)
 AZ0, AZ1 = 0.04, 1.83
 kvadr(M["skrin"], AX0, AX1, AY0, AY1, AZ0, AZ1)
 for xx in (AX0 + 0.06, AX1 - 0.1):                                            # nozicky
@@ -209,23 +213,22 @@ def lavicka(x, y, uhel):
     kus(M["lavicka"], -0.8, 0.8, 0.2, 0.25, 0.5, 0.88)
     for u in (-0.65, 0.65):
         kus(M["kov"], u - 0.03, u + 0.03, -0.2, 0.22, 0.0, 0.42)
-lavicka(AX1 - 0.15, AY0 - 1.35, 0.0)                                         # vlevo od automatu, sedi se k jihozapadu
+lavicka(AX1 + 1.4, (AY0 + AY1) / 2, math.pi)                               # pred automatem, sedi se k nemu
 
-# dlazba z betonovych dlazdic 50 cm se sparami
-DX0, DX1, DY0, DY1 = AX0 - 0.6, AX1 + 1.5, AY0 - 2.6, AY1 + 1.9
-Z_D = 0.03
-kvadr(M["spara"], DX0, DX1, DY0, DY1, 0.0, Z_D - 0.004)
-x = DX0
-while x < DX1 - 0.01:
-    y = DY0
-    while y < DY1 - 0.01:
-        kvadr(M["dlazba"], x + 0.012, min(x + 0.5, DX1) - 0.012, y + 0.012, min(y + 0.5, DY1) - 0.012, 0.0, Z_D)
-        y += 0.5
-    x += 0.5
+# dlazba 4 x 4 m z betonovych dlazdic 50 cm se sparami, kolem obrubnik 15 cm, uprostred policka
+D0, D1, OBR, Z_D = C - 2.0, C + 2.0, 0.15, 0.03
+for (x0, x1, y0, y1) in ((D0, D1, D0, D0 + OBR), (D0, D1, D1 - OBR, D1), (D0, D0 + OBR, D0 + OBR, D1 - OBR), (D1 - OBR, D1, D0 + OBR, D1 - OBR)):
+    kvadr(M["obrubnik"], x0, x1, y0, y1, 0.0, Z_D + 0.03)
+kvadr(M["spara"], D0 + OBR, D1 - OBR, D0 + OBR, D1 - OBR, 0.0, Z_D - 0.004)
+n_ = int(round((D1 - D0 - 2 * OBR) / 0.5)); kr = (D1 - D0 - 2 * OBR) / n_
+for i in range(n_):
+    for j in range(n_):
+        x, y = D0 + OBR + kr * i, D0 + OBR + kr * j
+        kvadr(M["dlazba"], x + 0.012, x + kr - 0.012, y + 0.012, y + kr - 0.012, 0.0, Z_D)
 
 # kericek vpravo za automatem: par koul s hrbolky, mekce stinovany
 rnd = random.Random(5)
-KX, KY, KR = AX0 + 0.55, AY1 + 0.95, 0.6
+KX, KY, KR = AX0 + 0.6, AY1 + 0.95, 0.6               # vpravo vedle automatu
 for i in range(9):                                     # hrbolaty ker z mensich chumacu, ne hladka koule
     a = rnd.random() * 2 * math.pi; d = KR * 0.6 * math.sqrt(rnd.random())
     rr = KR * (0.38 + 0.16 * rnd.random())

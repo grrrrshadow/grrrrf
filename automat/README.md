@@ -1,7 +1,8 @@
 # Automat na marihuanu (1 políčko)
 
 Hráč 1. 10. s fotkami automatů CBD MAT: *„ještě udělej 1x1 políčko automat na marihuanu s lavičkou a keříčkem
-křoví“*. Jen obrázek jako u gymnázia, do hry ho zabuduje session hry ve forclaude.
+křoví“*, pak *„to máš obdélníček, něco jako 2x1 políčko“*, *„lavičku postav před automat, otoč ji sedadlem
+k automatu a máš čtverec“*. Jen obrázek jako u gymnázia, do hry ho zabuduje session hry ve forclaude.
 
 Vlastní model, žádný cizí: `render_automat.py` ho postaví v Blenderu a vyfotí. Kamera, měřítko a světlo jako
 gymnázium (`gymnazium/`) a auta: 12,2 px/m v přiblížení 4×, políčko 14,84 m, stín na trávu na 55 %.
@@ -10,10 +11,11 @@ gymnázium (`gymnazium/`) a auta: 12,2 px/m v přiblížení 4×, políčko 14,8
   policemi balíčků, svítícím pásem LED a nálepkou POZOR, vpravo zelený pruh s ceníkem, čtečkou karet, displejem,
   klávesnicí a mincemi, dole výdejní klapka se zeleným štítkem PULL. Bok polepený zelenou fólií s listy konopí,
   paprsky a bílým nápisem CBD MAT. Polep a předek kreslí skript sám (`textury/bok.png`, `textury/predek.png`).
-- **Kolem:** lavička vlevo, hrbolatý keřík vpravo za automatem, pod tím betonová dlažba 50 cm se spárami.
+- **Kolem, do čtverce:** automat vzadu, lavička před ním sedadlem k automatu, hrbolatý keřík vpravo vedle
+  automatu, pod tím čtverec 4 × 4 m betonové dlažby 50 cm se spárami a obrubníkem, uprostřed políčka.
   Předek automatu míří k jihozápadu (na obrázku doleva dolů), bok s polepem k jihovýchodu.
 - Ve skutečné velikosti je automat při přiblížení 4× jen asi 15 × 20 px. Proto i dvakrát větší skupina
-  (`MERITKO=2`), vedle aut je ale velká: automat 3,7 m, lavička 3,2 m. Hráč vybere.
+  (`MERITKO=2`, i s dlažbou 8 × 8 m), vedle aut je ale velká: automat 3,7 m, lavička 3,2 m. Hráč vybere.
 
 | soubor | co to je |
 |---|---|
