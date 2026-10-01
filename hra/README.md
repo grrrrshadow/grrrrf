@@ -87,6 +87,26 @@ Bez obrazu, jen výpisy (třeba `testv3s`), stačí `./openttd -vnull:ticks=200 
 a v `game_start.scr` příkaz, na konci `quit` není potřeba.
 `-G <číslo>` dá pokaždé stejnou mapu.
 
+## Náhled budov ve fotce ze hry
+
+`nahled_ve_hre.py` vloží obrázky budov do fotky okruhu ze zkoušky v11 (`fotka_okruh_v11.png`, přiblížení 4×)
+tam, kam by je postavila hra:
+
+```bash
+python3 hra/nahled_ve_hre.py socha/nahled_ve_hre.png "socha/socha_kamen_zin4.png@45,16=z kamene" "socha/socha_bronz_zin4.png@43,16=bronzová" --vyrez -202,-174,458,236
+```
+
+`@x,y` je severní dlaždice budovy, rohy pozemku se berou z JSONu vedle obrázku. Tři věci, bez kterých náhled lže:
+
+- **Země v okruhu leží ve výšce 16** (auta tam mají `z 16`), dlaždice je proto o 64 px výš. Do 1. 10. jsem to
+  vynechával a všechny náhledy (gymnázium, automat, socha) byly o půl políčka níž; u automatu pak křoví lezlo na
+  silnici, ve hře ne.
+- **Políčko ve hře má 256 × 124 px**, ne 256 × 128 jako render: obrázek se svisle stáhne na 124/128.
+- **Severní roh dlaždice leží ve hře o 4 px vpravo** od hranice pixelu, kam ho klade render.
+
+Poslední dvě věci jsou ze zprávy od hry (`zarovnani-budov/ZPRAVA-OD-HRY.md`). Silnice okruhu vede po y = 12 a 18
+(x 40 až 51) a po x = 40 a 51 (y 12 až 18), uvnitř je tráva; (44,17) je hned u silnice.
+
 ## Jak přeložit znova
 
 ```bash
