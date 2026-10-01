@@ -7,6 +7,7 @@
 # Vlastni model, kamera a meritko jako automat (automat/render_automat.py), vsechno dvakrat vetsi (MERITKO 2) jako
 # automat, at to k sobe sedi. Slunce slabsi a okoli silnejsi nez u automatu, stin na travu jen 20 %.
 #   python3 render_socha.py <vystup.png>          SOCHA=kamen (sediva z kamene) nebo SOCHA=bronz
+#   POSTAVY=1: druhy obrazek do animace s divkami od hrace (postavy/), pak sloucit postavy/animace.py
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu policka; skupina je
 # navrzena ve skutecne velikosti kolem stredu policka C a zvetsi se K krat.
 # Postava stoji na podstavci cela k divakovi (k jihu), aby roztazene ruce byly na obrazku vodorovne: mikina s kapuci
@@ -353,6 +354,94 @@ koren.location = B(C, C, Z_PODST)
 koren.rotation_euler = (0, 0, math.radians(-135))     # misto +y (dopredu) miri k jihu (na policku +x +y)
 s_ = VYSKA_POSTAVY / 1.8 * K
 koren.scale = (s_, s_, s_)
+
+# ---------------------------------------------------------------- postavy (druhy obrazek do animace, POSTAVY=1)
+# Hrac: "bikini girl jako ze kraci tam, kde by byla ctvrta lavicka, college girl vyleze na sochu, obejme Karla a da
+# mu pusu, na lavicky zbytek: dve na jednu lavicku, jednu na jednu a treti lavicka bude prazdna"; meritko k lavicce.
+# Modely jsou v postavy/ (autori a licence v postavy/LICENCE.md), poza v postavy/postavy.py.
+if os.environ.get("POSTAVY", "") == "1":
+    sys.path.insert(0, os.path.join(TU, "..", "postavy"))
+    import postavy as PO
+
+    def do_sceny(meshe, kotva, gx, gy, gz, uhel):
+        """postava (celem k -y, kotva = jeji bod, ktery ma stat v bode skupiny gx gy gz) celem ve smeru uhel"""
+        M = Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Scale(K, 4) @ Matrix.Translation(-kotva)
+        PO.postav(meshe, M)
+
+    def na_lavicku(meshe, kotva, lavicka, u):
+        """bod sedu na sedak lavicky (x, y, uhel) ve vzdalenosti u od jejiho stredu, zady k operadlu"""
+        x, y, uhel = lavicka
+        c, s = math.cos(uhel), math.sin(uhel)
+        v = 0.05                                      # kousek dozadu k operadlu
+        do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47, uhel)
+
+    LAV_SZ = (C, C - R_LAV, math.pi / 2)              # severozapadni (na obrazku vlevo nahore): dve divky
+    LAV_SV = (C - R_LAV, C, 0.0)                      # severovychodni (vpravo nahore): jedna, jihovychodni prazdna
+
+    def kost(arm, zacatek):
+        return next(b.name for b in arm.pose.bones if b.name.startswith(zacatek))
+
+    # galaxia: sed kostrou, ruce podel tela a predlokti na stehna
+    def sed_kostra(arm, meshe):
+        for st in ("L", "R"):
+            zn = 1 if st == "L" else -1
+            PO.otoc_kost(arm, kost(arm, f"J_Bip_{st}_UpperLeg"), (1, 0, 0), math.radians(-72))     # kolena niz, at dojde na zem
+            PO.otoc_kost(arm, kost(arm, f"J_Bip_{st}_LowerLeg"), (1, 0, 0), math.radians(67))
+            PO.otoc_kost(arm, kost(arm, f"J_Bip_{st}_UpperArm"), (0, 1, 0), zn * math.radians(72))
+            PO.otoc_kost(arm, kost(arm, f"J_Bip_{st}_UpperArm"), (1, 0, 0), math.radians(-18))
+            PO.otoc_kost(arm, kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-55))
+    g = PO.nacti("galaxia_anime_girl", 1.58, priprava=sed_kostra, nechat=lambda o: "Icosphere" not in o.name)
+    kotva, pokles = PO.bod_sedu(g, 1.58, 0.0)
+    print("galaxia: od zadku k chodidlum %.3f m (sedak 0,47)" % pokles)
+    na_lavicku(g, kotva, LAV_SZ, -0.42)
+
+    # character_people_girl_001: sedi vedle, ruku ve vlasech nechava
+    ch = PO.nacti("character_people_girl_001", 1.68)
+    nohy = PO.stredy_nohou(ch, 1.68)
+    kotva, st, chyba = PO.sed(ch, 1.68, 0.49, 0.28, [nohy[0][1], nohy[1][1]])
+    print("character: stehna %d st, chodidla mimo zem o %.3f m" % (st, chyba))
+    na_lavicku(ch, kotva, LAV_SZ, 0.38)
+
+    # anime_girl: sama na severovychodni lavicce (sviti sama, emisi pryc)
+    an = PO.nacti("anime_girl", 1.6, emise=0.0)
+    nohy = PO.stredy_nohou(an, 1.6)
+    kotva, st, chyba = PO.sed(an, 1.6, 0.52, 0.285, [nohy[0][1], nohy[1][1]])
+    print("anime: stehna %d st, chodidla mimo zem o %.3f m" % (st, chyba))
+    na_lavicku(an, kotva, LAV_SV, 0.12)
+
+    # girl_bikini: krok tam, kde by byla ctvrta lavicka (jihozapadni), jde k jihovychodu; nohy napred k sobe pod kycle
+    bk = PO.nacti("girl_bikini", 1.66)
+    (xr, xfr, zfr), (xl, xfl, zfl) = PO.stredy_nohou(bk, 1.66)
+    odklon_r = math.atan2(xfr - xr, 0.42 * 1.66 - zfr); odklon_l = math.atan2(xfl - xl, 0.42 * 1.66 - zfl)
+    PO.ohni_nohy(bk, 1.66, 0.50, 0.285,
+                 [(xr, Matrix.Rotation(math.radians(-22), 3, 'X') @ Matrix.Rotation(-odklon_r, 3, 'Y'), ((1, 0, 0), math.radians(8))),
+                  (xl, Matrix.Rotation(math.radians(14), 3, 'X') @ Matrix.Rotation(-odklon_l, 3, 'Y'), ((1, 0, 0), math.radians(20)))])
+    lo, hi, _ = PO.rozmery_siti(bk)
+    do_sceny(bk, Vector((0, 0, lo[2])), C + R_LAV, C - 0.1, Z_D, math.pi / 2)
+
+    # college_girl: na podstavci u Karla zleva zpredu, celem k nemu, objima ho (ruce dopredu, predlokti kolem nej)
+    def divka_a(o):
+        if o.parent is None or o.parent.type != 'ARMATURE':
+            return False
+        dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); me_ = e.to_mesh()
+        x = sum((o.matrix_world @ v.co).x for v in me_.vertices) / max(1, len(me_.vertices)); e.to_mesh_clear()
+        return x < -1.0
+    def objeti(arm, meshe):
+        for st, zn in (("R", 1), ("L", -1)):
+            ram = kost(arm, f"Shoulder_{st}_"); loket = kost(arm, f"Elbow_{st}_")
+            PO.otoc_kost(arm, ram, (0, 0, 1), zn * math.radians(62))       # ruce dopredu a trochu od sebe
+            PO.otoc_kost(arm, ram, (1, 0, 0), math.radians(-25))           # a nahoru k jeho hrudi
+            PO.otoc_kost(arm, loket, (0, 0, 1), zn * math.radians(45))     # predlokti kolem nej
+        PO.otoc_kost(arm, kost(arm, "Spine1_M_"), (1, 0, 0), math.radians(6))
+        PO.otoc_kost(arm, kost(arm, "Head_M_"), (1, 0, 0), math.radians(-25))  # hlavu nahoru k nemu
+    cg = PO.nacti("college_girl", 1.62, priprava=objeti, nechat=divka_a)
+    # v mistnich souradnicich sochy (x doprava z pohledu Karla, y dopredu): vlevo zpredu, Karel je 2,3/1,8 vetsi
+    k_ = VYSKA_POSTAVY / 1.8
+    lx, ly = -0.30 * k_, 0.25 * k_
+    vpravo, vpred = Vector((1, -1)) / math.sqrt(2), Vector((1, 1)) / math.sqrt(2)     # Karel celem k jihu
+    gpos = vpravo * lx + vpred * ly
+    smer = -(gpos.normalized())
+    do_sceny(cg, Vector((0, 0, 0)), C + gpos.x, C + gpos.y, Z_PODST, math.atan2(smer.y, smer.x))
 
 # chytac stinu pres policko
 bpy.ops.mesh.primitive_plane_add(size=1, location=Vector((C, -C, 0.0)))

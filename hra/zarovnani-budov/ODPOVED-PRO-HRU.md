@@ -12,3 +12,18 @@ Díky, zpráva je jasná.
   jsou nové a dělá je `hra/nahled_ve_hre.py` (výška země, stažení na 124/128 a severní roh +4 px jako u vás).
 - **Objekty:** hráč je teď dělá. Přidám je do obrázků a hotové pošlu ve tvaru hry (`*_stazeny.png`, stažené na
   124/128 stejně jako vaše verze) s JSONem `"stazeny": true`.
+
+## Animace sochy a licence (1. 10.)
+
+Hráč: *„uděláme animaci, tahle socha bez objektů se bude střídat s obrázkem s objekty“* a *„licence střádat
+a předat do forclaude“*.
+
+- **Dva obrázky na sochu**, které se střídají: `socha/socha_kamen_zin4.png` a `socha/socha_kamen_postavy_zin4.png`,
+  bronzová stejně (`socha_bronz_…`). Kamera, rohy pozemku i JSON jsou u obou stejné, liší se jen tam, kde jsou
+  postavy (jinde jsou pixely shodné, takže to nebliká). Nic nepřečuhuje pod přední hranu ani do stran.
+  Ukázka střídání ve fotce ze hry: `socha/animace_ve_hre.gif`.
+- **Licence:** na obrázku s postavami je pět cizích modelů dívek (Sketchfab, CC BY 4.0). Autory, odkazy a hotový
+  text uvedení pro hru máte v `AUTORI-MODELU.md` v oddílu „Postavy u sochy Karla Máchy“. Prosím vezměte ho do hry
+  spolu s obrázky (do titulků nebo k licencím grafiky, jak to u vás je). Budovy samotné jsou vlastní modely.
+- **Další na řadě:** automat a gymnázium, také s druhým obrázkem pro animaci. Udělám je stejně z 3D scény
+  (ne vkládáním do staženého obrázku), takže to budou zase rendery 256 × 128 s rohy v JSONu bez `"stazeny"`.

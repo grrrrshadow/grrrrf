@@ -26,6 +26,24 @@ Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfot
 - **Dvakrát větší** jako automat: postava i s kapucí asi 4,8 m, s podstavcem 7,6 m, náměstíčko 11,2 × 11,2 m
   (políčko má 14,8 m). Ve skutečné velikosti by postava měla při přiblížení 4× jen asi 25 px.
 
+## Druhý obrázek do animace: s postavami
+
+Hráč: *„uděláme animaci, tahle socha bez objektů se bude střídat s obrázkem s objekty“*, *„bikini girl jako že kráčí
+tam, kde by byla čtvrtá lavička, college girl vyleze na sochu, obejme Karla a dá mu pusu, na lavičky zbytek:
+dvě na jednu lavičku, jednu na jednu a na třetí nezbyde“*, *„měřítko k lavičce“*.
+
+- **Na podstavci:** dívka ve školní uniformě (College Girl) stojí Karlovi po levici, čelem k němu, objímá ho
+  a hlavu má zvednutou k němu. Pusa vidět není.
+- **Kráčí:** dívka v bikinách jde přes náměstíčko vlevo vpředu, kde by byla čtvrtá lavička, k jihovýchodu.
+- **Na lavičkách:** na severozápadní (vlevo nahoře) dvě, bělovlasá anime dívka a dívka v tyrkysovém tílku
+  s kabelkou, na severovýchodní (vpravo nahoře) sama zrzavá anime dívka. Jihovýchodní (vpravo dole) zůstala prázdná.
+- **Měřítko k lavičce:** dívky mají 1,58 až 1,68 m a jsou dvakrát zvětšené jako lavičky, sedí zadkem na sedáku
+  a chodidly na zemi.
+- **Bez blikání:** každý render má trochu jiný šum, takže druhý obrázek je sloučený s prvním (`postavy/animace.py`):
+  liší se jen tam, kde jsou postavy a jejich stíny. Ani z postav nic nepřečuhuje na vedlejší dlaždice.
+- **Modely:** pět dívek od hráče (`postavy/`, Sketchfab, CC BY 4.0), autoři a text uvedení pro hru jsou
+  v `AUTORI-MODELU.md` v oddílu „Postavy u sochy Karla Máchy“. Posazení a pózy dělá `postavy/postavy.py`.
+
 | soubor | co to je |
 |---|---|
 | `socha_kamen_zin4.png` | šedá z kamene, 384 × 384 px, 32 bpp s průhledností, přiblížení 4× |
@@ -33,8 +51,13 @@ Vlastní model, žádný cizí: `render_socha.py` ho postaví v Blenderu a vyfot
 | `socha_kamen_zin4.json`, `socha_bronz_zin4.json` | rohy políčka na obrázku: sever (192, 128), východ (320, 192), západ (64, 192), jih (192, 256) |
 | `nahled_ve_hre.png` | obě sochy ve fotce ze zkušební hry u silnice s Tatrami, zvětšeno 2× |
 | `zblizka.png` | obě sochy vedle sebe zblízka |
+| `socha_kamen_postavy_zin4.png`, `socha_bronz_postavy_zin4.png` | druhý obrázek do animace: totéž s postavami, rohy v JSONu stejné |
+| `animace_ve_hre.gif` | obě sochy ve fotce ze hry, střídá se bez postav a s postavami |
+| `zblizka_postavy.png` | obě sochy s postavami vedle sebe zblízka |
 
 Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 15 s).
+S postavami `POSTAVY=1 SOCHA=kamen python3 render_socha.py <s_postavami.png>` (asi 25 s) a pak
+`python3 ../postavy/animace.py socha_kamen_zin4.png <s_postavami.png> socha_kamen_postavy_zin4.png`.
 `MERITKO=1` dá skutečnou velikost, `SLUNCE`, `OKOLI` a `STIN` mění světlo (teď 2,0, 0,9 a 0,2; automat má 5,0, 0,35
 a 0,55). Tělo je kostra s modifikátorem Skin a vyhlazením, takže je hladké jako tesané nebo lité; kapuce je
 skořepina s otvorem pro obličej, nos, líce s bradou, knír a kapsa jsou elipsoidy. Dlouhé vousy a joint jsou
