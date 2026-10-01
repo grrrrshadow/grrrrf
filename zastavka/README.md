@@ -32,7 +32,8 @@ zastávce“*, *„zálivovou dělat nebudem“*. Tady se to promýšlí, do hry
   a `Y_E` u silnice podél Y. Oba mají počátek ohraničení v severním rohu dlaždice, odtud jsou posuny v tabulce.
   Hra ji pak nakreslí hned po přístřešku, ať je originální nebo z CZTR. Je vždycky před ním a nemá vlastní
   ohraničení, které by se hádalo s přístřeškem nebo s autobusy.
-- **Velikost:** 1,5× (budovy jsou 2×) sedí k přístřeškům i autobusům. Ve 2× je skoro tak vysoká jako střecha.
+- **Velikost: 2×, jako budovy** (hráč: *„vemem tu větší variantu holky“*). Je skoro tak vysoká jako střecha
+  přístřešku; 1,5× je v ukázkách pro srovnání.
 
 **Druhá dívka jen u silnice podél X** (hráč: *„podél X se vejde do jižního rohu dlaždice druhá, jiná holka, zády
 otočená. Podél Y asi ne, naproti na zastávku se nevejde“*, *„úplně do rohu“*):
@@ -51,6 +52,7 @@ otočená. Podél Y asi ne, naproti na zastávku se nevejde“*, *„úplně do 
 
 | soubor | co to je |
 |---|---|
+| `vysledek_2x.png` | **výsledek:** obě zastávky s dívkami ve 2×, podél X dvě (druhá tmavovlasá v jižním rohu zády), podél Y jedna |
 | `zastavky_4x.png` | obě zastávky (originál OpenGFX a CZTR), silnice podél X i Y, ze hry v přiblížení 4× |
 | `zastavky_mrizka.png` | totéž zvětšené 2× s mřížkou dlaždice po 2/16 a rohy N, W, E, S |
 | `divka_na_zastavce_k1.5.png`, `divka_na_zastavce_k2.png` | ukázka: dívka vložená na místo do obou zastávek, 1,5× a 2× |
