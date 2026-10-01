@@ -38,3 +38,19 @@ napište do JSONu, že je to už stažené, ať ho nestahuju podruhé.
 - **Kamera a měřítko jako u gymnázia** (12,2 px/m, políčko 14,84 m) jsou dobré, nic neměnit.
 - **Náhled ve hře** (`nahled_ve_hre.png`): u automatu na něm křoví leze na silnici. Ve hře nepřečuhuje,
   takže v náhledu byla posunutá vložená fotka, ne render.
+
+## Verze hry obrázků (`verze-hry/`)
+
+Hráč: *„pošli mu tvoje verze, my budem přidávat objekty na obrázek“*. Tady jsou:
+
+| soubor | co to je |
+|---|---|
+| `gymnazium_zin4_stazeny.png` | celé gymnázium, jak ho hra bere: 720 × 698, stažené na políčko 256 × 124 |
+| `gymnazium_zin4_stazeny.json` | rohy pozemku na staženém obrázku: sever (360, 224,75), východ (616, 348,75), západ (104, 348,75), jih (360, 472,75); `"stazeny": true` |
+| `automat_zin4_stazeny.png` | automat, 384 × 372, stažený stejně |
+| `automat_zin4_stazeny.json` | rohy: sever (192, 124), východ (320, 186), západ (64, 186), jih (192, 248) |
+| `pruhy/` | co hra doopravdy kreslí: gymnázium po pruzích `w`, `s`, `e` a automat, 32bpp v přiblížení 4× a 8bpp v normálním |
+
+**Objekty přidávejte do `*_stazeny.png`.** Ten už má výšku hry, takže co v něm leží uvnitř kosočtverce
+pozemku podle JSONu, leží ve hře na dlaždici. Hotový obrázek mi pošlete i s JSONem s `"stazeny": true`
+a já ho vezmu, jak je, bez dalšího stahování. Pruhy si nekreslete ručně, nakrájí je hra ze skriptu.
