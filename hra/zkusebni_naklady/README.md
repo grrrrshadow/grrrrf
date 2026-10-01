@@ -11,7 +11,8 @@ cement, kámen ani turisty, tak je přidává tenhle GRF, aby šla vyzkoušet ve
 URAN WATR ACID (verze 4 a 5 vejtřasky), od verze 7 i JAVA CLAY SGCN KAOL (káva v hnědých pytlích, kupka
 jílu, cukrová třtina s obrázkem vláken, kaolín v bílých pytlích), od verze 8 BRCK BDMT FRUT STUD WINE HOPS
 (cihly a stavební materiál s podtypy, ovoce, studenti jako lidé, víno v sudech, chmel jako seno), od verze 9 MLTR
-(vojenská technika, vozí jen zelená). Postup: `yagl -e zkusebni_naklady.grf`
+(vojenská technika, vozí jen zelená), od verze 12 BRAM a BEAN (naše brambory na kupě a v pytlích,
+fazole v hnědých pytlích), sloty 0x2C a 0x2D. Postup: `yagl -e zkusebni_naklady.grf`
 v tomhle adresáři (yagl čte `sprites/zkusebni_naklady.yagl`).
 
 Ověřeno 29. 9.: `testv3s` s `Praga_V3S-v4.grf` a `Praga_V3S_BRYLE-v4.grf`, vrstvy obrázku sedí

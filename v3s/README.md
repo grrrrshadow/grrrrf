@@ -1,5 +1,33 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 12 (1. 10.): naše brambory BRAM, fazole v hnědých pytlích
+
+Hráč: *„valník brambory, vem mu kód BEAN a dej mu kód BRAM, uděláme si svoje brambory a fazole dáme do hnědých
+pytlů na kafe, v pytlích se ztratí i brambory BEAN“*.
+
+- **Nový kód BRAM** na konci vzorové tabulky (`prekladova-tabulka-vzor.yagl`, slot 0xDC). Tabulka má 221 kódů, stará
+  čísla platí.
+  - Vozí ho všechny vejtřasky i Tatry, stejně jako TATO.
+  - V okně přestavby je „(na kupě)“ se žlutou kupou brambor a „(v pytlích)“ v hnědých pytlích.
+  - Modrá vejtřaska je s ním v odstínu B (zemědělství).
+- **Fazole BEAN** jsou v hnědých pytlích jako káva, bez podtypů. Dřív měly kupu a pytle jako brambory, protože je CZIS
+  má přejmenované na brambory.
+- **Tatra:** zelená přestavba navíc je i u BRAM (`T_ZELENA_NAVIC`), u BEAN zůstala.
+- Vojenská vozí 216 nákladů, modrá 209 (o jeden víc, BRAM).
+- Malá 6,58 MB (`b97e2aea…`), velká 7,75 MB (`c05eee41…`), balík `Praga_V3S_Tatra-v12.zip`.
+- Valník brambor z dodávek veze od jejich verze 5 také BRAM místo BEAN (`auta/NOVA-VERZE.md`).
+- **Ověřeno ve zkušební hře.** Zkušební náklady `hra/zkusebni_naklady` mají od dneška i BRAM a BEAN.
+  - **Fotka** `TEST_FOTO_SADA=brambory` (`tatra/nahledy/ve_hre_v12_brambory.png`):
+    - modrá vejtřaska s BRAM na kupě a v pytlích, s fazolemi a s kávou v hnědých pytlích;
+    - zelená vejtřaska s BRAM na kupě a s fazolemi;
+    - Tatra 148 s BRAM na kupě a s fazolemi, Tatra 138 s BRAM v pytlích;
+    - valník TAZ 1203 z dodávek v5 s kupou brambor.
+  - **`testv3s`** pro `MAXd` i `MAXe`:
+    - BRAM má u obou vejtřasek podtypy „(na kupě)“ a „(v pytlích)“, u Tater navíc obojí „zelená“;
+    - BEAN je bez podtypu v hnědých pytlích (stejný obrázek jako BRAM v pytlích), u Tater i „(zelená)“;
+    - ostatní náklady jako ve verzi 11: modrá umí 35 z 39 nákladů zkušební hry (chybí URAN, MLTR, BOOM a ROLA),
+      zelená 37 (chybí TOYS a ROLA), Tatry 38 (chybí ROLA).
+
 ## Verze 11 (30. 9.): zelená Tatra schovaná pod normální, GRF jen pro naši hru
 
 - **Zelená Tatra 148 a 138 zmizela z nákupu** (hráč: *„hlavně zmizí z menu nákupu ta vojenská 138 148 a schová
@@ -178,12 +206,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v11.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v11.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v12.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v12.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v11.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v12.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
-(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10`) zůstávají v repu.
+(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` a `-v11`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 
@@ -449,4 +477,5 @@ zelená místo vojenské, modrá v nákupu první, nové texty; 6 v nákupu jen 
 7 v nákupu „for ottd Decouple by Karel Mácha“ a autor modelu, bílé a hnědé pytle s černou čarou, bedny
 i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podtypy přadných plodin;
 8 vzorová tabulka 220 kódů, studenti, vězni a dělníci, cihly, brambory, ovoce, rum a piva, víno, chmel;
-9 vojenská technika jen zelená, FREE mezi nevozí.
+9 vojenská technika jen zelená, FREE mezi nevozí; 10 Tatry ve stejném GRF; 11 zelená Tatra schovaná, jen pro naši hru;
+12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích.

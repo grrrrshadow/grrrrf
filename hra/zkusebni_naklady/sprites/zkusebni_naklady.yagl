@@ -5,7 +5,7 @@ grf // Action08
     grf_id: "MAXn";
     version: GRF8;
     name: "Zkušební náklady pro vejtřasku (jen pro zkušební hru)";
-    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky, pytle, sudy, seno, turisté, chemikálie, hračky, uran, voda, kyselina, káva, jíl, cukrová třtina, kaolín, cihly, stavební materiál, ovoce, studenti, víno, chmel a vojenská technika. Do hry pro hráče nepatří.";
+    description: "Náklady, které mírné klima nemá, aby šla ve zkušební hře vyzkoušet vejtřaska: kupky, pytle, sudy, seno, turisté, chemikálie, hračky, uran, voda, kyselina, káva, jíl, cukrová třtina, kaolín, cihly, stavební materiál, ovoce, studenti, víno, chmel, vojenská technika, naše brambory a fazole. Do hry pro hráče nepatří.";
 }
 strings<Cargos, default, 0xDC00*> // Action04
 {
@@ -78,6 +78,12 @@ strings<Cargos, default, 0xDC00*> // Action04
     /* 0xDC42 */ "Vojenská technika";
     /* 0xDC43 */ "VT";
     /* 0xDC44 */ "{sw} t vojenské techniky";
+    /* 0xDC45 */ "Naše brambory";
+    /* 0xDC46 */ "NB";
+    /* 0xDC47 */ "{sw} t našich brambor";
+    /* 0xDC48 */ "Fazole";
+    /* 0xDC49 */ "FA";
+    /* 0xDC4A */ "{sw} t fazolí";
 }
 properties<Cargos, 0x0015> // Action00, volny slot 21 (mirne klima ma 0 az 11)
 {
@@ -560,5 +566,47 @@ properties<Cargos, 0x002B> // Action00, volny slot 43 (mirne klima ma 0 az 11)
         base_price: 0x00001000;
         cargo_label: "MLTR";
         bit_number: 0x2B;
+    }
+}
+properties<Cargos, 0x002C> // Action00, volny slot 44 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x002C
+    {
+        cargo_type_name_id: 0xDC45;
+        single_unit_name_id: 0xDC45;
+        cargo_type_abbrev_id: 0xDC46;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC47;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "BRAM";
+        bit_number: 0x2C;
+    }
+}
+properties<Cargos, 0x002D> // Action00, volny slot 45 (mirne klima ma 0 az 11)
+{
+    // instance_id: 0x002D
+    {
+        cargo_type_name_id: 0xDC48;
+        single_unit_name_id: 0xDC48;
+        cargo_type_abbrev_id: 0xDC49;
+        cargo_sprite_id: 0x10CF;
+        single_unit_weight: 0x10;
+        is_freight: true;
+        cargo_units_id: 0x0052;
+        cargo_amount_id: 0xDC4A;
+        capacity_multiplier: 0x0100;
+        cargo_classes: 0x0010;
+        payment_list_colour: 0xD0;
+        station_list_colour: 0xD0;
+        base_price: 0x00001000;
+        cargo_label: "BEAN";
+        bit_number: 0x2D;
     }
 }

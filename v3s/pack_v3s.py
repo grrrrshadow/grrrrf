@@ -43,7 +43,9 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 11 zelena Tatra 148 a 138 schovana pod normalni (vojenske naklady ji obarvi, zelene prestavby navic), radek 3D
 #   hans1240; GRF s Tatrami jen pro nasi hru: dvoubajtova cisla bloku a zamek (hra, zpravy v hra/cisla-bloku a
 #   hra/zamek-128-nakladu), hrac: "neuskromneny, vyuzij novy rozsah cisel bloku"
-VERZE = 11
+# 12 nas kod brambor BRAM na konci vzorove tabulky (kupa a pytle jako TATO), fazole BEAN v hnedych pytlich jako kava
+#   (hrac 1. 10.: "udelame si svoje brambory a fazole dame do hnedych pytlu na kafe, v pytlich se ztrati i brambory BEAN")
+VERZE = 12
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -142,7 +144,7 @@ for _r in blok.split("\n"):
         PORADI.append(_m.group(1)); POZNAMKA[_m.group(1)] = _m.group(2)
     elif _r.strip().startswith("// ----"):
         ODDIL[len(PORADI)] = _r.strip()
-assert len(PORADI) == 220 and PORADI.index("MARI") == 0x92 and PORADI.index("CHEM") == 0xAB, len(PORADI)
+assert len(PORADI) == 221 and PORADI.index("MARI") == 0x92 and PORADI.index("CHEM") == 0xAB, len(PORADI)
 assert not set(NAVIC) & set(PORADI), set(NAVIC) & set(PORADI)
 if NAVIC: ODDIL[len(PORADI)] = "// ---- NAVÍC PRO VEJTŘASKU — ve vzoru nejsou ----"
 POZNAMKA.update(NAVIC)
@@ -159,7 +161,7 @@ LIDE = ["PASS", "TOUR", "OTI1", "OTI2", "YETI", "YETY",
 # B zemedelstvi"). Co neni v B, C ani D, je A. Od verze 4 i naklady, ktere prisly s celou tabulkou
 # (obili a plodiny B, jil a kaolin C, rudy a kovy D).
 ODSTIN = {}
-for k in ("TATO BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS WOOD "
+for k in ("TATO BRAM BEAN SGBT TBCO MARI FICR FMSP SEED OLSD LVST WOOL FRUT JAVA NUTS WOOD "
           "GRAI WHEA MAIZ CERE FRVG SGCN CASS TWOD FERT").split(): ODSTIN[k] = "B"
 for k in "CMNT BDMT BRCK CCPR CERA GRVL SAND LIME QLME RBAR STSW CLAY KAOL".split(): ODSTIN[k] = "C"
 for k in ("SCMT STEL STAL STST STSE STSH STWR STCB METL STIG STSL STBR STPL STBL STPP STTB PIPE IORE COAL COKE "
@@ -204,7 +206,7 @@ VRSTVY = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           # a livery brambor pytle hnedy", "ovoce a zelenina cerveny zluty zeleny oranzovy jablicka, jako brambor")
           "cihly_cervene", "cihly_sede", "brambory", "ovoce"]
 VRSTVA = {k: k for k in VRSTVY if k in INDEX}       # obrazky pojmenovane kodem nakladu
-VRSTVA.update({"TWOD": "WOOD", "SCRP": "SCMT"})   # brambory (TATO, BEAN) od verze 8 s podtypy, viz PODTYPY
+VRSTVA.update({"TWOD": "WOOD", "SCRP": "SCMT"})   # brambory (TATO, od verze 12 i BRAM) s podtypy, viz PODTYPY
 # obili od verze 7 taky se zlutou kupkou pisku (hrac 29. 9.: "psenice kupu zlutou od pisku treba")
 VRSTVA.update({k: "SAND" for k in "GRAI WHEA MAIZ CERE".split()})
 # rudy od verze 7 jako kupy podobne barvy: bauxit rezavy jako zelezna ruda, niklova a pyritova ruda sede, mangan
@@ -219,6 +221,7 @@ VRSTVA.update({"AORE": "IORE", "NKOR": "SLAG", "PORE": "GRVL", "MNO2": "COKE", "
 VRSTVA.update({k: "CMNT" for k in "SALT SUGR RSGR WOOL KAOL QLME SASH".split()})   # BDMT od verze 8 s podtypy
 VRSTVA.update({k: "GOOD" for k in "FMSP ENSP WELD".split()})
 VRSTVA["JAVA"] = "pytle_hnede"
+VRSTVA["BEAN"] = "pytle_hnede"                    # od verze 12 fazole v hnedych pytlich jako kava (hrac 1. 10.)
 VRSTVA["SGCN"] = "FICR"
 # od verze 8: kyseliny a plyny ze sad v hracove hre v cervenych sudech jako ostatni chemie (hrac: "prostě udělej
 # i tekutiny, barevný sudy a je to"), medeny koncentrat jako medena ruda (hrac: "vsechny ore kupu"), chmel
@@ -252,7 +255,8 @@ PODTYPY = {"LVST": [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce"
            "BRCK": [("cihly_cervene", " (červené)"), ("cihly_sede", " (šedé)")],
            "BDMT": [("cihly_cervene", " (červené cihly)"), ("cihly_sede", " (šedé cihly)"), ("CMNT", " (pytle)")],
            "TATO": [("brambory", " (na kupě)"), ("pytle_hnede", " (v pytlích)")],
-           "BEAN": [("brambory", " (na kupě)"), ("pytle_hnede", " (v pytlích)")]}
+           # od verze 12 nase brambory BRAM jako TATO, fazole BEAN bez podtypu v hnedych pytlich (VRSTVA)
+           "BRAM": [("brambory", " (na kupě)"), ("pytle_hnede", " (v pytlích)")]}
 # Plachta (hrac 29. 9.: "co neni kupka nech grafiku prazdne. udelame prikladaci plachtu. grafika stovky aut plny jednou
 # plachtou. kdyz pojede plna, prilozime plachtu", "jidlo plachta", "vojensky vojenskou plachtu, a sedou", "modry zlutou
 # sedobilou plachtu", "sedou dame u vojensky na ocelove retezce, strojirenstvi"): vsechno, co nejede jako kupka, jede

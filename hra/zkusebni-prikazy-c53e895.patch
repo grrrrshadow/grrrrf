@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 --- a/openttd/src/console_cmds.cpp	2026-10-01 16:52:11.759625822 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-10-01 16:52:11.771487186 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-01 17:16:28.213099432 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -27,7 +27,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "tree_cmd.h"
  #include "order_cmd.h"
  #include "order_func.h"
-@@ -2461,6 +2466,718 @@
+@@ -2461,6 +2466,726 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -303,9 +303,17 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		{"MAXd", 0x0102, "COAL", true}, {"MAXe", 0x0103, "MLTR", true}, {"MAXe", 0x0102, "BRCK", true, 2}, {"MAXe", 0x0103, "BEER", true, 3},
 +		{"MAXe", 0x0102, "GRAI", true, 1}, {"MAXe", 0x0103, "WOOD", true},
 +	};
++	/* TEST_FOTO_SADA=brambory: od verze 12 nase brambory BRAM (kupa a pytle jako TATO) a fazole BEAN v hnedych pytlich jako
++	 * kava; vejtraska modra a zelena, Tatra 148, a valnik brambor z dodavek v5 (MAX\x08 0x88) s BRAM */
++	static const Nakup nakupy_brambory[] = {
++		{"MAXd", 0x0101, "BRAM", true, 0}, {"MAXd", 0x0101, "BRAM", true, 1}, {"MAXd", 0x0101, "BEAN", true}, {"MAXd", 0x0101, "JAVA", true},
++		{"MAXd", 0x0100, "BRAM", true, 0}, {"MAXd", 0x0100, "BEAN", true}, {"MAXd", 0x0102, "BRAM", true, 0}, {"MAXd", 0x0102, "BEAN", true},
++		{"MAXd", 0x0103, "BRAM", true, 1}, {"MAX\x08", 0x0088, "BRAM", true},
++	};
 +	const char *sada_foto = getenv("TEST_FOTO_SADA");
 +	const bool tatra_foto = sada_foto != nullptr && std::string_view(sada_foto) == "tatra";
 +	const bool tatra11_foto = sada_foto != nullptr && std::string_view(sada_foto) == "tatra11";
++	const bool brambory_foto = sada_foto != nullptr && std::string_view(sada_foto) == "brambory";
 +	/* pro srovnani pruhu dva puvodni nakladaky hry (bez NewGRF) */
 +	int puvodnich = 0;
 +	for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
@@ -318,7 +326,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		V3SLog("V3SFOTO: koupen puvodni nakladak engine {}", e->index.base());
 +		puvodnich++;
 +	}
-+	for (const Nakup &n : (tatra11_foto ? std::span<const Nakup>(nakupy_tatra11) : tatra_foto ? std::span<const Nakup>(nakupy_tatra) : std::span<const Nakup>(nakupy))) {
++	for (const Nakup &n : (brambory_foto ? std::span<const Nakup>(nakupy_brambory) : tatra11_foto ? std::span<const Nakup>(nakupy_tatra11) : tatra_foto ? std::span<const Nakup>(nakupy_tatra) : std::span<const Nakup>(nakupy))) {
 +		uint32_t want = (uint8_t)n.grf[0] | (uint8_t)n.grf[1] << 8 | (uint8_t)n.grf[2] << 16 | (uint32_t)(uint8_t)n.grf[3] << 24;
 +		EngineID eid = EngineID::Invalid();
 +		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
@@ -746,7 +754,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2639,6 +3356,17 @@
+@@ -2639,6 +3364,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -764,7 +772,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13129,6 +13857,11 @@
+@@ -13129,6 +13865,11 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);

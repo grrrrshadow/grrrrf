@@ -56,7 +56,7 @@ T_NAKLADY_NORMALNI = [k for k in TABULKA if k not in NEVOZI]
 # cihel a stavebnin ("cement, vapno, pytle") a u toho, co si vojaci uzijou ("cigara, tabak, alkohol"); "prestavby na
 # pivovar Plzen Budvar ne" (cisterny zelenou variantu nemaji)
 T_ZELENA_NAVIC = ("LVST "                                                           # prasatka, kravicky, ovecky
-                  "MARI HOPS FICR SGCN FRUT FRVG GRAI WHEA MAIZ CERE TATO BEAN SGBT SEED OLSD NUTS "   # co roste
+                  "MARI HOPS FICR SGCN FRUT FRVG GRAI WHEA MAIZ CERE TATO BRAM BEAN SGBT SEED OLSD NUTS "   # co roste
                   "WOOD TWOD BRCK BDMT CMNT QLME "                                  # drevo, cihly, stavebniny
                   "CIGR TBCO BEER WINE").split()                                    # doutniky, tabak, alkohol
 

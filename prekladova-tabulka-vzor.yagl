@@ -958,6 +958,11 @@ properties<GlobalSettings, 0x0000> // Action00
     {
         cargo_translation_table: "WDCH"; // undefined (zná ho GETS Alpine 0.3.1)
     }
+    // ---- NAŠE BRAMBORY (hráč 1. 10.: „uděláme si svoje brambory“) ----
+    // instance_id: 0x00DC
+    {
+        cargo_translation_table: "BRAM"; // brambory, naše (vozidla jako TATO: kupa a hnědé pytle; fazole BEAN v hnědých pytlích)
+    }
 }
 
 // ====================================================================
@@ -976,9 +981,9 @@ properties<GlobalSettings, 0x0000> // Action00
 // existoval, musí se nadefinovat: Action0 feature 0B, vlastnost 17
 // (label) a k tomu jména, ikona, váha, cena.
 //
-//    // instance_id: 0x00DC
+//    // instance_id: 0x00DD
 //    {
 //        cargo_translation_table: "XXXX"; // co to je
 //    }
 
-// v tabulce výš: 220 nákladů, sloty 0x0000-0x00DB (strop je 255)
+// v tabulce výš: 221 nákladů, sloty 0x0000-0x00DC (strop je 255)
