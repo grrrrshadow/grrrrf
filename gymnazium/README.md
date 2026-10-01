@@ -20,8 +20,35 @@ Vlastní model, žádný cizí: `render_gymnazium.py` ho postaví v Blenderu (mo
 | `gymnazium_zin4.png` | celý obrázek, 720 × 720 px, 32 bpp s průhledností, přiblížení 4× |
 | `gymnazium_zin4.json` | kde jsou na obrázku rohy pozemku: sever (360, 232), východ (616, 360), západ (104, 360), jih (360, 488) |
 | `nahled_ve_hre.png` | obrázek vložený do fotky ze zkušební hry (políčka 46–47 × 16–17, vedle silnice s Tatrou) |
+| `gymnazium_postavy_zin4.png` | druhý obrázek do animace: totéž s holkami, rohy v JSONu (`gymnazium_postavy_zin4.json`) stejné |
+| `animace_ve_hre.gif` | gymnázium a automat ve fotce ze hry, střídá se bez holek a s holkami |
 
 Složit znovu: `python3 render_gymnazium.py <výstup.png>` (128 vzorků, asi 40 s; `SAMPLES=32` na zkoušku).
 
-**Dál:** rozřezat na čtyři sprity, každý na svou dlaždici (hráč: *„pak si budovu zarovnáme sprit na dlaždice“*).
-Do hry to zabuduje session hry ve forclaude.
+Ve hře je gymnázium od forclaude `2366825`: hra si obrázek sama stáhne na políčko 256 × 124 a rozkrájí na svislé
+pruhy po políčkách (`hra/zarovnani-budov/ZPRAVA-OD-HRY.md`).
+
+## Druhý obrázek do animace: holky kolem školy
+
+Hráč 1. 10.: *„spawnem holky kolem školy a automatu“*. Jako u sochy (`socha/`) se ve hře střídá obrázek bez holek
+(`gymnazium_zin4.png`, ten, co už hra má) a s holkami (`gymnazium_postavy_zin4.png`).
+
+- **Ve skutečné velikosti** jako budova, lavičky a koše na hřišti (u automatu a sochy jsou dvakrát větší, protože
+  tam je dvakrát větší všechno). Při přiblížení 4× mají asi 17 px.
+- **Na lavičce před školou** (vpravo od vchodu) sedí bělovlasá anime dívka (Galaxia) a dívka v tyrkysovém tílku
+  (Character Girl), jako u sochy.
+- **Před schody** si povídají dívka v tyrkysovém tílku a tmavovlasá ve školní uniformě (College Girl), z profilu.
+  Bělovlasá na světlých schodech splývala, proto tam je tmavovlasá.
+- **Po hlavní cestě** jde k bráně další tmavovlasá. College Girl má školní uniformu, víc stejných ve škole sedí.
+- **Na hřišti** hází tmavovlasá na koš, ruce nahoře, oranžový míč nad nimi.
+- **Na zadní lavičce v parku** sedí zrzavá anime dívka (Anime Girl) čelem k divákovi.
+- **Bez blikání:** druhý obrázek je sloučený s prvním (`postavy/animace.py`), liší se jen tam, kde jsou holky,
+  jejich stíny a pár odlesků v oknech. Nic z nich nepřečuhuje pod přední hrany ani do stran. Z pruhů, jak je hra
+  krájí, se mění jen západní (hřiště) a jižní, východní je v obou obrázcích stejný.
+- **Modely:** dívky od hráče (`postavy/`, Sketchfab, CC BY 4.0), autoři a text uvedení pro hru jsou
+  v `AUTORI-MODELU.md` v oddílu „Postavy u automatu a gymnázia“.
+
+Složit znovu: `POSTAVY=1 python3 render_gymnazium.py <s_postavami.png>` (asi 50 s) a pak
+`python3 ../postavy/animace.py gymnazium_zin4.png <s_postavami.png> gymnazium_postavy_zin4.png`.
+Náhled: `hra/nahled_ve_hre.py` se dvěma obrázky na `@46,16` (gymnázium) a `@44,16` (automat), jednou bez holek
+a jednou s nimi, a oba snímky do GIFu se společnou paletou.

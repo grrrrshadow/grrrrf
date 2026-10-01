@@ -272,3 +272,32 @@ def nacti_stojici(jmeno, vyska, poza="stoji"):
     priprava = (ruce_dolu_college if "college" in jmeno else ruce_dolu) if poza == "ruce_dolu" else None
     nechat = (lambda o: "Icosphere" not in o.name) if "galaxia" in jmeno else divka_a if "college" in jmeno else None
     return nacti(jmeno, vyska, priprava=priprava, nechat=nechat, emise=0.0 if "anime" in jmeno else None)
+
+
+# ---------------------------------------------------------------- divky sedici (na lavicky u budov, pozy jako u sochy)
+def sed_galaxia(arm, meshe):
+    """galaxia: sed kostrou, ruce podel tela a predlokti na stehna"""
+    for st in ("L", "R"):
+        zn = 1 if st == "L" else -1
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperLeg"), (1, 0, 0), math.radians(-72))     # kolena niz, at dojde na zem
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerLeg"), (1, 0, 0), math.radians(67))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (0, 1, 0), zn * math.radians(72))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (1, 0, 0), math.radians(-18))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-55))
+
+
+#: modely bez kostry, ktere sedi ohnutim nohou v siti: vyska, kycle a kolena (podil vysky)
+SEDICI = {"character_people_girl_001": (1.68, 0.49, 0.28), "anime_girl": (1.6, 0.52, 0.285)}
+
+
+def sedici(jmeno):
+    """divka posazena na sedak 0,47 m jako u sochy: (meshe, kotva), kotva = bod sedu (stred mezi kycli, zadek dole);
+    galaxia kostrou, ostatni ohnutim nohou (sed())"""
+    if "galaxia" in jmeno:
+        g = nacti(jmeno, 1.58, priprava=sed_galaxia, nechat=lambda o: "Icosphere" not in o.name)
+        return g, bod_sedu(g, 1.58, 0.0)[0]
+    vyska, z_kycel, z_koleno = SEDICI[jmeno]
+    m = nacti(jmeno, vyska, emise=0.0 if "anime" in jmeno else None)
+    nohy = stredy_nohou(m, vyska)
+    kotva, _, _ = sed(m, vyska, z_kycel, z_koleno, [nohy[0][1], nohy[1][1]])
+    return m, kotva

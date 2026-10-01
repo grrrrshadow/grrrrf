@@ -27,7 +27,29 @@ Vlastní model, žádný cizí: `render_automat.py` ho postaví v Blenderu a vyf
 | `automat_zin4.png` | obrázek, 384 × 384 px, 32 bpp s průhledností, přiblížení 4× |
 | `automat_zin4.json` | rohy políčka na obrázku: sever (192, 128), východ (320, 192), západ (64, 192), jih (192, 256) |
 | `nahled_ve_hre.png` | obrázek ve fotce ze zkušební hry u silnice s Tatrami, zvětšeno 2× |
+| `automat_postavy_zin4.png` | druhý obrázek do animace: totéž s holkami, rohy v JSONu (`automat_postavy_zin4.json`) stejné |
 
 Složit znovu: `python3 render_automat.py <výstup.png>` (128 vzorků, asi 20 s). `MERITKO=1` dá skutečnou velikost.
 Křoví se skládá z koulí přímo v síti (bmesh) s hrbolky ze šumu: stovky samostatných objektů s modifikátory
 by Blender zpomalily na desítky minut.
+
+## Druhý obrázek do animace: holky u automatu
+
+Hráč 1. 10.: *„spawnem holky kolem školy a automatu“*. Jako u sochy (`socha/`) se ve hře střídá obrázek bez holek
+(`automat_zin4.png`, ten, co už hra má) a s holkami (`automat_postavy_zin4.png`).
+
+- **U automatu platí** tmavovlasá dívka ve školní uniformě (College Girl), zády k divákovi, pravou ruku má
+  u zeleného pruhu s placením.
+- **Na lavičce sedí** dívka v tyrkysovém tílku (Character Girl), čelem k automatu, blíž ke koši.
+- **Vpravo vpředu stojí** bělovlasá anime dívka (Galaxia) čelem k divákovi, jako když odchází s nákupem.
+- **Dvakrát větší** jako automat a lavička. Na lavičce sedí zadkem na sedáku a chodidly na zemi.
+- **Bez blikání:** druhý obrázek je sloučený s prvním (`postavy/animace.py`), liší se jen tam, kde jsou holky
+  a jejich stíny. Nic z nich nepřečuhuje pod přední hrany ani do stran.
+- **Modely:** dívky od hráče (`postavy/`, Sketchfab, CC BY 4.0), autoři a text uvedení pro hru jsou
+  v `AUTORI-MODELU.md` v oddílu „Postavy u automatu a gymnázia“.
+
+Ukázka střídání ve fotce ze hry, i s gymnáziem: `../gymnazium/animace_ve_hre.gif`.
+
+Složit znovu: `POSTAVY=1 python3 render_automat.py <s_postavami.png>` (asi 20 s) a pak
+`python3 ../postavy/animace.py automat_zin4.png <s_postavami.png> automat_postavy_zin4.png`.
+Ruku u placení nastavují `PL_DOPREDU`, `PL_DOLU` a `PL_LOKET` (stupně, teď 82, 50 a 70).

@@ -15,23 +15,23 @@ musí NC převzít.
 |---|---|---|---|
 | [3D Sci-Fi](https://sketchfab.com/3D_Sci-Fi) | BSG – Shuttle Mk. II (`bsg__shuttle_mk._ii.glb`); BSG – Rising Star-type (`bsg__rising_star-type.glb`); BSG – Caprica Clipper (`bsg__caprica_clipper.glb`); BSG – Pyxis / Chrion (`bsg__pyxis__chrion.glb`); BSG – Olympic Carrier (`bsg__olympic_carrier.glb`); BSG – Gemenon Liner 1701 (`bsg__gemenon_liner_1701.glb`); BSG – Colonial Liner (`bsg__colonial_liner.glb`); BSG – Shuttle Mk. II (`bsg__shuttle_mk._iiix0cx60.glb`) | CC-BY-4.0 | glb (GLB.zip), z něj je shuttle.grf, par6 |
 | [Chicken cutlet](https://sketchfab.com/Chicken_Cutlet) | Diesel locomotive M62 (`diesel_locomotive_m62.glb`) | CC-BY-4.0 | par5 (zip5/m62), z něj je Sergej |
-| [demidrew](https://sketchfab.com/demidrew) | Anime Girl (`anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
+| [demidrew](https://sketchfab.com/demidrew) | Anime Girl (`anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, gymnázium s holkami |
 | [DynamicSAV](https://sketchfab.com/dynamicsav) | Car trailer model game ready for free PBR (`car_trailer_model_game_ready_for_free_pbr.glb`) | CC-BY-4.0 | par6 |
 | [Fratzica](https://sketchfab.com/vasilebetivu62) | Opel Movano (`opel_movano.glb`) | CC-BY-4.0 | par6 |
 | [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 (**nejisté**, viz „Pozor na modely od hans1240“ dole) | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
-| [kiemtruongkts](https://sketchfab.com/kiemtruongkts) | Character People Girl 001 (`character_people_girl_001.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, dívka na zastávce, holka u dveří busů (dodávky v5), studentky na korbě (V3S a Tatry v13) |
+| [kiemtruongkts](https://sketchfab.com/kiemtruongkts) | Character People Girl 001 (`character_people_girl_001.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, dívka na zastávce, holka u dveří busů (dodávky v5), studentky na korbě (V3S a Tatry v13), automat a gymnázium s holkami |
 | [LarsH.](https://sketchfab.com/LarsH.) | Star Wars A-A5 heavy speeder truck (`star_wars_a-a5_heavy_speeder_truck.glb`); Star Wars Landspeeder Collection (`star_wars_landspeeder_collection.glb`) | CC-BY-4.0 | par6 |
 | [manilov.ap](https://sketchfab.com/manilov.ap) | Mig21 (`mig21.glb`); Yak42 (`yak42.glb`); Tu204 (`tu204.glb`); Tu154 (`tu154.glb`); Tu144 (`tu144.glb`); Tu114 (`tu114.glb`); An225 (`an225.glb`); An10 (`an10.glb`); An124 (`an124.glb`); An74 (`an74.glb`) | CC-BY-4.0 | par6 |
 | [Miguel Adão](https://sketchfab.com/theauditor) | Zeppelin Aircraft (`zeppelin_aircraft.glb`) | CC-BY-4.0 | par6 |
 | [Pavlo_Holubov](https://sketchfab.com/Pavlo_Holubov) | Zuk (`zukpavloholubov.glb`) | CC-BY-4.0 | par6 |
 | [rhcreations](https://sketchfab.com/rhcreations) | Large Caravan (`large_caravan.glb`); Small Caravan (`small_caravan.glb`) | CC-BY-4.0 | par6 |
-| [Rotmill](https://sketchfab.com/Rotmill) | College Girl (`college_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, druhá dívka na zastávce, holka u kufru busů (dodávky v5), studentky na korbě (V3S a Tatry v13) |
+| [Rotmill](https://sketchfab.com/Rotmill) | College Girl (`college_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, druhá dívka na zastávce, holka u kufru busů (dodávky v5), studentky na korbě (V3S a Tatry v13), automat a gymnázium s holkami |
 | [Shonan](https://sketchfab.com/shonan) | Just a truck (`zukvalnik.glb`) | CC-BY-4.0 | par6 |
 | [Soviet Model Magic](https://sketchfab.com/mckadefasel) | Energia Rocket (untextured) (`energia_rocket_untextured.glb`) | CC-BY-4.0 | par6 |
 | [squalll_999](https://sketchfab.com/squalll_999) | Girl Bikini (`girl_bikini.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
 | [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`) |
 | [tashtego](https://sketchfab.com/tashtego) | Space Shuttle Buran (`space_shuttle_buran.glb`) | CC-BY-NC-4.0 | par6 |
-| [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13) |
+| [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13), automat a gymnázium s holkami |
 | [Thcyrax](https://sketchfab.com/thcyrax) | Vehicle - Ural Truck 44202 (`vehicle_-_ural_truck_44202.glb`) | CC-BY-4.0 | par6 |
 | [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`) |
 | ? (v souboru není) | v3s_praga.glb (`v3s_praga.glb`); bsg_shuttle_mk_ii_olympic_carriers_fanon.glb (`bsg_shuttle_mk_ii_olympic_carriers_fanon.glb`) | ? | par6 |
@@ -95,6 +95,40 @@ Changes: recoloured, scaled, the pot removed, rendered into the sprite.
 
 Budovy samotné (dívčí gymnázium, automat, socha Karla Máchy s lavičkami, košem, keři a odpadky) jsou vlastní
 modely ze skriptů v tomhle repu, cizí licenci nemají.
+
+## Postavy u automatu a gymnázia (2026-10-01)
+
+Stejné dívky z `postavy/` (zip7) jsou i v druhých obrázcích automatu a gymnázia do animace
+(`automat/automat_postavy_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png`), hráč: *„spawnem holky kolem školy
+a automatu“*. Girl Bikini tam není. Do hry jdou jen obrázky; kdo je bere (session hry ve forclaude), vezme i uvedení
+autorů níže.
+
+| model | autor | u automatu | u gymnázia |
+|---|---|---|---|
+| Anime Girl | demidrew | není | sedí na zadní lavičce v parku |
+| Character People Girl 001 | kiemtruongkts | sedí na lavičce | sedí na lavičce před školou, povídá si před schody |
+| College Girl | Rotmill | platí u automatu (ruka napozovaná kostrou) | povídá si před schody, jde po cestě, hází na koš (ruce kostrou) |
+| Galaxia anime girl | Tatenashi | stojí vpředu, ruce podél těla | sedí na lavičce před školou |
+
+Úpravy jako u sochy: bez obrysové slupky a svícení (Anime Girl), bez koule navíc (Galaxia), z College Girl jen první
+dívka, zmenšené k lavičkám (u automatu pak 2× jako celý automat).
+
+Uvedení pro hru:
+
+```
+Figures at the vending machine and the girls' grammar school (Postavy u automatu a dívčího gymnázia):
+"Anime Girl" by demidrew
+    https://sketchfab.com/3d-models/anime-girl-3dc65ecd2fc04f16bea1ec3d7b4673f0
+"Character People Girl 001" by kiemtruongkts
+    https://sketchfab.com/3d-models/character-people-girl-001-35d1d9521b8c4e3a8b282045dd243017
+"College Girl" by Rotmill
+    https://sketchfab.com/3d-models/college-girl-5395dfd1871c41f29aa02e05c4e58eb7
+"Galaxia anime girl" by Tatenashi
+    https://sketchfab.com/3d-models/galaxia-anime-girl-485f95459fa747fdbe42c87203e1a156
+All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Changes: posed (sitting, standing, paying at the machine, shooting a basket), scaled to the benches and rendered
+into the sprite.
+```
 
 ## Opis hráčova lístku (2026-09-28)
 

@@ -16,4 +16,11 @@ pro hru jsou v `../AUTORI-MODELU.md` (oddíl „Postavy u sochy Karla Máchy“)
   `sed()` vybere úhel stehen tak, aby na sedáku 0,47 m došla chodidla na zem.
 - `animace.py`: druhý obrázek budovy (s postavami) sloučí s prvním, aby se lišily jen tam, kde postavy jsou.
 
-Použití: socha (`socha/render_socha.py`, `POSTAVY=1`). Pak přijde automat a gymnázium.
+Použití:
+- druhé obrázky budov do animace (`POSTAVY=1`): socha (`socha/render_socha.py`), automat (`automat/render_automat.py`)
+  a gymnázium (`gymnazium/render_gymnazium.py`);
+- `fotka_postavy.py`: jedna dívka samotná na přiložení (zastávka, holky u aut);
+- studentky na korbě V3S a Tater (`v3s/render_v3s.py`).
+
+`sedici(jmeno)` posadí Galaxii (kostrou), Character Girl nebo Anime Girl (ohnutím nohou) na sedák 0,47 m jako u sochy
+a vrátí bod sedu; `nacti_stojici(jmeno, vyska, poza)` dá stojící.

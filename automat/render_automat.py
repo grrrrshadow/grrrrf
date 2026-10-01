@@ -10,6 +10,7 @@
 # a odpadky rozhazene po zemi": skupina je v severnim rohu policka (MERITKO, vychozi 2), zbytek zarostly divokym
 # neudrzovanym krovim stejne zvetsenym, mezi nim plevel.
 #   python3 render_automat.py <vystup.png>
+#   POSTAVY=1: druhy obrazek do animace s divkami (postavy/), pak sloucit postavy/animace.py s automat_zin4.png
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu policka.
 import bpy, bmesh, os, sys, math, json, random
 import numpy as np
@@ -355,6 +356,44 @@ print("kru", len(kere), "plevele", plevel)
 for jmeno, (m, bm) in SITE.items():
     me = bpy.data.meshes.new(jmeno); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(jmeno, me); scene.collection.objects.link(o); me.materials.append(m)
+# ---------------------------------------------------------------- postavy (druhy obrazek do animace, POSTAVY=1)
+# Hrac 1. 10.: "spawnem holky kolem skoly a automatu". Jako u sochy (socha/render_socha.py) ve 2x jako skupina:
+# tmavovlasa (College Girl) plati u automatu, Character Girl sedi na lavicce celem k automatu, Galaxia s nakupem
+# odchazi po dlazbe k divakovi. Modely v postavy/ (autori v AUTORI-MODELU.md), pozy v postavy/postavy.py.
+if os.environ.get("POSTAVY", "") == "1":
+    sys.path.insert(0, os.path.join(TU, "..", "postavy"))
+    import postavy as PO
+
+    def do_sceny(meshe, kotva, gx, gy, gz, uhel):
+        """postava (celem k -y, kotva = jeji bod, ktery ma stat v bode skupiny gx gy gz) celem ve smeru uhel"""
+        PO.postav(meshe, Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Scale(K, 4) @ Matrix.Translation(-kotva))
+
+    def na_lavicku(meshe, kotva, lavicka_, u):
+        """bod sedu na sedak lavicky (x, y, uhel) ve vzdalenosti u od jejiho stredu, zady k operadlu"""
+        x, y, uhel = lavicka_
+        c, s = math.cos(uhel), math.sin(uhel)
+        v = 0.05                                      # kousek dozadu k operadlu
+        do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47, uhel)
+
+    def placeni(arm, meshe):
+        """leva ruka podel tela (jako ruce_dolu_college), prava z pozice T dopredu dolu a predlokti nahoru k ctecce karet"""
+        PO.otoc_kost(arm, PO._kost(arm, "Shoulder_L_"), (0, 1, 0), math.radians(76))
+        PO.otoc_kost(arm, PO._kost(arm, "Shoulder_L_"), (1, 0, 0), math.radians(-6))
+        PO.otoc_kost(arm, PO._kost(arm, "Elbow_L_"), (1, 0, 0), math.radians(-14))
+        ram, loket = PO._kost(arm, "Shoulder_R_"), PO._kost(arm, "Elbow_R_")
+        PO.otoc_kost(arm, ram, (0, 0, 1), math.radians(PL_DOPREDU))
+        PO.otoc_kost(arm, ram, (1, 0, 0), math.radians(PL_DOLU))
+        PO.otoc_kost(arm, loket, (1, 0, 0), math.radians(-PL_LOKET))
+    PL_DOPREDU, PL_DOLU, PL_LOKET = (float(os.environ.get(n, d)) for n, d in (("PL_DOPREDU", "82"), ("PL_DOLU", "50"), ("PL_LOKET", "70")))
+    cg = PO.nacti("college_girl", 1.62, priprava=placeni, nechat=PO.divka_a)
+    do_sceny(cg, Vector((0, 0, 0)), AX1 + 0.5, AY1 - 0.32, Z_D, math.pi)      # u automatu, prava ruka u placeni
+
+    ch, kotva = PO.sedici("character_people_girl_001")
+    na_lavicku(ch, kotva, (LX, LY, math.pi), 0.3)                                # na lavicce blize ke kosi
+
+    ga = PO.nacti_stojici("galaxia_anime_girl", 1.58, "ruce_dolu")
+    do_sceny(ga, Vector((0, 0, 0)), C + 0.45, C + 1.5, Z_D, math.radians(40))  # vpravo vpredu, k divakovi
+
 bpy.ops.mesh.primitive_plane_add(size=1, location=Vector((C, -C, 0.0)))
 zem = bpy.context.object; zem.scale = (T, T, 1); zem.is_shadow_catcher = True
 

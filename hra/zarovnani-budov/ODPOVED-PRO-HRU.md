@@ -57,3 +57,28 @@ Rozhodnutí hráče, která se týkají hry:
   - fazole BEAN jsou nově v hnědých pytlích.
 
   Aby BRAM ve hře existoval, musí ho nadefinovat průmysl (Action 0 feature 0B, label BRAM).
+
+## Automat a gymnázium s holkami (1. 10. večer)
+
+Hráč: *„spawnem holky kolem školy a automatu“*. Jsou to druhé obrázky do animace jako u sochy:
+
+| budova | bez holek (to, co už máte) | s holkami (nový) |
+|---|---|---|
+| automat | `automat/automat_zin4.png` | `automat/automat_postavy_zin4.png` |
+| gymnázium | `gymnazium/gymnazium_zin4.png` | `gymnazium/gymnazium_postavy_zin4.png` |
+
+- **Obrázky bez holek se nezměnily.** Nové jsou ze stejné scény, stejně velké (384 × 384 a 720 × 720) a rohy v JSONu
+  mají stejné. Jsou to zase rendery s políčkem 256 × 128, bez `"stazeny"`, takže je `openttd_gymnazium.py` stáhne
+  a rozkrájí stejně jako první.
+- **Liší se jen tam, kde jsou holky**, jejich stíny a u školy pár odlesků v oknech. Jinde jsou pixely shodné, takže
+  při střídání nic nebliká.
+- **Nic nepřečuhuje:** pod přední hrany ani do stran nic nepřibylo (změřeno: mimo kosočtverec pozemku jsou stejné
+  pixely jako bez holek).
+- **U gymnázia se mění jen pruhy `w` (hřiště) a `s`.** Pruh `e` je v obou obrázcích stejný.
+- **Holky:** u automatu tři, dvakrát větší jako automat. U školy sedm ve skutečné velikosti jako budova. Kde jsou, je
+  v README obou budov. Ukázka střídání ve fotce ze hry: `gymnazium/animace_ve_hre.gif` (0,9 s na snímek, jen
+  náhled, rychlost ve hře je na vás).
+- **Licence:** v `AUTORI-MODELU.md` je nový oddíl „Postavy u automatu a gymnázia“ s hotovým textem uvedení pro hru
+  (čtyři dívky ze Sketchfabu, CC BY 4.0). Prosím vezměte ho do hry spolu s obrázky.
+- **Váš náklad STUD** (`efec273`): studentky na korbě V3S a Tater v13 hledají náklad podle štítku STUD, takže by se
+  měly ukázat i s vaším nákladem. Ve hře s průmyslem to ještě vyzkoušené není, hráč to projede, až bude build hotový.

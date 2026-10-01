@@ -5,6 +5,7 @@
 # stiny, aby vynikla zaoblena karoserie"): ortho, 30 st. shora, azimut 45 st., slabe okoli 0,35 a slunce 5 zleva shora.
 # Meritko 12,2 px/m jako vejtraska a Tatra v zin4, policko je pak 14,84 m a pozemek 29,7 x 29,7 m.
 #   python3 render_gymnazium.py <vystup.png> [px_na_m]
+#   POSTAVY=1: druhy obrazek do animace s divkami (postavy/), pak sloucit postavy/animace.py s gymnazium_zin4.png
 # Souradnice v modelu jako ve hre: x k jihozapadu (na obrazku doleva dolu), y k jihovychodu (doprava dolu),
 # z nahoru, pocatek v severnim rohu pozemku. Do Blenderu B(x, y, z) = (y, -x, z), kamera z jihu jako u aut.
 import bpy, bmesh, os, sys, math, json
@@ -347,6 +348,58 @@ for jmeno, (m, bm) in SITE.items():
     me = bpy.data.meshes.new(jmeno); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(jmeno, me); scene.collection.objects.link(o); me.materials.append(m)
     for p in me.polygons: p.use_smooth = False
+# ---------------------------------------------------------------- postavy (druhy obrazek do animace, POSTAVY=1)
+# Hrac 1. 10.: "spawnem holky kolem skoly a automatu". Jako u sochy (socha/render_socha.py), ale ve skutecne velikosti
+# jako budova a lavicky: na lavicce pred skolou Galaxia a Character Girl (jako u sochy), na zadni lavicce v parku
+# celem k divakovi Anime Girl, po hlavni ceste jde k brane tmavovlasa (College Girl), pred schody si povidaji
+# Character Girl a druha tmavovlasa a na hristi hazi na kos treti (College Girl ma skolni uniformu).
+# Modely v postavy/ (autori v AUTORI-MODELU.md), pozy v postavy/postavy.py.
+if os.environ.get("POSTAVY", "") == "1":
+    sys.path.insert(0, os.path.join(TU, "..", "postavy"))
+    import postavy as PO
+    from mathutils import Matrix
+
+    def do_sceny(meshe, kotva, gx, gy, gz, uhel):
+        """postava (celem k -y, kotva = jeji bod, ktery ma stat v bode gx gy gz) celem ve smeru uhel"""
+        PO.postav(meshe, Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Translation(-kotva))
+
+    def na_lavicku(meshe, kotva, lavicka_, u):
+        """bod sedu na sedak lavicky (x, y, uhel) ve vzdalenosti u od jejiho stredu, zady k operadlu"""
+        x, y, uhel = lavicka_
+        c, s = math.cos(uhel), math.sin(uhel)
+        v = 0.05                                      # kousek dozadu k operadlu
+        do_sceny(meshe, kotva, x + u * -s + v * -c, y + u * c + v * -s, 0.47, uhel)
+
+    LAV_SKOLA = (X1 + 1.6, Y1 - 2.5, 0.0)                                         # pred prucelim vpravo
+    LAV_PARK = (PX_ + 2.75 * math.cos(math.radians(225)), PY_ + 2.75 * math.sin(math.radians(225)), math.radians(45))
+    g, kotva = PO.sedici("galaxia_anime_girl"); na_lavicku(g, kotva, LAV_SKOLA, -0.4)
+    ch, kotva = PO.sedici("character_people_girl_001"); na_lavicku(ch, kotva, LAV_SKOLA, 0.4)
+    an, kotva = PO.sedici("anime_girl"); na_lavicku(an, kotva, LAV_PARK, 0.0)
+    cg = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")
+    do_sceny(cg, Vector((0, 0, 0)), 21.0, YC - 0.6, Z_ZEM, 0.0)                  # po hlavni ceste k brane
+    # pred schody si dve povidaji, z profilu (ne za lampou)
+    ch2 = PO.nacti_stojici("character_people_girl_001", 1.68)
+    do_sceny(ch2, Vector((0, 0, 0)), 15.3, YC + 0.55, Z_ZEM, math.radians(135))
+    cg2 = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")                   # tmava, na svetlych schodech
+    do_sceny(cg2, Vector((0, 0, 0)), 14.7, YC + 1.15, Z_ZEM, math.radians(315))  # bela Galaxia splyvala
+
+    def strela(arm, meshe):
+        """obe ruce z pozice T dopredu nahoru, jako kdyz hazi na kos"""
+        for st, zn in (("R", 1), ("L", -1)):
+            ram, loket = PO._kost(arm, f"Shoulder_{st}_"), PO._kost(arm, f"Elbow_{st}_")
+            PO.otoc_kost(arm, ram, (0, 0, 1), zn * math.radians(78))
+            PO.otoc_kost(arm, ram, (1, 0, 0), math.radians(-58))
+            PO.otoc_kost(arm, loket, (1, 0, 0), math.radians(-25))
+    hrac = PO.nacti("college_girl", 1.62, priprava=strela, nechat=PO.divka_a)
+    OBRUC = (KX1 - 0.5 + 0.35 - 0.9 - 0.25, (KY0 + KY1) / 2)                      # obruc u jihozapadniho konce kurtu
+    HX, HY = OBRUC[0] - 2.3, OBRUC[1] - 0.6
+    do_sceny(hrac, Vector((0, 0, 0)), HX, HY, Z_ZEM, math.atan2(OBRUC[1] - HY, OBRUC[0] - HX))
+    _, hi, vse = PO.rozmery_siti(hrac)
+    ruce = vse[vse[:, 2] > hi[2] - 0.04]                                           # nejvys jsou ruce, mic nad nimi
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.12, location=(ruce[:, 0].mean(), ruce[:, 1].mean(), hi[2] + 0.08))
+    mic = bpy.context.object; mic.data.materials.append(M["obruc"])
+    for p_ in mic.data.polygons: p_.use_smooth = True
+
 # chytac stinu pod pozemkem: pruhledny, jen stiny budovy a stromu na travu hry
 bpy.ops.mesh.primitive_plane_add(size=1, location=B(P / 2, P / 2, 0.0))
 zem = bpy.context.object; zem.scale = (P, P, 1); zem.is_shadow_catcher = True
