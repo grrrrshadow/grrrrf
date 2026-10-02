@@ -1,5 +1,32 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 15 (2. 10.): jméno a popis v okně grafik
+
+Hráč poslal snímek okna grafik z verze 13: v seznamu bylo *„V3S Praga, Tatra 148, 138 ottd Decouple by Karel M…“*
+useknuté a popis začínal dvěma podobnými řádky (žluté jméno a zelený řádek vejtřasek se třemi náklaďáčky), které
+vznikly sloučením vejtřasky a Tater. Hráč:
+- *„jméno do seznamu grf do okna grafik: V3S,Tatra138,148, pak můžou být už mezery, zeleně ottd Decouple by Karel
+  Macha“*;
+- *„tam stačí jeden řádek zeleně V3S Praga, Tatra 138, 148, na konci ikonka truck, soubor Brýle modrý truck
+  a zmenšený auta zlatý žlutý truck“*, *„nejdřív menší číslo“*;
+- *„pak bude popis a bude začínat 3D: hans… popis nech, je pěknej“*.
+
+Co je nové:
+- **Jméno** je `{yellow}V3S,Tatra138,148{green} ottd Decouple by Karel Macha` a na konci náklaďáček v barvě varianty
+  jako dosud. Do seznamu se teď vejde celé, i s náklaďáčkem, takže jdou malá a BRÝLE od sebe poznat.
+- **Popis začíná jedním zeleným řádkem** `V3S Praga, Tatra 138, 148` s náklaďáčkem: u malé zlatým (`{gold}`), u BRÝLÍ
+  modrým (`{lt-blue}`).
+- **Hned pod ním jsou autoři modelů:** `3D: hans1240 (Praga V3S, Tatra 138, Tatra 148), …` a studentky (`Students: …`).
+- **Zbytek popisu je beze změny:** u malé „original size“, pak vejtřaska, Tatry, zeleně ottd Decouple, itch a licence.
+- **Tatry všude nejdřív 138:** v řádku 3D, v řádku Tater (`Tatra 138 red, Tatra 148 orange`) i ve větě o nich
+  (`Tatra 138 and 148, the red and orange…`).
+- Auta, obrázky a náklady jsou stejné jako ve verzi 14. Ve zdroji yaglu se liší jen číslo verze, jméno a popis.
+- Malá 6,77 MB (`83d3bdcc…`), velká 8,01 MB (`4a419502…`), balík `Praga_V3S_Tatra-v15.zip`.
+- **Ověřeno ve zkušební hře** novým příkazem `testgrfokno` (`hra/README.md`):
+  - fotka okna grafik v češtině, zvětšení 175 %: `kontrola/okno_grafik_v15.png`, vlevo vybraná malá, vpravo BRÝLE;
+  - stará verze 14 se stejnou šířkou seznamu byla useknutá na „Karel Ma…“ jako u hráče, nové jméno se vejde celé
+    i s náklaďáčkem a zbývá místo.
+
 ## Verze 14 (1. 10. večer): studentky sedí, zlato jen zelená, odpad na kupě
 
 Hráč:
@@ -286,20 +313,30 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v14.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v14.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v15.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v15.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v14.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v15.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
-(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v12`) zůstávají v repu.
+(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v14`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 
 Od verze 2 (hráč 28. 9.: *„ve jménu vynech for, jen žlutě V3S Praga, zeleně ottd Decouple by Karel
 Macha“*): `{yellow}V3S Praga{green} ottd Decouple by Karel Macha` a na konci symbol náklaďáku
-(`{truck}`) v barvě varianty, měřítko CZTR `{gold}`, BRÝLE `{lt-blue}`. Popis: žluté jméno, zelený
-řádek se symboly, řádek varianty v její barvě, `{orange}` informace, model a zvuk, nakonec zeleně
-ottd decouple, itch a licence. V textech není „communist“ (hráč: *„nepiš tam comunist blue“*).
+(`{truck}`) v barvě varianty, měřítko CZTR `{gold}`, BRÝLE `{lt-blue}`. V textech není „communist“ (hráč: *„nepiš tam
+comunist blue“*).
+
+Od verze 15 (2. 10.) s Tatrami:
+- **Jméno:** `{yellow}V3S,Tatra138,148{green} ottd Decouple by Karel Macha` a náklaďáček v barvě varianty. Je krátké,
+  aby se do seznamu vešlo celé.
+- **Popis:**
+  1. zelený řádek `V3S Praga, Tatra 138, 148` s náklaďáčkem v barvě varianty;
+  2. `{orange}` autoři modelů (3D: hans1240, studentky);
+  3. u malé řádek „original size“ v její barvě;
+  4. `{orange}` informace o vejtřasce a zvuku, zelený řádek Tater a informace o nich;
+  5. nakonec zeleně ottd Decouple, itch a licence.
+- **Tatry nejdřív 138** (hráč: *„nejdřív menší číslo“*).
 
 ## Auta
 
@@ -560,4 +597,4 @@ i na zásoby, obilí, rudy a jíl jako kupky, bílé sudy místo modrých, podty
 9 vojenská technika jen zelená, FREE mezi nevozí; 10 Tatry ve stejném GRF; 11 zelená Tatra schovaná, jen pro naši hru;
 12 naše brambory BRAM (kupa a pytle), fazole BEAN v hnědých pytlích; 13 studentky na korbě; 14 studentky za jízdy
 sedí na lavicích (na zastávce stojí), zlato jen zelená pod plachtou i druhé zlato hry, cennosti a diamanty ne, odpad
-na šedé kupě.
+na šedé kupě; 15 jméno V3S,Tatra138,148 a v popisu jeden zelený řádek, pod ním 3D.

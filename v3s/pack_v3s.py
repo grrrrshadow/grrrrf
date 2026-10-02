@@ -53,7 +53,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   zlato hry: GOLD je ve hre dvakrat (ECS a hra), tabulka najde jen prvni, proto prestavba i podle tridy cennosti
 #   (hrac: "to zlato dvakrat"); zlato jen zelena pod plachtou, cennosti a diamanty nevozi (pojede Avia VB), odpad
 #   (TRSH, WSTE, RCYC) na sede kupe kamene
-VERZE = 14
+# 15 jmeno a popis v okne grafik (hrac 2. 10.): kratsi jmeno "V3S,Tatra138,148", aby se ottd Decouple by Karel Macha
+#   veslo do seznamu; v popisu misto dvou radku jmena jeden zeleny "V3S Praga, Tatra 138, 148" s nakladakem barvy
+#   varianty, hned pod nim 3D: hans1240; Tatry vsude nejdriv 138 ("nejdriv mensi cislo")
+VERZE = 15
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -341,7 +344,9 @@ BARVA = {"mala": "{gold}", "velka": "{lt-blue}"}[VEL]
 # symbol nakladaku v barve varianty na konci zustal (rozlisuje malou a velkou, jako Sergej)
 GRF_JMENO = "{yellow}V3S Praga{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
 if TATRA:
-    GRF_JMENO = "{yellow}V3S Praga, Tatra 148, 138{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
+    # hrac 2. 10. (v seznamu bylo "V3S Praga, Tatra 148, 138 ottd Decouple by Karel M..." useknute): "jmeno do seznamu
+    # grf do okna grafik: V3S,Tatra138,148, pak muzou byt uz mezery, zelene ottd Decouple by Karel Macha"
+    GRF_JMENO = "{yellow}V3S,Tatra138,148{green} ottd Decouple by Karel Macha " + BARVA + "{truck}"
 # hrac 29. 9.: "nepis tam cztr scale, kdyz budes muset cztr, tak nekde na konci v rohu a radsi vubec. nejak se to
 # jmenuje odborne, original size, a druhy radsi nepis vubec": mala "original size", velka bez radku
 VARIANTA_POPIS = {"mala": "original size", "velka": ""}[VEL]
@@ -365,26 +370,33 @@ POPIS_GRF = ("{yellow}V3S Praga{green}  {truck} {new-line}"
              "{green}" + ITCH + "{new-line}"
              "{green}GRF: Karel Mácha, licence CC BY 4.0{new-line}"
              "{black}The green ones ran in civilian life too, sold off from army stock.")
+STUDENTKY = "{orange}Students: kiemtruongkts, Rotmill, Tatenashi (Sketchfab), CC BY 4.0{new-line}"   # od verze 13
 if TATRA:
-    # hrac 29. 9.: Tatry ve stejnem GRF; popis Tater za vejtraskou, autor modelu Tatry je taky hans1240
-    POPIS_GRF = POPIS_GRF.replace("{yellow}V3S Praga{green}  {truck} {new-line}",
-                                  "{yellow}V3S Praga, Tatra 148, Tatra 138{green}  {truck} {new-line}", 1)
+    # hrac 29. 9.: Tatry ve stejnem GRF; popis Tater za vejtraskou, autor modelu Tatry je taky hans1240.
+    # Hrac 2. 10.: "pak jsou dva stejne radky vznikle sloucenim v3s a tater, tam staci jeden radek zelene V3S Praga,
+    # Tatra 138, 148, na konci ikonka truck, soubor Bryle modry truck a zmensene auta zlaty zluty truck", "nejdriv
+    # mensi cislo", "pak bude popis a bude zacinat 3D: hans... popis nech, je peknej": misto zluteho jmena a zeleneho
+    # radku vejtrasek jeden zeleny radek, pod nim autori modelu (i divek), pak popis jako dosud
+    ZACATEK = ("{yellow}V3S Praga{green}  {truck} {new-line}"
+               "{green}Praga V3S green, Praga V3S blue  " + BARVA + "{truck}  {truck}  {truck}{new-line}")
+    assert POPIS_GRF.startswith(ZACATEK)
+    POPIS_GRF = ("{green}V3S Praga, Tatra 138, 148 " + BARVA + "{truck}{new-line}"
+                 # hrac 30. 9.: "takhle udelame radek 3D taky u Praga V3S a Tatra 138, 148. 3D: Hans..." (jako u VW T1)
+                 "{orange}3D: hans1240 (Praga V3S, Tatra 138, Tatra 148), sketchfab.com/hans1240, CC BY 4.0{new-line}" +
+                 STUDENTKY + POPIS_GRF[len(ZACATEK):])
     POPIS_GRF = POPIS_GRF.replace("{orange}3D: Praga V3S, hans1240 (sketchfab.com/hans1240), CC BY 4.0{new-line}",
-        "{green}Tatra 148 orange, Tatra 138 red  " + BARVA + "{truck}{new-line}"
-        "{orange}Tatra 148 and 138, the orange and red Czechoslovak 6×6 trucks: a tipper for coal, ore and stone, "
+        "{green}Tatra 138 red, Tatra 148 orange  " + BARVA + "{truck}{new-line}"
+        "{orange}Tatra 138 and 148, the red and orange Czechoslovak 6×6 trucks: a tipper for coal, ore and stone, "
         "a flatbed with wooden sides for crops, animals and goods, a tarp for steel, a tank for liquids (blue water, "
         "milk and oil, white petrol, yellow chemicals, black crude oil), beer in barrels or in a Plzeň (white) or "
         "Budvar (blue) tank. With uranium, food, military equipment or explosives it turns army green, and animals, "
         "crops, wood, bricks, building supplies, cigars, tobacco and alcohol can ride in a green one too. "
-        "Air-cooled Tatra V8, 71 km/h.{new-line}"
-        # hrac 30. 9.: "takhle udelame radek 3D taky u Praga V3S a Tatra 138, 148. 3D: Hans..." (jako u VW T1)
-        "{orange}3D: hans1240 (Praga V3S, Tatra 148, Tatra 138), sketchfab.com/hans1240, CC BY 4.0{new-line}", 1)
-    assert "3D: hans1240" in POPIS_GRF and "Tatra 148 and 138 green" not in POPIS_GRF
-# od verze 13 studentky na korbe: autori modelu divek (AUTORI-MODELU.md)
-POPIS_GRF = POPIS_GRF.replace("CC BY 4.0{new-line}{new-line}{green}for ottd Decouple",
-                              "CC BY 4.0{new-line}{orange}Students: kiemtruongkts, Rotmill, Tatenashi (Sketchfab), CC BY 4.0"
-                              "{new-line}{new-line}{green}for ottd Decouple", 1)
-assert "Students: kiemtruongkts" in POPIS_GRF
+        "Air-cooled Tatra V8, 71 km/h.{new-line}", 1)
+    assert POPIS_GRF.count("3D: ") == 1 and "Tatra 138 and 148" in POPIS_GRF and "148, 138" not in POPIS_GRF
+else:
+    POPIS_GRF = POPIS_GRF.replace("CC BY 4.0{new-line}{new-line}{green}for ottd Decouple",
+                                  "CC BY 4.0{new-line}" + STUDENTKY + "{new-line}{green}for ottd Decouple", 1)
+assert POPIS_GRF.count("Students: kiemtruongkts") == 1
 
 # ---------------------------------------------------------------- yagl
 Y = ['yagl_version: "";', "grf_format: Container2;"]

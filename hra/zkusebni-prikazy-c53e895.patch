@@ -1,6 +1,6 @@
 diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-10-01 23:28:26.710854163 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-10-01 23:28:26.718541291 +0000
+--- a/openttd/src/console_cmds.cpp	2026-10-02 00:31:27.697076749 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-02 00:32:16.755453571 +0000
 @@ -15,6 +15,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -27,7 +27,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "tree_cmd.h"
  #include "order_cmd.h"
  #include "order_func.h"
-@@ -2461,6 +2466,747 @@
+@@ -2461,6 +2466,793 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -240,6 +240,52 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	_v3s_foto_dalsi = TimerGameTick::counter + _v3s_foto_krok;
 +	V3SFotoTed();
 +});
++
++void TestNewGRFOkno(uint32_t grfid_v_okne, int sirka, int vyska);
++
++/**
++ * Zkusebni kopie (grrrrf): kroky testgrfokno postupne. Okno se nakresli az v hlavni smycce, proto se fotka (syrova, jako
++ * pri padu, do adresare s konfiguraci) dela ve fronte hlavni smycky a dalsi krok jde do fronty za ni.
++ */
++static void TestGrfOknoKrok(std::vector<std::string> kroky, size_t i)
++{
++	if (i >= kroky.size()) return;
++	const std::string &k = kroky[i];
++	if (k == "quit") {
++		IConsoleCmdExec("quit");
++		return;
++	}
++	uint32_t id = 0;
++	for (char c : k) {
++		if (c >= '0' && c <= '9') id = id * 16 + (c - '0');
++		else if (c >= 'A' && c <= 'F') id = id * 16 + (c - 'A' + 10);
++		else if (c >= 'a' && c <= 'f') id = id * 16 + (c - 'a' + 10);
++	}
++	TestNewGRFOkno(id, 0, 0);
++	Debug(misc, 0, "GRFOKNO: vybrano {}", k);
++	VideoDriver::GetInstance()->QueueOnMainThread([kroky, i, k] {
++		CloseWindowByClass(WindowClass::ErrorMessage);
++		UndrawMouseCursor();
++		DrawDirtyBlocks();
++		bool ok = MakeScreenshot(SC_CRASHLOG, "grfokno_" + k);
++		Debug(misc, 0, "GRFOKNO: fotka {} {}", k, ok ? "ok" : "SELHALA");
++		CloseWindowByClass(WindowClass::ErrorMessage);
++		VideoDriver::GetInstance()->QueueOnMainThread([kroky, i] { TestGrfOknoKrok(kroky, i + 1); });
++	});
++}
++
++/** Zkusebni kopie (grrrrf): okno grafik s vybranym GRF, na fotku jmena a popisu. */
++static bool ConTestGrfOkno(std::span<std::string_view> argv)
++{
++	if (argv.size() < 2) {
++		IConsolePrint(CC_HELP, "Okna grafik s vybranymi GRF, kazde na fotku grfokno_<ID>.png. Usage: 'testgrfokno <GRF ID jak v okne, napr. 4D415864> [dalsi ID...] [quit]'.");
++		return true;
++	}
++	std::vector<std::string> kroky;
++	for (size_t i = 1; i < argv.size(); i++) kroky.emplace_back(argv[i]);
++	TestGrfOknoKrok(kroky, 0);
++	return true;
++}
 +
 +static bool ConTestV3SFoto(std::span<std::string_view> argv)
 +{
@@ -775,7 +821,7 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2639,6 +3385,17 @@
+@@ -2639,6 +3431,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -793,21 +839,51 @@ diff -ru a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13129,6 +13886,11 @@
+@@ -13129,6 +13932,12 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
 +	IConsole::CmdRegister("testv3s",                 ConTestV3S);
 +	IConsole::CmdRegister("testv3sfoto",             ConTestV3SFoto);
++	IConsole::CmdRegister("testgrfokno",             ConTestGrfOkno);
 +	IConsole::CmdRegister("testzastavky",            ConTestZastavky);
 +	IConsole::CmdRegister("testholky",               ConTestHolky);
 +	IConsole::CmdRegister("testpruhy",               ConTestPruhy);
  	IConsole::CmdRegister("testnaklad",              ConTestCargoScene);
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
+diff -ru a/openttd/src/newgrf_gui.cpp b/openttd/src/newgrf_gui.cpp
+--- a/openttd/src/newgrf_gui.cpp	2026-10-02 00:31:27.702889008 +0000
++++ b/openttd/src/newgrf_gui.cpp	2026-10-02 00:32:16.758392327 +0000
+@@ -1989,6 +1989,25 @@
+ 	new NewGRFWindow(_newgrf_desc, editable, show_params, exec_changes, config);
+ }
+ 
++/**
++ * Zkusebni kopie (grrrrf, testgrfokno): otevre okno grafik s GRF hry a vybere GRF podle cisla, jak ho okno ukazuje
++ * (napr. 4D415864). Kdyz je sirka a vyska vetsi nez 0, okno na ni zmeni. Fotku dela testgrfokno v console_cmds.cpp.
++ */
++void TestNewGRFOkno(uint32_t grfid_v_okne, int sirka, int vyska)
++{
++	ShowNewGRFSettings(true, true, false, _grfconfig);
++	NewGRFWindow *w = dynamic_cast<NewGRFWindow *>(FindWindowById(WindowClass::GameOptions, GameOptionsWindowNumber::NewGRFState));
++	if (w == nullptr) return;
++	for (const auto &c : w->actives) {
++		if (std::byteswap(c->ident.grfid) == grfid_v_okne) w->active_sel = c.get();
++	}
++	w->avail_sel = nullptr;
++	w->avail_pos = -1;
++	if (sirka > 0 && vyska > 0) ResizeWindow(w, sirka - w->width, vyska - w->height);
++	w->InvalidateData();
++	w->SetDirty();
++}
++
+ /** Widget parts of the save preset window. */
+ static constexpr std::initializer_list<NWidgetPart> _nested_save_preset_widgets = {
+ 	NWidget(NWID_HORIZONTAL),
 diff -ru a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-10-01 23:28:26.718854163 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-10-01 23:28:26.986854157 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-10-02 00:31:27.707087340 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-10-02 00:32:16.761191812 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  
