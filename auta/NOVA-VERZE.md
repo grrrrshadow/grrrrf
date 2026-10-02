@@ -9,13 +9,38 @@
 | 5 | `dodavky_BRYLE_v5.grf` | `94b3f4ea2dec56f6c3132ffa383ee780` | holky u otevřených dveří busů a Pajdy na zastávce, kód BRAM, autoři 3D v popisu |
 | 6 | `dodavky_BRYLE_v6.grf` | `4571e1e71efd6c0fc4fe25cc6c4e3f81` | kovy pod plachtou, odpad na valníku s kamennou kupou |
 | 7 | `dodavky_BRYLE_v7.grf` | `2e602ee7273fb785eb94ae106940b9c5` | holky u dveří i v přiblížení 8× naší hry (`zin8`), 1024 vzorků |
+| 8 | `dodavky_BRYLE_v8.grf` | `6891ebf5cce0495b83f0da8dc86d5e9e` | holky u dveří jen v 8×, ve směru na severovýchod o kousek výš (chyběla bota) |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v8`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v9`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 8 (2. 10.): holky jen v 8×, směr na severovýchod výš
+
+Hráč k v7 (hrál ji v 8×, v nastavení hry musel přepnout 4× na 8×):
+- *„zbytečný dávat do GRF obrázky 4× a 8×, to nemusíš, jenom 8× stačí“*;
+- *„severovýchodní směr zvednem holku trochu vejš, protože jí chybí bota. Levá bota není vidět, ale pravá bota je
+  vidět, tak nevím, čím to je“*.
+
+- **Holky mají v GRF jen `zin8`.** Ve 4× si hra obrázek udělá z 8× sama (vynechá každý druhý pixel), je o něco hrubší
+  než vlastní fotka 4× ve v7, v 8× je to stejné. GRF je tím jen pro naši hru: jiná hra řádek `zin8` přeskočí a sprite
+  nemá nic.
+- **Čím to je:** chodník zastávky CZTR je sprite s vlastní krabicí blíž k divákovi než auto, hra ho kreslí až po
+  autě (holky jsou vrstvy auta) a překryje, co z holek leží na něm: boty. Levá bota ležela celá na chodníku, pravá
+  stála na jeho hraně. Změřeno ve zkušební hře pixel po pixelu (`holky-u-aut/bota.png`): holce u kufru hra schovala
+  až 8 px (8×). Ve směru 3 holku u kufru zakrývá prosklený přístřešek, to je jiná věc a zůstává.
+- **Směr 1 (na severovýchod):** holka B u kufru o 6 px (4×) výš, holka A u předních dveří o 8 px výš (stojí o 0,3
+  jednotky hlouběji v chodníku, podle téže hrany by přišla o 10 px; s 11 px ale koukala hlavou nad střechu
+  přístřešku CZTR, tak jen 8, špičky bot tam může ztratit, v tomhle směru je stejně pod přístřeškem). Ostatní směry
+  beze změny. Ověřeno ve hře: holce B zůstaly obě boty celé.
+- Hráč: *„radši změním originál zastávku než holky“* (původní zastávka hry holky u bližšího pruhu schová přístřeškem),
+  to je na straně hry.
+- Složení jako v7, jen `dodavky_BRYLE_v8`. Pozor při zkoušení: hra si při ukončení přepíše řádek v `[newgrf]` na
+  `4D415808|<md5>|…` a podle GRF ID a md5 pak klidně vezme starší soubor ze složky (`hra/README.md`); md5 je u v7 i v8
+  stejné (`EA3B7428…`, počítá se jen z akcí, ne z obrázků), starší verze proto ze složky pryč.
 
 ## Verze 7 (2. 10.): holky u dveří v přiblížení 8×
 
@@ -254,9 +279,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v7
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v8
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v7.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v8.grf sprites
 ```
 
 Ověřeno 30. 9.:

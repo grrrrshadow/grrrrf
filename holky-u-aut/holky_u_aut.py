@@ -32,11 +32,17 @@ ZIN = {4: dict(px_m=12.2, ram=RAM, samples=64, pripona=""),            # jako do
 
 DIVKY = {"A": dict(postava="character_people_girl_001", poza="stoji", vyska=1.68),
          "B": dict(postava="college_girl", poza="ruce_dolu", vyska=1.62)}
-# smer jizdy (cislo spritu) -> [(divka, a, c, natoceni)]
+# smer jizdy (cislo spritu) -> [(divka, a, c, natoceni[, zvednout])]
 #   a: jednotky delky hry dopredu od stredu rozvoru (predni naprava +1,9, zadni naraznik -3,5)
 #   c: jednotky ven od linky kol na prave strane (bok karoserie +0,35)
 #   natoceni jako u postavy/fotka_postavy.py: 0 k jihozapadu, 45 k divakovi, 90 k jihovychodu, 180 k severovychodu
-MISTA = {1: [("A", 1.6, 1.8, 65), ("B", -3.1, 1.5, 0)],
+#   zvednout: o kolik px (4x) vys na obrazovce. Hrac 2. 10. (verze 8): "severovychodni smer zvednem holku trochu vejs,
+#   protoze ji chybi bota". Chodnik zastavky CZTR je sprite s vlastni krabici bliz k divakovi nez auto, hra ho kresli
+#   az po aute i s holkami a prekryje, co z nich lezi na nem: boty. Zmereno ve zkusebni hre (8x): holce B u kufru
+#   schova az 8 px (8x), tedy 4 px (4x); holka A u prednich dveri stoji o 0,3 jednotky hloubeji, podle teze hrany
+#   by prisla o 10 px (4x); s 11 px ale koukala hlavou nad strechu pristresku CZTR, proto jen 8 px (spicky bot
+#   tam muze ztratit, v tom smeru je stejne pod pristreskem). Zvednuti 6 a 8 px.
+MISTA = {1: [("A", 1.6, 1.8, 65, 8), ("B", -3.1, 1.5, 0, 6)],
          3: [("A", 1.6, 1.8, 25), ("B", -3.1, 1.5, 300)],
          5: [("A", 1.6, 1.8, 90)],
          7: [("B", -3.1, 1.5, 90)]}
@@ -67,7 +73,7 @@ def bod(k, a, c):
 def foto(zin=4):
     os.makedirs(FOTO, exist_ok=True)
     z = ZIN[zin]
-    potreba = sorted({(d, s) for m in MISTA.values() for d, _, _, s in m})
+    potreba = sorted({(d, s) for m in MISTA.values() for d, _, _, s, *_ in m})
     for d, s in potreba:
         cil = foto_jmeno(d, s, zin)
         if os.path.exists(cil):
@@ -92,14 +98,15 @@ def vrstvy():
             img = Image.fromarray(np.zeros((400, 400, 4), np.uint8), "RGBA")
             img8 = Image.fromarray(np.zeros((800, 800, 4), np.uint8), "RGBA")
             kusy = []
-            for d, a, c, s in MISTA.get(k, []):
+            for d, a, c, s, *zv in MISTA.get(k, []):
                 x, y, za = bod(k, a, c)
                 if za != (druh == "za"):
                     continue
-                kusy.append((y, Image.open(foto_jmeno(d, s)).convert("RGBA"), x, Image.open(foto_jmeno(d, s, 8)).convert("RGBA")))
-            for y, g, x, g8 in sorted(kusy, key=lambda t: t[0]):    # vzdalenejsi driv
+                kusy.append((y, Image.open(foto_jmeno(d, s)).convert("RGBA"), x, Image.open(foto_jmeno(d, s, 8)).convert("RGBA"),
+                             zv[0] if zv else 0))
+            for y, g, x, g8, zv in sorted(kusy, key=lambda t: t[0]):    # vzdalenejsi driv
                 assert g8.size == (2 * g.width, 2 * g.height), (g.size, g8.size)
-                px, py = round(x - g.width / 2), round(y - g.height / 2)
+                px, py = round(x - g.width / 2), round(y - g.height / 2) - zv
                 img.alpha_composite(g, (O + px, O + py))
                 img8.alpha_composite(g8, (O8 + 2 * px, O8 + 2 * py))
             bb, bb8 = img.getbbox(), img8.getbbox()

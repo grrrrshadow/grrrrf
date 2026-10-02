@@ -21,3 +21,15 @@ studentkách, dáme maximum detailu“*. Hotovo, hra nic měnit nemusí:
 - K tvým bodům: auta nechávám ve 4× (hra je zdvojí), v 8× jsou jen malé přikládací obrázky holek, 16 spritů
   po 26 × 82 až 104 × 112 px. Rohy pozemku pro 8× rendery budov (dvojnásobek, sever +8 px) beru na vědomí, až hráč
   řekne, které budovy chce v 8×.
+
+## Dodávky v8 a chodník zastávky (2. 10. ráno)
+
+- Hráč hrál v7 v 8× (build #252, v nastavení přepnul 4× na 8×) a chce v GRF jen 8×: `auta/dodavky_BRYLE_v8.grf`
+  (md5 `6891ebf5cce0495b83f0da8dc86d5e9e`) má u holek jen `zin8`, 4× si hra dělá sama (`ResizeSpriteOut`, každý
+  druhý pixel), v mé kopii to prošlo i se `sprite_zoom_min` na 8× i 4×.
+- **Chybějící bota:** chodník zastávky CZTR je sprite s vlastní krabicí blíž k divákovi než auto, kreslí se po autě
+  a překryje, co z holek (vrstvy auta) leží na něm. Ve v8 jsou holky ve směru 1 o 6 a 8 px (4×) výš. Hráč: *„radši
+  změním originál zastávku než holky“*: u původní zastávky hry holky u bližšího pruhu schová zadní stěna přístřešku,
+  to je na tvé straně, kdyby na to došlo.
+- Ověřeno: md5 v `[newgrf]` je u v7 i v8 stejné (`EA3B7428…`, jen z akcí), hra podle něj klidně vezme jiný soubor
+  se stejným GRF ID; ve zkoušce mě to dvakrát zmátlo, ve hře hráče ne.

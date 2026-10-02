@@ -20,6 +20,10 @@
 # 11. (verze 7) divky u dveri i v priblizeni 8x (zin8, kod zoomu 6: jen nase hra, kolega 2. 10. ZoomLevel::In8x),
 #     dvojnasobne rozliseni a vic vzorku (hrac: "dame maximum detailu, jsou to malicky obrazky, ktere jen prikladame");
 #     obrazek 8x je presne dvojnasobek 4x, ostatni sprity maji dal jen 4x (hra si 8x udela zdvojenim)
+# 12. (verze 8) divky u dveri jen v 8x (hrac 2. 10.: "zbytecny davat do grf obrazky 4x a 8x, to nemusis, jenom 8x
+#     staci"): hra si 4x udela z 8x sama (vynechanim kazdeho druheho pixelu); ve smeru 1 (severovychod) divky o kousek
+#     vys (hrac: "zvednem holku trochu vejs, protoze ji chybi bota": leva bota lezela na chodniku zastavky CZTR, ktery
+#     se kresli az po aute)
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -297,16 +301,15 @@ for si, druh in enumerate(("za", "pred")):
     r += [f"    sprite_set // 0x{si:04X} divky {druh} autem", "    {"]
     for p in HOLKY[druh]:
         r += [f"        sprite_id<0x{nove_id():08X}>", "        {"]
-        # (verze 7) dve urovne: zin4 a zin8 (dvojnasobek) v jednom sprite_id; prazdny smer pruhledny 4 x 4 (8x 8 x 8)
-        for zin, q, prazdny in ((4, p, 4), (8, p["zin8"], 8)):
+        # (verze 7) dve urovne zin4 a zin8 (dvojnasobek) v jednom sprite_id; (verze 8) jen zin8, 4x si hra udela sama;
+        # prazdny smer pruhledny 8 x 8
+        for zin, q, prazdny in ((8, p["zin8"], 8),):
             a = np.array(Image.open(os.path.join(HOLKY_DIR, q["soubor"])).convert("RGBA"))
             w, h, xo, yo = q["w"], q["h"], q["xo"], q["yo"]
             if a[..., 3].max() == 0:                   # prazdny smer: pruhledny jako cumak
                 a, w, h, xo, yo = np.zeros((prazdny, prazdny, 4), np.uint8), prazdny, prazdny, -prazdny // 2, -prazdny // 2
             assert a.shape[:2] == (h, w)
-            if zin == 8:
-                assert (w, h, xo, yo) == (2 * w4, 2 * h4, 2 * xo4, 2 * yo4), ((w, h, xo, yo), (w4, h4, xo4, yo4))
-            w4, h4, xo4, yo4 = w, h, xo, yo
+            assert (w, h, xo, yo) == (2 * p["w"], 2 * p["h"], 2 * p["xo"], 2 * p["yo"]) or p["w"] == 1, (q, p)
             bunky.append(a)
             n = len(bunky) - 1
             r += [f"            [{w}, {h}, {xo}, {yo}], zin{zin}, c32bpp | chunked, \"{LIST_NOVY}\", [{{X{n}}}, {{Y{n}}}];"]

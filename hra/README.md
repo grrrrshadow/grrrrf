@@ -80,6 +80,15 @@ cd /tmp/hra/ottd-zkusebni-51428e5 && HOME=$H xvfb-run -a -s "-screen 0 1024x768x
 Na fotce `holky-u-aut/ve_hre_8x.png` je v domově i celý CZTR Road set (prosklené zastávky, holky vidět; v repu
 není, hráč ho má), s pouhým výstřižkem silnice jsou zastávky původní a přístřešek holky u bližšího pruhu schová.
 
+**Znovu past s md5 v `[newgrf]`** (2. 10., podruhé): řádek `4D415808|<md5 v5>|dodavky_BRYLE_v7.grf = ` opsaný ze
+staré konfigurace a v domově ještě v5: hra tiše vzala v5 podle GRF ID a md5, jméno souboru ji nezajímalo, a tři fotky
+„v7 v 8×“ byly ve skutečnosti v5. Poznalo se to až pixelovým porovnáním s vrstvou (fotka seděla na zdvojené 4×) a
+výpisem `ZIN8:` ve zkušební kopii (`spriteloader/grf.cpp`, `spritecache.cpp`), který pro úroveň 8× vůbec nenaběhl.
+Řádek psát jen jako `dodavky_BRYLE_v7.grf = ` a starší verze z `newgrf/` pryč. A ještě jednou: hra si ten řádek
+při ukončení **přepíše** na `4D415808|<md5>|…`, takže `sed` na jméno souboru před dalším během už nezabere (v7 → v8
+se tak málem fotilo zase s v7); md5 je navíc u v7 a v8 stejné, protože se počítá jen z akcí. Před každým během
+řádek přepsat celý a ve složce nechat jen tu jednu verzi.
+
 ## Zkušební příkazy
 
 | příkaz | co udělá |
