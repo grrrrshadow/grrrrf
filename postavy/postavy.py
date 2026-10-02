@@ -250,9 +250,11 @@ def ruce_dolu(arm, meshe):
 
 
 def ruce_dolu_college(arm, meshe):
-    """college_girl (pozice T ze snimku akce): ruce podel tela"""
+    """college_girl (pozice T ze snimku akce): ruce podel tela. Paze ma model uz asi 25 stupnu pod vodorovnou (zapesti
+    0,23 m pod ramenem na 0,5 m delky), proto jen 50 stupnu: se 76 (jako u galaxie z prave pozice T) sly pres svislici
+    dovnitr trupu a divka byla bez rukou (hrac 2. 10.: "na vsech fotkach je asi bez rukou")"""
     for st, zn in (("L", 1), ("R", -1)):
-        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(76))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(50))
         otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-6))
         otoc_kost(arm, _kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-14))
 
@@ -292,7 +294,7 @@ def sed_college(arm, meshe):
     for st, zn in (("L", 1), ("R", -1)):
         otoc_kost(arm, _kost(arm, f"Hip_{st}_"), (1, 0, 0), math.radians(-84))
         otoc_kost(arm, _kost(arm, f"Knee_{st}_"), (1, 0, 0), math.radians(80))
-        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(74))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(50))    # 74 davalo paze do trupu (viz ruce_dolu_college)
         otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-18))
         otoc_kost(arm, _kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-50))
 

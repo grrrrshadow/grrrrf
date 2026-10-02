@@ -25,3 +25,12 @@ Použití:
 
 `sedici(jmeno)` posadí Galaxii nebo College Girl (kostrou), Character Girl nebo Anime Girl (ohnutím nohou) na sedák 0,47 m jako u sochy
 a vrátí bod sedu; `nacti_stojici(jmeno, vyska, poza)` dá stojící.
+
+## College Girl: ramena jen o 50° (2. 10.)
+
+Hráč: *„holka, která stojí u kufru, zkontroluj modelu ruce, na všech fotkách je asi bez rukou“*. College Girl má
+v modelu (snímek akce) paže už asi 25° pod vodorovnou, ne vodorovně jako Galaxia. Otočení ramen o 76° (převzaté
+od Galaxie) je dalo přes svislici dovnitř trupu, zápěstí skončilo uprostřed hrudníku a dívka byla bez rukou.
+`ruce_dolu_college` otáčí teď o 50° a `sed_college` taky (dřív 74°): ruce podél těla, vidět. Obrázky z dřívějška
+(studentky na korbě V3S a Tater stojící i sedící, dvě stojící College Girl u gymnázia, levá ruka u automatu
+s vlastním otočením 76° v `automat/render_automat.py`) mají ještě ruce schované, jsou na přefocení.

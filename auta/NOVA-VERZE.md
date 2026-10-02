@@ -11,13 +11,23 @@
 | 7 | `dodavky_BRYLE_v7.grf` | `2e602ee7273fb785eb94ae106940b9c5` | holky u dveří i v přiblížení 8× naší hry (`zin8`), 1024 vzorků |
 | 8 | `dodavky_BRYLE_v8.grf` | `6891ebf5cce0495b83f0da8dc86d5e9e` | holky u dveří jen v 8×, ve směru na severovýchod o kousek výš (chyběla bota) |
 | 9 | `dodavky_BRYLE_v9.grf` | `d4e73ce5472d927567a5361de163fc70` | holky u dveří zase ve 4× i 8× (hráč: oboje do GRF), zvednutý směr zůstává |
+| 10 | `dodavky_BRYLE_v10.grf` | `988ae28e51fe59133aadf909f6482c69` | holka u kufru (College Girl) má ruce: ramena otočená o 50° místo 76° |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v10`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v11`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 10 (2. 10.): holka u kufru má ruce
+
+Hráč: *„holka, která stojí u kufru u zadku auta, zkontroluj modelu ruce, na všech fotkách je asi bez rukou“*. Měl
+pravdu: College Girl má v modelu paže už asi 25° pod vodorovnou, ne vodorovně jako Galaxia, a otočení ramen o 76°
+(převzaté od Galaxie) je dalo přes svislici dovnitř trupu, zápěstí bylo uprostřed hrudníku (`postavy/postavy.py`,
+`ruce_dolu_college`). Teď 50°: ruce podél těla, vidět ze všech stran (`holky-u-aut/ruce.png`, vlevo stará fotka).
+Totéž má sedící póza (`sed_college`, 74° → 50°), ta se tu nepoužívá. Fotky holky B znovu (4× i 8×), vrstvy a GRF
+znovu, jinak jako v9.
 
 ## Verze 9 (2. 10.): holky zase ve 4× i 8×
 
@@ -292,9 +302,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v9
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v10
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v9.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v10.grf sprites
 ```
 
 Ověřeno 30. 9.:

@@ -55,7 +55,9 @@ Od dodávek v7 mají holky u dveří dvě úrovně:
 - **Kde:** obě holky na pravé straně auta, k chodníku, za bílou čárou silnice. Nikdy za autem v jízdním pruhu ani
   přes střední čáru.
   - **A:** Character Girl s kabelkou u předních dveří.
-  - **B:** tmavovlasá College Girl z boku u kufru.
+  - **B:** tmavovlasá College Girl z boku u kufru. Do v9 byla bez rukou (hráč: *„na všech fotkách je asi bez
+    rukou“*): paže má model už 25° dolů a otočení ramen o 76° je schovalo do trupu; od v10 jen 50°
+    (`postavy/postavy.py`, `ruce_dolu_college`).
 - **Směry:**
 
   | auto jede na | holky |
@@ -94,11 +96,12 @@ Od dodávek v7 mají holky u dveří dvě úrovně:
 | `foto/` | fotky holek (`postavy/fotka_postavy.py`, kamera a světlo jako budovy, 2×, bez stínu, chodidla uprostřed); `*_z8.png` v 8× |
 | `vrstvy/` | obrázky vrstev `za_<směr>.png`, `pred_<směr>.png` a `holky.json` s posuny od kotvy spritu; prázdné směry 1 × 1; `*_z8.png` v 8× (v JSONu `zin8`) |
 | `nahled.png` | náhled na autech z GRF, všechny čtyři směry: TAZ 1203 bus, bus zahrádka, TAZ 1500 bus, Pajda |
-| `nahled_8x.png` | TAZ 1203 bus ve směrech 1 a 3: vlevo 4×, vpravo 8× (v9) |
+| `nahled_8x.png` | TAZ 1203 bus ve směrech 1 a 3: vlevo 4×, vpravo 8× (v10) |
 | `ve_hre.png` | ze zkušební hry (`testholky`): auta čekají na zastávkách na plné naložení, CZTR i původní silnice |
-| `ve_hre_8x.png` | ze zkušební hry z `51428e5` (`testholky`, CZTR silnice a zastávky): vlevo 4× zdvojené, uprostřed 8× s v6 (holky zdvojené hrou), vpravo 8× s v9 (holky z fotek 8×, směr 1 zvednuté) |
+| `ve_hre_8x.png` | ze zkušební hry z `51428e5` (`testholky`, CZTR silnice a zastávky): vlevo 4× zdvojené, uprostřed 8× s v6 (holky zdvojené hrou), vpravo 8× s v10 (holky z fotek 8×, směr 1 zvednuté, s rukama) |
 | `ve_hre_8x_detail.png` | totéž zblízka, jen holky u busu ve směrech 1 a 3 |
 | `bota.png` | proč chyběla bota: holka u kufru ve směru 1 ve v7 (boty pod chodníkem) a ve v8 (zvednutá), 8× |
+| `ruce.png` | holka B (College Girl) před a po opravě ramen (v10): dřív byly paže otočené dovnitř trupu, teď podél těla |
 | `ve_hre_4x_z_8x.png` | 4× ve hře: vlevo z v7 (vlastní fotka 4×), vpravo z v8 (hra si 4× dělá z 8× vynecháním každého druhého pixelu); proto od v9 oboje |
 
 ## Postup
