@@ -117,7 +117,9 @@ soubory?“*, *„dáme zvlášť obrázky pro přesné barvy“*, *„jo zvuk j
    (malá 12,2 px/m, velká 14,64 px/m, jako vejtřaska), dva rendery naraz, hotové přeskočí. Auta: 148 oranžová a 138
    červená se sklápěčem, valníkem a cisternou ve čtyřech barvách, zelená 148 a 138 s valníkem; vrstvy: všechny obrázky
    nákladu vejtřasky na valníku (kupy rozsypané, pytle, bedny, sudy, dřevo, zvířata, seno, plachty vojenská, šedá,
-   šedobílá) a kupy nerostů na sklápěči. U každé fotky `kotvy.json` jako u vejtřasky.
+   šedobílá) a kupy nerostů na sklápěči. U každé fotky `kotvy.json` jako u vejtřasky. Od verze 16 (2. 10.) `ZIN8=1`
+   fotí pro přiblížení 8× (dvojnásobné px/m, `RAM` 512, adresáře `<velikost>_<jméno>_zin8`) a `JEN=kód,kód` omezí
+   náklady, zatím `JEN=studentky,studentky_sedi`; `grf_tatra.py` dává těmto nákladům k řádku `zin4` i `zin8`.
 2. **Balení:** `v3s/pack_v3s.py <mala|velka> <fotky vejtřasky> v3s/grf/<varianta> <fotky Tater>` spustí
    `grf_tatra.py` (Tatry do stejného GRF), pak `yagl -e`. Balič bez čtvrtého argumentu dělá GRF jen s vejtřaskou.
    `TATRA_NANECISTO=1` doplní chybějící fotky prázdnými (zkouška baliče, než doběhnou rendery).

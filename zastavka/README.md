@@ -68,7 +68,16 @@ otočená. Podél Y asi ne, naproti na zastávku se nevejde“*, *„úplně do 
 | `druha_divka_srovnani.png` | druhá dívka v jižním rohu: bělovlasá a tmavovlasá vedle sebe |
 | `divka2_co_k*_s260.png`, `divka2_ga_k*_s260.png` (+ `.json`) | druhá dívka sama zády (College Girl, Galaxia), ruce podél těla |
 | `divka_k*_s90.png`, `divka_k*_s0.png` (+ `.json`) | dívka sama (Character People Girl 001, stojí), čelem k jihovýchodu a k jihozápadu, 160 × 160 px, 4×, chodidla přesně uprostřed |
+| `divka_k2_s90_zin8.png`, `divka_k2_s0_zin8.png`, `divka2_co_k2_s260_zin8.png` (+ `.json`) | tytéž tři dívky, které hra používá, v přiblížení 8× (jen naše hra, `zin8`): 320 × 320 px, 24,4 px/m, 1024 vzorků, chodidla přesně uprostřed (160, 160), přesně dvojnásobek 4× |
 
 Fotky zastávek: zkušební hra s příkazem `testzastavky` (`hra/zkusebni-prikazy-c53e895.patch`), mapa `-G 11`,
 OpenGFX, jednou bez GRF a jednou s celou sadou CZTR silnic (z releasu `par3`), výška země 8. Fotka dívky:
 `postavy/fotka_postavy.py` (`POSTAVA`, `POZA`, `SMER`, `MERITKO`), kamera a světlo jako u budov.
+
+## Přiblížení 8× a ruce (2. 10.)
+
+Hráč: *„uděláme 8× holky čekající na zastávce, 4× jim zůstane a přidáme 8×“*. Tři dívky, které hra kreslí (podél X
+tyrkysová `divka_k2_s90` a tmavovlasá zády `divka2_co_k2_s260`, podél Y `divka_k2_s0`), jsou vyfocené znovu
+`postavy/fotka_postavy.py` s `PX_M=24.4 RAM=320 SAMPLES=1024`: stejná kamera, dvojnásobné rozlišení, obrázek 8× je
+přesně dvojnásobek 4× i s chodidly uprostřed. Tmavovlasá College Girl má zároveň ve 4× i 8× ruce (dřív je otočení
+ramen o 76° schovalo do trupu, teď 50°, `postavy/README.md`), `divka2_co_k2_s260.png` je proto znovu.

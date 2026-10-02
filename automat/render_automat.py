@@ -19,10 +19,11 @@ from bpy_extras.object_utils import world_to_camera_view
 from PIL import Image, ImageDraw, ImageFont
 
 VYSTUP = sys.argv[-1]
-PX_M = 12.2
-RAM = 384
+ZIN = int(os.environ.get("ZIN", "4"))         # priblizeni: 4 (zin4, 12,2 px/m, 384 px) nebo 8 (zin8 jen nase hra: 24,4 px/m, 768 px, stejny zaber)
+PX_M = 12.2 * ZIN / 4
+RAM = 384 * ZIN // 4
 K = float(os.environ.get("MERITKO", "2"))
-T = 256 / (math.sqrt(2) * PX_M)               # policko 14,84 m
+T = 256 / (math.sqrt(2) * 12.2)               # policko 14,84 m (256 px ve 4x)
 C = T / 2                                       # stred policka
 TU = os.path.dirname(os.path.abspath(__file__))
 HDRI = os.path.join(TU, "..", "glb", "GLB", "hdri", "snow.exr")
@@ -377,7 +378,7 @@ if os.environ.get("POSTAVY", "") == "1":
 
     def placeni(arm, meshe):
         """leva ruka podel tela (jako ruce_dolu_college), prava z pozice T dopredu dolu a predlokti nahoru k ctecce karet"""
-        PO.otoc_kost(arm, PO._kost(arm, "Shoulder_L_"), (0, 1, 0), math.radians(76))
+        PO.otoc_kost(arm, PO._kost(arm, "Shoulder_L_"), (0, 1, 0), math.radians(50))   # 76 davalo pazi do trupu (postavy.py, 2. 10.)
         PO.otoc_kost(arm, PO._kost(arm, "Shoulder_L_"), (1, 0, 0), math.radians(-6))
         PO.otoc_kost(arm, PO._kost(arm, "Elbow_L_"), (1, 0, 0), math.radians(-14))
         ram, loket = PO._kost(arm, "Shoulder_R_"), PO._kost(arm, "Elbow_R_")

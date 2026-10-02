@@ -18,7 +18,7 @@ import nater_v3s
 NATER, PX_M, VYSTUP = sys.argv[-3], float(sys.argv[-2]), sys.argv[-1]
 MODEL = os.path.join(TU, "model", "praga-v3s.glb")
 HDRI = os.path.join(TU, "..", "glb", "GLB", "hdri", "snow.exr")
-RAM = 256                         # ctverec rendru v px (zin4)
+RAM = int(os.environ.get("RAM", "256"))   # ctverec rendru v px: 256 pro zin4; pro zin8 (jen nase hra) dvojnasobny px_na_m a RAM=512, zaber stejny
 SAMPLES = int(os.environ.get("SAMPLES", "256"))
 SMERY = [int(s) for s in os.environ.get("SMERY", "0,1,2,3,4,5,6,7").split(",")]
 # Uhly z render_sergej.py pocitaji s celem modelu na -Y. V3S ma kabinu na +Y, proto +180.

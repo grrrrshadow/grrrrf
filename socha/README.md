@@ -66,6 +66,7 @@ dvě na jednu lavičku, jednu na jednu a na třetí nezbyde“*, *„měřítko 
 | `socha_kamen_postavy_zin4.png`, `socha_bronz_postavy_zin4.png` | druhý obrázek do animace: totéž s postavami, rohy v JSONu stejné |
 | `animace_ve_hre.gif` | obě sochy ve fotce ze hry, střídá se bez postav a s postavami |
 | `zblizka_postavy.png` | obě sochy s postavami vedle sebe zblízka |
+| `socha_kamen_zin8.png`, `socha_bronz_zin8.png`, `socha_kamen_postavy_zin8.png`, `socha_bronz_postavy_zin8.png` | totéž v přiblížení 8× (jen naše hra, `zin8`): 768 × 768 px, přesně dvojnásobek 4× (stejná scéna a kamera, dvojnásobné rozlišení); rohy v `*_zin8.json`: sever (384, 256), východ (640, 384), západ (128, 384), jih (384, 512) |
 
 Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 35 s, výstup s celou cestou).
 S postavami `POSTAVY=1 SOCHA=kamen python3 render_socha.py <s_postavami.png>` (asi 45 s) a pak
@@ -75,3 +76,12 @@ a 0,55). Tělo je kostra s modifikátorem Skin a vyhlazením, takže je hladké 
 skořepina s otvorem pro obličej, nos, líce s bradou, knír a kapsa jsou elipsoidy. Dlouhé vousy a joint jsou
 poskládané z kroužků: vousy leží kousek zanořené na mikině (její předek je změřený přímo z modelu), joint je
 kroužek po kroužku podle profilu trychtýře.
+
+## Přiblížení 8× (2. 10.)
+
+Kolega dal hře přiblížení 8× (`ZoomLevel::In8x`, `hra/zoom-8x/`), hráč: *„uděláme 8× holky kolem sochy Karla, 4× jim
+zůstane a přidáme 8×“*. `ZIN=8 SOCHA=kamen python3 render_socha.py <výstup>` (a s `POSTAVY=1`) fotí stejnou scénu
+stejnou kamerou na 24,4 px/m do 768 × 768 px, takže obrázek je přesně dvojnásobek toho 4× i s rohy (hra to u jednoho
+spritu s víc úrovněmi vyžaduje). Oba snímky animace jsou v 8× (bez postav i s postavami), aby se při střídání neměnila
+ostrost. 4× obrázky se nezměnily (po opravě rukou College Girl v `postavy/postavy.py` jsou znovu vyfocené a stejné,
+tahle dívka tu objímá Karla vlastní pózou).

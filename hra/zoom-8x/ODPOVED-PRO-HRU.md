@@ -40,3 +40,30 @@ Hráč po srovnání 4× z vlastní fotky a 4× dopočítaného hrou z 8× (`Res
 `holky-u-aut/ve_hre_4x_z_8x.png`): *„budem používat sprity 4× ke spritům 8×, budem dávat oboje do GRF“*.
 `auta/dodavky_BRYLE_v9.grf` (md5 `d4e73ce5472d927567a5361de163fc70`) má u holek zase `zin4` i `zin8`. Pravidlo pro všechno další v 8×: 4× i 8×,
 8× přesně dvojnásobné, tak si to hra kontroluje.
+
+## 8× pro studentky, sochu, automat a zastávku (2. 10. odpoledne)
+
+Hráč: *„zin8 funguje dobře, teď uděláme 8× náklady stud V3S, holky kolem sochy Karla, holky čekající na zastávce,
+holky u automatu na šméčko. 4× jim zůstane a přidáme 8×. Dívčí gymnázium neděláme“* a *„oprav ty ruce všude“*
+(College Girl měla paže otočené do trupu, `postavy/README.md`). Všechno 8× je přesně dvojnásobek 4× (rozměr i rohy
+nebo chodidla), 4× zůstává vedle něj.
+
+- **V3S a Tatry v16** (`v3s/Praga_V3S_Tatra-v16.zip`): studentky na korbě, stojící i sedící, mají v GRF `zin4` + `zin8`
+  (malá md5 `82853d0c052ab88bbd8b4dc16321fb0b`, velká `bd0cbaac05c50054296246676eb99f1d`, 32 spritů s `zin8` v každé).
+  V mé kopii z `51428e5` (`testv3sfoto`, `zoom_min 0` i `1`) sedí fotky 8× i 4× pixel po pixelu na posunu (0, 0),
+  `v3s/kontrola/hra_studentky_v16.png`. Nic pro hru.
+- **Socha Karla Máchy v 8×** pro `openttd_budovy.py`: `socha/socha_kamen_zin8.png`, `socha_kamen_postavy_zin8.png`,
+  `socha_bronz_zin8.png`, `socha_bronz_postavy_zin8.png` (+ `.json`), 768 × 768 px, rohy sever (384, 256),
+  východ (640, 384), západ (128, 384), jih (384, 512), tedy dvojnásobek 4×. Oba snímky animace jsou v 8× a druhý je
+  sloučený s prvním jako ve 4× (liší se jen tam, kde holky jsou).
+- **Automat v 8×:** `automat/automat_zin8.png`, `automat_postavy_zin8.png` (+ `.json`), stejně 768 × 768 a stejné rohy.
+- **Dívky na zastávce v 8×:** `zastavka/divka_k2_s90_zin8.png`, `divka_k2_s0_zin8.png`, `divka2_co_k2_s260_zin8.png`
+  (+ `.json`), 320 × 320 px, chodidla přesně uprostřed (160, 160), tedy u tvých položek `girl` dvojnásobek
+  `GIRL_FEET` i posunů od rohu přístřešku.
+- **Znovu ve 4× kvůli rukám** (základ budov se nemění, jen snímek s holkami, sloučený s původním základem):
+  `automat/automat_postavy_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png` a `zastavka/divka2_co_k2_s260.png`
+  (u tebe `zastavka_divka_s260_zin4.png`). Tyhle tři kopie v `media/baseset/openttd/` jsou k přetažení z grrrrf.
+  Socha se ve 4× nemění (holka u Karla má vlastní pózu objetí, nové fotky vyšly bit po bitu stejně).
+- **Gymnázium 8× není** (hráč: *„dívčí gymnázium neděláme“*), jen opravené ruce ve 4×.
+- Viděl jsem `309a969` (8× výchozí i pro starou konfiguraci); moje zkušební kopie zůstává z `51428e5`, pro tohle
+  ověření to stačilo.

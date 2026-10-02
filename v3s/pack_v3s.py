@@ -53,10 +53,13 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 #   zlato hry: GOLD je ve hre dvakrat (ECS a hra), tabulka najde jen prvni, proto prestavba i podle tridy cennosti
 #   (hrac: "to zlato dvakrat"); zlato jen zelena pod plachtou, cennosti a diamanty nevozi (pojede Avia VB), odpad
 #   (TRSH, WSTE, RCYC) na sede kupe kamene
+# 16 studentky (stojici i sedici) i v priblizeni 8x (zin8, kod zoomu 6, jen nase hra; hrac 2. 10.: "udelame 8x naklady
+#   stud v3s, 4x jim zustane a pridame 8x"): fotky 8x s dvojnasobnym px/m a RAM 512, orez presne dvojnasobek ramecku 4x,
+#   vlastni list -32bpp-zin8.png; College Girl ma ruce (postavy.py: ramena o 50 misto 76 stupnu, drive byly v trupu)
 # 15 jmeno a popis v okne grafik (hrac 2. 10.): kratsi jmeno "V3S,Tatra138,148", aby se ottd Decouple by Karel Macha
 #   veslo do seznamu; v popisu misto dvou radku jmena jeden zeleny "V3S Praga, Tatra 138, 148" s nakladakem barvy
 #   varianty, hned pod nim 3D: hans1240; Tatry vsude nejdriv 138 ("nejdriv mensi cislo")
-VERZE = 15
+VERZE = 16
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -64,6 +67,11 @@ if TATRA:
     JMENO = {"mala": "Praga_V3S_Tatra", "velka": "Praga_V3S_Tatra_BRYLE"}[VEL] + f"-v{VERZE}"
 GRF_ID = {"mala": "MAXd", "velka": "MAXe"}[VEL]
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
+PNG32_8 = f"{JMENO}-32bpp-zin8.png"             # od verze 16: obrazky 8x (zin8) na vlastnim listu
+# Naklady, ktere maji i fotky 8x (adresar <vel>_naklad_<kod>_zin8, render_v3s.py s RAM=512 a dvojnasobnym px/m). Obrazek 8x
+# je orez fotky 8x presne na dvojnasobek ramecku 4x (hra chce 8x = 2 x 4x i s posunem), takze se nic nehyba.
+ZIN8 = ["studentky", "studentky_sedi"]
+vse8 = {}                                          # (nat -> 8 x (obrazek 8x, 2 xo, 2 yo)), plni nacti_sadu a tatra_nacti
 
 def kotva_zrcadlova(d):
     """kotva spritu proti bodu na zemi pod stredem auta, px zin4 (vodorovne, svisle), zrcadlove srovnana"""
@@ -102,18 +110,25 @@ def kotva_konvence(d):
     sx, sy = posun_do_pruhu(d)
     return du - sx, dv - sy
 
-def nacti_sadu(nater):
+def nacti_sadu(nater, zin8=False):
+    """8 smeru (obrazek, xo, yo) z fotek 4x; se zin8 k tomu do vse8 totez z fotek 8x (orez 2 x ramecek 4x, posun 2x)"""
     adr = os.path.join(FOTKY, f"{VEL}_{nater}")
     info = json.load(open(os.path.join(adr, "kotvy.json")))
-    out = []
+    out, out8 = [], []
     for d in range(8):
         gx, gy = info["smery"][str(d)]["zem_stred"]
         du, dv = kotva_konvence(d)
         foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
         bb = foto.getbbox()
         if bb is None:                             # naklad v tomhle smeru cely za bocnici
-            out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); continue
-        out.append((foto.crop(bb), int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))))
+            out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); out8.append((Image.new("RGBA", (2, 2), (0, 0, 0, 0)), 0, 0)); continue
+        xo, yo = int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))
+        out.append((foto.crop(bb), xo, yo))
+        if zin8:
+            foto8 = Image.open(os.path.join(adr + "_zin8", f"d{d}.png")).convert("RGBA")
+            assert foto8.size == (2 * foto.width, 2 * foto.height), (nater, d, foto.size, foto8.size)
+            out8.append((foto8.crop((2 * bb[0], 2 * bb[1], 2 * bb[2], 2 * bb[3])), 2 * xo, 2 * yo))
+    if zin8: vse8[nater] = out8
     return out
 
 # ---------------------------------------------------------------- naklady
@@ -289,7 +304,7 @@ PODTYPY = {"LVST": [("LVST", " (prasátka)"), ("kravy", " (kravičky)"), ("ovce"
 PLACHTA = {"vojenska": ("plachta_vojenska", "plachta_seda"), "modra": ("plachta_zluta", "plachta_sedobila")}
 OBRAZKY = VRSTVY + [p for v in PLACHTA.values() for p in v]
 vse = {nat: nacti_sadu(nat) for v in SADY.values() for nat in v}
-vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}") for k in OBRAZKY})
+vse.update({f"naklad_{k}": nacti_sadu(f"naklad_{k}", zin8=k in ZIN8) for k in OBRAZKY})
 if TATRA:
     exec(compile(open(os.path.join(TU, "..", "tatra", "grf_tatra.py"), encoding="utf-8").read(), "tatra/grf_tatra.py", "exec"))
     tatra_nacti()
@@ -306,6 +321,16 @@ for klic, im in polozky: list32.alpha_composite(im, pozice[klic])
 list32.save(os.path.join(VYSTUP, "sprites", PNG32))
 list8 = Image.new("P", (16, 16), 0); list8.putpalette([0, 0, 255] + [0, 0, 0] * 255)
 list8.save(os.path.join(VYSTUP, "sprites", PNG8))
+# list 8x (od verze 16): stejne skladani, vlastni soubor
+polozky8 = [((nat, i), vse8[nat][i][0]) for nat in vse8 for i in range(8)]
+x = y = ODST; radek = 0; pozice8 = {}
+for klic, im in polozky8:
+    if x + im.width + ODST > SIRKA: x = ODST; y += radek + ODST; radek = 0
+    pozice8[klic] = (x, y); x += im.width + ODST; radek = max(radek, im.height)
+if polozky8:
+    list32_8 = Image.new("RGBA", (SIRKA, y + radek + ODST), (0, 0, 0, 0))
+    for klic, im in polozky8: list32_8.alpha_composite(im, pozice8[klic])
+    list32_8.save(os.path.join(VYSTUP, "sprites", PNG32_8))
 
 sid = [1]
 def sprite(nat=None, i=None):
@@ -316,6 +341,10 @@ def sprite(nat=None, i=None):
     else:
         im, xo, yo = vse[nat][i]; px, py = pozice[(nat, i)]
         out.append(f'            [{im.width}, {im.height}, {xo}, {yo}], zin4, c32bpp | chunked, "{PNG32}", [{px}, {py}];')
+        if nat in vse8:                            # od verze 16: k 4x i 8x (jen nase hra, jina hra radek preskoci)
+            im8, xo8, yo8 = vse8[nat][i]; px8, py8 = pozice8[(nat, i)]
+            assert (im8.width, im8.height, xo8, yo8) == (2 * im.width, 2 * im.height, 2 * xo, 2 * yo)
+            out.append(f'            [{im8.width}, {im8.height}, {xo8}, {yo8}], zin8, c32bpp | chunked, "{PNG32_8}", [{px8}, {py8}];')
     out.append("        }"); sid[0] += 1
     return out
 
@@ -728,7 +757,8 @@ if TATRA: tatra_yagl()
 open(os.path.join(VYSTUP, "sprites", f"{JMENO}.yagl"), "w").write("\n".join(Y) + "\n")
 souhrn = {"tabulka": TABULKA, "naklady": NAKLADY, "odstin": ODSTIN, "vrstva": VRSTVA, "vrstva_modra": VRSTVA_MODRA,
           "podtypy": PODTYPY, "plachta": PLACHTA,
-          "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse}}
+          "sprity": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse[nat]] for nat in vse},
+          "sprity_zin8": {nat: [[im.width, im.height, xo, yo] for im, xo, yo in vse8[nat]] for nat in vse8}}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-souhrn.json"), "w"), indent=1, ensure_ascii=False)
 print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "tabulka", len(TABULKA), "nakladu",
       {n: len(v) for n, v in NAKLADY.items()}, "odstiny B/C/D", {o: sum(1 for v in ODSTIN.values() if v == o) for o in "BCD"})

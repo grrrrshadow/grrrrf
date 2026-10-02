@@ -10,6 +10,14 @@ FOTKY = sys.argv[1]
 SKUPINY = sys.argv[2:] or ["auta", "valnik", "sklapec"]
 VELIKOSTI = {"mala": 12.2, "velka": 14.64}
 SAMPLES = os.environ.get("SAMPLES", "128")
+# ZIN8=1: fotky pro priblizeni 8x (jen nase hra, 2. 10.): dvojnasobne px/m, render 512 px (stejny zaber), adresar
+# <vel>_<jmeno>_zin8. JEN=kod,kod omezi naklady (8x zatim jen studentky a studentky_sedi).
+ZIN8 = bool(os.environ.get("ZIN8"))
+JEN = os.environ.get("JEN", "").split(",") if os.environ.get("JEN") else None
+if ZIN8:
+    VELIKOSTI = {v: 2 * px for v, px in VELIKOSTI.items()}
+PRIPONA = "_zin8" if ZIN8 else ""
+RAM = "512" if ZIN8 else "256"
 
 # Auta (hrac 29. 9.): 148 oranzova a 138 cervena se sklapecem, valnikem a cisternou ve ctyrech barvach (modra voda,
 # mleko, olej; bila benzin; zluta chemie; cerna ropa), zelena 148 a 138 jen s valnikem (plachta je vrstva).
@@ -31,6 +39,8 @@ VALNIK = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "SGBT"
           "studentky_sedi"]                                 # od verze 14 za jizdy sedi na lavicich (stojici na zastavce)
 # Kupy nerostu na sklapeci (hrac: "mineraly, uhli sklapec")
 SKLAPEC = ["COAL", "COKE", "IORE", "LIME", "SLAG", "SCMT", "GRVL", "SAND", "CLAY", "CORE", "SULP"]
+if JEN:
+    VALNIK = [k for k in VALNIK if k in JEN]; SKLAPEC = [k for k in SKLAPEC if k in JEN]
 
 ULOHY = []
 for vel, px in VELIKOSTI.items():
@@ -49,11 +59,12 @@ if os.environ.get("OBRACENE"): ULOHY.reverse()
 
 def udelej(uloha):
     jm, nater, px, env = uloha
+    jm = jm + PRIPONA
     out = os.path.join(FOTKY, jm)
     if os.path.exists(os.path.join(out, "kotvy.json")): return jm, "uz je"
     e = dict(os.environ, SAMPLES=SAMPLES, **env)
     with open(os.path.join(FOTKY, jm + ".log"), "w") as log:
-        r = subprocess.run([sys.executable, os.path.join(TU, "render_sklapec.py"), nater, str(px), "256", out],
+        r = subprocess.run([sys.executable, os.path.join(TU, "render_sklapec.py"), nater, str(px), RAM, out],
                            env=e, stdout=log, stderr=subprocess.STDOUT, cwd=TU)
     return jm, "OK" if r.returncode == 0 and os.path.exists(os.path.join(out, "kotvy.json")) else f"CHYBA {r.returncode}"
 

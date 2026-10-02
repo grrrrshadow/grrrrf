@@ -82,20 +82,27 @@ def tatra_nacti():
     """fotky Tater do vse: auta a vrstvy nakladu (valnik Tv_, sklapec Ts_), kotvy jako u vejtrasky"""
     global T_OBR_V, T_OBR_S
     fotky = sys.argv[4]
-    def sada(jm):
+    def sada(jm, zin8=False):
+        """8 smeru (obrazek, xo, yo) z fotek 4x; se zin8 k tomu do vse8[klic] totez z fotek 8x (jako nacti_sadu vejtrasky)"""
         adr = os.path.join(fotky, f"{VEL}_{jm}")
         if os.environ.get("TATRA_NANECISTO") and not os.path.exists(os.path.join(adr, "kotvy.json")):
             return [(Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)] * 8     # zkouska baliče, fotka jeste neni
         info = json.load(open(os.path.join(adr, "kotvy.json")))
-        out = []
+        out, out8 = [], []
         for d in range(8):
             gx, gy = info["smery"][str(d)]["zem_stred"]
             du, dv = kotva_konvence(d)
             foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
             bb = foto.getbbox()
             if bb is None:
-                out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); continue
-            out.append((foto.crop(bb), int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))))
+                out.append((Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0)); out8.append((Image.new("RGBA", (2, 2), (0, 0, 0, 0)), 0, 0)); continue
+            xo, yo = int(math.floor(bb[0] - (gx + du) + 0.5)), int(math.floor(bb[1] - (gy + dv) + 0.5))
+            out.append((foto.crop(bb), xo, yo))
+            if zin8:
+                foto8 = Image.open(os.path.join(adr + "_zin8", f"d{d}.png")).convert("RGBA")
+                assert foto8.size == (2 * foto.width, 2 * foto.height), (jm, d, foto.size, foto8.size)
+                out8.append((foto8.crop((2 * bb[0], 2 * bb[1], 2 * bb[2], 2 * bb[3])), 2 * xo, 2 * yo))
+        if zin8: sada.out8 = out8
         return out
     for m in ("T148", "T138"):
         for t in ["sklapec", "valnik"] + [f"cisterna_{c}" for c in ("modra", "bila", "zluta", "cerna")] + ["valnik_zelena"]:
@@ -104,7 +111,9 @@ def tatra_nacti():
                      | set(T_PLACHTA["oranzova"]) | set(T_PLACHTA["zelena"]) | {"BEER", "studentky_sedi"})   # od v14 sedici
     T_OBR_V = [o for o in T_OBR_V if not o.startswith("plachta_") or o in ("plachta_vojenska", "plachta_seda", "plachta_sedobila")]
     T_OBR_S = sorted(set(T_SKLAPEC.values()))
-    for k in T_OBR_V: vse[f"Tv_{k}"] = sada(f"T_valnik_naklad_{k}")
+    for k in T_OBR_V:
+        vse[f"Tv_{k}"] = sada(f"T_valnik_naklad_{k}", zin8=k in ZIN8)
+        if k in ZIN8: vse8[f"Tv_{k}"] = sada.out8          # od verze 16: studentky i v 8x
     for k in T_OBR_S: vse[f"Ts_{k}"] = sada(f"T_sklapec_naklad_{k}")
 
 def tatra_texty():

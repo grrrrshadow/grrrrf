@@ -1,5 +1,33 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 16 (2. 10. odpoledne): studentky v přiblížení 8×, College Girl má ruce
+
+Hráč po dodávkách v10 (`holky-u-aut/README.md`): *„tak jo, zin8 funguje dobře, teď uděláme 8× náklady stud V3S,
+holky kolem sochy Karla, holky čekající na zastávce, holky u automatu na šméčko. 4× jim zůstane, že jo, a přidáme 8×“*
+a *„oprav ty ruce všude“*.
+
+Co je nové:
+- **Studentky na korbě (STUD) mají navíc obrázek pro přiblížení 8×**, stojící i sedící, u vejtřasky i Tater, v malé
+  i v BRÝLÍCH. V GRF je u každého spritu studentek řádek `zin4` a pod ním `zin8`; obrázek 8× je přesně dvojnásobek 4×
+  (rozměr i posun od kotvy), jak to hra u jednoho spritu s víc úrovněmi vyžaduje (`hra/zoom-8x/`). Auta, ostatní
+  náklady a plachty zůstávají jen ve 4×, hra je v 8× zdvojí sama. Hra bez 8× řádek `zin8` přeskočí.
+- **Fotky 8×:** `render_v3s.py` fotí stejnou scénu na dvojnásobné px/m (malá 24,4, velká 29,28) do `RAM=512` px, sady
+  `<velikost>_naklad_studentky[_sedi]_zin8`; Tatra `ZIN8=1 JEN=studentky,studentky_sedi python3 fotky_tatra.py … valnik`.
+  Balič `pack_v3s.py` (`ZIN8`, `nacti_sadu(…, zin8=True)`) ořízne 8× fotku dvojnásobným rámečkem 4× a skládá ji na
+  druhý list `…-32bpp-zin8.png`; `grf_tatra.py` (`sada(…, zin8=True)`) stejně. V souhrnu je `sprity_zin8`.
+- **College Girl (tmavovlasá s kravatou) má ruce.** Hráč u dodávek: *„holka, která stojí u kufru u zadku auta,
+  zkontroluj modelu ruce, na všech fotkách je asi bez rukou“*. Model má paže už 25° od vodorovné, otočení ramen
+  o 76° je dávalo do trupu, teď je to 50° i v sedě (`postavy/postavy.py`, `postavy/README.md`). Stojící i sedící
+  studentky ve 4× jsou proto vyfocené znovu, ostatní 4× obrázky se nemění.
+- Malá 7,43 MB (`82853d0c…`), velká 8,92 MB (`bd0cbaac…`), balík `Praga_V3S_Tatra-v16.zip`. Nárůst proti
+  v15 je druhý list 8× (32 v každé: 4 náklady × 8 směrů spritů).
+- **Ověřeno ve zkušební hře z `51428e5`** (`hra/README.md`, třetí hra): `testv3sfoto` s `TEST_FOTO_SADA=studentky`
+  a `TEST_FOTO_NAKLADANI=1`, jednou se `setting gui.zoom_min 0` (8×), jednou s `1` (4×):
+  - v 8× hra načetla u studentek obě úrovně (ladicí výpis `ZIN8:` v mé kopii hry: 40 načtených spritů s úrovní 8×, hra je načítá, až když je kreslí) a kreslí fotky 8× (ověřeno pixel po
+    pixelu proti vrstvám: všechny volně viditelné vozy mají shodu 100 % na posunu (0, 0), vejtřasky i Tatry, malé i BRÝLE, sedící i stojící; neshody jen u vozů zakrytých jiným autem nebo přístřeškem a u neviditelných čumáků BRÝLÍ, ve 4× stejně), ve 4× je obrázek z vlastních fotek 4× jako dřív;
+  - `kontrola/hra_studentky_v16.png`: nahoře výřezy z fotky 8× (studentky z fotek 8× na autech zdvojených hrou), dole totéž z fotky 4× zvětšené 2×.
+- Ve zdroji yaglu se proti v15 liší jen sprity studentek (nové 4× a řádky `zin8`), číslo verze a druhý list.
+
 ## Verze 15 (2. 10.): jméno a popis v okně grafik
 
 Hráč poslal snímek okna grafik z verze 13: v seznamu bylo *„V3S Praga, Tatra 148, 138 ottd Decouple by Karel M…“*
@@ -313,12 +341,12 @@ Hráč 28. 9.: *„udělej mi vejtřasku, zas uděláme velkou malou“*, *„vo
 
 | GRF | `grf_id` | měřítko | délka auta | kolona |
 |---|---|---|---|---|
-| `grf/mala/Praga_V3S_Tatra-v15.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
-| `grf/velka/Praga_V3S_Tatra_BRYLE-v15.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
+| `grf/mala/Praga_V3S_Tatra-v16.grf` | `MAXd` | jako CZTR, 12,2 px/m (zin4) | 7,7 osminy, díl 8/8 | rozestup 8, jako CZTR |
+| `grf/velka/Praga_V3S_Tatra_BRYLE-v16.grf` | `MAXe` | BRÝLE, o 20 % větší, 14,64 px/m | 9,25 osminy, díl 8/8 | čumák 2/8, rozestup 10 |
 
-Balík pro hráče je `Praga_V3S_Tatra-v15.zip`: oba GRF a `licence.txt` (licence, převzatý model,
+Balík pro hráče je `Praga_V3S_Tatra-v16.zip`: oba GRF a `licence.txt` (licence, převzatý model,
 reklama na ottd Decouple s odkazem na itch a „No donations allowed“). Starší balíky
-(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v14`) zůstávají v repu.
+(`Praga_V3S_Vejtraska-v1` až `-v9`, `Praga_V3S_Tatra-v10` až `-v15`) zůstávají v repu.
 
 ## Jméno a popis v seznamu GRF
 

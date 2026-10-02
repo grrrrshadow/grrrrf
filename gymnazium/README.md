@@ -55,3 +55,9 @@ Složit znovu: `python3 render_gymnazium.py <bez_postav.png>` a `POSTAVY=1 pytho
 `python3 ../postavy/animace.py <bez_postav.png> <s_postavami.png> gymnazium_postavy_zin4.png`.
 Náhled: `hra/nahled_ve_hre.py` se dvěma obrázky na `@46,16` (gymnázium) a `@44,16` (automat), jednou bez holek
 a jednou s nimi, a oba snímky do GIFu se společnou paletou.
+
+## Ruce College Girl (2. 10.)
+
+Dvě stojící College Girl (u školy a na schodech) měly paže otočené dovnitř trupu (`postavy/README.md`, oprava ramen
+76° → 50°). `gymnazium_postavy_zin4.png` je proto vyfocený znovu, `gymnazium_zin4.png` se nemění. Přiblížení 8× škola
+nemá (hráč 2. 10.: *„dívčí gymnázium neděláme, neznám současný stav, jak to tam vypadá“*).
