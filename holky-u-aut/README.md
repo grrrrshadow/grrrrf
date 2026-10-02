@@ -23,12 +23,12 @@ Od dodávek v7 mají holky u dveří dvě úrovně:
   fotky 4× a rámeček je společný, takže vrstva 8× je přesně dvojnásobek vrstvy 4× (šířka, výška i posun). Hra to
   u víc úrovní jednoho spritu vyžaduje. Pixely 4× zůstaly jako ve v6, jen by se rámeček rozšířil, kdyby 8×
   přesahovalo (nepřesahuje).
-- **V GRF** měla v7 v každém `sprite_id` holek řádek `zin4` i `zin8`; **od v8 jen `zin8`** (hráč: *„zbytečný dávat do
-  GRF obrázky 4× a 8×, jenom 8× stačí“*). Ve 4× si hra obrázek udělá z 8× sama vynecháním každého druhého pixelu
-  (`ResizeSpriteOut`), je tedy o něco hrubší než vlastní fotka 4× byla. Prázdné směry 8 × 8 průhledných. Vrstvy 4×
-  v `vrstvy/` zůstávají na náhled a jako rámeček, do GRF nejdou.
+- **V GRF** je v každém `sprite_id` holek řádek `zin4` i `zin8` (v7 a od v9). Verze 8 měla jen `zin8` (hráč: *„jenom
+  8× stačí“*): ve 4× si hra obrázek dělá z 8× sama vynecháním každého druhého pixelu (`ResizeSpriteOut`) a je hrubší
+  než vlastní fotka 4× (`ve_hre_4x_z_8x.png`), proto hráč rozhodl: *„budem používat sprity 4× ke spritům 8×, budem
+  dávat oboje do GRF“*. Prázdné směry 4 × 4 a 8 × 8 průhledných.
 - **Auta mají dál jen 4×**, v 8× je hra kreslí zdvojená; holky jsou v 8× ostré. Jiná hra řádek `zin8` přeskočí
-  a sprite bez jiné úrovně nemá, GRF od v8 je proto jen pro naši hru.
+  a kreslí 4×.
 - **Směr 1 (auto jede na severovýchod) má holky o kousek výš** (v8, `MISTA`, pátá hodnota: A o 8 px, B o 6 px ve 4×).
   Hráč viděl, že holce u kufru chybí levá bota. Chodník zastávky CZTR je sprite s vlastní krabicí blíž k divákovi než
   auto, hra ho kreslí až po autě i s holkami a překryje z nich to, co leží na něm: boty (levá celá, pravá stála na
@@ -94,12 +94,12 @@ Od dodávek v7 mají holky u dveří dvě úrovně:
 | `foto/` | fotky holek (`postavy/fotka_postavy.py`, kamera a světlo jako budovy, 2×, bez stínu, chodidla uprostřed); `*_z8.png` v 8× |
 | `vrstvy/` | obrázky vrstev `za_<směr>.png`, `pred_<směr>.png` a `holky.json` s posuny od kotvy spritu; prázdné směry 1 × 1; `*_z8.png` v 8× (v JSONu `zin8`) |
 | `nahled.png` | náhled na autech z GRF, všechny čtyři směry: TAZ 1203 bus, bus zahrádka, TAZ 1500 bus, Pajda |
-| `nahled_8x.png` | TAZ 1203 bus ve směrech 1 a 3: vlevo 4× (vrstvy 4×, jen na náhled), vpravo 8× (v8) |
+| `nahled_8x.png` | TAZ 1203 bus ve směrech 1 a 3: vlevo 4×, vpravo 8× (v9) |
 | `ve_hre.png` | ze zkušební hry (`testholky`): auta čekají na zastávkách na plné naložení, CZTR i původní silnice |
-| `ve_hre_8x.png` | ze zkušební hry z `51428e5` (`testholky`, CZTR silnice a zastávky): vlevo 4× zdvojené, uprostřed 8× s v6 (holky zdvojené hrou), vpravo 8× s v8 (holky z fotek 8×, směr 1 zvednuté) |
+| `ve_hre_8x.png` | ze zkušební hry z `51428e5` (`testholky`, CZTR silnice a zastávky): vlevo 4× zdvojené, uprostřed 8× s v6 (holky zdvojené hrou), vpravo 8× s v9 (holky z fotek 8×, směr 1 zvednuté) |
 | `ve_hre_8x_detail.png` | totéž zblízka, jen holky u busu ve směrech 1 a 3 |
 | `bota.png` | proč chyběla bota: holka u kufru ve směru 1 ve v7 (boty pod chodníkem) a ve v8 (zvednutá), 8× |
-| `ve_hre_4x_z_8x.png` | 4× ve hře: vlevo z v7 (vlastní fotka 4×), vpravo z v8 (hra si 4× dělá z 8× vynecháním každého druhého pixelu) |
+| `ve_hre_4x_z_8x.png` | 4× ve hře: vlevo z v7 (vlastní fotka 4×), vpravo z v8 (hra si 4× dělá z 8× vynecháním každého druhého pixelu); proto od v9 oboje |
 
 ## Postup
 

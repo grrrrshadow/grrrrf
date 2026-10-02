@@ -24,6 +24,8 @@
 #     staci"): hra si 4x udela z 8x sama (vynechanim kazdeho druheho pixelu); ve smeru 1 (severovychod) divky o kousek
 #     vys (hrac: "zvednem holku trochu vejs, protoze ji chybi bota": leva bota lezela na chodniku zastavky CZTR, ktery
 #     se kresli az po aute)
+# 13. (verze 9) divky u dveri zase ve 4x i 8x (hrac 2. 10.: "budem pouzivat sprity 4x ke spritum 8x, budem davat oboje
+#     do grf"): vlastni fotka 4x je hezci nez 4x, ktere si hra dela z 8x vynechanim pixelu; zvednuty smer 1 zustava
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -301,15 +303,17 @@ for si, druh in enumerate(("za", "pred")):
     r += [f"    sprite_set // 0x{si:04X} divky {druh} autem", "    {"]
     for p in HOLKY[druh]:
         r += [f"        sprite_id<0x{nove_id():08X}>", "        {"]
-        # (verze 7) dve urovne zin4 a zin8 (dvojnasobek) v jednom sprite_id; (verze 8) jen zin8, 4x si hra udela sama;
-        # prazdny smer pruhledny 8 x 8
-        for zin, q, prazdny in ((8, p["zin8"], 8),):
+        # (verze 7 a od verze 9) dve urovne zin4 a zin8 (presny dvojnasobek) v jednom sprite_id; verze 8 mela jen zin8;
+        # prazdny smer pruhledny 4 x 4 (8x 8 x 8)
+        for zin, q, prazdny in ((4, p, 4), (8, p["zin8"], 8)):
             a = np.array(Image.open(os.path.join(HOLKY_DIR, q["soubor"])).convert("RGBA"))
             w, h, xo, yo = q["w"], q["h"], q["xo"], q["yo"]
             if a[..., 3].max() == 0:                   # prazdny smer: pruhledny jako cumak
                 a, w, h, xo, yo = np.zeros((prazdny, prazdny, 4), np.uint8), prazdny, prazdny, -prazdny // 2, -prazdny // 2
             assert a.shape[:2] == (h, w)
-            assert (w, h, xo, yo) == (2 * p["w"], 2 * p["h"], 2 * p["xo"], 2 * p["yo"]) or p["w"] == 1, (q, p)
+            if zin == 8:
+                assert (w, h, xo, yo) == (2 * w4, 2 * h4, 2 * xo4, 2 * yo4), ((w, h, xo, yo), (w4, h4, xo4, yo4))
+            w4, h4, xo4, yo4 = w, h, xo, yo
             bunky.append(a)
             n = len(bunky) - 1
             r += [f"            [{w}, {h}, {xo}, {yo}], zin{zin}, c32bpp | chunked, \"{LIST_NOVY}\", [{{X{n}}}, {{Y{n}}}];"]

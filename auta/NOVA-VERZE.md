@@ -10,13 +10,26 @@
 | 6 | `dodavky_BRYLE_v6.grf` | `4571e1e71efd6c0fc4fe25cc6c4e3f81` | kovy pod plachtou, odpad na valníku s kamennou kupou |
 | 7 | `dodavky_BRYLE_v7.grf` | `2e602ee7273fb785eb94ae106940b9c5` | holky u dveří i v přiblížení 8× naší hry (`zin8`), 1024 vzorků |
 | 8 | `dodavky_BRYLE_v8.grf` | `6891ebf5cce0495b83f0da8dc86d5e9e` | holky u dveří jen v 8×, ve směru na severovýchod o kousek výš (chyběla bota) |
+| 9 | `dodavky_BRYLE_v9.grf` | `d4e73ce5472d927567a5361de163fc70` | holky u dveří zase ve 4× i 8× (hráč: oboje do GRF), zvednutý směr zůstává |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v9`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v10`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 9 (2. 10.): holky zase ve 4× i 8×
+
+Hráč po srovnání 4× ve v7 (vlastní fotka) a ve v8 (hra ji dělá z 8× vynecháním každého druhého pixelu,
+`holky-u-aut/ve_hre_4x_z_8x.png`): *„tak jo, přesvědčil jsi mě, budem používat sprity 4× ke spritům 8×, budem dávat
+oboje do GRF“*.
+
+- Holky mají v každém `sprite_id` zase řádek `zin4` i `zin8` jako ve v7 (`stavba_vwt1.py`, obrázek 8× přesně
+  dvojnásobný). Zvednutý směr 1 z v8 zůstává (A 8 px, B 6 px ve 4×), ostatní jako v8.
+- Ověřeno ve zkušební hře: ve 4× (`zoom_min 1`) jsou holky pixel po pixelu z vrstvy 4×, v 8× z vrstvy 8×, holce
+  u kufru ve směru 1 zůstaly obě boty.
+- Od teď je to pravidlo pro všechno v 8×: do GRF jde 4× i 8×.
 
 ## Verze 8 (2. 10.): holky jen v 8×, směr na severovýchod výš
 
@@ -279,9 +292,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v8
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v9
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v8.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v9.grf sprites
 ```
 
 Ověřeno 30. 9.:

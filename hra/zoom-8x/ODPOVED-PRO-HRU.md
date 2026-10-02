@@ -33,3 +33,10 @@ studentkách, dáme maximum detailu“*. Hotovo, hra nic měnit nemusí:
   to je na tvé straně, kdyby na to došlo.
 - Ověřeno: md5 v `[newgrf]` je u v7 i v8 stejné (`EA3B7428…`, jen z akcí), hra podle něj klidně vezme jiný soubor
   se stejným GRF ID; ve zkoušce mě to dvakrát zmátlo, ve hře hráče ne.
+
+## Dodávky v9: oboje (2. 10.)
+
+Hráč po srovnání 4× z vlastní fotky a 4× dopočítaného hrou z 8× (`ResizeSpriteOut` bere každý druhý pixel,
+`holky-u-aut/ve_hre_4x_z_8x.png`): *„budem používat sprity 4× ke spritům 8×, budem dávat oboje do GRF“*.
+`auta/dodavky_BRYLE_v9.grf` (md5 `d4e73ce5472d927567a5361de163fc70`) má u holek zase `zin4` i `zin8`. Pravidlo pro všechno další v 8×: 4× i 8×,
+8× přesně dvojnásobné, tak si to hra kontroluje.
