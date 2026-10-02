@@ -286,3 +286,20 @@ Hráč: *„Avia VB, můžem dělat? Licence je dobrá?“* (na cennosti a diama
     moc těžký a modrý.
   - Jinde nic volného: „Avia A21 F“ na TurboSquid je za 7 USD a bez CC.
 - **Rozhodnutí hráče:** zatím žádné, Workshop model se nepoužívá.
+
+## Co se nepoužívá (bez licence nebo ND) — stav 2026-10-02
+
+Projito přes INDEX-RELEASY.md (par3–par7). Modely níže nemají licenci (nebo ji mají s ND = no derivatives),
+takže je nelze renderovat do spritů. Vše ostatní v indexu je CC BY 4.0 (nebo CC BY-NC 4.0 u Buranu, který je
+v pořádku pro free GRF).
+
+| soubor | důvod |
+|---|---|
+| `zip6/aviafurgonvb/Avia Furgon VB.crp` | Steam Workshop wooderCZ, bez licence |
+| `zip6/gggg/trabantextured.c4d` | neznámý autor, bez licence |
+| `zip6/bar/1589313069_FSO Warszawa 223 Sedan Pickup.zip` | GTA mod `.dff/.txd`, bez licence |
+| `zip6/bar/1453936363_FSO_Warszawa_M20_KAFAROS.rar` | GTA mod, bez licence |
+| `zip6/bar/v3s_praga.glb` | žádná metadata ani autor (≠ `praga-v3s.glb` od hans1240 CC BY) |
+| `zip6/bar/bsg_shuttle_mk_ii_olympic_carriers_fanon.glb` | žádná metadata ani autor (≠ `bsg__shuttle_mk._ii.glb` od 3D Sci-Fi CC BY) |
+| `zip6/bar/FS25_Tatra_T_148_S1_S3_TN_converted.zip` | Farming Simulator mod, bez licence |
+| `zip7/tatra-t-148-s1-118-scale-model_files.zip` + STL díly | SDesign CC BY-NC-**ND** 4.0, ND zakazuje úpravy |
