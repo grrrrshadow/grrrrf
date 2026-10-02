@@ -1,0 +1,33 @@
+Škoda 706 RTO for ottd Decouple by Karel Macha – GRF pro OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENCE: Creative Commons Uveďte původ 4.0 Mezinárodní (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/deed.cs
+
+GRF i jeho části (sprity, texty, skripty, model) smíte šířit a upravovat, i pro jiné sady,
+pokud uvedete autora takto:
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+Model autobusu je vlastní, nakreslený podle fotografií (skript rto/model_rto.py), bez převzatých částí.
+Zvuky: výchozí zvuky OpenTTD.
+
+-------------------------------------------------------------------------------
+
+Škoda 706 RTO for ottd Decouple by Karel Macha – GRF for OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENSE: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt this GRF and its parts (sprites, texts, scripts, model), also for other
+sets, as long as you credit the author as
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+The bus model is our own, drawn from photographs (script rto/model_rto.py), with no third-party parts.
+Sounds: OpenTTD default sounds.

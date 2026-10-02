@@ -96,8 +96,8 @@ Both licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
 Changes: recoloured, scaled, the pot removed, rendered into the sprite.
 ```
 
-Budovy samotné (dívčí gymnázium, automat, socha Karla Máchy s lavičkami, košem, keři a odpadky) jsou vlastní
-modely ze skriptů v tomhle repu, cizí licenci nemají.
+Budovy samotné (dívčí gymnázium, automat, socha Karla Máchy s lavičkami, košem, keři a odpadky) a autobus Škoda
+706 RTO (`rto/model_rto.py`, 2. 10.) jsou vlastní modely ze skriptů v tomhle repu, cizí licenci nemají.
 
 ## Postavy u automatu a gymnázia (2026-10-01)
 
