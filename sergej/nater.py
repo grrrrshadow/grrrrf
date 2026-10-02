@@ -3,7 +3,7 @@
 # Pracuje přímo s obrázky textur z diesel_locomotive_m62.glb: Image_0 tělo, Image_6 překryv s průhledností,
 # Image_8 žaluzie, Image_2 spojka. Souřadnice v červeném nátěru jsou pro texturu 1024 px, textury z par8 mají
 # 2048 px, tak se dělí měřítkem.
-import os
+import os, math
 import numpy as np
 from PIL import Image
 
@@ -36,6 +36,21 @@ def prebarvit(pole, cil, maska, ref_jas):
     f = np.clip(_jas(pole) / ref_jas, 0.15, 1.8)[..., None]
     nove = np.clip(cil[None, None, :] * f, 0, 255)
     pole[maska] = nove[maska]
+
+# Narazniky (dorazy) pod svetly: na kazdem cele dva kvadry, jejich cela jsou v texture tela ctverce (v px textury 2048,
+# x od, x do, y od, y do), overeno obarvenim na zkousku. U CSD cerne (hrac 2. 10.: "sergej csd ma pod svetly narazniky,
+# dorazy. udelej je cerne", "dva ctverce vys jsou svetla", "ma jen dva dorazy na vagon").
+NARAZNIKY = [(305, 350, 1592, 1636), (576, 616, 1592, 1636), (1206, 1243, 1592, 1636), (1470, 1515, 1592, 1636)]
+CERNA = np.array([30, 29, 28], float)
+
+def cerne_narazniky(a, out):
+    """cela narazniku v texture tela na cernou, se zachovanim jasu (spary, spina); a puvodni, out vysledek (float)"""
+    s = a.shape[0] / 2048
+    for x0, x1, y0, y1 in NARAZNIKY:
+        x0, x1, y0, y1 = int(x0 * s), int(math.ceil(x1 * s)), int(y0 * s), int(math.ceil(y1 * s))
+        kus = a[y0:y1, x0:x1]
+        f = np.clip(_jas(kus) / max(np.median(_jas(kus)), 1.0), 0.6, 1.5)[..., None]
+        out[y0:y1, x0:x1] = np.clip(CERNA[None, None, :] * f, 0, 255)
 
 def cerveny(nazev, rgb):
     """rgb: pole HxWx3 (uint8) textury; vrati novou texturu v cervenem natiru, None kdyz se textura nemeni."""
@@ -74,6 +89,8 @@ def cerveny(nazev, rgb):
         f = np.clip(_jas(a) / ref_pas, 0.8, 1.15)[..., None]
         zl = np.clip(ZLUTA[None, None, :] * f, 0, 255)
         out[pod_oknem] = zl[pod_oknem]
+    if nazev == "Image_0":
+        cerne_narazniky(a, out)
     return np.clip(out, 0, 255).astype(np.uint8)
 
 # РЖД: textury z teplovoz-m62.glb (par8, Leafia dev., CC BY 4.0), vytazene obrazky 1 (telo), 2 (zaluzie) a 6 (spojka)

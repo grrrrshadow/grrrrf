@@ -85,6 +85,98 @@ bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); gramofon = bpy.cont
 bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); natah = bpy.context.object
 natah.parent = gramofon; natah.matrix_parent_inverse = gramofon.matrix_world.inverted()
 koren.parent = natah; koren.matrix_parent_inverse = natah.matrix_world.inverted()
+# ---------------------------------------------------------------- rez
+# Hrac 2. 10.: "strechu sergeje udelame rezatou a podvozek taky, kola vsechno co je sedy dole bude taky rezaty ale ne jako
+# strecha. dole tmavsi rez, od oleje, spinavy", "rez kde je sedy, na podvozek tmavy spinavy rez". V kazdem materialu se pred
+# Base Color vlozi michani s rezi, rozhoduje vyska a sedost (nizka sytost barvy): strecha = sede plochy nad horni hranou
+# boku (3,5 m, boky tela jsou 1,6 az 3,47 m) a v texture tela cela oblast strechy (radky 0-383 z 2048); podvozek = sede
+# plochy pod spodni hranou boku (1,55 m): kola, podvozky, ram, nadrz, skrine, spojka. Lak (zelena, cervena, pruhy, sedy pas
+# RZD na boku) se nemeni. Souradnice v prostoru natahovace (puvodni metry modelu od stredu), takze rez je u vsech smeru
+# na stejnem miste. REZ=0 bez rzi.
+REZ = os.environ.get("REZ", "1") == "1"
+Z_STRECHA, Z_PODVOZEK = 3.50, 1.55
+BEZ_REZU = {"phong3", "phong4", "phong5", "phong9", "phong12"}   # kabina a strojovna za okny, sklo, zaluzie
+TELO = {"phong1", "phong10"}                                       # textura tela (Image_0): strecha i podle radku textury
+
+def zrezivet(mat):
+    nt = mat.node_tree; N = nt.nodes; Lk = nt.links
+    bsdf = [n for n in N if n.type == 'BSDF_PRINCIPLED'][0]
+    def soket(vstup):
+        if vstup.is_linked: return vstup.links[0].from_socket
+        v = N.new("ShaderNodeValue") if not hasattr(vstup.default_value, "__len__") else N.new("ShaderNodeRGB")
+        v.outputs[0].default_value = vstup.default_value
+        return v.outputs[0]
+    def mapa(vstup, a, b, c, d):
+        m = N.new("ShaderNodeMapRange"); m.interpolation_type = 'SMOOTHSTEP'; m.clamp = True
+        Lk.new(vstup, m.inputs["Value"])
+        for jm, v in (("From Min", a), ("From Max", b), ("To Min", c), ("To Max", d)): m.inputs[jm].default_value = v
+        return m.outputs["Result"]
+    def mat_(op, a, b=None, hodnota=None):
+        m = N.new("ShaderNodeMath"); m.operation = op; m.use_clamp = op in ('MULTIPLY', 'ADD', 'MAXIMUM')
+        Lk.new(a, m.inputs[0])
+        if b is not None: Lk.new(b, m.inputs[1])
+        else: m.inputs[1].default_value = hodnota
+        return m.outputs[0]
+    def sum_(vektor, meritko, detail, posun):
+        s = N.new("ShaderNodeTexNoise"); s.inputs["Scale"].default_value = meritko; s.inputs["Detail"].default_value = detail
+        s.inputs["Roughness"].default_value = 0.62
+        p = N.new("ShaderNodeVectorMath"); p.operation = 'ADD'; p.inputs[1].default_value = posun
+        Lk.new(vektor, p.inputs[0]); Lk.new(p.outputs[0], s.inputs["Vector"])
+        return s.outputs["Fac"]
+    def rampa(fac, body):
+        r = N.new("ShaderNodeValToRGB"); cr = r.color_ramp
+        for i, (poz, c) in enumerate(body):
+            e = cr.elements[i] if i < 2 else cr.elements.new(poz)
+            e.position = poz; e.color = tuple((v / 255) ** 2.2 for v in c) + (1.0,)
+        Lk.new(fac, r.inputs["Fac"])
+        return r.outputs["Color"]
+    barva = soket(bsdf.inputs["Base Color"])
+    tc = N.new("ShaderNodeTexCoord"); tc.object = natah
+    xyz = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs["Object"], xyz.inputs[0])
+    z = xyz.outputs["Z"]; zs = stred.z
+    hsv = N.new("ShaderNodeSeparateColor"); hsv.mode = 'HSV'; Lk.new(barva, hsv.inputs[0])
+    sedost = mapa(hsv.outputs[1], 0.16, 0.30, 1.0, 0.0)
+    nad = mapa(z, Z_STRECHA - zs - 0.02, Z_STRECHA - zs + 0.02, 0.0, 1.0)
+    pod = mapa(z, Z_PODVOZEK - zs - 0.03, Z_PODVOZEK - zs + 0.03, 1.0, 0.0)
+    if mat.name in TELO:
+        uv = N.new("ShaderNodeSeparateXYZ"); Lk.new(tc.outputs["UV"], uv.inputs[0])
+        v = uv.outputs["Y"]                                               # Blender: v odspodu, radek shora = 1 - v
+        strecha_uv = mapa(v, 1 - 390 / 2048, 1 - 380 / 2048, 0.0, 1.0)   # radky 0-383: strecha
+        mimo_cela = mapa(v, 1 - 1540 / 2048, 1 - 1530 / 2048, 0.0, 1.0)  # radky 1536+: cela (okna, svetla) bez rzi
+        nad = mat_('MAXIMUM', strecha_uv, mat_('MULTIPLY', nad, mimo_cela))
+        pod = mat_('MULTIPLY', pod, mimo_cela)
+    strecha = mat_('MULTIPLY', nad, sedost); dole = mat_('MULTIPLY', pod, sedost)
+    p = tc.outputs["Object"]
+    # strecha: rez od tmave hnede po oranzovou ve skvrnach, misty prosvita seda; kresba textury (spary, spina) zustava
+    rez_s = rampa(sum_(p, 2.8, 8.0, (3.1, 7.7, 1.3)), [(0.30, (78, 42, 24)), (0.50, (118, 62, 32)), (0.66, (150, 84, 42)), (0.82, (104, 76, 58))])
+    det_s = N.new("ShaderNodeMath"); det_s.operation = 'MULTIPLY_ADD'; Lk.new(hsv.outputs[2], det_s.inputs[0])
+    det_s.inputs[1].default_value = 0.75; det_s.inputs[2].default_value = 0.42
+    rez_s_d = N.new("ShaderNodeMix"); rez_s_d.data_type = 'RGBA'; rez_s_d.blend_type = 'MULTIPLY'; rez_s_d.inputs["Factor"].default_value = 1.0
+    Lk.new(rez_s, rez_s_d.inputs["A"]); Lk.new(det_s.outputs[0], rez_s_d.inputs["B"])
+    pokryti = mapa(sum_(p, 3.3, 4.0, (11.0, 2.0, 5.0)), 0.36, 0.62, 0.80, 1.0)
+    f_s = mat_('MULTIPLY', strecha, pokryti)
+    # podvozek: tmavy spinavy rez od oleje: skoro cerna hneda, misty rezava, mista vyprahleho prachu
+    rez_d = rampa(sum_(p, 2.6, 6.0, (5.3, 1.1, 9.4)), [(0.28, (26, 22, 19)), (0.48, (52, 35, 24)), (0.68, (86, 52, 30)), (0.86, (64, 54, 44))])
+    det_d = N.new("ShaderNodeMath"); det_d.operation = 'MULTIPLY_ADD'; Lk.new(hsv.outputs[2], det_d.inputs[0])
+    det_d.inputs[1].default_value = 0.6; det_d.inputs[2].default_value = 0.55
+    rez_d_d = N.new("ShaderNodeMix"); rez_d_d.data_type = 'RGBA'; rez_d_d.blend_type = 'MULTIPLY'; rez_d_d.inputs["Factor"].default_value = 1.0
+    Lk.new(rez_d, rez_d_d.inputs["A"]); Lk.new(det_d.outputs[0], rez_d_d.inputs["B"])
+    f_d = mat_('MULTIPLY', dole, None, 0.93)
+    m1 = N.new("ShaderNodeMix"); m1.data_type = 'RGBA'; Lk.new(f_s, m1.inputs["Factor"]); Lk.new(barva, m1.inputs["A"]); Lk.new(rez_s_d.outputs["Result"], m1.inputs["B"])
+    m2 = N.new("ShaderNodeMix"); m2.data_type = 'RGBA'; Lk.new(f_d, m2.inputs["Factor"]); Lk.new(m1.outputs["Result"], m2.inputs["A"]); Lk.new(rez_d_d.outputs["Result"], m2.inputs["B"])
+    Lk.new(m2.outputs["Result"], bsdf.inputs["Base Color"])
+    # rez je matny a neni kov
+    oba = mat_('ADD', f_s, f_d)
+    for jm, cil in (("Roughness", 0.9), ("Metallic", 0.0)):
+        zdroj = soket(bsdf.inputs[jm])
+        m = N.new("ShaderNodeMix"); m.data_type = 'FLOAT'; Lk.new(oba, m.inputs["Factor"]); Lk.new(zdroj, m.inputs["A"])
+        m.inputs["B"].default_value = cil; Lk.new(m.outputs["Result"], bsdf.inputs[jm])
+
+if REZ:
+    for mat in {s.material for o in meshe for s in o.material_slots if s.material}:
+        if mat.name in BEZ_REZU or not mat.use_nodes: continue
+        zrezivet(mat); print("rez", mat.name)
+
 body = {}
 for jm, co in (("kotva", (stred.x, stred.y, mn.z)), ("plus", (stred.x, mx.y, mn.z)), ("minus", (stred.x, mn.y, mn.z)),
                ("vrsek", (stred.x, stred.y, mx.z))):

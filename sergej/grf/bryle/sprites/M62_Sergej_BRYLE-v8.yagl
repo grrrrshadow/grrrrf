@@ -1,0 +1,1713 @@
+yagl_version: "";
+grf_format: Container2;
+optional_info // Action14
+{
+    INFO: 
+    {
+        URL_: default, "https://karel-macha.itch.io/openttd-decouple-by-karel-macha";
+        VRSN: [ 0x08 0x00 0x00 0x00 ];
+        MINV: [ 0x01 0x00 0x00 0x00 ];
+        NPAR: [ 0x00 ];
+        PALS: [ 0x44 ];
+        BLTR: [ 0x33 ];
+    }
+}
+grf // Action08
+{
+    grf_id: "MAXc";
+    version: GRF8;
+    name: "{red}M62 Sergej{green} for ottd Decouple by Karel Macha {lt-blue}{train}";
+    description: "{red}M62 Sergej{green}  {train} {new-line}{green}M62 Tamtam tajgy, Sergej ČSD, Maša РЖД  {lt-blue}{train}  {train}  {train}{new-line}{lt-blue}BRÝLE, magnified +20 %, 14/8 tiles, for the original game tracks, sprites in 4x and 8x zoom{new-line}{orange}Three M62 diesels: the green international one, the red ČSD one and the red and grey Russian РЖД one (Маша). The engine roars louder with speed, the horn sounds on departure and at a honk waypoint.{new-line}{orange}3D: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0; РЖД livery: Teplovoz-m62 РЖД, Leafia dev. (sketchfab.com/Leaf_dev), CC BY 4.0{new-line}{orange}Sounds: alexdarek (CC0), Walking.With.Microphones (CC BY 4.0), freesound.org{new-line}{new-line}{green}ottd decouple by Karel Mácha {lt-blue}{train}{new-line}{green}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{new-line}{green}GRF: Karel Mácha, licence CC BY 4.0";
+}
+strings<Trains, default, 0xD001*> // Action04, popisy v nakupnim okne
+{
+    /* 0xD001 */ "{lt-green}M62, mezinárodní. Dvoutakt z německé ponorky. V SSSR М62 Машка, v Polsku ST44 Gagarin, v Maďarsku Szergej, v Německu (NDR) V 200 / 120 Taigatrommel, tamtam tajgy.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
+    /* 0xD002 */ "{lt-green}T 679.1, dieslová. ČSD, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, vyrobený v Rusku.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0";
+    /* 0xD003 */ "{lt-green}M62 v nátěru РЖД (Российские железные дороги, Ruské železnice). V Rusku Маша, Машка. Dvoutakt z německé ponorky.{new-line}{green}ottd Decouple by Karel Mácha{new-line}https://karel-macha.itch.io/openttd-decouple-by-karel-macha{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}Výrobce: {gold}Luhansk{black}{new-line}Motor: {gold}14D40, dvanáctiválcový dvoutakt{black}{new-line}Uspořádání: {gold}Co'Co'{black}{new-line}Délka: {gold}17,55 m{black}{new-line}Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0, nátěr РЖД: Leafia dev. (Sketchfab), CC BY 4.0";
+}
+sound_effects // Action11, vlastni zvuky od 0x49
+{
+    sprite_id<0x00000001>
+    {
+        binary("sprites/troubeni.wav");
+    }
+    sprite_id<0x00000002>
+    {
+        binary("sprites/troubeni_tunel.wav");
+    }
+    sprite_id<0x00000003>
+    {
+        binary("sprites/zeleny_p0_1.wav");
+    }
+    sprite_id<0x00000004>
+    {
+        binary("sprites/zeleny_p0_2.wav");
+    }
+    sprite_id<0x00000005>
+    {
+        binary("sprites/zeleny_p0_3.wav");
+    }
+    sprite_id<0x00000006>
+    {
+        binary("sprites/zeleny_p0_4.wav");
+    }
+    sprite_id<0x00000007>
+    {
+        binary("sprites/zeleny_p1_1.wav");
+    }
+    sprite_id<0x00000008>
+    {
+        binary("sprites/zeleny_p1_2.wav");
+    }
+    sprite_id<0x00000009>
+    {
+        binary("sprites/zeleny_p1_3.wav");
+    }
+    sprite_id<0x0000000A>
+    {
+        binary("sprites/zeleny_p1_4.wav");
+    }
+    sprite_id<0x0000000B>
+    {
+        binary("sprites/zeleny_p2_1.wav");
+    }
+    sprite_id<0x0000000C>
+    {
+        binary("sprites/zeleny_p2_2.wav");
+    }
+    sprite_id<0x0000000D>
+    {
+        binary("sprites/zeleny_p2_3.wav");
+    }
+    sprite_id<0x0000000E>
+    {
+        binary("sprites/zeleny_p2_4.wav");
+    }
+    sprite_id<0x0000000F>
+    {
+        binary("sprites/zeleny_p3_1.wav");
+    }
+    sprite_id<0x00000010>
+    {
+        binary("sprites/zeleny_p3_2.wav");
+    }
+    sprite_id<0x00000011>
+    {
+        binary("sprites/zeleny_p3_3.wav");
+    }
+    sprite_id<0x00000012>
+    {
+        binary("sprites/zeleny_p3_4.wav");
+    }
+    sprite_id<0x00000013>
+    {
+        binary("sprites/zeleny_p4_1.wav");
+    }
+    sprite_id<0x00000014>
+    {
+        binary("sprites/zeleny_p4_2.wav");
+    }
+    sprite_id<0x00000015>
+    {
+        binary("sprites/zeleny_p4_3.wav");
+    }
+    sprite_id<0x00000016>
+    {
+        binary("sprites/zeleny_p4_4.wav");
+    }
+    sprite_id<0x00000017>
+    {
+        binary("sprites/zeleny_p5_1.wav");
+    }
+    sprite_id<0x00000018>
+    {
+        binary("sprites/zeleny_p5_2.wav");
+    }
+    sprite_id<0x00000019>
+    {
+        binary("sprites/zeleny_p5_3.wav");
+    }
+    sprite_id<0x0000001A>
+    {
+        binary("sprites/zeleny_p5_4.wav");
+    }
+    sprite_id<0x0000001B>
+    {
+        binary("sprites/zeleny_stani_1.wav");
+    }
+    sprite_id<0x0000001C>
+    {
+        binary("sprites/zeleny_stani_2.wav");
+    }
+    sprite_id<0x0000001D>
+    {
+        binary("sprites/cerveny_p0_1.wav");
+    }
+    sprite_id<0x0000001E>
+    {
+        binary("sprites/cerveny_p0_2.wav");
+    }
+    sprite_id<0x0000001F>
+    {
+        binary("sprites/cerveny_p0_3.wav");
+    }
+    sprite_id<0x00000020>
+    {
+        binary("sprites/cerveny_p0_4.wav");
+    }
+    sprite_id<0x00000021>
+    {
+        binary("sprites/cerveny_p1_1.wav");
+    }
+    sprite_id<0x00000022>
+    {
+        binary("sprites/cerveny_p1_2.wav");
+    }
+    sprite_id<0x00000023>
+    {
+        binary("sprites/cerveny_p1_3.wav");
+    }
+    sprite_id<0x00000024>
+    {
+        binary("sprites/cerveny_p1_4.wav");
+    }
+    sprite_id<0x00000025>
+    {
+        binary("sprites/cerveny_p2_1.wav");
+    }
+    sprite_id<0x00000026>
+    {
+        binary("sprites/cerveny_p2_2.wav");
+    }
+    sprite_id<0x00000027>
+    {
+        binary("sprites/cerveny_p2_3.wav");
+    }
+    sprite_id<0x00000028>
+    {
+        binary("sprites/cerveny_p2_4.wav");
+    }
+    sprite_id<0x00000029>
+    {
+        binary("sprites/cerveny_p3_1.wav");
+    }
+    sprite_id<0x0000002A>
+    {
+        binary("sprites/cerveny_p3_2.wav");
+    }
+    sprite_id<0x0000002B>
+    {
+        binary("sprites/cerveny_p3_3.wav");
+    }
+    sprite_id<0x0000002C>
+    {
+        binary("sprites/cerveny_p3_4.wav");
+    }
+    sprite_id<0x0000002D>
+    {
+        binary("sprites/cerveny_p4_1.wav");
+    }
+    sprite_id<0x0000002E>
+    {
+        binary("sprites/cerveny_p4_2.wav");
+    }
+    sprite_id<0x0000002F>
+    {
+        binary("sprites/cerveny_p4_3.wav");
+    }
+    sprite_id<0x00000030>
+    {
+        binary("sprites/cerveny_p4_4.wav");
+    }
+    sprite_id<0x00000031>
+    {
+        binary("sprites/cerveny_p5_1.wav");
+    }
+    sprite_id<0x00000032>
+    {
+        binary("sprites/cerveny_p5_2.wav");
+    }
+    sprite_id<0x00000033>
+    {
+        binary("sprites/cerveny_p5_3.wav");
+    }
+    sprite_id<0x00000034>
+    {
+        binary("sprites/cerveny_p5_4.wav");
+    }
+    sprite_id<0x00000035>
+    {
+        binary("sprites/cerveny_stani_1.wav");
+    }
+    sprite_id<0x00000036>
+    {
+        binary("sprites/cerveny_stani_2.wav");
+    }
+}
+// ---------------- M62 Tamtam tajgy
+properties<Trains, 0x0100> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        speed_kmh: 100;
+        power: 1971;
+        weight_tons: 116;
+        cost_factor: 0x34;
+        running_cost_factor: 0x4C;
+        running_cost_base: 0x00004C36;
+        engine_traction_type: 0x08;
+        coeff_of_tractive_effort: 0x4F;
+        coeff_of_air_drag: 0x14;
+        ai_engine_rank: 0x04;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+        callback_flags_mask: 0x90;
+    }
+}
+strings<Trains, default, 0x0100> // Action04
+{
+    /* 0x0100 */ "M62 Tamtam tajgy";
+}
+properties<Trains, 0x0101> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x00;
+        visual_effect: effect(DieselFumes, 0x08, Enable);
+    }
+}
+strings<Trains, default, 0x0101> // Action04
+{
+    /* 0x0101 */ "M62 Tamtam tajgy (článek)";
+}
+properties<Trains, 0x0102> // Action00
+{
+    {
+        long_introduction_date: date(1965/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+    }
+}
+strings<Trains, default, 0x0102> // Action04
+{
+    /* 0x0102 */ "M62 Tamtam tajgy (článek)";
+}
+sprite_sets<Trains, 0x0000> // Action01
+{
+    sprite_set // 0x0000 hlava
+    {
+        sprite_id<0x00000037>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000038>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 73, -15, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 6];
+            [102, 146, -30, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 6];
+        }
+        sprite_id<0x00000039>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000003A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, 13, -40], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [63, 6];
+            [110, 154, 26, -80], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [114, 6];
+        }
+        sprite_id<0x0000003B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000003C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 75, -68, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [124, 6];
+            [110, 150, -136, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [230, 6];
+        }
+        sprite_id<0x0000003D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000003E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 71, -36, -60], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [185, 6];
+            [98, 142, -72, -120], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [346, 6];
+        }
+    }
+    sprite_set // 0x0001 stred
+    {
+        sprite_id<0x0000003F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 172, -22, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [240, 6];
+            [102, 344, -44, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [450, 6];
+        }
+        sprite_id<0x00000040>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [297, 6];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [558, 6];
+        }
+        sprite_id<0x00000041>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 73, -131, -58], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [403, 6];
+            [524, 146, -262, -116], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [764, 6];
+        }
+        sprite_id<0x00000042>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -37, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [671, 6];
+            [200, 204, -74, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1294, 6];
+        }
+        sprite_id<0x00000043>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 173, -25, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [777, 6];
+            [102, 346, -50, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1500, 6];
+        }
+        sprite_id<0x00000044>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [834, 6];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1608, 6];
+        }
+        sprite_id<0x00000045>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 185];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 358];
+        }
+        sprite_id<0x00000046>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 100, -37, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [274, 185];
+            [200, 200, -74, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [536, 358];
+        }
+    }
+    sprite_set // 0x0002 zad
+    {
+        sprite_id<0x00000047>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000048>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, -28, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [380, 185];
+            [110, 154, -56, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [742, 358];
+        }
+        sprite_id<0x00000049>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000004A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 67, 4, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [441, 185];
+            [98, 134, 8, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [858, 358];
+        }
+        sprite_id<0x0000004B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000004C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 68, -53, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [496, 185];
+            [98, 136, -106, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [962, 358];
+        }
+        sprite_id<0x0000004D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000004E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 76, -27, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [551, 185];
+            [110, 152, -54, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1066, 358];
+        }
+    }
+}
+sprite_groups<Trains, 0x10> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+sprite_groups<Trains, 0x11> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+sprite_groups<Trains, 0x12> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
+{
+    sprite_set // 0x0000 nakup
+    {
+        sprite_id<0x0000004F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [612, 185];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1182, 358];
+        }
+    }
+}
+sprite_groups<Trains, 0x13> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+switch<Trains, 0x14, PrimaryDWord> // clanky (callback 0x16)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8101;
+        0x00000002: 0x8102;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x18, PrimaryDWord> // jizda, pasmo 0 (0.78x, -10.0 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x804B;
+        0x00000001: 0x804C;
+        0x00000002: 0x804D;
+        0x00000003: 0x804E;
+    };
+    default: 0x804B;
+}
+switch<Trains, 0x19, PrimaryDWord> // jizda, pasmo 1 (0.86x, -9.4 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x804F;
+        0x00000001: 0x8050;
+        0x00000002: 0x8051;
+        0x00000003: 0x8052;
+    };
+    default: 0x804F;
+}
+switch<Trains, 0x1A, PrimaryDWord> // jizda, pasmo 2 (0.95x, -8.8 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8053;
+        0x00000001: 0x8054;
+        0x00000002: 0x8055;
+        0x00000003: 0x8056;
+    };
+    default: 0x8053;
+}
+switch<Trains, 0x1B, PrimaryDWord> // jizda, pasmo 3 (1.04x, -8.2 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8057;
+        0x00000001: 0x8058;
+        0x00000002: 0x8059;
+        0x00000003: 0x805A;
+    };
+    default: 0x8057;
+}
+switch<Trains, 0x1C, PrimaryDWord> // jizda, pasmo 4 (1.13x, -7.6 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x805B;
+        0x00000001: 0x805C;
+        0x00000002: 0x805D;
+        0x00000003: 0x805E;
+    };
+    default: 0x805B;
+}
+switch<Trains, 0x1D, PrimaryDWord> // jizda, pasmo 5 (1.24x, -7.0 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x805F;
+        0x00000001: 0x8060;
+        0x00000002: 0x8061;
+        0x00000003: 0x8062;
+    };
+    default: 0x805F;
+}
+switch<Trains, 0x1E, PrimaryDWord> // stani, volnobeh
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8063;
+        0x00000001: 0x8064;
+    };
+    default: 0x8063;
+}
+switch<Trains, 0x1F, RelatedDWord> // rychlost cela vlaku (km/h) -> pasmo
+{
+    expression:
+    {
+        value1 = variable[0xB4] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x0018;
+        0x00000010..0x0000001E: 0x0019;
+        0x0000001F..0x0000002D: 0x001A;
+        0x0000002E..0x0000003C: 0x001B;
+        0x0000003D..0x00000050: 0x001C;
+    };
+    default: 0x001D;
+}
+switch<Trains, 0x20, PrimaryDWord> // jizda: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x001F;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x21, PrimaryDWord> // stani: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x001E;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x22, PrimaryDWord> // zvuky (callback 0x33): 1 odjezd a zahoukej, 2 tunel, 7 jizda, 8 stani
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8049;
+        0x00000002: 0x804A;
+        0x00000007: 0x0020;
+        0x00000008: 0x0021;
+    };
+    default: 0x7FFF;
+}
+switch<Trains, 0x15, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0014;
+        0x00000033: 0x0022;
+    };
+    default: 0x0010;
+}
+switch<Trains, 0x16, PrimaryDWord> // nakup: clanky, popis, obrazek
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0014;
+        0x00000023: 0x8001;
+    };
+    default: 0x0013;
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0015;
+    feature_ids: [ 0x0100 ];
+    cargo_types:
+    {
+        0xFF: 0x0016;
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0011;
+    feature_ids: [ 0x0101 ];
+    cargo_types:
+    {
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0012;
+    feature_ids: [ 0x0102 ];
+    cargo_types:
+    {
+    };
+}
+// ---------------- Sergej ČSD
+properties<Trains, 0x0110> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        speed_kmh: 100;
+        power: 1971;
+        weight_tons: 116;
+        cost_factor: 0x34;
+        running_cost_factor: 0x4C;
+        running_cost_base: 0x00004C36;
+        engine_traction_type: 0x08;
+        coeff_of_tractive_effort: 0x4F;
+        coeff_of_air_drag: 0x14;
+        ai_engine_rank: 0x04;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+        callback_flags_mask: 0x90;
+    }
+}
+strings<Trains, default, 0x0110> // Action04
+{
+    /* 0x0110 */ "Sergej ČSD";
+}
+properties<Trains, 0x0111> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x00;
+        visual_effect: effect(DieselFumes, 0x08, Enable);
+    }
+}
+strings<Trains, default, 0x0111> // Action04
+{
+    /* 0x0111 */ "Sergej ČSD (článek)";
+}
+properties<Trains, 0x0112> // Action00
+{
+    {
+        long_introduction_date: date(1966/1/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+    }
+}
+strings<Trains, default, 0x0112> // Action04
+{
+    /* 0x0112 */ "Sergej ČSD (článek)";
+}
+sprite_sets<Trains, 0x0000> // Action01
+{
+    sprite_set // 0x0000 hlava
+    {
+        sprite_id<0x00000050>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000051>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 73, -15, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [880, 185];
+            [102, 146, -30, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1712, 358];
+        }
+        sprite_id<0x00000052>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000053>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, 13, -40], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [937, 185];
+            [110, 154, 26, -80], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1820, 358];
+        }
+        sprite_id<0x00000054>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000055>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 75, -68, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 291];
+            [110, 150, -136, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 564];
+        }
+        sprite_id<0x00000056>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000057>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 71, -36, -60], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [67, 291];
+            [98, 142, -72, -120], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [122, 564];
+        }
+    }
+    sprite_set // 0x0001 stred
+    {
+        sprite_id<0x00000058>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 172, -22, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [122, 291];
+            [102, 344, -44, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [226, 564];
+        }
+        sprite_id<0x00000059>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [179, 291];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [334, 564];
+        }
+        sprite_id<0x0000005A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 73, -131, -58], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [285, 291];
+            [524, 146, -262, -116], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [540, 564];
+        }
+        sprite_id<0x0000005B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -37, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [553, 291];
+            [200, 204, -74, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1070, 564];
+        }
+        sprite_id<0x0000005C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 173, -25, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [659, 291];
+            [102, 346, -50, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1276, 564];
+        }
+        sprite_id<0x0000005D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [716, 291];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1384, 564];
+        }
+        sprite_id<0x0000005E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 470];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 916];
+        }
+        sprite_id<0x0000005F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 100, -37, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [274, 470];
+            [200, 200, -74, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [536, 916];
+        }
+    }
+    sprite_set // 0x0002 zad
+    {
+        sprite_id<0x00000060>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000061>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, -28, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [380, 470];
+            [110, 154, -56, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [742, 916];
+        }
+        sprite_id<0x00000062>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000063>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 67, 4, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [441, 470];
+            [98, 134, 8, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [858, 916];
+        }
+        sprite_id<0x00000064>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000065>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 68, -53, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [496, 470];
+            [98, 136, -106, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [962, 916];
+        }
+        sprite_id<0x00000066>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000067>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 76, -27, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [551, 470];
+            [110, 152, -54, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1066, 916];
+        }
+    }
+}
+sprite_groups<Trains, 0x40> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+sprite_groups<Trains, 0x41> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+sprite_groups<Trains, 0x42> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
+{
+    sprite_set // 0x0000 nakup
+    {
+        sprite_id<0x00000068>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [612, 470];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1182, 916];
+        }
+    }
+}
+sprite_groups<Trains, 0x43> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+switch<Trains, 0x44, PrimaryDWord> // clanky (callback 0x16)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8111;
+        0x00000002: 0x8112;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x48, PrimaryDWord> // jizda, pasmo 0 (0.78x, -11.5 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8065;
+        0x00000001: 0x8066;
+        0x00000002: 0x8067;
+        0x00000003: 0x8068;
+    };
+    default: 0x8065;
+}
+switch<Trains, 0x49, PrimaryDWord> // jizda, pasmo 1 (0.86x, -10.9 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8069;
+        0x00000001: 0x806A;
+        0x00000002: 0x806B;
+        0x00000003: 0x806C;
+    };
+    default: 0x8069;
+}
+switch<Trains, 0x4A, PrimaryDWord> // jizda, pasmo 2 (0.95x, -10.3 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x806D;
+        0x00000001: 0x806E;
+        0x00000002: 0x806F;
+        0x00000003: 0x8070;
+    };
+    default: 0x806D;
+}
+switch<Trains, 0x4B, PrimaryDWord> // jizda, pasmo 3 (1.04x, -9.7 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8071;
+        0x00000001: 0x8072;
+        0x00000002: 0x8073;
+        0x00000003: 0x8074;
+    };
+    default: 0x8071;
+}
+switch<Trains, 0x4C, PrimaryDWord> // jizda, pasmo 4 (1.13x, -9.1 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8075;
+        0x00000001: 0x8076;
+        0x00000002: 0x8077;
+        0x00000003: 0x8078;
+    };
+    default: 0x8075;
+}
+switch<Trains, 0x4D, PrimaryDWord> // jizda, pasmo 5 (1.24x, -8.5 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8079;
+        0x00000001: 0x807A;
+        0x00000002: 0x807B;
+        0x00000003: 0x807C;
+    };
+    default: 0x8079;
+}
+switch<Trains, 0x4E, PrimaryDWord> // stani, volnobeh
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x807D;
+        0x00000001: 0x807E;
+    };
+    default: 0x807D;
+}
+switch<Trains, 0x4F, RelatedDWord> // rychlost cela vlaku (km/h) -> pasmo
+{
+    expression:
+    {
+        value1 = variable[0xB4] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x0048;
+        0x00000010..0x0000001E: 0x0049;
+        0x0000001F..0x0000002D: 0x004A;
+        0x0000002E..0x0000003C: 0x004B;
+        0x0000003D..0x00000050: 0x004C;
+    };
+    default: 0x004D;
+}
+switch<Trains, 0x50, PrimaryDWord> // jizda: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x004F;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x51, PrimaryDWord> // stani: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x004E;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x52, PrimaryDWord> // zvuky (callback 0x33): 1 odjezd a zahoukej, 2 tunel, 7 jizda, 8 stani
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8049;
+        0x00000002: 0x804A;
+        0x00000007: 0x0050;
+        0x00000008: 0x0051;
+    };
+    default: 0x7FFF;
+}
+switch<Trains, 0x45, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0044;
+        0x00000033: 0x0052;
+    };
+    default: 0x0040;
+}
+switch<Trains, 0x46, PrimaryDWord> // nakup: clanky, popis, obrazek
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0044;
+        0x00000023: 0x8002;
+    };
+    default: 0x0043;
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0045;
+    feature_ids: [ 0x0110 ];
+    cargo_types:
+    {
+        0xFF: 0x0046;
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0041;
+    feature_ids: [ 0x0111 ];
+    cargo_types:
+    {
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0042;
+    feature_ids: [ 0x0112 ];
+    cargo_types:
+    {
+    };
+}
+// ---------------- Maša РЖД
+properties<Trains, 0x0120> // Action00
+{
+    {
+        long_introduction_date: date(2003/10/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        climate_availability: Temperate | Arctic | Tropical | Toyland;
+        speed_kmh: 100;
+        power: 1971;
+        weight_tons: 116;
+        cost_factor: 0x34;
+        running_cost_factor: 0x4C;
+        running_cost_base: 0x00004C36;
+        engine_traction_type: 0x08;
+        coeff_of_tractive_effort: 0x4F;
+        coeff_of_air_drag: 0x14;
+        ai_engine_rank: 0x04;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+        callback_flags_mask: 0x90;
+    }
+}
+strings<Trains, default, 0x0120> // Action04
+{
+    /* 0x0120 */ "Maša РЖД";
+}
+properties<Trains, 0x0121> // Action00
+{
+    {
+        long_introduction_date: date(2003/10/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x00;
+        visual_effect: effect(DieselFumes, 0x08, Enable);
+    }
+}
+strings<Trains, default, 0x0121> // Action04
+{
+    /* 0x0121 */ "Maša РЖД (článek)";
+}
+properties<Trains, 0x0122> // Action00
+{
+    {
+        long_introduction_date: date(2003/10/1);
+        model_life_years: 255;
+        vehicle_life_years: 50;
+        reliability_decay_speed: 20;
+        track_type: 0;
+        sprite_id: 0xFD;
+        cargo_capacity: 0;
+        refit_cargo_types: 0x00000000;
+        shorten_vehicle: 0x05;
+        visual_effect: effect(DisableEffect, 0x00, Enable);
+    }
+}
+strings<Trains, default, 0x0122> // Action04
+{
+    /* 0x0122 */ "Maša РЖД (článek)";
+}
+sprite_sets<Trains, 0x0000> // Action01
+{
+    sprite_set // 0x0000 hlava
+    {
+        sprite_id<0x00000069>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000006A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 73, -15, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [880, 470];
+            [102, 146, -30, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1712, 916];
+        }
+        sprite_id<0x0000006B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000006C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, 13, -40], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [937, 470];
+            [110, 154, 26, -80], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1820, 916];
+        }
+        sprite_id<0x0000006D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000006E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 75, -68, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 576];
+            [110, 150, -136, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 1122];
+        }
+        sprite_id<0x0000006F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000070>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 71, -36, -60], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [67, 576];
+            [98, 142, -72, -120], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [122, 1122];
+        }
+    }
+    sprite_set // 0x0001 stred
+    {
+        sprite_id<0x00000071>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 172, -22, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [122, 576];
+            [102, 344, -44, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [226, 1122];
+        }
+        sprite_id<0x00000072>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [179, 576];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [334, 1122];
+        }
+        sprite_id<0x00000073>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 73, -131, -58], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [285, 576];
+            [524, 146, -262, -116], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [540, 1122];
+        }
+        sprite_id<0x00000074>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -37, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [553, 576];
+            [200, 204, -74, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1070, 1122];
+        }
+        sprite_id<0x00000075>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [51, 173, -25, -106], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [659, 576];
+            [102, 346, -50, -212], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1276, 1122];
+        }
+        sprite_id<0x00000076>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 102, -63, -64], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [716, 576];
+            [200, 204, -126, -128], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1384, 1122];
+        }
+        sprite_id<0x00000077>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [6, 755];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [6, 1474];
+        }
+        sprite_id<0x00000078>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [100, 100, -37, -62], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [274, 755];
+            [200, 200, -74, -124], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [536, 1474];
+        }
+    }
+    sprite_set // 0x0002 zad
+    {
+        sprite_id<0x00000079>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000007A>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 77, -28, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [380, 755];
+            [110, 154, -56, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [742, 1474];
+        }
+        sprite_id<0x0000007B>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000007C>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 67, 4, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [441, 755];
+            [98, 134, 8, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [858, 1474];
+        }
+        sprite_id<0x0000007D>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x0000007E>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [49, 68, -53, -37], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [496, 755];
+            [98, 136, -106, -74], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [962, 1474];
+        }
+        sprite_id<0x0000007F>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [1, 1, 0, 0], zin4, c32bpp, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [1017, 6];
+        }
+        sprite_id<0x00000080>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [55, 76, -27, -59], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [551, 755];
+            [110, 152, -54, -118], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1066, 1474];
+        }
+    }
+}
+sprite_groups<Trains, 0x70> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+sprite_groups<Trains, 0x71> // Action02 basic
+{
+    primary_spritesets: [ 0x0001 ];
+    secondary_spritesets: [ 0x0001 ];
+}
+sprite_groups<Trains, 0x72> // Action02 basic
+{
+    primary_spritesets: [ 0x0002 ];
+    secondary_spritesets: [ 0x0002 ];
+}
+sprite_sets<Trains, 0x0000> // Action01, obrazek do nakupu
+{
+    sprite_set // 0x0000 nakup
+    {
+        sprite_id<0x00000081>
+        {
+            [1, 1, 0, 0], normal, c8bpp, "M62_Sergej_BRYLE-v8-8bpp.png", [4, 4];
+            [262, 71, -131, -56], zin4, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin4.png", [612, 755];
+            [524, 142, -262, -112], zin8, c32bpp | chunked, "M62_Sergej_BRYLE-v8-32bpp-zin8.png", [1182, 1474];
+        }
+    }
+}
+sprite_groups<Trains, 0x73> // Action02 basic
+{
+    primary_spritesets: [ 0x0000 ];
+    secondary_spritesets: [ 0x0000 ];
+}
+switch<Trains, 0x74, PrimaryDWord> // clanky (callback 0x16)
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8121;
+        0x00000002: 0x8122;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x78, PrimaryDWord> // jizda, pasmo 0 (0.78x, -10.0 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x804B;
+        0x00000001: 0x804C;
+        0x00000002: 0x804D;
+        0x00000003: 0x804E;
+    };
+    default: 0x804B;
+}
+switch<Trains, 0x79, PrimaryDWord> // jizda, pasmo 1 (0.86x, -9.4 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x804F;
+        0x00000001: 0x8050;
+        0x00000002: 0x8051;
+        0x00000003: 0x8052;
+    };
+    default: 0x804F;
+}
+switch<Trains, 0x7A, PrimaryDWord> // jizda, pasmo 2 (0.95x, -8.8 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8053;
+        0x00000001: 0x8054;
+        0x00000002: 0x8055;
+        0x00000003: 0x8056;
+    };
+    default: 0x8053;
+}
+switch<Trains, 0x7B, PrimaryDWord> // jizda, pasmo 3 (1.04x, -8.2 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8057;
+        0x00000001: 0x8058;
+        0x00000002: 0x8059;
+        0x00000003: 0x805A;
+    };
+    default: 0x8057;
+}
+switch<Trains, 0x7C, PrimaryDWord> // jizda, pasmo 4 (1.13x, -7.6 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x805B;
+        0x00000001: 0x805C;
+        0x00000002: 0x805D;
+        0x00000003: 0x805E;
+    };
+    default: 0x805B;
+}
+switch<Trains, 0x7D, PrimaryDWord> // jizda, pasmo 5 (1.24x, -7.0 LUFS)
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000004;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x805F;
+        0x00000001: 0x8060;
+        0x00000002: 0x8061;
+        0x00000003: 0x8062;
+    };
+    default: 0x805F;
+}
+switch<Trains, 0x7E, PrimaryDWord> // stani, volnobeh
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF / 0x00000070;
+        value2 = variable[0x1A] & 0x00000002;
+        value1 = UnsignedMod(value1, value2);
+    };
+    ranges:
+    {
+        0x00000000: 0x8063;
+        0x00000001: 0x8064;
+    };
+    default: 0x8063;
+}
+switch<Trains, 0x7F, RelatedDWord> // rychlost cela vlaku (km/h) -> pasmo
+{
+    expression:
+    {
+        value1 = variable[0xB4] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x0078;
+        0x00000010..0x0000001E: 0x0079;
+        0x0000001F..0x0000002D: 0x007A;
+        0x0000002E..0x0000003C: 0x007B;
+        0x0000003D..0x00000050: 0x007C;
+    };
+    default: 0x007D;
+}
+switch<Trains, 0x80, PrimaryDWord> // jizda: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x007F;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x81, PrimaryDWord> // stani: jednou za 112 tiku
+{
+    expression:
+    {
+        value1 = variable[0x0A] & 0x0000FFFF % 0x00000070;
+    };
+    ranges:
+    {
+        0x00000000..0x0000000F: 0x007E;
+    };
+    default: 0xFFFF;
+}
+switch<Trains, 0x82, PrimaryDWord> // zvuky (callback 0x33): 1 odjezd a zahoukej, 2 tunel, 7 jizda, 8 stani
+{
+    expression:
+    {
+        value1 = variable[0x10] & 0x000000FF;
+    };
+    ranges:
+    {
+        0x00000001: 0x8049;
+        0x00000002: 0x804A;
+        0x00000007: 0x0080;
+        0x00000008: 0x0081;
+    };
+    default: 0x7FFF;
+}
+switch<Trains, 0x75, PrimaryDWord> // hlava: clanky, zvuky nebo grafika
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0074;
+        0x00000033: 0x0082;
+    };
+    default: 0x0070;
+}
+switch<Trains, 0x76, PrimaryDWord> // nakup: clanky, popis, obrazek
+{
+    expression:
+    {
+        value1 = variable[0x0C] & 0x0000FFFF;
+    };
+    ranges:
+    {
+        0x00000016: 0x0074;
+        0x00000023: 0x8003;
+    };
+    default: 0x0073;
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0075;
+    feature_ids: [ 0x0120 ];
+    cargo_types:
+    {
+        0xFF: 0x0076;
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0071;
+    feature_ids: [ 0x0121 ];
+    cargo_types:
+    {
+    };
+}
+feature_graphics<Trains> // Action03
+{
+    livery_override: false;
+    default_set_id: 0x0072;
+    feature_ids: [ 0x0122 ];
+    cargo_types:
+    {
+    };
+}

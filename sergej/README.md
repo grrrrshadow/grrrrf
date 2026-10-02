@@ -4,8 +4,8 @@ Tři lokomotivy M62 v jednom GRF, ve dvou velikostech, každý sprite v přiblí
 
 | GRF | `grf_id` | měřítko | délka | kolej |
 |---|---|---|---|---|
-| `grf/orig/M62_Sergej-v7.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4), 24,4 px/m (zin8) | 12/8 (2 + 8 + 2) | na koleje CZTR |
-| `grf/bryle/M62_Sergej_BRYLE-v7.grf` | `MAXc` | o 20 % větší, 14,64 px/m (zin4), 29,28 px/m (zin8) | 14/8 (3 + 8 + 3) | na původní koleje hry |
+| `grf/orig/M62_Sergej-v8.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4), 24,4 px/m (zin8) | 12/8 (2 + 8 + 2) | na koleje CZTR |
+| `grf/bryle/M62_Sergej_BRYLE-v8.grf` | `MAXc` | o 20 % větší, 14,64 px/m (zin4), 29,28 px/m (zin8) | 14/8 (3 + 8 + 3) | na původní koleje hry |
 
 Obě mají `track_type 0`, tedy štítek `RAIL`. Na něm jezdí i lokomotivy a vagony CZTR (v jejich
 převodní tabulce je `RAIL` na indexu 1) a všechny koleje CZTR Rails (RA01–RA13, ELRL, ER01–08)
@@ -27,11 +27,12 @@ Popis (Action08) jde v hráčově pořadí: `{red}M62 Sergej{green}  {train}`, z
 řádek varianty v její barvě, `{orange}` informace (lokomotivy, 3D model, zvuky) a nakonec zeleně
 `ottd decouple by Karel Mácha`, odkaz na itch a licence.
 
-Soubory se jmenují `M62_Sergej-v7.grf` a `M62_Sergej_BRYLE-v7.grf`, aby šly v seznamu najít podle jména.
+Soubory se jmenují `M62_Sergej-v8.grf` a `M62_Sergej_BRYLE-v8.grf`, aby šly v seznamu najít podle jména.
 Číslo verze (hráč: *„piš tam verzi do jména souboru grf“*) je `VERZE` v `pack_sergej.py`, stejné
 číslo jde do Action14 (`VRSN`) a hra ho ukáže v okně GRF. Každé sestavení pro hráče o jedna výš:
 1 první sprity, 2 sever o 3 px, 3 přezdívky a licence, 4 troubení, 5 motor podle rychlosti a barevné
-jméno, 6 jméno „M62 Sergej“ červeně a zbytek zeleně, 7 třetí lokomotiva Maša РЖД a všechno v 4× i 8×. `MINV` je 1,
+jméno, 6 jméno „M62 Sergej“ červeně a zbytek zeleně, 7 třetí lokomotiva Maša РЖД a všechno v 4× i 8×, 8 rezavá střecha, tmavý špinavý
+rez na podvozku a u ČSD černé nárazníky. `MINV` je 1,
 takže nová verze smí v uložené hře nahradit kteroukoli starší.
 
 ## Lokomotivy
@@ -66,11 +67,14 @@ Maša má zvuky zelené (motor bez tlumiče).
    dieselsetu (132, 31, 31 a 154, 123, 20), vyšlo 130, 37, 33 a 151, 118, 32 a o krok dál.
    Nátěr РЖД (`nater.rzd`) vymění `Image_0`, `Image_8` a `Image_2` za textury Leafia dev. a v překryvu
    `Image_6` (vrstva s průhledností, má zelené kusy těla) dá zeleným pixelům barvu těla РЖД ze stejného místa.
+   Od v8 má ČSD černé nárazníky (dorazy) pod světly: na každém čele dva kvádry, jejich čela jsou v textuře těla
+   čtyři čtverce (`nater.NARAZNIKY`, nalezené obarvením na zkoušku; hráč: *„dva čtverce výš jsou světla“*,
+   *„má jen dva dorazy na vagon“*).
 3. **Focení** (`render_sergej.py`): z hráčova `glb3BBC.py` z 24. 1. 2026, stejná kamera, HDRI a Cycles.
    `python3 render_sergej.py <zeleny|cerveny|rzd> <px_na_m> <osmin> <výstup>`; s `ZIN=8` fotí 8×
    (dvojnásobné px/m i rám 640 px) do adresáře `<výstup>_zin8`. `SMERY=1,8` vyfotí jen dané směry (zkoušky).
 4. **Balení** (`pack_sergej.py`): `python3 pack_sergej.py <orig|bryle> <adresář fotek> grf/<orig|bryle>`,
-   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v7.grf` (nebo `M62_Sergej_BRYLE-v7.grf`).
+   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v8.grf` (nebo `M62_Sergej_BRYLE-v8.grf`).
    Chce fotky 4× (`<orig|bryle>_<nátěr>`) i 8× (`…_zin8`) všech tří nátěrů.
    Zvuky bere ze `zvuky/` (`zvuky.json`), připravuje je `zvuky/priprav_zvuky.py`, viz `zvuky/README.md`.
 5. **Kontroly** na rozbaleném GRF (`yagl -d`), poslední argument 4 nebo 8 je zoom:
@@ -90,6 +94,34 @@ fotka 8× dělí na články podle téže mapy jako 4× (zvětšené 2×), takž
 siluety 8× mimo dvojnásobný rámeček 4× balič spočítá (`pixelu 8x mimo ramecek 4x`), bývá jich pár na okraji.
 Prázdné směry (hlava a záď na šikmé koleji) mají jen `zin4` 1×1. Hra 8× ukáže, když je v nastavení přiblížení 8×
 (`gui.zoom_min 0`); v jiné hře (bez zin8) se řádek přeskočí a 4× se zvětší jako dřív.
+
+## Rez (v8, 2. 10. 2026)
+
+Hráč: *„střechu sergeje uděláme rezatou a podvozek taky, kola všechno co je šedý dole bude taky rezatý ale ne jako
+střecha. dole tmavší rez, od oleje, špinavý“*, *„rez kde je šedý, na podvozek tmavý špinavý rez“*. Dělá to
+`render_sergej.py` (funkce `zrezivet`) přímo v materiálech, u všech tří lokomotiv:
+
+- **Kde:** rozhoduje výška a šedost (nízká sytost barvy). Boky těla jsou v modelu od 1,6 do 3,47 m (změřeno
+  `model/` podle řádků textury). **Střecha** = šedé plochy nad 3,5 m a v textuře těla celá oblast střechy
+  (řádky 0–383 z 2048); čela (řádky od 1536: okna, světla) se nerezaví. **Podvozek** = šedé plochy pod 1,55 m:
+  kola, podvozky, rám, nádrž, skříně, spojka. Lak boků a čel (zelená, červená, pruhy, šedý pás РЖД) zůstává.
+- **Jak:** střecha rezavě hnědá až oranžová ve skvrnách (šum), místy prosvítá šedá, spáry a špína textury
+  zůstanou vidět (rez se násobí jasem textury); podvozek tmavý, skoro černohnědý rez od oleje s rezavými a
+  zaprášenými místy. Rez je matný a není kov.
+- Souřadnice jsou v prostoru natahovače (původní metry modelu), takže rez je ve všech směrech na stejném místě.
+  `REZ=0` fotí bez rzi.
+
+## Verze 8 ve hře (2. 10. 2026 v noci)
+
+- **Zkušební hra** z `51428e5` jako u v7 (`testvlakfoto`, tři lokomotivy, osm fotek v 8× a osm ve 4×).
+- **Pixelová kontrola** (`kontrola_pixel.py`): v 8× sedí všech 51 článků na fotkách na 100 % s posunem (0,0), ve 4×
+  49 z 51; u dvou článků Maši na jedné fotce chybí 18 % a 1 % pixelů, protože přes střechu jde kouř z výfuku.
+  Výřezy z fotek: `kontrola/hra_8x_v8.png`, `kontrola/hra_4x_v8.png`.
+- **Spoje a koleje** 4× i 8× u obou velikostí v pořádku (rozdíl nejvýš 1 ze zaokrouhlení).
+- **GRF:** `grf/orig/M62_Sergej-v8.grf` 11,2 MB (md5 `367bb3e8135dcee41458a3c21791055b`),
+  `grf/bryle/M62_Sergej_BRYLE-v8.grf` 12,8 MB (md5 `1c2b95f64cd75f16a645243e94743f76`), stejná stavba jako v7
+  (75 obrázkových spritů, 51 se zin4 i zin8, 54 zvuků). Oba GRF a licence jsou i v `M62_Sergej-v8.zip`, soubory
+  v7 jsou z repa pryč (zůstávají v historii gitu).
 
 ## Verze 7 ve hře (2. 10. 2026)
 
