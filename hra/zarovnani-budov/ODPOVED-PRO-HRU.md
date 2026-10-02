@@ -133,3 +133,14 @@ jeden obrázek bez fází růstu“*. Obrázky jsou v `pole/`, popis v `pole/REA
   - cennosti a diamanty nevozí žádné, hráč na ně udělá Avii VB;
   - odpad jede na šedé kupě.
 - **Dodávky v6** (`auta/dodavky_BRYLE_v6.grf`): kovy pod plachtou, odpad na valníku s kamennou kupou.
+
+## Gymnázium: černá místa u schodů a stromy (2. 10. večer)
+
+Hráč podle fotky z vaší hry: *„schody jsou dobře napasované, chybí jim bok a dlažba na konci. ta černá místa“* a
+*„dva stromy vedle budovy maj vysoko koruny nad kmenem, je to tyčka ze země, mezera a koruna“*.
+
+- **Krájení je v pořádku**, chyba byla v našem obrázku: plochy přes sebe ve stejné rovině vyšly v renderu černé (bok
+  schodů a pruh dlažby před nimi). Opraveno v modelu, stromy mají kmen až do koruny.
+- **Změnily se všechny čtyři obrázky:** `gymnazium/gymnazium_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png`,
+  `gymnazium/gymnazium_zin8.png`, `gymnazium/gymnazium_postavy_zin8.png`. Prosím rozkrájet znovu (4× i 8×).
+- Rohy v JSONu jsou stejné, velikost obrázků taky, 8× je přesně dvojnásobek 4×. Holky jsou na stejných místech.

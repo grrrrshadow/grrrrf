@@ -156,9 +156,9 @@ for xx in (X0, X1 - LIZ):                                                       
     kvadr(M["bila"], xx, xx + LIZ, Y1, Y1 + 0.06, ZS, ZPP)
 # rizalit
 kvadr(M["fasada"], X1, RIZ_X, RIZ_Y0, RIZ_Y1, ZS, ZPP)
-kvadr(M["sokl"], X1, RIZ_X + 0.06, RIZ_Y0 - 0.06, RIZ_Y1 + 0.06, 0.0, ZS)
-kvadr(M["bila"], X1, RIZ_X + 0.25, RIZ_Y0 - 0.25, RIZ_Y1 + 0.25, ZPP, ZR)
-kvadr(M["bila"], X1, RIZ_X + 0.08, RIZ_Y0 - 0.08, RIZ_Y1 + 0.08, ZP - 0.1, ZP + 0.12)
+kvadr(M["sokl"], X1 + 0.06, RIZ_X + 0.06, RIZ_Y0 - 0.06, RIZ_Y1 + 0.06, 0.0, ZS)       # navazuji na sokl a rimsy hlavni
+kvadr(M["bila"], X1 + 0.25, RIZ_X + 0.25, RIZ_Y0 - 0.25, RIZ_Y1 + 0.25, ZPP, ZR)         # budovy (driv prekryv ve stejne
+kvadr(M["bila"], X1 + 0.08, RIZ_X + 0.08, RIZ_Y0 - 0.08, RIZ_Y1 + 0.08, ZP - 0.1, ZP + 0.12)  # vysce = cerna linka)
 for yy in (RIZ_Y0, RIZ_Y1 - 0.5):
     kvadr(M["bila"], RIZ_X, RIZ_X + 0.06, yy, yy + 0.5, ZS, ZPP)
 # stit nad rizalitem (trojuhelnik v rovine prucelim) a v nem kulate okno
@@ -206,7 +206,7 @@ def okno(prucelim, u, z0, z1, sirka=1.2):
     q(M["bila"], u - s2 - 0.22, u + s2 + 0.22, 0.0, 0.12, z1 + o, z1 + o + 0.12)   # nadokenni rimsa
     q(M["bila"], u - 0.03, u + 0.03, 0.0, 0.03, z0, z1)                    # poutce
     zt = z0 + (z1 - z0) * 0.68
-    q(M["bila"], u - s2, u + s2, 0.0, 0.03, zt - 0.03, zt + 0.03)
+    q(M["bila"], u - s2, u + s2, 0.0, 0.032, zt - 0.03, zt + 0.03)          # o 2 mm pred poutcem (krizeni)
 
 OKNA_Z = [(1.55, 3.55), (5.15, 7.15)]
 for z0, z1 in OKNA_Z:
@@ -220,9 +220,15 @@ okno(('x', RIZ_X), YC, 5.15, 7.15, 1.0)
 # vstup: dvoukridle dvere v portalu, nad nimi napis, pred nimi tri schody
 kvadr(M["bila"], RIZ_X, RIZ_X + 0.1, YC - 1.25, YC + 1.25, ZS, 3.55)          # portal
 kvadr(M["dvere"], RIZ_X + 0.1, RIZ_X + 0.13, YC - 0.95, YC + 0.95, ZS, 3.25)
-kvadr(M["bila"], RIZ_X + 0.1, RIZ_X + 0.15, YC - 0.03, YC + 0.03, ZS, 3.25)
-for i in range(3):
-    kvadr(M["sokl"], RIZ_X, RIZ_X + 0.36 * (3 - i), YC - 1.6, YC + 1.6, 0.0, 0.23 * (i + 1))
+kvadr(M["bila"], RIZ_X + 0.1, RIZ_X + 0.15, YC - 0.03, YC + 0.03, ZS, 3.24)
+# Schody jako jeden hranol se schodovitym profilem (do 2. 10. tri kvadry pres sebe: jejich boky lezely v jedne rovine
+# pres sebe a Cycles takove plochy kresli cerne, hrac: "schody chybi jim bok", "ta cerna mista"). Zadni stena 5 cm
+# v soklu rizalitu, at nelezi v rovine jeho lice.
+PROFIL = [(RIZ_X - 0.05, 0.0), (RIZ_X + 1.08, 0.0), (RIZ_X + 1.08, 0.23), (RIZ_X + 0.72, 0.23), (RIZ_X + 0.72, 0.46),
+          (RIZ_X + 0.36, 0.46), (RIZ_X + 0.36, 0.69), (RIZ_X - 0.05, 0.69)]
+_n = len(PROFIL)
+mnohostena(M["sokl"], [(x, YC - 1.6, z) for x, z in PROFIL] + [(x, YC + 1.6, z) for x, z in PROFIL],
+           [tuple(range(_n)), tuple(range(2 * _n - 1, _n - 1, -1))] + [(k, k + _n, (k + 1) % _n + _n, (k + 1) % _n) for k in range(_n)])
 bpy.ops.object.text_add(location=B(RIZ_X + 0.07, YC, 3.92), rotation=(math.radians(90), 0, 0))
 napis = bpy.context.object; napis.data.body = "DÍVČÍ GYMNÁZIUM"; napis.data.align_x = 'CENTER'; napis.data.align_y = 'CENTER'
 napis.data.font = bpy.data.fonts.load("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
@@ -253,23 +259,25 @@ for yy in (Y0 + 4.0, Y1 - 4.0):                                     # dva komín
 # ---------------------------------------------------------------- okoli: predprostor, cesty, hriste, park
 Z_ZEM = 0.035
 kvadr(M["dlazba"], X1 + 0.06, X1 + 2.2, Y0 - 0.3, Y1 + 0.3, 0.0, Z_ZEM)            # dlazba podel prucelim
-kvadr(M["dlazba"], RIZ_X + 1.08, P, YC - 1.25, YC + 1.25, 0.0, Z_ZEM)          # hlavni cesta k plotu
+kvadr(M["dlazba"], X1 + 2.2, P, YC - 1.25, YC + 1.25, 0.0, Z_ZEM)             # hlavni cesta k plotu, navazuje na dlazbu
+                                                                                 # podel prucelim (driv se prekryvaly: cerny pas)
 # hriste: cerveny kurt s carami a dvema kosi (podel osy x)
 KX0, KX1, KY0, KY1 = 15.2, 28.2, 1.6, 10.4
 kvadr(M["kurt"], KX0, KX1, KY0, KY1, 0.0, Z_ZEM)
 C, ZC_ = 0.08, Z_ZEM + 0.004
 kx0, kx1, ky0, ky1 = KX0 + 0.5, KX1 - 0.5, KY0 + 0.5, KY1 - 0.5
-for (a0, a1, b0, b1) in ((kx0, kx1, ky0, ky0 + C), (kx0, kx1, ky1 - C, ky1), (kx0, kx0 + C, ky0, ky1), (kx1 - C, kx1, ky0, ky1)):
-    kvadr(M["cara"], a0, a1, b0, b1, 0.0, ZC_)
+# cary, ktere se krizi, kazda o 0,5 mm jinak vysoko (ve stejne vysce by krizeni bylo cerne)
+for k, (a0, a1, b0, b1) in enumerate(((kx0, kx1, ky0, ky0 + C), (kx0, kx1, ky1 - C, ky1), (kx0, kx0 + C, ky0, ky1), (kx1 - C, kx1, ky0, ky1))):
+    kvadr(M["cara"], a0, a1, b0, b1, 0.0, ZC_ + 0.0005 * (k // 2))
 kxs, kys = (kx0 + kx1) / 2, (ky0 + ky1) / 2
-kvadr(M["cara"], kxs - C / 2, kxs + C / 2, ky0, ky1, 0.0, ZC_)
-mezikruzi(M["cara"], kxs, kys, 0.0, ZC_, 1.5, 1.5 + C)
+kvadr(M["cara"], kxs - C / 2, kxs + C / 2, ky0, ky1, 0.0, ZC_ + 0.001)
+mezikruzi(M["cara"], kxs, kys, 0.0, ZC_ + 0.0015, 1.5, 1.5 + C)
 for kraj, smer in ((kx0, 1), (kx1, -1)):
     xa, xb = sorted((kraj, kraj + smer * 4.0))
     for (a0, a1, b0, b1) in ((xa, xb, kys - 2.0, kys - 2.0 + C), (xa, xb, kys + 2.0 - C, kys + 2.0)):
-        kvadr(M["cara"], a0, a1, b0, b1, 0.0, ZC_)
+        kvadr(M["cara"], a0, a1, b0, b1, 0.0, ZC_ + 0.002)
     xr = kraj + smer * 4.0
-    kvadr(M["cara"], xr - C / 2, xr + C / 2, kys - 2.0, kys + 2.0, 0.0, ZC_)
+    kvadr(M["cara"], xr - C / 2, xr + C / 2, kys - 2.0, kys + 2.0, 0.0, ZC_ + 0.0025)
     # kos: sloup za cárou, rameno, deska a obruc
     xs = kraj - smer * 0.35
     kvadr(M["kov"], xs - 0.06, xs + 0.06, kys - 0.06, kys + 0.06, 0.0, 3.3)
@@ -287,8 +295,8 @@ for i in range(70):                                                     # kvetin
     r = 1.45 * math.sqrt(random.random()); a = random.random() * 2 * math.pi
     x, y = PX_ + r * math.cos(a), PY_ + r * math.sin(a)
     kvadr(KVETY[i % len(KVETY)], x - 0.09, x + 0.09, y - 0.09, y + 0.09, Z_ZEM + 0.08, Z_ZEM + 0.08 + 0.12 + 0.12 * random.random())
-kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, YC + 1.25, PY_ - 3.1, 0.0, Z_ZEM)
-kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, PY_ + 3.1, P, 0.0, Z_ZEM)
+kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, YC + 1.25, PY_ - 3.1, 0.0, Z_ZEM - 0.002)    # o 2 mm nize nez namesticko,
+kvadr(M["sterk"], PX_ - 0.6, PX_ + 0.6, PY_ + 3.1, P, 0.0, Z_ZEM - 0.002)            # do ktereho kus zajizdeji
 # Holky a lavicky 1,5x vetsi nez budova (hrac 1. 10.: "skola zvetsit studentky, zvetsime i lavicky, dvere do skoly jsou
 # velke dost, muzem zvetsit studentky"): holka 2,43 az 2,52 m, dvere 2,55 m, ve 2x (3,2 m) by uz dvermi neprosla.
 K_LAV = float(os.environ.get("LAVICKY", "1.5"))
@@ -330,15 +338,19 @@ plot_x(PL0, PX_ - 0.65, P - PL1, P - PL0); plot_x(PX_ + 0.65, P - PL1, P - PL1, 
 plot_x(PL0, P - PL1, PL0, PL1)                                                             # severozapadni strana
 plot_x(PL0, PL1, PL1, P - PL1)                                                             # severovychodni strana
 
-# stromy: kmen a koruna z nekolika koul, stin od koruny dela hloubku
+# stromy: kmen a koruna z nekolika koul, stin od koruny dela hloubku. Kmen jde az doprostred koruny a spodni koule
+# koruny sahaji k nemu (hrac 2. 10.: "dva stromy vedle budovy maji vysoko koruny nad kmenem, je to tycka ze zeme,
+# mezera a koruna"; drive kmen koncil ve 45 % vysky a koruna zacinala az nad nim)
 def strom(x, y, vyska, r, barva, seed, kmen=True):
     rnd = random.Random(seed)
-    if kmen: valec(M["kmen"], x, y, 0.0, vyska * 0.45, 0.15, 8)
+    if kmen: valec(M["kmen"], x, y, 0.0, vyska - r * 1.05, 0.2, 8)
     obj_m = KORUNY[barva]
     for i in range(9 if kmen else 4):
         a = rnd.random() * 2 * math.pi; d = r * 0.55 * math.sqrt(rnd.random())
         cx, cy = x + d * math.cos(a), y + d * math.sin(a)
-        cz = vyska - r * 1.05 + (rnd.random() - 0.3) * r * 0.7
+        cz = vyska - r * 1.1 + (rnd.random() - 0.5) * r * 0.6
+        if kmen and i < 3:                                              # spodek koruny tesne nad kmenem
+            cx, cy, cz = x + (cx - x) * 0.5, y + (cy - y) * 0.5, vyska - r * 1.7
         rr = r * (0.48 + 0.22 * rnd.random())
         bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=rr, location=B(cx, cy, cz))
         o = bpy.context.object; o.data.materials.append(obj_m)

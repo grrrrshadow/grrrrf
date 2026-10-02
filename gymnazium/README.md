@@ -73,3 +73,19 @@ zvětšená 1,5× je v repu od 1. 10. večer (`822f355`), stačí si vzít nové
 1440 × 1440 px (políčko 512 px): obrázek i rohy jsou přesně dvojnásobek 4×. Oba snímky animace jsou v 8×, druhý
 sloučený s prvním (`postavy/animace.py`) jako ve 4×. Kontrolní 4× render po úpravě skriptu vyšel stejně jako
 `gymnazium_zin4.png` v repu.
+
+## Černá místa u schodů a stromy (2. 10. večer)
+
+Hráč podle fotky ze hry: *„pohly se schody a dva stromy vedle budovy maj vysoko koruny nad kmenem, je to tyčka ze
+země, mezera a koruna“*, pak *„schody jsou dobře napasované, chybí jim bok a dlažba na konci. ta černá místa“*.
+
+- **Černá místa:** kde v modelu ležely dvě plochy přesně přes sebe ve stejné rovině, nakreslil je Blender černě.
+  Tak zčernal bok schodů (tři kvádry přes sebe) a pruh dlažby před nimi (hlavní cesta přes dlažbu podél průčelí),
+  takže schody vypadaly ujeté. Schody jsou teď jeden kus se třemi stupni, cesta začíná až za dlažbou podél průčelí.
+  Stejně opravené i menší překryvy: sokl a římsy rizalitu, příčle oken, čáry hřiště, štěrkové cestičky v parku.
+  Černých pixelů u schodů ve 4× ubylo z 56 na 3 (zbyl jen sloup lampy), v 8× zmizel celý černý pruh.
+- **Stromy:** kmen končil ve 45 % výšky a koruna začínala až nad ním (tyčka, mezera, koruna). Kmen teď sahá do
+  koruny a spodek koruny je u kmene. Platí pro všechny tři stromy (dva u budovy a jeden v parku), keře se nemění.
+- Holky stojí, kde stály. Rohy v JSONu jsou stejné, 8× je pořád přesně dvojnásobek 4×.
+- Znovu vyfocené všechny čtyři obrázky: `gymnazium_zin4.png`, `gymnazium_postavy_zin4.png`, `gymnazium_zin8.png`,
+  `gymnazium_postavy_zin8.png` (s holkami zase sloučené s obrázkem bez holek přes `postavy/animace.py`).
