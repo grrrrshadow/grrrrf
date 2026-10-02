@@ -48,7 +48,9 @@ public:
     static constexpr uint8_t CROP_TRANSARENT_BORDER = 0x40; // Ignore for now - grfcodec trims extraneous transparent
                                                             // borders from sprites
 
-    // Zoom levels supported by OpenTTD.
+    // Zoom levels supported by OpenTTD (codes 0 to 5). Code 6 is ZoomInX8 ("zin8"): the 8x level
+    // of ottd Decouple by Karel Macha only (its ZoomLevel::In8x, 2026-10-02), twice the size of
+    // zin4; any other reader of a GRF skips a zoom code it does not know.
     enum class ZoomLevel : uint8_t
     {
         Normal      = 0,
@@ -56,7 +58,8 @@ public:
         ZoomInX2    = 2,
         ZoomOutX2   = 3,
         ZoomOutX4   = 4,
-        ZoomOutX8   = 5
+        ZoomOutX8   = 5,
+        ZoomInX8    = 6
     };
 
     //enum class ColourDepth : uint8_t

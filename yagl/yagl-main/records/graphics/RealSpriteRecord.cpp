@@ -454,6 +454,7 @@ constexpr const char* str_zin4    = "zin4";
 constexpr const char* str_zout2   = "zout2";
 constexpr const char* str_zout4   = "zout4";
 constexpr const char* str_zout8   = "zout8";
+constexpr const char* str_zin8    = "zin8";    // code 6: 8x of ottd Decouple by Karel Macha only
 
 // Identifiers cannot begin with digits.
 constexpr const char* str_8bpp    = "c8bpp";
@@ -474,6 +475,7 @@ const EnumDescriptorT<RealSpriteRecord::ZoomLevel> zoom_desc =
         { 0x03, str_zout2  }, // ZoomLevel::ZoomOutX2 },
         { 0x04, str_zout4  }, // ZoomLevel::ZoomOutX4 },
         { 0x05, str_zout8  }, // ZoomLevel::ZoomOutX8 },
+        { 0x06, str_zin8   }, // ZoomLevel::ZoomInX8 },
     }
 };
 

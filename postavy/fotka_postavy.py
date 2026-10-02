@@ -5,7 +5,8 @@
 # STIN > 0 prida slaby stin na zem: divky na zastavce jsou s STIN=0.2 (hrac: "neni to videt, na zastavce dobry").
 #   python3 fotka_postavy.py <vystup.png>
 # Promenne: POSTAVA (jmeno GLB v postavy/), POZA (stoji = jak je v modelu, sedi, ruce_dolu = z pozice T), SMER (stupne, kam se diva: 0 = k
-# jihozapadu, 90 = k jihovychodu, jako u lavicek), MERITKO (2 jako budovy), VYSKA (m, skutecna), RAM (px), SAMPLES.
+# jihozapadu, 90 = k jihovychodu, jako u lavicek), MERITKO (2 jako budovy), VYSKA (m, skutecna), RAM (px), SAMPLES,
+# PX_M (12,2 = 4x; 24,4 = 8x pro nasi hru, pak i RAM dvojnasobny, aby zaber zustal stejny).
 import bpy, os, sys, math, json
 import numpy as np
 from mathutils import Vector, Matrix
@@ -16,7 +17,7 @@ sys.path.insert(0, TU)
 import postavy as P
 
 VYSTUP = sys.argv[-1]
-PX_M = 12.2
+PX_M = float(os.environ.get("PX_M", "12.2"))     # px na metr: 12,2 je priblizeni 4x (zin4), 24,4 je 8x (zin8, jen nase hra)
 K = float(os.environ.get("MERITKO", "2"))
 RAM = int(os.environ.get("RAM", "160"))
 JMENO = os.environ.get("POSTAVA", "character_people_girl_001")

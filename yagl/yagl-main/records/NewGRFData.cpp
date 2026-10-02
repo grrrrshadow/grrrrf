@@ -772,12 +772,13 @@ void NewGRFData::parse(TokenStream& is, const std::string& output_dir, const std
     // become a bit of a burden, have the YAGL file determine which version
     // of yagl is needed to parse it (typically the same version that
     // created it).
-    if (yagl_version != str_yagl_version)
+    // Our build (grrrrf, 2026-10-02): the version is taken from git and changes with every commit of
+    // the repository, while our packers write an empty version on purpose and decoded scripts are kept
+    // for later. An empty version means "any yagl"; a different one is only reported, not refused.
+    if (!yagl_version.empty() && yagl_version != str_yagl_version)
     {
-        std::ostringstream os;
-        os << "YAGL version number does not match. ";
-        os << "Expected: " << str_yagl_version << "; found: " << yagl_version;
-        throw PARSER_ERROR(os.str(), token);
+        std::cout << "WARNING: YAGL version number does not match. ";
+        std::cout << "Expected: " << str_yagl_version << "; found: " << yagl_version << "\n";
     }
 
     // Top level parser. Every record has the format 'keyword [<...>] { ... }'.

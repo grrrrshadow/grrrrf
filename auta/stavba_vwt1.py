@@ -17,6 +17,9 @@
 # 10. (verze 6) podle vypisu prumyslu (hrac 1. 10.): kovy pod plachtou (plachta a plachta seda), odpad (TRSH, WSTE,
 #     RCYC) na valniku s kamennou kupou; cennosti, zlato a diamanty dvanacttrojky nevozi (pojede na ne Avia VB),
 #     tekutiny vozi sudy V3S a cisterny Tater
+# 11. (verze 7) divky u dveri i v priblizeni 8x (zin8, kod zoomu 6: jen nase hra, kolega 2. 10. ZoomLevel::In8x),
+#     dvojnasobne rozliseni a vic vzorku (hrac: "dame maximum detailu, jsou to malicky obrazky, ktere jen prikladame");
+#     obrazek 8x je presne dvojnasobek 4x, ostatni sprity maji dal jen 4x (hra si 8x udela zdvojenim)
 # Pouziti: python3 stavba_vwt1.py <vstup.yagl> <list.png> <zelena.pkl> <kody.json> <slozka sprites> <jmeno>
 #   vznikne <slozka sprites>/<jmeno>.yagl, list novych spritu a <slozka sprites>/../<jmeno>-souhrn.json
 import json, os, pickle, re, sys
@@ -57,7 +60,7 @@ VALNIKY = {0x83: ["WOOD", "TWOD"], 0x84: ["COAL", "COKE", "MNO2"],
 S_HOLKAMI = [0x82, 0x8B, 0x8C, 0x93, 0x94]
 HOLKY_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "holky-u-aut", "vrstvy")
 HOLKY = json.load(open(os.path.join(HOLKY_DIR, "holky.json"), encoding="utf-8"))
-assert all(len(HOLKY[d]) == 8 for d in ("za", "pred"))
+assert all(len(HOLKY[d]) == 8 and all("zin8" in p for p in HOLKY[d]) for d in ("za", "pred"))
 
 def cisla(seznam):
     return sorted({SLOT[k] for k in seznam})
@@ -293,16 +296,21 @@ r = ["sprite_sets<RoadVehicles, 0x0000> // Action01, divky u otevrenych dveri: 0
 for si, druh in enumerate(("za", "pred")):
     r += [f"    sprite_set // 0x{si:04X} divky {druh} autem", "    {"]
     for p in HOLKY[druh]:
-        a = np.array(Image.open(os.path.join(HOLKY_DIR, p["soubor"])).convert("RGBA"))
-        w, h, xo, yo = p["w"], p["h"], p["xo"], p["yo"]
-        if a[..., 3].max() == 0:                       # prazdny smer: pruhledny 4 x 4 jako cumak
-            a, w, h, xo, yo = np.zeros((4, 4, 4), np.uint8), 4, 4, -2, -2
-        assert a.shape[:2] == (h, w)
-        bunky.append(a)
-        n = len(bunky) - 1
-        r += [f"        sprite_id<0x{nove_id():08X}>", "        {",
-              f"            [{w}, {h}, {xo}, {yo}], zin4, c32bpp | chunked, \"{LIST_NOVY}\", [{{X{n}}}, {{Y{n}}}];",
-              "        }"]
+        r += [f"        sprite_id<0x{nove_id():08X}>", "        {"]
+        # (verze 7) dve urovne: zin4 a zin8 (dvojnasobek) v jednom sprite_id; prazdny smer pruhledny 4 x 4 (8x 8 x 8)
+        for zin, q, prazdny in ((4, p, 4), (8, p["zin8"], 8)):
+            a = np.array(Image.open(os.path.join(HOLKY_DIR, q["soubor"])).convert("RGBA"))
+            w, h, xo, yo = q["w"], q["h"], q["xo"], q["yo"]
+            if a[..., 3].max() == 0:                   # prazdny smer: pruhledny jako cumak
+                a, w, h, xo, yo = np.zeros((prazdny, prazdny, 4), np.uint8), prazdny, prazdny, -prazdny // 2, -prazdny // 2
+            assert a.shape[:2] == (h, w)
+            if zin == 8:
+                assert (w, h, xo, yo) == (2 * w4, 2 * h4, 2 * xo4, 2 * yo4), ((w, h, xo, yo), (w4, h4, xo4, yo4))
+            w4, h4, xo4, yo4 = w, h, xo, yo
+            bunky.append(a)
+            n = len(bunky) - 1
+            r += [f"            [{w}, {h}, {xo}, {yo}], zin{zin}, c32bpp | chunked, \"{LIST_NOVY}\", [{{X{n}}}, {{Y{n}}}];"]
+        r += ["        }"]
     r += ["    }"]
 r += ["}"]
 for gid, si, druh in ((0xE0, 0, "za"), (0xE3, 1, "pred")):

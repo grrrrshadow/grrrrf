@@ -227,6 +227,7 @@ void SpriteSheetGenerator::create_sprite_sheet(Category category, SpriteVector s
         case ZoomLevel::ZoomOutX2: os << "-zout2-";  break;
         case ZoomLevel::ZoomOutX4: os << "-zout4-";  break;
         case ZoomLevel::ZoomOutX8: os << "-zout8-";  break;
+        case ZoomLevel::ZoomInX8:  os << "-zin8-";   break;
     }
     os << index << ".png";
     const std::string image_path = os.str();

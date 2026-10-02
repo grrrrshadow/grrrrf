@@ -41,6 +41,17 @@ Náš přídavek (2026-09-27, hráč: *„jen soubor yagl, výpis spritů bez sp
 jména listů a pozice spritů v něm zůstanou, jen soubory se nezapíšou. Hodí se na čtení cizích
 sad: GETS (318 MB) se takhle rozbalí za 25 s do 31 MB textu. Zpátky složit se z toho nedá.
 
+## Verze v hlavičce
+
+První řádek `yagl_version: "…";` smí být prázdný (`""`), tak ho píšou naše balicí skripty. Jiná verze
+než ta přeložená jen vypíše varování (od 2. 10., `NASE-UPRAVY.md`, oddíl 6).
+
+## Zoom `zin8` (jen naše hra)
+
+Od 2. 10. umí yagl v `sprite_id` i řádek se zoomem `zin8` (kód zoomu 6 v GRF): přiblížení 8× naší hry,
+obrázek přesně dvojnásobný proti `zin4`, vedle kterého stojí. Jiná hra ten řádek přeskočí. Podrobně
+`NASE-UPRAVY.md`, oddíl 5.
+
 ## Složit GRF
 
 ```bash

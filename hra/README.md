@@ -42,6 +42,44 @@ cd /tmp/hra/ottd-zkusebni-c53e895 && HOME=$H TEST_RV_GRF=MAXd ./openttd -vnull:t
 Uložená hra: `save <jméno>` v `game_start.scr`, načíst `-g <soubor>`, ale v `autoexec.scr` pak nesmí být
 `newgame`, jinak hra místo načtení založí novou.
 
+## Třetí zkušební hra: přiblížení 8× (2. 10.)
+
+Kolega dal hře úroveň přiblížení 8× (`ZoomLevel::In8x` před původním 4×, forclaude `51428e5`, jen čteno). Tahle
+kopie je z toho commitu se stejnými zkušebními příkazy (záplata `zkusebni-prikazy-c53e895.patch` sedí i na něj,
+jen posunutá) a je na zkoušku spritů `zin8` (yagl, kód zoomu 6; první jsou holky u dveří v `auta/dodavky_BRYLE_v7.grf`).
+
+| soubor | co to je |
+|---|---|
+| `ottd-zkusebni-51428e5-gfx.tar.xz` | přeložená hra (SDL2, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a čistý domov `domov/` jako u druhé |
+
+Co je u ní jinak:
+- **Úrovně přiblížení jsou posunuté o jednu:** 0 je 8×, 1 je 4× (dřív 0). Starou `openttd.cfg` bez `ini_version`
+  si hra přepočítá sama (`zoom_min` a `zoom_max` o jedna výš), takže se otevře ve 4× jako dřív; 8× zapne
+  `setting gui.zoom_min 0` ve skriptu (hra pak sprity znovu načte i s úrovní 8×). `sprite_zoom_min = 0` znamená dál
+  „nejjemnější, co je“.
+- **Fotky `testv3sfoto` a `testholky`** se dělají v přiblížení `zoom_min` (`SC_ZOOMEDIN`): se `zoom_min 0` jsou v 8×
+  a dvakrát větší (okruh 6400 × 4000), se `zoom_min 1` ve 4× jako dřív.
+- **Kam padají fotky:** s `-c <konfigurace>` do `screenshot/` vedle té konfigurace, ne do `domov/.openttd/screenshot/`
+  (platí i pro druhou hru; hra bere složku s konfigurací jako svou osobní). Jméno je pořád `v3s_okruh.png`, mezi
+  běhy ho přejmenovat.
+- **Sprite jen se `zin4`** hra v 8× zdvojí sama; sprite se `zin4` i `zin8` musí mít 8× přesně dvojnásobný (šířka,
+  výška, posun), jinak hra spadne na assert (překlad má asserty zapnuté).
+- Paměť: kolega měří, že 8× bere čtyřikrát víc paměti na sprity než 4×; na zkoušku je to jedno.
+
+```bash
+mkdir -p /tmp/hra && tar -xJf hra/ottd-zkusebni-51428e5-gfx.tar.xz -C /tmp/hra
+H=/tmp/hra/ottd-zkusebni-51428e5/domov
+cp auta/dodavky_BRYLE_v7.grf $H/.openttd/newgrf/
+sed -i 's/^\[newgrf\]$/[newgrf]\ndodavky_BRYLE_v7.grf = /' $H/.openttd/openttd.cfg
+printf 'setting starting_year 1990\nnewgame\n' > $H/.openttd/scripts/autoexec.scr
+printf 'setting gui.zoom_min 0\ntestholky 600 8C RT14\n' > $H/.openttd/scripts/game_start.scr
+cd /tmp/hra/ottd-zkusebni-51428e5 && HOME=$H xvfb-run -a -s "-screen 0 1024x768x24" ./openttd -v sdl -b 32bpp-anim -r 800x500 -s null -m null -G 7
+# fotka v 8x: $H/.openttd/screenshot/v3s_okruh.png (bez -c)
+```
+
+Na fotce `holky-u-aut/ve_hre_8x.png` je v domově i celý CZTR Road set (prosklené zastávky, holky vidět; v repu
+není, hráč ho má), s pouhým výstřižkem silnice jsou zastávky původní a přístřešek holky u bližšího pruhu schová.
+
 ## Zkušební příkazy
 
 | příkaz | co udělá |

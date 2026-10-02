@@ -8,13 +8,35 @@
 | 4 | `dodavky_BRYLE_v4.grf` | `56d1797382f742dbf43831627bbf53c6` | fialová TAZ 1900 D dodávka s naftovým motorem VW |
 | 5 | `dodavky_BRYLE_v5.grf` | `94b3f4ea2dec56f6c3132ffa383ee780` | holky u otevřených dveří busů a Pajdy na zastávce, kód BRAM, autoři 3D v popisu |
 | 6 | `dodavky_BRYLE_v6.grf` | `4571e1e71efd6c0fc4fe25cc6c4e3f81` | kovy pod plachtou, odpad na valníku s kamennou kupou |
+| 7 | `dodavky_BRYLE_v7.grf` | `2e602ee7273fb785eb94ae106940b9c5` | holky u dveří i v přiblížení 8× naší hry (`zin8`), 1024 vzorků |
 
 - grf_id `MAX\x08`, jméno v seznamu GRF ve hře zůstává zatím staré (hráč: „ve jménu GRF v seznamu GRF ve hře to
   zatím nech“).
 - Až budou auta hotová, zamkne se podle `hra/zamek-128-nakladu/ZPRAVA-OD-HRY.md`: zámek `decouple_128_cargo` a hře
-  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v7`.
+  jméno souboru a GRF ID. Další verze bude `dodavky_BRYLE_v8`.
 - Základ je poslední vydané `VWT1-S1203-clanky-oba-na-stred.grf`, rozbalené yaglem a upravené skriptem
   `stavba_vwt1.py`.
+
+## Verze 7 (2. 10.): holky u dveří v přiblížení 8×
+
+Kolega dal hře přiblížení 8× (forclaude `51428e5`, `ZoomLevel::In8x` před původním 4×, v GRF kód zoomu 6). Hráč:
+*„potřebujem udělat yagl pro zinc zoom a zkusíme to na dvanácttrojkách na přikládacích studentkách, dáme maximum
+detailu, jsou to maličký obrázky, které jen přikládáme“*.
+
+- **yagl umí `zin8`** (`yagl/NASE-UPRAVY.md`, oddíl 5): v jednom `sprite_id` stojí řádek `zin4` a pod ním `zin8`
+  s obrázkem přesně dvojnásobným (šířka, výška i posun od kotvy; hra to u víc úrovní jednoho spritu vyžaduje).
+  Jiná hra kód 6 přeskočí, GRF jí jde dál.
+- **Holky u dveří mají obě úrovně.** Fotky 8× (`holky-u-aut/foto/*_z8.png`) jsou na 24,4 px/m místo 12,2 a mají
+  1024 vzorků místo 64 (šest fotek za 3 minuty). Vrstvy 4× zůstaly pixel po pixelu jako ve v6, vrstvy 8× jsou
+  jejich přesný dvojnásobek (`holky-u-aut/README.md`). Prázdné směry mají 8 × 8 průhledných pixelů.
+- **Ostatní sprity mají dál jen 4×**, hra si je v 8× zdvojí sama. Auta, náklady, texty: beze změny (souhrn
+  `vwt1-nova-souhrn.json` stejný jako ve v6).
+- Náhled `holky-u-aut/nahled_8x.png`: vlevo 4× (zvětšeno 3×), vpravo 8× (auto zdvojené, holky z fotek 8×,
+  zvětšeno 1,5×).
+- **Ověřeno ve zkušební hře z `51428e5`** (`hra/README.md`, třetí zkušební hra): `testholky` s `setting
+  gui.zoom_min 0` fotí v 8×, holky jsou z vrstev 8×; se `zoom_min 1` (4×) stejný obrázek jako v6.
+- Složení jako dřív, jen `dodavky_BRYLE_v7` a nový yagl; rozbalení zpět dá 16 řádků `zin8` a vlastní list
+  `dodavky_BRYLE_v7-32bpp-zin8-0.png`.
 
 ## Verze 6 (1. 10. večer): kovy pod plachtou, odpad na kupě
 
@@ -232,9 +254,9 @@ python3 ../zelena_kupa.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
     sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png 0x88 zelena.pkl
 mkdir -p novy/sprites
 python3 ../stavba_vwt1.py sprites/VWT1-S1203-clanky-oba-na-stred.yagl \
-    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v6
+    sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png zelena.pkl ../vwt1_kody.json novy/sprites dodavky_BRYLE_v7
 cp sprites/VWT1-S1203-clanky-oba-na-stred-32bpp-zin4-0.png novy/sprites/
-cd novy && yagl -e dodavky_BRYLE_v6.grf sprites
+cd novy && yagl -e dodavky_BRYLE_v7.grf sprites
 ```
 
 Ověřeno 30. 9.:

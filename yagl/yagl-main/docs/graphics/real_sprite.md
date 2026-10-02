@@ -14,7 +14,7 @@ sprite_id<0x000000C3>
 The `sprite_id` blocks represent realsprites (actual images), and have the following features:
 - The actual ID of the sprite in hex (in the angle bracket decoration). This value also appears in the sprite sheets so you can identify the images. IDs are double words, so are shown with 8 hex digits. The preceding zeroes are optional.
 - The size and offset of the sprite in square brackets: `[<xdim, ydim, xoff, yoff>]`.
-- The zoom level: one of `normal`, `zin2`, `zin4`, `zout2`, `zout4` or `zout8`.
+- The zoom level: one of `normal`, `zin2`, `zin4`, `zout2`, `zout4` or `zout8`; `zin8` (zoom code 6, twice `zin4`) is the 8x level of ottd Decouple by Karel Macha only, other games skip it.
 - The colour depth: one of `c8bpp`, `c32bpp`,  
     - which is optionally ORed together with `chunked` and/or `mask` (and/or `no_crop` - not supported at the moment). A chunked sprite uses an extra compression algorithm which chops out most transparent pixels. A mask contains additional data which is used for glass effects other things. The `no_crop` option relates to a **grfcodec** feature.
 - The name of the spritesheet file containin the image data. This can be anything, but **yagl** generates files for each colour depth and zoom level when it decodes a GRF. 

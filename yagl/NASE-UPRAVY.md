@@ -235,5 +235,63 @@ který se v Action 14 zeptá na vlastnost `decouple_more_action2_ids`.
 - Starý GRF bez dotazu vyjde bajt po bajtu stejně: V3S+Tatra v10 malá
   `99c75468…` i velká `4a26765e…` složené novým yaglem ze svých skriptů.
 
+## 5. Přiblížení 8× naší hry: zoom `zin8`, kód 6 (2026-10-02)
+
+**Soubory:** `records/graphics/RealSpriteRecord.h`, `records/graphics/RealSpriteRecord.cpp`,
+`records/graphics/SpriteSheetGenerator.cpp`, `docs/graphics/real_sprite.md`
+
+### Proč
+
+Kolega dal hře (forclaude `51428e5`) úroveň přiblížení 8× (`ZoomLevel::In8x`) před původní 4×. V GRF ji
+sprite označí kódem zoomu 6; kódy 0 až 5 jsou původní NewGRF (normal, zin4, zin2, zout2, zout4, zout8).
+Jiná hra kód 6 nezná a sprite s ním přeskočí (`LoadSpriteV2`: „any other reader of the set skips a code
+it does not know“), takže GRF s `zin8` jde dál všude, jen 8× vidí jen naše hra. Hráč: *„potřebujem udělat
+yagl pro zinc zoom“*.
+
+### Co jsme udělali
+
+- `ZoomLevel::ZoomInX8 = 6` v `RealSpriteRecord.h`.
+- V textu yaglu je to slovo `zin8` (`zoom_desc` v `RealSpriteRecord.cpp`), čte se i píše jako ostatní
+  úrovně, v jednom `sprite_id` vedle `zin4`.
+- Při rozbalení jde na vlastní list `<jméno>-32bpp-zin8-<n>.png` (`SpriteSheetGenerator.cpp`).
+- Dokumentace `docs/graphics/real_sprite.md`.
+
+### Co hra chce
+
+Obrázek 8× musí být přesně dvojnásobek 4× (šířka, výška i posun od kotvy): hra (`ResizeSprites`) si u
+jednoho spritu s víc úrovněmi kontroluje, že každá hrubší úroveň je polovina té nejjemnější. Sprite, který
+má jen `zin4`, si hra v 8× zdvojí sama.
+
+### Ověřeno
+
+- Vlastní testy yaglu: 2 685 477 assertions, 76 test cases, all passed.
+- Zkušební GRF s jedním spritem `zin4` + `zin8`: po `-e` a `-d` je v yaglu zpátky řádek `zin8`, list
+  `-32bpp-zin8-0.png` a pixely obou úrovní sedí přesně.
+- Zpětně: `auta/dodavky_BRYLE_v6.grf` rozbalené a znovu složené novým yaglem je bajt po bajtu stejné
+  (md5 `4571e1e71efd6c0fc4fe25cc6c4e3f81`).
+- Poprvé použito v `auta/dodavky_BRYLE_v7.grf` (holky u dveří ve 4× i 8×).
+
+## 6. Verze yaglu v hlavičce: prázdná projde, jiná jen varuje (2026-10-02)
+
+**Soubor:** `records/NewGRFData.cpp`
+
+### Co vadilo
+
+Yagl si při skládání kontroluje první řádek `yagl_version: "…"` proti verzi, se kterou byl přeložen. Ta se
+bere z gitu (`git describe --long --tags --dirty=-m` v `yagl_version.cmake`) a protože `yagl-main/` leží
+v našem repu, mění se s každým commitem repa (`par7-54-gf4dd0f7-m`). Dřívější překlady měly verzi prázdnou
+(popis z gitu tehdy nevyšel), naše balicí skripty (`pack_v3s.py`, `grf_tatra.py`) proto píšou prázdnou
+a rozbalené yagly v repu nesou verzi svého překladu. Po novém překladu by nešlo složit nic z toho.
+
+### Co jsme udělali
+
+Prázdná verze v souboru znamená „kterýkoli yagl“ a nekontroluje se. Jiná než vlastní se jen vypíše jako
+`WARNING: YAGL version number does not match…` a skládá se dál. Při rozbalení yagl verzi píše dál.
+
+### Ověřeno
+
+Testy yaglu beze změny, `dodavky_BRYLE_v6.grf` rozbalené novým yaglem (hlavička s verzí) se znovu složí
+bajt po bajtu stejně; soubor s prázdnou verzí se složí bez hlášky.
+
 ## Pozor: sprite_id 0
 Sprite se `sprite_id<0x00000000>` yagl zabalí, ale při rozbalení je prázdný: v kontejneru 2 znamená id 0 konec grafické sekce. Číslovat od 1 (zjištěno u `vagony-mari/`, 25. 9. 2026).

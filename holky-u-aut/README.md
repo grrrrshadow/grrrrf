@@ -11,6 +11,25 @@ Hráč 1. 10.:
 
 Je to v GRF dodávek od verze 5 (`auta/dodavky_BRYLE_v5.grf`, `auta/NOVA-VERZE.md`). Hra se nemění.
 
+## Přiblížení 8× (2. 10.)
+
+Kolega dal hře úroveň přiblížení 8× (`ZoomLevel::In8x`, v GRF kód zoomu 6, v yaglu `zin8`). Hráč: *„zkusíme to na
+dvanácttrojkách na přikládacích studentkách, dáme maximum detailu, jsou to maličký obrázky, které jen přikládáme“*.
+Od dodávek v7 mají holky u dveří dvě úrovně:
+
+- **Fotky 8×** (`foto/*_z8.png`): 24,4 px/m místo 12,2, rám 240 px, 1024 vzorků místo 64. Stejná kamera, světlo
+  a chodidla uprostřed, takže fotka 8× je dvojnásobek fotky 4× (`postavy/fotka_postavy.py`, proměnná `PX_M`).
+- **Vrstvy 8×** (`vrstvy/*_z8.png`, v `holky.json` pod `zin8`): každá fotka 8× leží na dvojnásobku celočíselné polohy
+  fotky 4× a rámeček je společný, takže vrstva 8× je přesně dvojnásobek vrstvy 4× (šířka, výška i posun). Hra to
+  u víc úrovní jednoho spritu vyžaduje. Pixely 4× zůstaly jako ve v6, jen by se rámeček rozšířil, kdyby 8×
+  přesahovalo (nepřesahuje).
+- **V GRF** je v každém `sprite_id` holek řádek `zin4` a `zin8`; prázdné směry 4 × 4 a 8 × 8 průhledných.
+- **Auta mají dál jen 4×**, v 8× je hra kreslí zdvojená; holky jsou v 8× ostré. Jiná hra řádek `zin8` přeskočí.
+- Náhled `nahled_8x.png`: vlevo 4× (zvětšeno 3×), vpravo 8× (zvětšeno 1,5×, stejná velikost na obrazovce).
+- Ve hře: `ve_hre_8x.png` a `ve_hre_8x_detail.png` ze zkušební hry z `51428e5` (`testholky` se `setting gui.zoom_min 0`,
+  domov se sadou CZTR Road set, aby byly zastávky prosklené a holky vidět). Se `zoom_min 1` (4×) je fotka stejná
+  jako s v6.
+
 ## Co je vidět
 
 - **Kdy:** jen když auto nakládá na zastávce, tedy když má otevřené dveře (sada spritů „na zastávce“). Za jízdy, v depu,
@@ -61,17 +80,22 @@ Je to v GRF dodávek od verze 5 (`auta/dodavky_BRYLE_v5.grf`, `auta/NOVA-VERZE.m
 | soubor | co to je |
 |---|---|
 | `holky_u_aut.py` | rozmístění holek (tabulka `MISTA`), fotky, skládání vrstev a náhled |
-| `foto/` | fotky holek (`postavy/fotka_postavy.py`, kamera a světlo jako budovy, 2×, bez stínu, chodidla uprostřed) |
-| `vrstvy/` | obrázky vrstev `za_<směr>.png`, `pred_<směr>.png` a `holky.json` s posuny od kotvy spritu; prázdné směry 1 × 1 |
+| `foto/` | fotky holek (`postavy/fotka_postavy.py`, kamera a světlo jako budovy, 2×, bez stínu, chodidla uprostřed); `*_z8.png` v 8× |
+| `vrstvy/` | obrázky vrstev `za_<směr>.png`, `pred_<směr>.png` a `holky.json` s posuny od kotvy spritu; prázdné směry 1 × 1; `*_z8.png` v 8× (v JSONu `zin8`) |
 | `nahled.png` | náhled na autech z GRF, všechny čtyři směry: TAZ 1203 bus, bus zahrádka, TAZ 1500 bus, Pajda |
+| `nahled_8x.png` | TAZ 1203 bus ve směrech 1 a 3: vlevo 4×, vpravo 8× |
 | `ve_hre.png` | ze zkušební hry (`testholky`): auta čekají na zastávkách na plné naložení, CZTR i původní silnice |
+| `ve_hre_8x.png` | ze zkušební hry z `51428e5` (`testholky`, CZTR silnice a zastávky): vlevo 4× zdvojené, uprostřed 8× s v6 (holky zdvojené hrou), vpravo 8× s v7 (holky z fotek 8×) |
+| `ve_hre_8x_detail.png` | totéž zblízka, jen holky u busu ve směrech 1 a 3 |
 
 ## Postup
 
 ```bash
-python3 holky_u_aut.py foto      # chybějící fotky holek
-python3 holky_u_aut.py vrstvy    # obrázky vrstev a holky.json
-python3 holky_u_aut.py nahled <rozbalený yagl dodávek> x nahled.png
+python3 holky_u_aut.py foto      # chybějící fotky holek 4×
+python3 holky_u_aut.py foto 8    # chybějící fotky holek 8× (1024 vzorků, 6 fotek za 3 minuty)
+python3 holky_u_aut.py vrstvy    # obrázky vrstev 4× i 8× a holky.json
+python3 holky_u_aut.py nahled <rozbalený yagl dodávek> x nahled.png      # 4×
+python3 holky_u_aut.py nahled <rozbalený yagl dodávek> x nahled8.png 8   # 8×
 # GRF: auta/NOVA-VERZE.md, stavba_vwt1.py bere vrstvy odsud
 ```
 
