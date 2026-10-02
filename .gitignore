@@ -27,3 +27,7 @@ sergej/grf/*/sprites/*.wav
 # V3S: model Praga V3S (5 MB) je v releasu par6 (zip6/bar/praga-v3s.glb), sem se jen kopiruje.
 v3s/model/
 tatra/model/
+
+# Osobacky: model Skoda 1203 ROL valnik 1975 (49 MB STL, Printables 1620425, CC0) je v releasu par9
+# (zip8/skoda-1203-valnik-1975.stl), sem se jen kopiruje.
+osobacky/model/

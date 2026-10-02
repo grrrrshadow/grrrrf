@@ -1,0 +1,39 @@
+Osobáčky (TAZ 1203 plachta) for ottd Decouple by Karel Macha – GRF pro OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENCE: Creative Commons Uveďte původ 4.0 Mezinárodní (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/deed.cs
+
+GRF i jeho části (sprity, texty, skripty) smíte šířit a upravovat, i pro jiné sady,
+pokud uvedete autora takto:
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+3D model: „Škoda 1203 ROL valník 1975“, autor Jiří Novák (Printables, JiriNovak_3699667)
+https://www.printables.com/model/1620425-skoda-1203-rol-valnik-1975
+licence Creative Commons — Public Domain (CC0 1.0), https://creativecommons.org/publicdomain/zero/1.0/
+Model je nabarvený a vyfocený pro hru (barvy, skla a světla dodané ve skriptu osobacky/render_1203.py).
+Zvuky: výchozí zvuky OpenTTD.
+
+-------------------------------------------------------------------------------
+
+Osobáčky (TAZ 1203 tarp) for ottd Decouple by Karel Macha – GRF for OpenTTD
+ottd Decouple by Karel Mácha
+https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+LICENSE: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt this GRF and its parts (sprites, texts, scripts), also for other
+sets, as long as you credit the author as
+
+    ottd Decouple by Karel Mácha
+    https://karel-macha.itch.io/openttd-decouple-by-karel-macha
+
+3D model: "Škoda 1203 ROL valník 1975" by Jiří Novák (Printables, JiriNovak_3699667)
+https://www.printables.com/model/1620425-skoda-1203-rol-valnik-1975
+license Creative Commons — Public Domain (CC0 1.0), https://creativecommons.org/publicdomain/zero/1.0/
+The model was coloured and photographed for the game (colours, glass and lights added in osobacky/render_1203.py).
+Sounds: OpenTTD default sounds.

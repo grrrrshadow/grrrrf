@@ -1,6 +1,6 @@
 diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-10-02 17:20:06.813580469 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-10-02 17:20:06.820624094 +0000
+--- a/openttd/src/console_cmds.cpp	2026-10-02 23:44:26.096157430 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-02 23:44:26.102088110 +0000
 @@ -17,6 +17,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -27,7 +27,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "tree_cmd.h"
  #include "order_cmd.h"
  #include "order_func.h"
-@@ -2524,6 +2529,899 @@
+@@ -2524,6 +2529,908 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -388,7 +388,14 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +	static const Nakup nakupy_rto[] = {
 +		{"MAXf", 0x0100, "", false}, {"MAXf", 0x0100, "", false}, {"MAXg", 0x0100, "", false}, {"MAXg", 0x0100, "", false},
 +	};
++	/* TEST_FOTO_SADA=osobacky: TAZ 1203 plachta (osobacky/, MAXh, jen zin8): orig size 0x0100 a zmensena 0x0101, posta
++	 * (vychozi), zbozi a lide (kapacita 2 callbackem 0x15) */
++	static const Nakup nakupy_osobacky[] = {
++		{"MAXh", 0x0100, "", false}, {"MAXh", 0x0101, "", false}, {"MAXh", 0x0100, "GOOD", true}, {"MAXh", 0x0101, "GOOD", true},
++		{"MAXh", 0x0100, "PASS", true}, {"MAXh", 0x0101, "PASS", true}, {"MAXh", 0x0100, "COAL", true},
++	};
 +	const char *sada_foto = getenv("TEST_FOTO_SADA");
++	const bool osobacky_foto = sada_foto != nullptr && std::string_view(sada_foto) == "osobacky";
 +	const bool rto_foto = sada_foto != nullptr && std::string_view(sada_foto) == "rto";
 +	const bool tatra_foto = sada_foto != nullptr && std::string_view(sada_foto) == "tatra";
 +	const bool tatra11_foto = sada_foto != nullptr && std::string_view(sada_foto) == "tatra11";
@@ -406,7 +413,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +		V3SLog("V3SFOTO: koupen puvodni nakladak engine {}", e->index.base());
 +		puvodnich++;
 +	}
-+	for (const Nakup &n : (rto_foto ? std::span<const Nakup>(nakupy_rto) : studentky_foto ? std::span<const Nakup>(nakupy_studentky) : brambory_foto ? std::span<const Nakup>(nakupy_brambory) : tatra11_foto ? std::span<const Nakup>(nakupy_tatra11) : tatra_foto ? std::span<const Nakup>(nakupy_tatra) : std::span<const Nakup>(nakupy))) {
++	for (const Nakup &n : (osobacky_foto ? std::span<const Nakup>(nakupy_osobacky) : rto_foto ? std::span<const Nakup>(nakupy_rto) : studentky_foto ? std::span<const Nakup>(nakupy_studentky) : brambory_foto ? std::span<const Nakup>(nakupy_brambory) : tatra11_foto ? std::span<const Nakup>(nakupy_tatra11) : tatra_foto ? std::span<const Nakup>(nakupy_tatra) : std::span<const Nakup>(nakupy))) {
 +		uint32_t want = (uint8_t)n.grf[0] | (uint8_t)n.grf[1] << 8 | (uint8_t)n.grf[2] << 16 | (uint32_t)(uint8_t)n.grf[3] << 24;
 +		EngineID eid = EngineID::Invalid();
 +		for (const Engine *e : Engine::IterateType(VehicleType::Road)) {
@@ -432,7 +439,9 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +			}
 +		}
 +		Command<Commands::StartStopVehicle>::Do(DoCommandFlag::Execute, vid, false);
-+		V3SLog("V3SFOTO: koupeno {} 0x{:04X} {}{}", n.grf, n.local, n.naklad, n.plne ? " nalozeno" : "");
++		uint kapacita = 0;
++		for (const RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) kapacita += u->cargo_cap;
++		V3SLog("V3SFOTO: koupeno {} 0x{:04X} {}{} kapacita {}", n.grf, n.local, n.naklad, n.plne ? " nalozeno" : "", kapacita);
 +	}
 +	_v3s_stred = TileXY((x0 + x1) / 2, (y0 + y1) / 2);
 +	ScrollMainWindowToTile(_v3s_stred, true);
@@ -927,7 +936,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2702,6 +3600,17 @@
+@@ -2702,6 +3609,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -945,7 +954,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13545,6 +14454,13 @@
+@@ -13545,6 +14463,13 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -960,8 +969,8 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ruN a/openttd/src/newgrf_gui.cpp b/openttd/src/newgrf_gui.cpp
---- a/openttd/src/newgrf_gui.cpp	2026-10-02 17:20:06.821580469 +0000
-+++ b/openttd/src/newgrf_gui.cpp	2026-10-02 17:20:06.825580469 +0000
+--- a/openttd/src/newgrf_gui.cpp	2026-10-02 23:44:26.104157430 +0000
++++ b/openttd/src/newgrf_gui.cpp	2026-10-02 23:44:26.110828379 +0000
 @@ -1989,6 +1989,25 @@
  	new NewGRFWindow(_newgrf_desc, editable, show_params, exec_changes, config);
  }
@@ -989,8 +998,8 @@ diff -ruN a/openttd/src/newgrf_gui.cpp b/openttd/src/newgrf_gui.cpp
  static constexpr std::initializer_list<NWidgetPart> _nested_save_preset_widgets = {
  	NWidget(NWID_HORIZONTAL),
 diff -ruN a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-10-02 17:20:06.829580469 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-10-02 17:20:06.836567591 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-10-02 23:44:26.284157441 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-10-02 23:44:26.290903514 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

@@ -326,3 +326,14 @@ RZD livery: textures from "Teplovoz-m62 РЖД" by Leafia dev.
     https://sketchfab.com/3d-models/teplovoz-m62-6a3deae9991f45bfa89c2a6882a044e7
     CC BY 4.0. Changes: body, louvre and coupler textures transferred onto the Chicken cutlet model (same UV layout).
 ```
+
+## Osobáčky: Škoda 1203 ROL valník z par9 (2026-10-02)
+
+- **Model:** „Škoda 1203 ROL valník 1975“, autor **Jiří Novák** (Printables, `JiriNovak_3699667`),
+  https://www.printables.com/model/1620425-skoda-1203-rol-valnik-1975 , publikováno 28. 2. 2026.
+- **Licence:** Creative Commons — Public Domain (**CC0**), ověřeno přes API Printables. Smíme ho upravit i šířit;
+  v GRF a v `licence.txt` ho přesto uvádíme jako autora.
+- **V releasu:** `par9`, `zip8/skoda-1203-valnik-1975.stl` (49 MB), fotky `vyrp11_132s_1203_valnicek_1.webp`,
+  `vyr_2621_vyr_14931skoda-1203-rol-ssm2012.webp`, `vyrp16_132s_1203_kladno_reklama.webp` jsou z jeho stránky.
+- **Použití:** `osobacky/` (TAZ 1203 plachta, orig size a zmenšená, GRF `MAXh`).
+- Stejný autor má na Printables pod CC0 i další modely, které jsou v `zip8` (třeba 1203 sanitka a 1202 STW).
