@@ -45,12 +45,13 @@ Uložená hra: `save <jméno>` v `game_start.scr`, načíst `-g <soubor>`, ale v
 ## Třetí zkušební hra: přiblížení 8× (2. 10.)
 
 Kolega dal hře úroveň přiblížení 8× (`ZoomLevel::In8x` před původním 4×, forclaude `51428e5`, jen čteno). Tahle
-kopie je z toho commitu se stejnými zkušebními příkazy (záplata `zkusebni-prikazy-c53e895.patch` sedí i na něj,
-jen posunutá) a je na zkoušku spritů `zin8` (yagl, kód zoomu 6; první jsou holky u dveří v `auta/dodavky_BRYLE_v7.grf`).
+kopie je z toho commitu se stejnými zkušebními příkazy a navíc `testvlakfoto` (Sergej v7) a je na zkoušku spritů
+`zin8` (yagl, kód zoomu 6; první jsou holky u dveří v `auta/dodavky_BRYLE_v7.grf`).
 
 | soubor | co to je |
 |---|---|
-| `ottd-zkusebni-51428e5-gfx.tar.xz` | přeložená hra (SDL2, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a čistý domov `domov/` jako u druhé |
+| `ottd-zkusebni-51428e5-gfx.tar.xz` | přeložená hra (SDL2, i `-vnull`), `lang/`, `baseset/`, `ai/`, `game/` a čistý domov `domov/` jako u druhé; od 2. 10. odpoledne i s `testvlakfoto` |
+| `zkusebni-prikazy-51428e5.patch` | moje změny proti `51428e5` (`patch -p1` ve složce, kde je `openttd/`): totéž co `zkusebni-prikazy-c53e895.patch` a k tomu `testvlakfoto` |
 
 Co je u ní jinak:
 - **Úrovně přiblížení jsou posunuté o jednu:** 0 je 8×, 1 je 4× (dřív 0). Starou `openttd.cfg` bez `ini_version`
@@ -102,6 +103,7 @@ se tak málem fotilo zase s v7); md5 je navíc u v7 a v8 stejné, protože se po
 | `testgrfokno <GRF ID> [další ID…] [quit]` | od verze 15 (2. 10.): otevře okno grafik se seznamem GRF hry, vybere GRF podle ID, jak ho okno ukazuje (`4D415864` malá vejtřaska s Tatrami, `4D415865` BRÝLE), a vyfotí celou obrazovku do `grfokno_<ID>.png` v adresáři s konfigurací (`-c`, bez něj v domově); pak totéž s dalším ID, `quit` hru ukončí. Okno se kreslí až v hlavní smyčce, proto se fotka dělá ve frontě hlavní smyčky a všechno musí být v jednom příkazu (`screenshot` a `quit` za sebou ve skriptu hru ukončí dřív, než se fotka udělá). Musí běžet s obrazem (`-v sdl` v `xvfb-run`) |
 | `testpruhy x\|y [tiků] [kolona]` | pořadí kreslení aut proti sobě (29. 9.): postaví tři rovné silnice podél osy X (SV–JZ) nebo Y (SZ–JV) a na každou osm dvojic stojících aut proti sobě, zadní a přední pruh, čela od sebe 0 až 14/16 dlaždice (celé míjení); s `kolona` místo dvojic zácpu v obou pruzích. Auta: TAZ 1500 bus zahrádka, TAZ 1203 plachta a VW T1 z GRF VW T1 (`auta/VWT1-S1203-clanky-oba-na-stred.grf` musí být v domově) a Tatry z verze 10. Vypíše krabice dílů (`PRUHY: … box x … y …`), vyfotí a skončí; vystřihnout dvojice umí `hra/poradi-kresleni/vystrih.py`. Jiná auta: `TEST_PRUHY_AUTA="MAXe:0102/MAXe:0103;4D415808:0093/4D415808:0092;…"` (po řadách zadní/přední pruh, GRF jako 4 znaky nebo 8 šestnáctkových číslic); s `mrizka` stejná dvojice (odstup `TEST_PRUHY_ODSTUP`, jinak 6) posunutá po dlaždici. CZTR Truck Set chce svoje silnice, na zkoušku mu stačí přesměrovat je na `RT14`, a starší auta chtějí `setting vehicle.never_expire_vehicles 1` |
 | `testspoj` | kolegova scénka se spojováním vlaků; s `TEST_LOCO_GRF=MAXb` vezme lokomotivu z toho GRF (zkouška zvuků Sergeje) |
+| `testvlakfoto <tiků> [fotek] [tiků mezi fotkami]` | od Sergeje v7 (2. 10.): pro každou lokomotivu z GRF `TEST_LOCO_GRF` (např. `MAXb`, bez vagonů) postaví rovnou kolej podél osy X s depem na západním konci, lokomotivy zpřístupní bez ohledu na datum uvedení (Maša РЖД je od 2003; `starting_year` v konfiguraci ani `-t` tahle hra při `newgame` ze skriptu nebere), pustí je na východ (na konci se otočí) a fotí jako `testv3sfoto`, výpis `V3SDIL` tu je i pro vlaky (`stav` jsou bity koleje). Pixelová kontrola fotek proti rozbalenému GRF je `sergej/kontrola_pixel.py` |
 
 Výpisy V3S jdou i na stderr (`dbg: [misc:0] V3S…`), s obrazem by jinak zůstaly jen v okně konzole.
 Zvuková zkouška Sergeje vypisuje řádky `ZVUK: vuz … udalost … callback … zvuk …`.

@@ -7,7 +7,9 @@
 #     hustsi nez na sikme koleji (8 px na osminu proti 16 px), CZTR to dela stejne
 #   - barevny pruchod: ktery pixel patri hlave, stredu a zadi (lokomotiva je 3 clanky)
 #   - kotva (bod na koleji pod stredem lokomotivy) spoctena promitnutim, ne odhadem
-# Spousti se:  python3 render_sergej.py <natier: zeleny|cerveny> <px_na_m> <osmin: 12|14> <vystup>
+#   - ZIN=8: obrazky 8x (zin8) pro nasi hru, dvojnasobne px/m i ram, zbytek stejny; do GRF jdou k 4x
+#   - natier rzd: textury РЖД z par8 (nater.rzd), SMERY=1,3 vyfoti jen nektere smery (zkousky)
+# Spousti se:  [ZIN=8] python3 render_sergej.py <natier: zeleny|cerveny|rzd> <px_na_m (4x)> <osmin: 12|14> <vystup>
 import bpy, os, sys, math, json
 import numpy as np
 from mathutils import Vector
@@ -17,10 +19,12 @@ TU = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, TU)
 import nater
 
-NATER, PX_M, OSMIN, VYSTUP = sys.argv[-4], float(sys.argv[-3]), int(sys.argv[-2]), sys.argv[-1]
+ZIN = int(os.environ.get("ZIN", "4"))
+NATER, PX_M, OSMIN, VYSTUP = sys.argv[-4], float(sys.argv[-3]) * ZIN / 4, int(sys.argv[-2]), sys.argv[-1]
+SMERY = [int(s) for s in os.environ.get("SMERY", "").split(",") if s]
 MODEL = os.path.join(TU, "model", "diesel_locomotive_m62.glb")
 HDRI = os.path.join(TU, "..", "glb", "GLB", "hdri", "snow.exr")
-RAM = 320                         # ctverec rendru v px (zin4); lokomotiva se do nej vejde v obou meritkach
+RAM = 320 * ZIN // 4              # ctverec rendru v px (zin4: 320); lokomotiva se do nej vejde v obou meritkach
 SAMPLES = int(os.environ.get("SAMPLES", "256"))
 # poradi smeru jako vycet Direction ve hre: N, NE, E, SE, S, SW, W, NW, a 8 = obrazek do nakupu (W)
 ROTATION_ANGLES = [225.0, 180.0, 135.0, 90.0, 45.0, 0.0, 315.0, 270.0, 315.0]
@@ -61,18 +65,20 @@ stred = (mn + mx) / 2
 DELKA = mx.y - mn.y                                   # model lezi podel osy Y
 print("model", tuple(round(c, 3) for c in mn), tuple(round(c, 3) for c in mx), "delka", round(DELKA, 3))
 
-if NATER == "cerveny":
+PREBARVIT = {"zeleny": None, "cerveny": nater.cerveny, "rzd": nater.rzd}[NATER]
+if PREBARVIT:
     for img in bpy.data.images:
-        if img.name in ("Image_0", "Image_6", "Image_8"):
+        if img.name.startswith("Image_"):
             w, h = img.size
             px = np.empty(w * h * 4, np.float32); img.pixels.foreach_get(px)
             px = px.reshape(h, w, 4)
             # Blender ma obrazky odspodu nahoru, nater pocita s radky shora
             rgb = (np.flipud(px[..., :3]) * 255 + 0.5).astype(np.uint8)
-            nove_rgb = np.flipud(nater.cerveny(img.name, rgb)).astype(np.float32) / 255
-            px[..., :3] = nove_rgb
+            nove = PREBARVIT(img.name, rgb)
+            if nove is None: continue
+            px[..., :3] = np.flipud(nove).astype(np.float32) / 255
             img.pixels.foreach_set(px.ravel()); img.update()
-            print("prebarveno", img.name)
+            print("prebarveno", img.name, (w, h))
 
 # gramofon (otaceni) -> natahovac (stlaceni podel osy modelu) -> model
 bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); gramofon = bpy.context.object
@@ -114,8 +120,9 @@ def na_pixel(obj):
     p = world_to_camera_view(scene, cam, obj.matrix_world.translation)
     return (p.x * RAM, (1 - p.y) * RAM)
 
-info = {"nater": NATER, "px_m": PX_M, "osmin": OSMIN, "ram": RAM, "delka_m": DELKA, "smery": {}}
+info = {"nater": NATER, "zin": ZIN, "px_m": PX_M, "osmin": OSMIN, "ram": RAM, "delka_m": DELKA, "smery": {}}
 for d, uhel in enumerate(ROTATION_ANGLES):
+    if SMERY and d not in SMERY: continue
     gramofon.rotation_euler[2] = math.radians(uhel)
     natah.scale = (1, STLACENI, 1) if d in ROVNE else (1, 1, 1)
     bpy.context.view_layer.update()

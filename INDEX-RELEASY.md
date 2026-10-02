@@ -7,6 +7,19 @@ U GRF je md5 (podle něj hra pozná GRF v savu) a `grf_id` se jménem z Action08
 Jeden soubor se dá vytáhnout bez stažení celého zipu:
 `python3 tools/zipindex.py get <odkaz na asset> <část jména> <výstup>`
 
+## grrrrf / par8 — zip7.zip
+
+`https://github.com/grrrrshadow/grrrrf/releases/download/par8/zip7.zip`
+
+32 547 720 B, 4 záznamů
+
+```
+               zip7/
+   19 795 852  zip7/antonov_an-225.glb   (deflate)
+    6 812 636  zip7/teplovoz-m62.glb   (deflate)
+   16 947 724  zip7/diesel_locomotive_m62.glb   (deflate)
+```
+
 ## grrrrf / par7 — zip7.zip
 
 `https://github.com/grrrrshadow/grrrrf/releases/download/par7/zip7.zip`

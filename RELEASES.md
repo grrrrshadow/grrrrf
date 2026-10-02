@@ -119,6 +119,28 @@ Modely 3D (hlavně glb ze Sketchfabu), autoři a licence jsou v `AUTORI-MODELU.m
 
 ---
 
+## par7 — zip7.zip, 387 MB (29. 9. 2026)
+
+Tatra T 148 S1 v měřítku 1:18 pro 3D tisk z Printables (SDesign, „Michael Doe“), **CC BY-NC-ND 4.0**, tedy
+jen beze změny: do spritů ji dát nesmíme, slouží jen jako předloha mřížky a kapoty 138 (viz `AUTORI-MODELU.md`):
+
+- `tatra-t-148-s1-118-scale-model_files.zip` — STL díly, `…-other_files.zip` — PDF plán
+- `Bonnet_Tatra_138_V2_SDesign_1x.stl`, `Engine_Tatra_138_V2_SDesign_1x.stl`, okna `window_*.stl`, `windshield_*.stl`
+
+---
+
+## par8 — zip7.zip, 32 MB (2. 10. 2026)
+
+Modely M62 pro Sergeje v7 (8×) a jedno letadlo, všechno CC BY 4.0 ze Sketchfabu:
+
+- `diesel_locomotive_m62.glb` (17 MB) — týž model Chicken cutlet jako v par5, jen s texturami 2048 px;
+  **z něj se fotí** od Sergeje v7 (`sergej/model/`)
+- `teplovoz-m62.glb` (6,8 MB) — „Teplovoz-m62 РЖД“, Leafia dev.; stejné UV jako model Chicken cutlet, jeho textury
+  těla, žaluzií a spojky dělají nátěr „Maša РЖД“ (`sergej/model/rzd_*.png`)
+- `antonov_an-225.glb` (20 MB) — Antonov AN-225, KOG_THORNS; zatím nepoužitý
+
+---
+
 ## Releasy v `forclaude` (hra, jen číst)
 
 | tag | zip | co v něm je |

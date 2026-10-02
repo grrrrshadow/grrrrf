@@ -19,7 +19,14 @@ PŘEVZATÉ ČÁSTI
     https://sketchfab.com/Chicken_Cutlet
     https://sketchfab.com/3d-models/diesel-locomotive-m62-a923943868db43f382fe8edaab358d75
     licence CC BY 4.0
-    Úpravy: vyfoceno do spritů pro OpenTTD, červený nátěr ČSD se žlutým pruhem pod čelním oknem.
+    Úpravy: vyfoceno do spritů pro OpenTTD (4× a 8×), červený nátěr ČSD se žlutým pruhem pod čelním oknem,
+    nátěr РЖД z textur níže.
+
+Nátěr РЖД: textury z modelu "Teplovoz-m62 РЖД", autor Leafia dev.
+    https://sketchfab.com/Leaf_dev
+    https://sketchfab.com/3d-models/teplovoz-m62-6a3deae9991f45bfa89c2a6882a044e7
+    licence CC BY 4.0
+    Úpravy: textury těla, žaluzií a spojky přenesené na model od Chicken cutlet (stejné UV), vyfoceno do spritů.
 
 @ZVUKY@
 
@@ -46,6 +53,13 @@ THIRD-PARTY PARTS
     https://sketchfab.com/Chicken_Cutlet
     https://sketchfab.com/3d-models/diesel-locomotive-m62-a923943868db43f382fe8edaab358d75
     license CC BY 4.0
-    Changes: rendered to OpenTTD sprites, red ČSD livery with a yellow stripe below the front window.
+    Changes: rendered to OpenTTD sprites (4x and 8x), red ČSD livery with a yellow stripe below the front window,
+    РЖД livery from the textures below.
+
+РЖД livery: textures from "Teplovoz-m62 РЖД" by Leafia dev.
+    https://sketchfab.com/Leaf_dev
+    https://sketchfab.com/3d-models/teplovoz-m62-6a3deae9991f45bfa89c2a6882a044e7
+    license CC BY 4.0
+    Changes: body, louvre and coupler textures transferred onto the Chicken cutlet model (same UV layout), rendered to sprites.
 
 @SOUNDS@

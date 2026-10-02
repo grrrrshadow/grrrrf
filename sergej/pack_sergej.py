@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-# Balic Sergeje: z fotek (render_sergej.py) udela spritesheet a cely GRF v yaglu.
+# Balic Sergeje: z fotek (render_sergej.py) udela spritesheety a cely GRF v yaglu.
 #   python3 pack_sergej.py <orig|bryle> <adresar s fotkami> <vystupni adresar>
-# Fotky: <adresar>/<orig|bryle>_zeleny a _cerveny, v kazdem d0-d8.png, vlastnik_d1/3/5/7.png, kotvy.json.
+# Fotky: <adresar>/<orig|bryle>_zeleny, _cerveny a _rzd, v kazdem d0-d8.png, vlastnik_d1/3/5/7.png, kotvy.json,
+# a k nim <totez>_zin8 s fotkami 8x (ZIN=8, dvojnasobny ram). Od verze 7 nese GRF kazdy sprite v zin4 i zin8
+# (zoom 8x, kod 6, jen nase hra; jina hra radek zin8 preskoci): obrazek 8x je orez fotky 8x dvojnasobnym ramekem
+# obrazku 4x, posuny dvojnasobne, u rovne koleje rozdeleni na clanky zvetsene z 4x.
 #
 # Lokomotiva je 3 clanky jako CZTR 770: hlava, stred (8 osmin), zad.
 #   orig : 2 + 8 + 2 = 12 osmin (CZTR meritko, ~12,2 px/m v zin4)
@@ -27,8 +30,26 @@ N_HLAVA, N_ZAD = odstupy(DELKY)
 # jih ne). CZTR ma stred lokomotivy v severnim pohledu 2,5 px vpravo od kotvy u vsech 364 sad.
 KOREKCE = {0: (3, 0)}
 
-def rozdel(d, fotka, vlastnik, predni):
-    """Pixely fotky -> clanek (0 hlava, 1 stred, 2 zad) podle barevneho pruchodu."""
+def dopln(lab, videt):
+    """Pixely siluety bez clanku (vyhlazene okraje, ktere v ostrem pruchodu nejsou): nejblizsi soused."""
+    potreba = videt & (lab < 0)
+    for _ in range(12):
+        if not potreba.any(): break
+        for dy, dx in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            sh = np.roll(np.roll(lab, dy, 0), dx, 1)
+            vyplnit = potreba & (sh >= 0)
+            lab[vyplnit] = sh[vyplnit]
+            potreba = videt & (lab < 0)
+
+def rozrez(a, lab):
+    kusy = []
+    for c in range(3):
+        k_ = a.copy(); k_[lab != c] = 0
+        kusy.append(Image.fromarray(k_))
+    return kusy
+
+def rozdel(d, fotka, vlastnik, predni, fotka8=None):
+    """Pixely fotky -> clanek (0 hlava, 1 stred, 2 zad) podle barevneho pruchodu; fotka 8x podle teze mapy zvetsene 2x."""
     a = np.array(fotka); v = np.array(vlastnik).astype(int)
     lab = np.full(a.shape[:2], -1, int)
     ma = v[..., 3] > 0
@@ -38,68 +59,85 @@ def rozdel(d, fotka, vlastnik, predni):
         sel = ma & (k == kk)
         if kk == 1: lab[sel] = 1
         else: lab[sel] = 0 if konec[kk] == predni else 2
-    # vyhlazene okraje siluety, ktere v ostrem pruchodu nejsou: nejblizsi soused
-    potreba = (a[..., 3] > 0) & (lab < 0)
-    for _ in range(12):
-        if not potreba.any(): break
-        for dy, dx in ((0, 1), (0, -1), (1, 0), (-1, 0)):
-            sh = np.roll(np.roll(lab, dy, 0), dx, 1)
-            vyplnit = potreba & (sh >= 0)
-            lab[vyplnit] = sh[vyplnit]
-            potreba = (a[..., 3] > 0) & (lab < 0)
-    kusy = []
-    for c in range(3):
-        k_ = a.copy(); k_[lab != c] = 0
-        kusy.append(Image.fromarray(k_))
-    return kusy
+    dopln(lab, a[..., 3] > 0)
+    kusy = rozrez(a, lab)
+    if fotka8 is None: return kusy, None
+    a8 = np.array(fotka8)
+    lab8 = np.repeat(np.repeat(lab, 2, 0), 2, 1)   # stejne rozdeleni jako 4x, aby kusy 8x byly presne 2x kusy 4x
+    dopln(lab8, a8[..., 3] > 0)
+    return kusy, rozrez(a8, lab8)
 
 def orez(im):
     bb = im.getbbox()
     if bb is None: return None, (0, 0)
     return im.crop(bb), (bb[0], bb[1])
 
-def natier_sprity(adr):
+OREZANO = [0]                                   # pixely 8x mimo dvojnasobny ramecek 4x (jen hlaseni)
+
+def natier_sprity(adr, adr8):
+    """Sprity 4x z fotek v adr a k nim 8x z adr8: orez 2x ramecek 4x, posuny 2x. Vraci (sprity, sprity8)."""
     info = json.load(open(os.path.join(adr, "kotvy.json")))
     assert info["osmin"] == sum(DELKY), (info["osmin"], DELKY)
+    info8 = json.load(open(os.path.join(adr8, "kotvy.json")))
+    assert info8.get("zin") == 8 and info8["ram"] == 2 * info["ram"] and info8["osmin"] == info["osmin"], adr8
     sprity = {"hlava": [], "stred": [], "zad": [], "nakup": []}
+    sprity8 = {"hlava": [], "stred": [], "zad": [], "nakup": []}
+    def pridej(jm, im, xo, yo, zdroj8, cx, cy):
+        sprity[jm].append((im, xo, yo))
+        ram = (2 * cx, 2 * cy, 2 * (cx + im.width), 2 * (cy + im.height))
+        bb = zdroj8.getbbox()
+        if bb is not None:
+            OREZANO[0] += int((np.array(zdroj8)[..., 3] > 0).sum() - (np.array(zdroj8.crop(ram))[..., 3] > 0).sum())
+        sprity8[jm].append((zdroj8.crop(ram), 2 * xo, 2 * yo))
+    def prazdny(jm):
+        sprity[jm].append(None); sprity8[jm].append(None)
+    def fotky(jmeno):
+        f = Image.open(os.path.join(adr, jmeno)).convert("RGBA"); f8 = Image.open(os.path.join(adr8, jmeno)).convert("RGBA")
+        assert f8.size == (2 * f.width, 2 * f.height), (adr8, jmeno, f.size, f8.size)
+        return f, f8
     for d in range(8):
         s = info["smery"][str(d)]; kx, ky = s["kotva"]
-        foto = Image.open(os.path.join(adr, f"d{d}.png")).convert("RGBA")
+        foto, foto8 = fotky(f"d{d}.png")
         if d in ROVNE:
             vl = Image.open(os.path.join(adr, f"vlastnik_d{d}.png")).convert("RGBA")
-            kusy = rozdel(d, foto, vl, s["predni"])
+            kusy, kusy8 = rozdel(d, foto, vl, s["predni"], foto8)
             posun = {"hlava": N_HLAVA, "stred": 0, "zad": -N_ZAD}
-            for jm, kus, L in zip(("hlava", "stred", "zad"), kusy, DELKY):
+            for jm, kus, kus8, L in zip(("hlava", "stred", "zad"), kusy, kusy8, DELKY):
                 im, (cx, cy) = orez(kus)
-                if im is None: sprity[jm].append(None); continue
+                if im is None: prazdny(jm); continue
                 ax = kx + posun[jm] * KROK[d][0]; ay = ky + posun[jm] * KROK[d][1]
                 rx, ry = remap(*kotva_hry(L, d))
-                sprity[jm].append((im, int(round(cx - ax - rx)), int(round(cy - ay - ry))))
+                pridej(jm, im, int(round(cx - ax - rx)), int(round(cy - ay - ry)), kus8, cx, cy)
         else:
             im, (cx, cy) = orez(foto)
             rx, ry = remap(*kotva_hry(DELKY[1], d))
             kx_, ky_ = KOREKCE.get(d, (0, 0))
-            sprity["stred"].append((im, int(round(cx - kx - rx)) + kx_, int(round(cy - ky - ry)) + ky_))
-            sprity["hlava"].append(None); sprity["zad"].append(None)
+            pridej("stred", im, int(round(cx - kx - rx)) + kx_, int(round(cy - ky - ry)) + ky_, foto8, cx, cy)
+            prazdny("hlava"); prazdny("zad")
     # obrazek do nakupu: pohled W (d8), posuny jako stred ve smeru W
     s = info["smery"]["8"]; kx, ky = s["kotva"]
-    im, (cx, cy) = orez(Image.open(os.path.join(adr, "d8.png")).convert("RGBA"))
+    foto, foto8 = fotky("d8.png")
+    im, (cx, cy) = orez(foto)
     rx, ry = remap(*kotva_hry(DELKY[1], 6))
-    sprity["nakup"].append((im, int(round(cx - kx - rx)), int(round(cy - ky - ry))))
-    return sprity
+    pridej("nakup", im, int(round(cx - kx - rx)), int(round(cy - ky - ry)), foto8, cx, cy)
+    return sprity, sprity8
 
 # ---------------------------------------------------------------- spritesheet
-NATERY = ("zeleny", "cerveny")
-vse = {n: natier_sprity(os.path.join(FOTKY, f"{VARIANTA}_{n}")) for n in NATERY}
+NATERY = ("zeleny", "cerveny", "rzd")
+vse = {}; vse8 = {}
+for n in NATERY:
+    vse[n], vse8[n] = natier_sprity(os.path.join(FOTKY, f"{VARIANTA}_{n}"), os.path.join(FOTKY, f"{VARIANTA}_{n}_zin8"))
 # soubor se jmenuje jako GRF v seznamu ve hre, jinak ho hrac nenajde
 # Verze: kazde sestaveni, ktere dostane hrac, o jednu vys. Je ve jmenu souboru (hrac: "pis tam verzi
 # do jmena souboru grf") a v Action14 (VRSN), hra ji ukaze v okne GRF. MINV 1: nova verze smi nahradit
 # kteroukoli starsi v ulozene hre (ID vozu se nemeni).
 # 1 prvni sprity, 2 sever o 3 px, 3 prezdivky a licence, 4 troubeni, 5 motor podle rychlosti a barevne jmeno,
-# 6 jmeno: M62 Sergej cervene, zbytek zelene
-VERZE = 6
+# 6 jmeno: M62 Sergej cervene, zbytek zelene, 7 treti lokomotiva Masa РЖД (textury z par8), vsechno v zin4 i zin8,
+#   model s texturami 2048 px (par8)
+VERZE = 7
 JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA] + f"-v{VERZE}"
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
+PNG32_8 = f"{JMENO}-32bpp-zin8.png"             # od verze 7: obrazky 8x (zin8) na vlastnim listu
 os.makedirs(os.path.join(VYSTUP, "sprites"), exist_ok=True)
 
 ODST = 6
@@ -120,6 +158,16 @@ for klic, im in polozky: list32.alpha_composite(im, pozice[klic])
 list32.save(os.path.join(VYSTUP, "sprites", PNG32))
 list8 = Image.new("P", (16, 16), 0); list8.putpalette([0, 0, 255] + [0, 0, 0] * 255)
 list8.save(os.path.join(VYSTUP, "sprites", PNG8))
+# list 8x: stejne polozky, dvojnasobne obrazky
+polozky8 = [(klic, vse8[klic[0]][klic[1]][klic[2]][0]) for klic, _ in polozky]
+SIRKA8 = 2048
+x = y = ODST; radek = 0; pozice8 = {}
+for klic, im in polozky8:
+    if x + im.width + ODST > SIRKA8: x = ODST; y += radek + ODST; radek = 0
+    pozice8[klic] = (x, y); x += im.width + ODST; radek = max(radek, im.height)
+list32_8 = Image.new("RGBA", (SIRKA8, y + radek + ODST), (0, 0, 0, 0))
+for klic, im in polozky8: list32_8.alpha_composite(im, pozice8[klic])
+list32_8.save(os.path.join(VYSTUP, "sprites", PNG32_8))
 
 # ---------------------------------------------------------------- yagl
 sid = [1]                                       # sprite_id od 1, nula se pri rozbaleni ztraci
@@ -131,13 +179,20 @@ def sprite(sp, klic):
     else:
         im, xo, yo = sp; px, py = pozice[klic]
         out.append(f'            [{im.width}, {im.height}, {xo}, {yo}], zin4, c32bpp | chunked, "{PNG32}", [{px}, {py}];')
+        n, jm, i = klic
+        im8, xo8, yo8 = vse8[n][jm][i]; px8, py8 = pozice8[klic]
+        assert (im8.width, im8.height, xo8, yo8) == (2 * im.width, 2 * im.height, 2 * xo, 2 * yo), klic
+        out.append(f'            [{im8.width}, {im8.height}, {xo8}, {yo8}], zin8, c32bpp | chunked, "{PNG32_8}", [{px8}, {py8}];')
     out.append("        }"); sid[0] += 1
     return out
 
-ID = {"zeleny": 0x0100, "cerveny": 0x0110}      # hlava; stred +1, zad +2
-TEXT = {"zeleny": 0x01, "cerveny": 0x02}        # D001, D002
-NAZEV = {"zeleny": "M62 Tamtam tajgy", "cerveny": "Sergej ČSD"}
-UVEDENI = {"zeleny": "1965/1/1", "cerveny": "1966/1/1"}
+ID = {"zeleny": 0x0100, "cerveny": 0x0110, "rzd": 0x0120}      # hlava; stred +1, zad +2
+TEXT = {"zeleny": 0x01, "cerveny": 0x02, "rzd": 0x03}          # D001, D002, D003
+BASE = {"zeleny": 0x10, "cerveny": 0x40, "rzd": 0x70}          # cisla Action02 (sady, clanky, zvuky, nakup)
+# hrac 2. 10.: treti lokomotiva je РЖД, "to bude Masa", v popisu azbukou РЖД a Маша; zelena a CSD beze zmeny
+NAZEV = {"zeleny": "M62 Tamtam tajgy", "cerveny": "Sergej ČSD", "rzd": "Maša РЖД"}
+# РЖД (Rossijskije zeleznyje dorogi) vznikly 1. 10. 2003, cerveno-sedy nater s logem je od te doby
+UVEDENI = {"zeleny": "1965/1/1", "cerveny": "1966/1/1", "rzd": "2003/10/1"}
 ITCH = "https://karel-macha.itch.io/openttd-decouple-by-karel-macha"
 DECOUPLE = "ottd Decouple by Karel Mácha"
 PODPIS = "{new-line}{green}" + DECOUPLE + "{new-line}" + ITCH       # za uvodni odstavec, tmavsi zelenou
@@ -151,6 +206,10 @@ POPIS = {
     "cerveny": ("{lt-green}T 679.1, dieslová. ČSD, od roku 1988 řada 781, přezdívaná Sergej. Dvoutakt z německé ponorky, "
                 "vyrobený v Rusku." + PODPIS + "{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}" + TECH +
                 "Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0"),
+    "rzd": ("{lt-green}M62 v nátěru РЖД (Российские железные дороги, Ruské železnice). V Rusku Маша, Машка. "
+            "Dvoutakt z německé ponorky." + PODPIS + "{black}{new-line}Určení: {gold}nákladní a osobní vlaky{black}{new-line}"
+            "Výrobce: {gold}Luhansk{black}{new-line}" + TECH +
+            "Model: {gold}Chicken cutlet (Sketchfab), CC BY 4.0, nátěr РЖД: Leafia dev. (Sketchfab), CC BY 4.0"),
 }
 # Zvuky (Action11 + callback 0x33) ze zvuky/zvuky.json (pripravuje zvuky/priprav_zvuky.py).
 # Vlastni zvuky GRF se cisluji od 0x49 v poradi Action11. Udalosti (var 0x10): 1 = odjezd a "zahoukej",
@@ -159,6 +218,7 @@ POPIS = {
 ZVUKY_ADR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zvuky")
 _zj = os.path.join(ZVUKY_ADR, "zvuky.json")
 ZV = json.load(open(_zj)) if os.path.exists(_zj) else {}
+if "zeleny" in ZV and "rzd" not in ZV: ZV["rzd"] = ZV["zeleny"]      # Masa РЖД: motor bez tlumice jako zelena
 SOUBORY = []                                      # jedinecne wav v poradi Action11
 def cislo_zvuku(f):
     if f not in SOUBORY: SOUBORY.append(f)
@@ -183,11 +243,13 @@ GRF_JMENO = "{red}M62 Sergej{green} for ottd Decouple by Karel Macha " + BARVA +
 VARIANTA_POPIS = {"orig": "CZTR scale, 12/8 tiles, for CZTR tracks",
                   "bryle": "BRÝLE, magnified +20 %, 14/8 tiles, for the original game tracks"}[VARIANTA]
 POPIS_GRF = ("{red}M62 Sergej{green}  {train} {new-line}"
-             "{green}M62 Tamtam tajgy, Sergej ČSD  " + BARVA + "{train}  {train}  {train}{new-line}" +
-             BARVA + VARIANTA_POPIS + "{new-line}"
-             "{orange}Two M62 diesels, the green international one and the red ČSD one. The engine roars louder "
-             "with speed, the horn sounds on departure and at a honk waypoint.{new-line}"
-             "{orange}3D: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0{new-line}"
+             "{green}M62 Tamtam tajgy, Sergej ČSD, Maša РЖД  " + BARVA + "{train}  {train}  {train}{new-line}" +
+             BARVA + VARIANTA_POPIS + ", sprites in 4x and 8x zoom{new-line}"
+             "{orange}Three M62 diesels: the green international one, the red ČSD one and the red and grey "
+             "Russian РЖД one (Маша). The engine roars louder with speed, the horn sounds on departure and at a honk "
+             "waypoint.{new-line}"
+             "{orange}3D: Diesel locomotive M62, Chicken cutlet (sketchfab.com/Chicken_Cutlet), CC BY 4.0; "
+             "РЖД livery: Teplovoz-m62 РЖД, Leafia dev. (sketchfab.com/Leaf_dev), CC BY 4.0{new-line}"
              "{orange}Sounds: alexdarek (CC0), Walking.With.Microphones (CC BY 4.0), freesound.org{new-line}{new-line}"
              "{green}ottd decouple by Karel Mácha " + BARVA + "{train}{new-line}"
              "{green}" + ITCH + "{new-line}"
@@ -281,7 +343,7 @@ for n in NATERY:
                   f'    /* 0x{eid:04X} */ "{NAZEV[n] if jm == "hlava" else NAZEV[n] + " (článek)"}";', "}"]
     # Action01: 0 hlava, 1 stred, 2 zad (po osmi spritech); obrazek do nakupu ma vlastni Action01,
     # protoze vsechny sady v jednom Action01 musi mit stejny pocet spritu
-    base = 0x10 if n == "zeleny" else 0x40
+    base = BASE[n]
     Y += ["sprite_sets<Trains, 0x0000> // Action01", "{"]
     for si, jm in enumerate(("hlava", "stred", "zad")):
         Y += [f"    sprite_set // 0x{si:04X} {jm}", "    {"]
@@ -329,5 +391,7 @@ if ZVUKY and os.path.exists(zdroje):
     en = "\n".join(r[3:].strip() for r in radky if r.startswith("en:")) or en
 open(os.path.join(VYSTUP, "license.txt"), "w").write(lic.replace("@ZVUKY@", cs).replace("@SOUNDS@", en))
 souhrn = {n: {jm: [None if sp is None else [sp[0].width, sp[0].height, sp[1], sp[2]] for sp in vse[n][jm]] for jm in vse[n]} for n in NATERY}
+souhrn["zin8"] = {n: {jm: [None if sp is None else [sp[0].width, sp[0].height, sp[1], sp[2]] for sp in vse8[n][jm]] for jm in vse8[n]} for n in NATERY}
 json.dump(souhrn, open(os.path.join(VYSTUP, f"{JMENO}-sprity.json"), "w"), indent=1)
-print(JMENO, "spritu", sid[0] - 1, "list", list32.size, "hlava pred stredem", N_HLAVA, "zad za stredem", N_ZAD)
+print(JMENO, "spritu", sid[0] - 1, "list 4x", list32.size, "list 8x", list32_8.size, "hlava pred stredem", N_HLAVA,
+      "zad za stredem", N_ZAD, "pixelu 8x mimo ramecek 4x", OREZANO[0])

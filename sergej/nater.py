@@ -1,6 +1,13 @@
-# Nátěry M62: zelený (původní textura) a červený ČSD se žlutým pruhem pod čelním oknem.
-# Pracuje přímo s obrázky textur z diesel_locomotive_m62.glb (Image_0, Image_6, Image_8).
+# Nátěry M62: zelený (původní textura), červený ČSD se žlutým pruhem pod čelním oknem a РЖД (textury z modelu
+# Teplovoz-m62 РЖД od Leafia dev., par8, který má stejné UV jako model od Chicken cutlet).
+# Pracuje přímo s obrázky textur z diesel_locomotive_m62.glb: Image_0 tělo, Image_6 překryv s průhledností,
+# Image_8 žaluzie, Image_2 spojka. Souřadnice v červeném nátěru jsou pro texturu 1024 px, textury z par8 mají
+# 2048 px, tak se dělí měřítkem.
+import os
 import numpy as np
+from PIL import Image
+
+TU = os.path.dirname(os.path.abspath(__file__))
 
 # Cílové barvy textury. Ladí se tak, aby na fotce vyšla barva brejlovce z CZTR
 # (ČSD červená 132,31,31 a žlutá 154,123,20 na spritu), viz ladeni_barvy v render_sergej.py.
@@ -31,11 +38,13 @@ def prebarvit(pole, cil, maska, ref_jas):
     pole[maska] = nove[maska]
 
 def cerveny(nazev, rgb):
-    """rgb: pole HxWx3 (uint8) textury; vrati novou texturu v cervenem natiru."""
+    """rgb: pole HxWx3 (uint8) textury; vrati novou texturu v cervenem natiru, None kdyz se textura nemeni."""
+    if nazev not in ("Image_0", "Image_6", "Image_8"): return None
     a = rgb.astype(float)
     out = a.copy()
     h, w = a.shape[:2]
-    y = np.arange(h)[:, None] * np.ones((1, w))
+    s = h / 1024                                    # souradnice nize jsou pro texturu 1024 px
+    y = np.arange(h)[:, None] * np.ones((1, w)) / s
     zel = maska_zelena(a)
     if nazev in ("Image_0", "Image_6"):
         zel &= y >= 452                 # boky a cela; nahore je strecha a drobnosti, tam zelena neni
@@ -51,7 +60,7 @@ def cerveny(nazev, rgb):
         # (ve skutecnosti) lososovy pruh 934-946, zelena mezera 918-933, kremova linka 906-915.
         # Zluty pruh: radky 918-934 pres celou natrenou sirku cela, kus od okna (hrac:
         # "pruh pod okno kus od okna", jako CZTR brejlovci). Mezi nim a oknem zustane cervena.
-        x = np.arange(w)[None, :] * np.ones((h, 1))
+        x = np.arange(w)[None, :] * np.ones((h, 1)) / s
         natrene = zel | los | krem
         pod_oknem = natrene & (y >= 918) & (y <= 934) & (x < 900)
         zbytek = (los | krem) & (y >= 770) & ~pod_oknem
@@ -66,3 +75,29 @@ def cerveny(nazev, rgb):
         zl = np.clip(ZLUTA[None, None, :] * f, 0, 255)
         out[pod_oknem] = zl[pod_oknem]
     return np.clip(out, 0, 255).astype(np.uint8)
+
+# РЖД: textury z teplovoz-m62.glb (par8, Leafia dev., CC BY 4.0), vytazene obrazky 1 (telo), 2 (zaluzie) a 6 (spojka)
+# jako model/rzd_*.png. Model ma stejne UV jako diesel_locomotive_m62.glb, textury se jen vymeni; geometrie zustava
+# od Chicken cutlet (hrac 2. 10.: zeleny je detailnejsi a ma okna, РЖД ma vpredu vlevo pomackany plech).
+# Prekryv Image_6 ma zelene kusy tela: dostanou barvu tela РЖД ze stejneho mista textury.
+RZD = {"Image_0": "rzd_telo.png", "Image_8": "rzd_zaluzie.png", "Image_2": "rzd_spojka.png"}
+_rzd_obrazky = {}
+
+def _rzd_obrazek(soubor):
+    if soubor not in _rzd_obrazky:
+        _rzd_obrazky[soubor] = np.asarray(Image.open(os.path.join(TU, "model", soubor)).convert("RGB"))
+    return _rzd_obrazky[soubor]
+
+def rzd(nazev, rgb):
+    """rgb: pole HxWx3 (uint8) textury; vrati texturu v nateru РЖД, None kdyz se textura nemeni."""
+    if nazev in RZD:
+        t = _rzd_obrazek(RZD[nazev])
+        assert t.shape == rgb.shape, (nazev, t.shape, rgb.shape)
+        return t.copy()
+    if nazev == "Image_6":
+        t = _rzd_obrazek(RZD["Image_0"])
+        assert t.shape == rgb.shape, (nazev, t.shape, rgb.shape)
+        out = rgb.copy(); m = maska_zelena(rgb.astype(float))
+        out[m] = t[m]
+        return out
+    return None

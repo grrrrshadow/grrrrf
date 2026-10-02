@@ -34,18 +34,24 @@ def odstupy(delky):
     h, s, z = delky
     return h // 2 + (s + 1) // 2, s // 2 + (z + 1) // 2
 
-def nacti_sady(adresar, yagl):
-    """Sady spritu z (rozbaleneho) yaglu v poradi, kazda jako seznam (w, h, xoffs, yoffs, png, x, y)."""
+def nacti_sady(adresar, yagl, zin=4):
+    """Sady spritu z (rozbaleneho) yaglu v poradi, kazda jako seznam (w, h, xoffs, yoffs, png, x, y) podle zoomu
+    zin (4 nebo 8); sprite bez radku toho zoomu (prazdne smery maji jen zin4) je None."""
     text = open(os.path.join(adresar, yagl)).read()
+    vzor = re.compile(r"\[(\d+), (\d+), (-?\d+), (-?\d+)\], zin" + str(zin) + r", [^\"]*\"([^\"]+)\", \[(\d+), (\d+)\]")
     sady = []
     for rec in re.findall(r"sprite_sets<Trains[^>]*>.*?\n\}", text, re.S):
         for blok in re.split(r"\n    sprite_set", rec)[1:]:
-            sady.append([tuple(int(v) if i != 4 else v for i, v in enumerate(m.groups())) for m in re.finditer(
-                r"\[(\d+), (\d+), (-?\d+), (-?\d+)\], zin4, [^\"]*\"([^\"]+)\", \[(\d+), (\d+)\]", blok)])
+            sada = []
+            for sp in re.split(r"sprite_id<", blok)[1:]:
+                m = vzor.search(sp)
+                sada.append(tuple(int(v) if i != 4 else v for i, v in enumerate(m.groups())) if m else None)
+            sady.append(sada)
     return sady
 
 _listy = {}
 def obrazek(adresar, sp):
+    if sp is None: return Image.new("RGBA", (1, 1), (0, 0, 0, 0)), 0, 0
     w, h, xo, yo, png, x, y = sp
     klic = os.path.join(adresar, png)
     if klic not in _listy: _listy[klic] = Image.open(klic).convert("RGBA")
