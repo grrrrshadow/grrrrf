@@ -40,7 +40,8 @@ Bez metadat v par6:
 - `bsg_shuttle_mk_ii_olympic_carriers_fanon.glb` (117 MB) a `v3s_praga.glb` (z `v3s_praga.rar`). Autora
   je třeba dohledat.
 - `aviafurgonvb/Avia Furgon VB.crp` je model do Cities: Skylines stažený ze SkyMods (smods.ru), autor
-  ani licence u něj nejsou.
+  ani licence u něj nejsou. Dohledáno 2. 10. (hráč: *„Avia VB, můžem dělat? Licence je dobrá?“*), viz oddíl
+  „Avia Furgon VB ze Steam Workshopu“ níže.
 - `gggg/` (Trabant v Cinema 4D) je bez autora.
 - FSO Warszawa (`1589313069_…zip`, `…_KAFAROS.rar`) jsou modely do GTA (`.dff/.txd`), autor je nejspíš
   v jejich `ReadMe!.txt`.
@@ -256,3 +257,32 @@ uvádíme jako autora.
 - **Použití:** nikde. Tatry jsou z modelu od hans1240.
 - **Rozhodnutí hráče 30. 9.:** *„já emika nevyndám ze zipu v repo. necháme to tak. nepoužili jsme to.“* Zůstává
   v zipu a už se to nepřipomíná.
+
+## Avia Furgon VB ze Steam Workshopu (2026-10-02)
+
+Hráč: *„Avia VB, můžem dělat? Licence je dobrá?“* (na cennosti a diamanty, které od v14 nevozí vejtřasky ani Tatry).
+
+- **Původ:** `zip6/aviafurgonvb/Avia Furgon VB.crp` je beze změny položka Steam Workshopu pro Cities: Skylines
+  **„Avia Furgon VB“ od wooderCZ** (https://steamcommunity.com/sharedfiles/filedetails/?id=528507915, SteamID
+  76561197987018322, 2. 10. 2015, 1432 polygonů, popis jen *„Headlight for After dark, Added as police van“*).
+  Velikost souboru na Workshopu (2 483 515 B) je přesně velikost našeho `.crp`. SkyMods ho jen přebalil a přidal
+  svůj `Readme.txt` s odkazem na smods.ru. Týž autor má na Workshopu i „Avia Furgon Motokov“ (510033583)
+  a „Avia A30 DA 12“ (510580753); „Avia A31“ (1125049813, 2017) je od † TRANZIT ZONE † (Konstantin Vlasov),
+  taky bez licence.
+- **Licence: žádná.** Autor k modelu nenapsal nic. Steam Subscriber Agreement (odd. 6) dává práva k obsahu
+  Workshopu jen Valve a ostatním předplatitelům **uvnitř Steamu**; použití mimo Steam nebo v jiném produktu
+  neuděluje. Použít model v našem GRF (rendery jsou odvozené dílo) by tedy šlo jen se svolením wooderCZ.
+  Je to stejný případ jako mod Tatry z Farming Simulatoru (bez licence, nepoužito), ne jako hans1240 (CC BY).
+- **Co se dá:** (1) napsat wooderCZ přes Steam a poprosit o svolení (třeba CC BY); (2) udělat vlastní model
+  jako u gymnázia (Avia A30/A31 furgon je hranatá dodávka, na 100 × 50 px stačí správné proporce, podle fotek
+  a rozměrů skutečného auta); (3) vzít Avii s CC BY ze Sketchfabu a VB nátěr (bílá se žlutým pruhem, nápis VB,
+  modrý maják) jí dát sami. Hráč: *„to je VB, to nejde jinou“*, *„potřebujem vozit z banky cennosti“*: VB je nátěr,
+  tvar je Avia furgon, ten jde postavit na kterémkoli z nich.
+- **Avie s CC BY na Sketchfabu (2. 10.):**
+  - **Avia A-15 Truck**, Gertol (Heisenberg), CC BY, 8 525 ploch, https://sketchfab.com/3d-models/none-5c2c1e10c3b94942b38094cd4a337586:
+    rezavá kabina A15 (stejná kabina jako A30/A31), ke stažení; furgon by se na ni domodeloval.
+  - **Avia A21F [FREE] (Raw Scan)**, ivanrytp31, CC BY, 1,13 mil. ploch, https://sketchfab.com/3d-models/none-cab6d90afcca453d95c99e88cd1240fd:
+    fotogrammetrie skutečné modré A21F (furgon), hrubý sken se zemí a šumem; výborná předloha tvaru, na přímé focení
+    moc těžký a modrý.
+  - Jinde nic volného: „Avia A21 F“ na TurboSquid je za 7 USD a bez CC.
+- **Rozhodnutí hráče:** zatím žádné, Workshop model se nepoužívá.
