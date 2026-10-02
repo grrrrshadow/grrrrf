@@ -21,6 +21,7 @@ Vlastní model, žádný cizí: `render_gymnazium.py` ho postaví v Blenderu (mo
 | `gymnazium_zin4.json` | kde jsou na obrázku rohy pozemku: sever (360, 232), východ (616, 360), západ (104, 360), jih (360, 488) |
 | `nahled_ve_hre.png` | obrázek vložený do fotky ze zkušební hry (políčka 46–47 × 16–17, vedle silnice s Tatrou) |
 | `gymnazium_postavy_zin4.png` | druhý obrázek do animace: totéž s holkami, rohy v JSONu (`gymnazium_postavy_zin4.json`) stejné |
+| `gymnazium_zin8.png`, `gymnazium_postavy_zin8.png` (+ `.json`) | totéž v přiblížení 8× (jen naše hra, `zin8`): 1440 × 1440 px, přesně dvojnásobek 4×; rohy sever (720, 464), východ (1232, 720), západ (208, 720), jih (720, 976) |
 | `animace_ve_hre.gif` | gymnázium a automat ve fotce ze hry, střídá se bez holek a s holkami |
 
 Složit znovu: `python3 render_gymnazium.py <výstup.png>` (128 vzorků, asi 40 s; `SAMPLES=32` na zkoušku).
@@ -59,5 +60,16 @@ a jednou s nimi, a oba snímky do GIFu se společnou paletou.
 ## Ruce College Girl (2. 10.)
 
 Dvě stojící College Girl (u školy a na schodech) měly paže otočené dovnitř trupu (`postavy/README.md`, oprava ramen
-76° → 50°). `gymnazium_postavy_zin4.png` je proto vyfocený znovu, `gymnazium_zin4.png` se nemění. Přiblížení 8× škola
-nemá (hráč 2. 10.: *„dívčí gymnázium neděláme, neznám současný stav, jak to tam vypadá“*).
+76° → 50°). `gymnazium_postavy_zin4.png` je proto vyfocený znovu, `gymnazium_zin4.png` se nemění.
+
+## Přiblížení 8× (2. 10. odpoledne)
+
+Hráč nejdřív: *„dívčí gymnázium neděláme, neznám současný stav, jak to tam vypadá“*, pak podle snímku z #252:
+*„mám v #252 gymnázium ještě malý lavičky a malý holky. Máme už novější zvětšenou verzi? Dáme tam lavičky a holky
+velký a pak můžem udělat 8×.“* Hra kolegy má pořád první školu z 1. 10. dopoledne (`7918e29`, holky a lavičky 1×);
+zvětšená 1,5× je v repu od 1. 10. večer (`822f355`), stačí si vzít nové soubory.
+
+`ZIN=8 python3 render_gymnazium.py <výstup>` (a s `POSTAVY=1`) fotí stejnou scénu stejnou kamerou na 24,4 px/m do
+1440 × 1440 px (políčko 512 px): obrázek i rohy jsou přesně dvojnásobek 4×. Oba snímky animace jsou v 8×, druhý
+sloučený s prvním (`postavy/animace.py`) jako ve 4×. Kontrolní 4× render po úpravě skriptu vyšel stejně jako
+`gymnazium_zin4.png` v repu.

@@ -64,6 +64,11 @@ nebo chodidla), 4× zůstává vedle něj.
   `automat/automat_postavy_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png` a `zastavka/divka2_co_k2_s260.png`
   (u tebe `zastavka_divka_s260_zin4.png`). Tyhle tři kopie v `media/baseset/openttd/` jsou k přetažení z grrrrf.
   Socha se ve 4× nemění (holka u Karla má vlastní pózu objetí, nové fotky vyšly bit po bitu stejně).
-- **Gymnázium 8× není** (hráč: *„dívčí gymnázium neděláme“*), jen opravené ruce ve 4×.
+- **Gymnázium:** hráč podle snímku z #252 (*„mám v #252 gymnázium ještě malý lavičky a malý holky“*): tvoje hra má
+  pořád první školu z 1. 10. dopoledne (`gymnazium_zin4.png` md5 `6ad78fa5…`, grrrrf `7918e29`, holky a lavičky 1×).
+  Zvětšená 1,5× je v grrrrf od 1. 10. večer (`822f355`, md5 `337dde16…`) a snímek s holkami je po opravě rukou
+  z dneška (`765c9f4`), vezmi si prosím oba. K tomu je nově i **8×**: `gymnazium/gymnazium_zin8.png`
+  a `gymnazium_postavy_zin8.png` (+ `.json`), 1440 × 1440 px, rohy sever (720, 464), východ (1232, 720),
+  západ (208, 720), jih (720, 976), tedy tvé pruhy pro `strips` dvojnásobné.
 - Viděl jsem `309a969` (8× výchozí i pro starou konfiguraci); moje zkušební kopie zůstává z `51428e5`, pro tohle
   ověření to stačilo.

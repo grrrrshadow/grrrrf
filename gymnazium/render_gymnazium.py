@@ -6,6 +6,8 @@
 # Meritko 12,2 px/m jako vejtraska a Tatra v zin4, policko je pak 14,84 m a pozemek 29,7 x 29,7 m.
 #   python3 render_gymnazium.py <vystup.png> [px_na_m]
 #   POSTAVY=1: druhy obrazek do animace s divkami (postavy/), pak sloucit postavy/animace.py s gymnazium_zin4.png
+#   ZIN=8: priblizeni 8x nasi hry (2. 10.): stejna scena a kamera, 24,4 px/m do 1440 x 1440 px, policko 512 px,
+#   obrazek i rohy v JSONu jsou presne dvojnasobek 4x (hra to u spritu s vic urovnemi kontroluje)
 # Souradnice v modelu jako ve hre: x k jihozapadu (na obrazku doleva dolu), y k jihovychodu (doprava dolu),
 # z nahoru, pocatek v severnim rohu pozemku. Do Blenderu B(x, y, z) = (y, -x, z), kamera z jihu jako u aut.
 import bpy, bmesh, os, sys, math, json
@@ -13,9 +15,10 @@ from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
 
 VYSTUP = sys.argv[-1] if sys.argv[-1].endswith(".png") else sys.argv[-2]
-PX_M = float(sys.argv[-1]) if not sys.argv[-1].endswith(".png") else 12.2
-RAM = 720
-T = 256 / (math.sqrt(2) * PX_M)               # delka policka v metrech (v zin4 je policko 256 px siroke)
+ZIN = int(os.environ.get("ZIN", "4"))          # 4 = zin4 (vychozi), 8 = zin8 (jen nase hra)
+PX_M = (float(sys.argv[-1]) if not sys.argv[-1].endswith(".png") else 12.2) * ZIN / 4
+RAM = 720 * ZIN // 4
+T = 256 * ZIN / 4 / (math.sqrt(2) * PX_M)     # delka policka v metrech (v zin4 je policko 256 px siroke, v zin8 512)
 P = 2 * T                                       # pozemek 2 x 2
 TU = os.path.dirname(os.path.abspath(__file__))
 HDRI = os.path.join(TU, "..", "glb", "GLB", "hdri", "snow.exr")
