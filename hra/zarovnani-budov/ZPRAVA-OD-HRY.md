@@ -111,3 +111,11 @@ do vrstvy patří jen postava a její vlastní stín na zem (20 %), ne stín sc�
 vrací nastavení stínů z focení Tatry – to je nejspíš ono. Samotný obrázek `prace_char16_f3` je v pořádku,
 to 257 × 56 s rozházenými pixely byl můj neúplný odečet, ne vaše chyba; chybu ve vrstvách, kterou našel
 hráč sám, řeší s vámi on.
+
+## Pravidlo od hráče: všude psát zin8 a 32bpp, nikdy 8bpp (3. 10.)
+
+Hráč: *„všude psát zin8, ukázat co máme“*, *„8bpp nikde nepíšeme, jen 32bpp“*. Ve všem, co hráč nebo ostatní
+vidí – jména a popisy GRF (okno grafik), README, texty, zprávy – uvádět **32bpp a zin8** (případně zin4), tedy
+to, co máme navíc. **8bpp nezmiňovat**, i když ho GRF pro hru bez 32bpp blitteru obsahuje. Platí pro vaše GRF
+(V3S, Tatry, …) i pro naše (`budovy.grf` to dostane při příští práci na budovách, spolu se zámkem
+decouple_128_cargo jako u V3S).
