@@ -80,8 +80,10 @@ def bronz():
 
 M = {
     "podstavec": mat("podstavec", (126, 124, 120), 0.85, sum_=0.12, meritko=14.0),       # zula
-    "deska": mat("deska", (112, 80, 46), 0.4, kov=0.9),                                  # bronzova deska se jmenem
-    "pismo": mat("pismo", (186, 150, 96), 0.3, kov=1.0),
+    # deska se jmenem: od 3. 10. tmava patina a svetle zlate pismo pres celou desku (hrac: "napis roztahni pres celou
+    # ceduli a zvyrazni ho at je videt, jiny odstin cedule a napisu at napis vynikne"); driv bronz na bronzu
+    "deska": mat("deska", (34, 30, 26), 0.6, kov=0.3),
+    "pismo": mat("pismo", (246, 204, 104), 0.35),
     "dlazba": mat("dlazba", (176, 172, 164), 0.9, sum_=0.07, meritko=6.0),
     "spara": mat("spara", (136, 132, 124), 0.95),
     "obrubnik": mat("obrubnik", (150, 146, 138), 0.9, sum_=0.06, meritko=8.0),
@@ -155,6 +157,15 @@ for stena in ("x", "y"):                      # deska na jihozapadni (x) a jihov
     tx = bpy.context.object; tx.data.body = "KAREL\nMÁCHA"; tx.data.align_x = 'CENTER'; tx.data.align_y = 'CENTER'
     tx.data.font = bpy.data.fonts.load(PISMO); tx.data.size = 0.12 * K; tx.data.extrude = 0.004 * K
     tx.data.space_line = 0.9; tx.data.materials.append(M["pismo"])
+    # pismo roztazene pres celou desku (0,72 x 0,46 m skupiny): 92 % sirky a 84 % vysky, stred na stredu desky
+    bpy.context.view_layer.update()
+    bb = [Vector(c) for c in tx.bound_box]
+    sx_ = 0.92 * 0.72 * K / (max(c.x for c in bb) - min(c.x for c in bb))
+    sy_ = 0.84 * 0.46 * K / (max(c.y for c in bb) - min(c.y for c in bb))
+    tx.scale = (sx_, sy_, 1.0)
+    bpy.context.view_layer.update()
+    sx0, sy0 = (max(c.x for c in bb) + min(c.x for c in bb)) / 2, (max(c.y for c in bb) + min(c.y for c in bb)) / 2
+    tx.location = tx.location - tx.matrix_world.to_3x3() @ Vector((sx0, sy0, 0.0))
 
 def lavicka(x, y, uhel):
     """lavicka 1,6 m jako u automatu; uhel: kam se sedici diva (rad)"""

@@ -62,10 +62,10 @@ dvě na jednu lavičku, jednu na jednu a na třetí nezbyde“*, *„měřítko 
 | `socha_bronz_zin4.png` | bronzová, totéž |
 | `socha_kamen_zin4.json`, `socha_bronz_zin4.json` | rohy políčka na obrázku: sever (192, 128), východ (320, 192), západ (64, 192), jih (192, 256) |
 | `nahled_ve_hre.png` | obě sochy ve fotce ze zkušební hry u silnice s Tatrami, zvětšeno 2× |
-| `zblizka.png` | obě sochy vedle sebe zblízka |
+| `zblizka.png` | obě sochy vedle sebe zblízka (z 8×) |
 | `socha_kamen_postavy_zin4.png`, `socha_bronz_postavy_zin4.png` | druhý obrázek do animace: totéž s postavami, rohy v JSONu stejné |
 | `animace_ve_hre.gif` | obě sochy ve fotce ze hry, střídá se bez postav a s postavami |
-| `zblizka_postavy.png` | obě sochy s postavami vedle sebe zblízka |
+| `zblizka_postavy.png` | obě sochy s postavami vedle sebe zblízka (z 8×) |
 | `socha_kamen_zin8.png`, `socha_bronz_zin8.png`, `socha_kamen_postavy_zin8.png`, `socha_bronz_postavy_zin8.png` | totéž v přiblížení 8× (jen naše hra, `zin8`): 768 × 768 px, přesně dvojnásobek 4× (stejná scéna a kamera, dvojnásobné rozlišení); rohy v `*_zin8.json`: sever (384, 256), východ (640, 384), západ (128, 384), jih (384, 512) |
 
 Složit znovu: `SOCHA=kamen python3 render_socha.py <výstup.png>`, bronzová `SOCHA=bronz` (128 vzorků, asi 35 s, výstup s celou cestou).
@@ -85,3 +85,15 @@ stejnou kamerou na 24,4 px/m do 768 × 768 px, takže obrázek je přesně dvojn
 spritu s víc úrovněmi vyžaduje). Oba snímky animace jsou v 8× (bez postav i s postavami), aby se při střídání neměnila
 ostrost. 4× obrázky se nezměnily (po opravě rukou College Girl v `postavy/postavy.py` jsou znovu vyfocené a stejné,
 tahle dívka tu objímá Karla vlastní pózou).
+
+## Nápis na desce (3. 10.)
+
+Hráč: *„socha karla, nápis roztáhni přes celou ceduli a zvýrazni ho ať je vidět, jiný odstín cedule a nápisu ať nápis
+vynikne“*.
+
+- Deska byla bronzová a písmo taky bronzové, jen o kus světlejší, a nápis zabíral asi polovinu desky.
+- Teď je deska tmavá (skoro černá patina) a písmo světle zlaté, matné, aby se v něm neodráželo nebe. Nápis
+  KAREL / MÁCHA je roztažený přes celou desku (92 % šířky a 84 % výšky) na obou předních stěnách podstavce.
+- V 8× je nápis čitelný, ve 4× je to zlatý obdélník se dvěma řádky (deska má ve 4× jen asi 12 × 9 px).
+- Znovu vyfocené všechny obrázky sochy (kámen i bronz, bez postav i s postavami, 4× i 8×). Rohy v JSONu i velikost
+  jsou stejné, jinde se obrázky liší jen šumem renderu (listí rostlin).
