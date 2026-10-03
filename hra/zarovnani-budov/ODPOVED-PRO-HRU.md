@@ -205,3 +205,10 @@ posunem směrem od lavičky na ušetřené místo. ke zdi dej jinou ne tu colege
 - Domek je zmenšený na tři čtvrtiny a stojí v severním rohu zadního políčka, kolem něj vpředu jsou rostliny
   marihuany. U zdi domku stojí holka v tyrkysovém tílku (Character Girl), Galaxia je místo ní u branky.
 - `holky_obdelnik` ve 4×: stojící [110, 150, 245, 259], sedící [75, 194, 219, 241]. Nic nepřečuhuje.
+
+## Chatka: hlína až k domku (3. 10.)
+
+Hráč: *„roztáhni ten povrch na kterém stojí holky až na políčko kde stojí dům ale odpadky už nedávej další“*.
+
+- Ušlapaná hlína teď vede z dvorku až k domku. Změnilo se zase všech šest obrázků chatky (4× i 8×), prosím rozkrájet
+  znovu. Rohy, velikost obrázků i JSON jsou stejné jako v předchozí verzi s menším domkem.

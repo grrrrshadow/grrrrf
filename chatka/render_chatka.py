@@ -156,17 +156,24 @@ print("holka u zdi", tuple(round(v, 2) for v in U_ZDI), flush=True)
 
 # ---------------------------------------------------------------- dvorek: uslapana zem, lavicky, neporadek
 X0 = T                                           # dvorek: x T az 2T, y 0 az T
-# uslapana hlina: nepravidelna placka na dvorku (kolem lavicek, k dverim a k dire v plotu)
+# uslapana hlina: nepravidelna placka pres dvorek az na policko s domkem (do 3. 10. jen elipsa na dvorku; hrac:
+# "roztahni ten povrch na kterem stoji holky az na policko kde stoji dum ale odpadky uz nedavej dalsi"). Tvar je
+# zaobleny obdelnik pres oba policka (superelipsa), kraj zvlneny dovnitr; pod plotem a v rozich zustava trava.
+# Odpadky se nemeni, jsou dal jen na dvorku.
 def placka(m, body, z=0.012):
     bm = bm_pro(m)
     v = [bm.verts.new(B(x, y, z)) for x, y in body]
     bm.faces.new(v)
 rnd_z = random.Random(5)
+H_X0, H_X1, H_Y0, H_Y1 = 0.6, 2 * T - 1.7, 0.7, T - 1.7      # kam az hlina saha (x podel obou policek, y napric)
+hcx, hcy, hax, hay = (H_X0 + H_X1) / 2, (H_Y0 + H_Y1) / 2, (H_X1 - H_X0) / 2, (H_Y1 - H_Y0) / 2
 obrys = []
-for k in range(40):
-    a = 2 * math.pi * k / 40
-    r = 1.0 + 0.12 * math.sin(3 * a + 1.0) + 0.06 * rnd_z.uniform(-1, 1)
-    obrys.append((X0 + T * 0.5 + math.cos(a) * T * 0.40 * r, T * 0.5 + math.sin(a) * T * 0.38 * r))
+for k in range(120):
+    a = 2 * math.pi * k / 120
+    c, s_ = math.cos(a), math.sin(a)
+    r = (abs(c) ** 2.6 + abs(s_) ** 2.6) ** (-1 / 2.6)
+    r *= 1.0 - 0.05 * (1 + math.sin(3 * a + 1.0)) / 2 - 0.04 * (1 + math.sin(7 * a + 2.0)) / 2 - 0.02 * rnd_z.random()
+    obrys.append((hcx + c * hax * r, hcy + s_ * hay * r))
 placka(M["hlina"], obrys)
 
 def lavicka(x, y, uhel):
@@ -328,7 +335,7 @@ STOJICI, SEDICI = [], []
 cg = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")
 do_sceny(cg, Vector((0, 0, 0)), X0 + 2.6, 6.2, 0.012, math.radians(-35)); STOJICI += cg
 ch = PO.nacti_stojici("character_people_girl_001", 1.68)
-do_sceny(ch, Vector((0, 0, 0)), U_ZDI[0], U_ZDI[1], 0.0, math.radians(45)); STOJICI += ch
+do_sceny(ch, Vector((0, 0, 0)), U_ZDI[0], U_ZDI[1], 0.012, math.radians(45)); STOJICI += ch      # na hline
 ga_st = PO.nacti_stojici("galaxia_anime_girl", 1.58, "ruce_dolu")
 do_sceny(ga_st, Vector((0, 0, 0)), X0 + 9.8, 7.4, 0.012, math.radians(120)); STOJICI += ga_st
 # sedici: College Girl a Character Girl na lavicce u domku, Galaxia na druhe (zapadni), vsechny celem od operadla

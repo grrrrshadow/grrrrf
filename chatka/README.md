@@ -16,9 +16,11 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
 - **Kytky kolem domku:** 19 vyšších rostlin marihuany (stejné jako v plotu, skutečně 1,1 až 1,7 m, na obrázku dvakrát
   větší) na uvolněném místě před jihozápadní a jihovýchodní stranou domku. Za domkem nejsou, nestojí na cestě od
   schůdků ke dveřím ani od paty schodů na balkon a nezakrývají holku u zdi.
-- **Dvorek** (přední políčko): ušlapaná hlína, dvě lavičky jako u sochy (dvakrát větší), nepořádek: dvě bedny na sobě,
-  převrhlá bedna, hromada prken, dvě pneumatiky, kyblík a asi sto odpadků (papíry, plechovky, lahve, kelímky, sáčky,
-  zelené balíčky).
+- **Ušlapaná hlína** vede přes celý dvorek až k domku na zadním políčku (kytky kolem domku v ní stojí). Kolem plotu
+  a v rozích pozemku zůstává tráva.
+- **Dvorek** (přední políčko): dvě lavičky jako u sochy (dvakrát větší), nepořádek: dvě bedny na sobě, převrhlá
+  bedna, hromada prken, dvě pneumatiky, kyblík a asi sto odpadků (papíry, plechovky, lahve, kelímky, sáčky, zelené
+  balíčky). Odpadky jsou jen na dvorku.
 - **Plot:** 31 nízkých rostlin marihuany místo plotu (Cannabis Sativa plant a Cannabis Plant jako u sochy, skutečně
   1 až 1,3 m, na obrázku dvakrát větší) podél přední pravé hrany celého pozemku a kolem dvorku. Sem tam je díra,
   vlevo široká jako branka k dveřím.
@@ -98,3 +100,13 @@ holka splývá se zdí“*.
 - Galaxia stojí na jejím místě u branky, na hnědé hlíně nesplývá.
 - Změnilo se všechno: obrázek s domkem je nižší (400 × 320 místo 400 × 360, v 8× 800 × 640), rohy v JSONu jsou jinde
   (o 40 px výš ve 4×) a obě vrstvy s holkami jsou nové.
+
+## Hlína až k domku (3. 10.)
+
+Hráč: *„roztáhni ten povrch na kterém stojí holky až na políčko kde stojí dům ale odpadky už nedávej další“*.
+
+- Ušlapaná hlína byla jen elipsa na dvorku, teď je to jeden zvlněný kus přes oba políčka až k domku. Holka u zdi
+  domku a kytky kolem domku stojí na hlíně.
+- Odpadky se nezměnily, žádné nepřibyly, jsou dál jen na dvorku.
+- Změnily se všechny obrázky (holky ve vrstvách mají od hnědé hlíny o chlup teplejší odraz světla), rohy, velikost
+  a `holky_obdelnik` v JSONu jsou stejné jako s menším domkem.
