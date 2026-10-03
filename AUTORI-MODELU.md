@@ -19,7 +19,7 @@ musí NC převzít.
 | [DynamicSAV](https://sketchfab.com/dynamicsav) | Car trailer model game ready for free PBR (`car_trailer_model_game_ready_for_free_pbr.glb`) | CC-BY-4.0 | par6 |
 | [Fratzica](https://sketchfab.com/vasilebetivu62) | Opel Movano (`opel_movano.glb`) | CC-BY-4.0 | par6 |
 | [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 (**nejisté**, viz „Pozor na modely od hans1240“ dole) | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
-| [kiemtruongkts](https://sketchfab.com/kiemtruongkts) | Character People Girl 001 (`character_people_girl_001.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, dívka na zastávce, holka u dveří busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami |
+| [kiemtruongkts](https://sketchfab.com/kiemtruongkts) | Character People Girl 001 (`character_people_girl_001.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, dívka na zastávce, holka u dveří busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
 | [KOG_THORNS](https://sketchfab.com/ioai25312) | Antonov AN-225 (`antonov_an-225.glb`) | CC-BY-4.0 | par8 |
 | [LarsH.](https://sketchfab.com/LarsH.) | Star Wars A-A5 heavy speeder truck (`star_wars_a-a5_heavy_speeder_truck.glb`); Star Wars Landspeeder Collection (`star_wars_landspeeder_collection.glb`) | CC-BY-4.0 | par6 |
 | [Leafia dev.](https://sketchfab.com/Leaf_dev) | Teplovoz-m62 РЖД (`teplovoz-m62.glb`) | CC-BY-4.0 | par8; textury těla, žaluzií a spojky jsou nátěr Maša РЖД Sergeje od v7 (`sergej/model/rzd_*.png`) |
@@ -27,15 +27,16 @@ musí NC převzít.
 | [Miguel Adão](https://sketchfab.com/theauditor) | Zeppelin Aircraft (`zeppelin_aircraft.glb`) | CC-BY-4.0 | par6 |
 | [Pavlo_Holubov](https://sketchfab.com/Pavlo_Holubov) | Zuk (`zukpavloholubov.glb`) | CC-BY-4.0 | par6 |
 | [rhcreations](https://sketchfab.com/rhcreations) | Large Caravan (`large_caravan.glb`); Small Caravan (`small_caravan.glb`) | CC-BY-4.0 | par6 |
-| [Rotmill](https://sketchfab.com/Rotmill) | College Girl (`college_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, druhá dívka na zastávce, holka u kufru busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami |
+| [Rotmill](https://sketchfab.com/Rotmill) | College Girl (`college_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, druhá dívka na zastávce, holka u kufru busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
 | [Shonan](https://sketchfab.com/shonan) | Just a truck (`zukvalnik.glb`) | CC-BY-4.0 | par6 |
 | [Soviet Model Magic](https://sketchfab.com/mckadefasel) | Energia Rocket (untextured) (`energia_rocket_untextured.glb`) | CC-BY-4.0 | par6 |
 | [squalll_999](https://sketchfab.com/squalll_999) | Girl Bikini (`girl_bikini.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami |
-| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`), Small Cannabis Plant a Cannabis Plant na marihuanové plantáži (`pole/`) |
+| [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`) a v plotu chatky, Small Cannabis Plant a Cannabis Plant na marihuanové plantáži (`pole/`) |
 | [tashtego](https://sketchfab.com/tashtego) | Space Shuttle Buran (`space_shuttle_buran.glb`) | CC-BY-NC-4.0 | par6 |
-| [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami |
+| [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
 | [Thcyrax](https://sketchfab.com/thcyrax) | Vehicle - Ural Truck 44202 (`vehicle_-_ural_truck_44202.glb`) | CC-BY-4.0 | par6 |
-| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`) a na marihuanové plantáži (`pole/`) |
+| [Tigran Safaryan](https://sketchfab.com/Tigran_Eredas) | A little happy hut (`a_little_happy_hut.glb`) | CC-BY-4.0 | poslal hráč 3. 10. v chatu; chatka (`chatka/`) |
+| [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`), na marihuanové plantáži (`pole/`) a v plotu chatky |
 | ? (v souboru není) | v3s_praga.glb (`v3s_praga.glb`); bsg_shuttle_mk_ii_olympic_carriers_fanon.glb (`bsg_shuttle_mk_ii_olympic_carriers_fanon.glb`) | ? | par6 |
 
 Bez metadat v par6:
@@ -337,3 +338,36 @@ RZD livery: textures from "Teplovoz-m62 РЖД" by Leafia dev.
   `vyr_2621_vyr_14931skoda-1203-rol-ssm2012.webp`, `vyrp16_132s_1203_kladno_reklama.webp` jsou z jeho stránky.
 - **Použití:** `osobacky/` (TAZ 1203 plachta, orig size a zmenšená, GRF `MAXh`).
 - Stejný autor má na Printables pod CC0 i další modely, které jsou v `zip8` (třeba 1203 sanitka a 1202 STW).
+
+## Chatka (2026-10-03)
+
+- **Domek:** „A little happy hut“, autor **Tigran Safaryan** (Sketchfab `Tigran_Eredas`),
+  https://sketchfab.com/3d-models/a-little-happy-hut-045afe84e4c04400a34f0babab201378 , licence **CC BY 4.0**
+  (podle metadat v souboru). Poslal ho hráč 3. 10. v chatu, v gitu není (`chatka/model/`, 11 MB).
+- **Holky** v přikládacích vrstvách (`chatka/chatka_stojici_zin*.png`, `chatka/chatka_sedici_zin*.png`): College Girl
+  (Rotmill) stojí před dveřmi a sedí na lavičce, Character People Girl 001 (kiemtruongkts) jde od branky a sedí na
+  lavičce, Galaxia anime girl (Tatenashi) sedí na druhé lavičce. Všechny CC BY 4.0, z `postavy/` jako u sochy.
+- **Plot:** Cannabis Sativa plant (Zbrojmistrz) a Cannabis Plant (streetpharmacy), CC BY 4.0, z `rostliny/` jako
+  u sochy.
+- Dvorek (hlína, lavičky, bedny, prkna, pneumatiky, kyblík, odpadky) je vlastní ze skriptu `chatka/render_chatka.py`.
+
+Uvedení pro hru:
+
+```
+Hut (Chatka):
+"A little happy hut" by Tigran Safaryan
+    https://sketchfab.com/3d-models/a-little-happy-hut-045afe84e4c04400a34f0babab201378
+Figures: "College Girl" by Rotmill
+    https://sketchfab.com/3d-models/college-girl-5395dfd1871c41f29aa02e05c4e58eb7
+"Character People Girl 001" by kiemtruongkts
+    https://sketchfab.com/3d-models/character-people-girl-001-35d1d9521b8c4e3a8b282045dd243017
+"Galaxia anime girl" by Tatenashi
+    https://sketchfab.com/3d-models/galaxia-anime-girl-485f95459fa747fdbe42c87203e1a156
+Plants: "Cannabis Sativa plant" by Zbrojmistrz
+    https://sketchfab.com/3d-models/cannabis-sativa-plant-ea31a5768c06457ea2fd67c3eb3458b8
+"Cannabis Plant" by streetpharmacy
+    https://sketchfab.com/3d-models/cannabis-plant-79fe78fd6c6a426b8584115e772a5818
+All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
+Changes: the hut scaled and turned, a yard with benches, junk and a fence of plants added, the figures posed
+(standing, sitting) and scaled, plants recoloured and scaled, rendered into the sprite.
+```

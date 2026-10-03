@@ -144,3 +144,40 @@ Hráč podle fotky z vaší hry: *„schody jsou dobře napasované, chybí jim 
 - **Změnily se všechny čtyři obrázky:** `gymnazium/gymnazium_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png`,
   `gymnazium/gymnazium_zin8.png`, `gymnazium/gymnazium_postavy_zin8.png`. Prosím rozkrájet znovu (4× i 8×).
 - Rohy v JSONu jsou stejné, velikost obrázků taky, 8× je přesně dvojnásobek 4×. Holky jsou na stejných místech.
+
+## Chatka s přikládacími holkami (3. 10.)
+
+Hráč: *„okolo domku lavičky velké jak u sochy, nepořádek, nízké smrčky marihuany místo plotu, sem tam díra. přikládací
+holky stojící a pak přikádací holky sedící. takže bude obrázek bez holek a dva s holkama přiloženejma“*, *„velikost
+1 políčko … muže to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holky přikládací ať ušetříme Mb“*.
+Obrázky jsou v `chatka/`, popis v `chatka/README.md`.
+
+| obrázek | co to je | velikost 4× (8×) |
+|---|---|---|
+| `chatka/chatka_zin4.png`, `chatka/chatka_zin8.png` | chatka bez holek | 400 × 360 (800 × 720) |
+| `chatka/chatka_stojici_zin4.png`, `…_zin8.png` | přikládací vrstva: stojící holky | stejná |
+| `chatka/chatka_sedici_zin4.png`, `…_zin8.png` | přikládací vrstva: sedící holky | stejná |
+
+- **Pozemek 2 × 1 políčko:** 2 políčka podél x, 1 podél y. Zadní políčko (u severního rohu) je domek, přední dvorek.
+  JSON má `policek: [2, 1]`.
+- **Rohy ve 4×:** sever (264, 160), východ (392, 224), západ (8, 288), jih (136, 352); v 8× přesně dvojnásobek.
+  Render 2 : 1, políčko 256 × 128, severní roh na celém pixelu dělitelném 4, bez `"stazeny"`, jako gymnázium a pole.
+- **Přikládací vrstvy:** stejná velikost a rohy jako obrázek bez holek, jinde průhledné. Co holky zakrývá domek,
+  lavička nebo rostlina, je už vyříznuté, takže se vrstva kreslí jen navrch obrázku s domkem (rozkrájet ji stejně
+  jako obrázek s domkem). Holky nemají stín. Kde holky ve vrstvě jsou, říká `holky_obdelnik` v JSONu (vlevo, nahoře,
+  vpravo, dole), kdybyste chtěli vrstvu oříznout: ve 4× stojící [108, 226, 172, 300], sedící [68, 235, 219, 281].
+  Holky jsou jen na dvorku (předním políčku).
+- **Kdy která vrstva**, je na vás a na hráči (třeba stojící, když přijíždí bus, sedící jindy). Hráč chce hlavně holku
+  od kufru 1203 busu: *„když ji povezem tak tam pak musí být někde“*. Ta je v obou vrstvách (College Girl).
+- **Nic nepřečuhuje:** vrstvy nemají mimo pozemek ani pixel, obrázek s domkem jen okraj stínu s alfou nejvýš 9 z 255.
+- **Licence:** domek „A little happy hut“ (Tigran Safaryan) a holky a rostliny ze Sketchfabu, vše CC BY 4.0. Text
+  uvedení je v `AUTORI-MODELU.md` v oddílu „Chatka“. Prosím vezměte ho do hry spolu s obrázky.
+
+## Gymnázium: méně stínů (3. 10.)
+
+Hráč: *„to jsou stíny, dáváš hodně stínů, už nefotíme tatru 148.“* Gymnázium bylo nasvícené jako Tatra (silné stíny),
+teď je měkce jako socha (stín na trávu 20 % místo 55 %, tmavé kouty u schodů zmizely).
+
+- **Změnily se zase všechny čtyři obrázky:** `gymnazium/gymnazium_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png`,
+  `gymnazium/gymnazium_zin8.png`, `gymnazium/gymnazium_postavy_zin8.png`. Prosím rozkrájet znovu (4× i 8×).
+- Rohy v JSONu, velikost obrázků i místa holek jsou stejné, 8× je přesně dvojnásobek 4×.

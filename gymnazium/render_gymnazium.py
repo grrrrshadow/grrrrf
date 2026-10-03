@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # Divci gymnazium na 2 x 2 policka (hrac 1. 10.: "udelame budovu skoly, divci gymnazium, 2x2 policka, nizka budova,
 # neco okolo budovy hriste park", "jenom obrazek a vedle ve forclaude to zabudujem do zakladniho prumyslu hry").
-# Vlastni model, zadny cizi. Kamera a svetlo jako u Tatry (tatra/render_sklapec.py, hrac: "u tatry jsme navysili
-# stiny, aby vynikla zaoblena karoserie"): ortho, 30 st. shora, azimut 45 st., slabe okoli 0,35 a slunce 5 zleva shora.
+# Vlastni model, zadny cizi. Kamera jako u Tatry (tatra/render_sklapec.py): ortho, 30 st. shora, azimut 45 st.
+# Svetlo od 3. 10. mekke jako u sochy (socha/render_socha.py, okoli 0,9, slunce 2 zleva shora, stin na travu 20 %),
+# hrac: "to jsou stiny, davas hodne stinu, uz nefotime tatru 148". Do 3. 10. bylo jako u Tatry (okoli 0,35, slunce 5,
+# stin 55 %), ale to delalo tmave kouty u schodu.
 # Meritko 12,2 px/m jako vejtraska a Tatra v zin4, policko je pak 14,84 m a pozemek 29,7 x 29,7 m.
 #   python3 render_gymnazium.py <vystup.png> [px_na_m]
 #   POSTAVY=1: druhy obrazek do animace s divkami (postavy/), pak sloucit postavy/animace.py s gymnazium_zin4.png
@@ -38,7 +40,7 @@ bg = nt.nodes.new('ShaderNodeBackground'); env = nt.nodes.new('ShaderNodeTexEnvi
 env.image = bpy.data.images.load(HDRI)
 nt.links.new(env.outputs['Color'], bg.inputs['Color']); nt.links.new(bg.outputs['Background'], wo.inputs['Surface'])
 scene.world.cycles_visibility.shadow = True
-bg.inputs["Strength"].default_value = float(os.environ.get("OKOLI", "0.35"))
+bg.inputs["Strength"].default_value = float(os.environ.get("OKOLI", "0.9"))       # jako socha (do 3. 10. 0,35)
 
 
 def srgb(c):
@@ -425,7 +427,7 @@ if os.environ.get("POSTAVY", "") == "1":
 bpy.ops.mesh.primitive_plane_add(size=1, location=B(P / 2, P / 2, 0.0))
 zem = bpy.context.object; zem.scale = (P, P, 1); zem.is_shadow_catcher = True
 
-# ---------------------------------------------------------------- kamera a slunce jako u Tatry
+# ---------------------------------------------------------------- kamera jako u Tatry, slunce jako u sochy
 stred = B(P / 2, P / 2, 0.0)
 bpy.ops.object.empty_add(type='PLAIN_AXES', location=stred); cil = bpy.context.object
 ax = math.radians(90 - 30.0); az = math.radians(45.0); DIST = 80.0
@@ -436,7 +438,7 @@ c = cam.constraints.new(type='TRACK_TO'); c.target = cil
 ke_kamere = Vector((math.sin(az), -math.cos(az), 0.0)); vlevo = Vector((-math.cos(az), -math.sin(az), 0.0))
 odkud = (vlevo * 1.0 + ke_kamere * float(os.environ.get("ZEPREDU", "-0.25")) + Vector((0, 0, float(os.environ.get("SHORA", "1.0"))))).normalized()
 bpy.ops.object.light_add(type='SUN'); sl = bpy.context.object
-sl.data.energy = float(os.environ.get("SLUNCE", "5.0")); sl.data.angle = math.radians(6)
+sl.data.energy = float(os.environ.get("SLUNCE", "2.0")); sl.data.angle = math.radians(6)   # do 3. 10. 5,0
 sl.rotation_euler = odkud.to_track_quat('Z', 'Y').to_euler()
 
 def na_pixel(p):
@@ -445,8 +447,8 @@ def na_pixel(p):
     return (q.x * RAM, (1 - q.y) * RAM)
 rohy = {"sever": na_pixel(B(0, 0, 0)), "vychod": na_pixel(B(0, P, 0)), "zapad": na_pixel(B(P, 0, 0)), "jih": na_pixel(B(P, P, 0))}
 print("rohy pozemku na obrazku", {k: tuple(round(c, 2) for c in v) for k, v in rohy.items()})
-# Stin na travu: chytac stinu ho dava skoro cerny (slabe okoli, silne slunce). Druhy render bez chytace da jen
-# predmety, rozdil je stin a ten jde do obrazku jen na STIN (55 %).
+# Stin na travu: chytac stinu ho dava tmavy. Druhy render bez chytace da jen predmety, rozdil je stin a ten jde do
+# obrazku jen na STIN (20 % jako u sochy, do 3. 10. 55 %).
 import numpy as np
 from PIL import Image
 def render_do_pole():
@@ -458,7 +460,7 @@ def render_do_pole():
 A = render_do_pole()
 zem.hide_render = True
 Bp = render_do_pole()
-STIN = float(os.environ.get("STIN", "0.55"))
+STIN = float(os.environ.get("STIN", "0.2"))
 aB = Bp[..., 3]; aS = np.clip((A[..., 3] - aB) / np.maximum(1 - aB, 1e-6), 0, 1) * STIN
 alfa = aB + (1 - aB) * aS
 barva = np.where(alfa[..., None] > 0, Bp[..., :3] * aB[..., None] / np.maximum(alfa[..., None], 1e-6), 0)

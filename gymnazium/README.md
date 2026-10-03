@@ -12,7 +12,8 @@ Vlastní model, žádný cizí: `render_gymnazium.py` ho postaví v Blenderu (mo
 - **Okolí:** vlevo hřiště s červeným povrchem, čarami a dvěma koši, vpravo park s kruhovým náměstíčkem, záhonem,
   lavičkami a keři, tři stromy, lampy u cesty, dlažba před budovou, kolem živý plot s mezerami pro cesty.
 - **Měřítko a kamera jako u aut** (vejtřaska, Tatra): 12,2 px/m v přiblížení 4×, políčko 14,84 m, kamera 30°
-  shora, světlo jako u Tatry se silnějšími stíny. Stín na trávu je v obrázku na 55 % (průhledně černý).
+  shora. Světlo je od 3. 10. měkké jako u sochy, stín na trávu je v obrázku na 20 % (průhledně černý); do té doby
+  bylo jako u Tatry se silnými stíny (viz „Méně stínů“ dole).
 - Tráva pod budovou je průhledná, je vidět tráva hry. Všechno je uvnitř pozemku.
 
 | soubor | co to je |
@@ -89,3 +90,16 @@ země, mezera a koruna“*, pak *„schody jsou dobře napasované, chybí jim b
 - Holky stojí, kde stály. Rohy v JSONu jsou stejné, 8× je pořád přesně dvojnásobek 4×.
 - Znovu vyfocené všechny čtyři obrázky: `gymnazium_zin4.png`, `gymnazium_postavy_zin4.png`, `gymnazium_zin8.png`,
   `gymnazium_postavy_zin8.png` (s holkami zase sloučené s obrázkem bez holek přes `postavy/animace.py`).
+
+## Méně stínů (3. 10.)
+
+Hráč: *„to jsou stíny, dáváš hodně stínů, už nefotíme tatru 148.“*
+
+- Gymnázium mělo světlo jako Tatra (slabé okolí 0,35, silné slunce 5, stín na trávu 55 %). Hráč ho u Tatry chtěl, aby
+  vynikla zaoblená kabina, u budovy z toho byly tmavé kouty u schodů, pod lavičkami a u stromů.
+- Teď je světlo měkké jako u sochy: okolí 0,9, slunce 2, stín na trávu 20 %. Celkový jas budovy je skoro stejný,
+  jen stíny jsou slabé. Tmavých pixelů (pod 40 z 255) je ve 4× 625 místo 3077, zbyla hlavně okna.
+- Znovu vyfocené všechny čtyři obrázky (`gymnazium_zin4.png`, `gymnazium_postavy_zin4.png`, `gymnazium_zin8.png`,
+  `gymnazium_postavy_zin8.png`, s holkami zase sloučené přes `postavy/animace.py`). Rohy v JSONu a velikost jsou
+  stejné, 8× je pořád přesně dvojnásobek 4×. Nové jsou i `nahled_ve_hre.png` a `animace_ve_hre.gif` (automat v něm
+  má světlo pořád jako dřív).
