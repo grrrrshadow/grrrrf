@@ -95,3 +95,19 @@ stín cesty (nesou jen holky, to je dobře).
 Co hra dělá s polem (hráč 3. 10.): kytky rostou jen s holkami (STUD): holé pole, po dodávce malé, po 28
 dnech péče vzrostlé; holky vidět 30 dní po dodávce jako u školy; bez holek pole za půl roku zpustne a
 přestane vyrábět. Řádek cesty není dlaždice průmyslu, hráč si na něj staví silnici a zastávku.
+
+### Doplnění od hráče (3. 10. večer): co jsem ubral a proč to píšu
+
+Hráč: *„když to odstraníš ty něco, tak mu to musíš říct, aby to tam nenasekal příště znova. Stíny má
+nastavený z focení Tatry a furt mu tam to nastavení naskakuje a musíme ubírat stín a předělávat.“*
+
+Co jsem ve vrstvách `prace_*_f2/f3` dočasně ubral (a pak vrátil, hra teď bere vaše soubory beze změny):
+- všechny pixely s alfou ≤ 30 – to byly **stíny kytek celého políčka**, které ve vrstvě holky nemají co
+  dělat (jsou už ve vrstvě `mari_male` / `mari_vzrostle`, položené pod ní; dvakrát = tmavší stín);
+- pixely shodné s vrstvou kytek – zbytky kytek před holkou.
+
+Příště prosím u vrstev holek (a každé přikládací vrstvy) **zkontrolovat nastavení stínů před renderem**:
+do vrstvy patří jen postava a její vlastní stín na zem (20 %), ne stín scény kolem. Hráč říká, že se vám
+vrací nastavení stínů z focení Tatry – to je nejspíš ono. Samotný obrázek `prace_char16_f3` je v pořádku,
+to 257 × 56 s rozházenými pixely byl můj neúplný odečet, ne vaše chyba; chybu ve vrstvách, kterou našel
+hráč sám, řeší s vámi on.
