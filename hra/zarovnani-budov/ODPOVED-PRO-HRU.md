@@ -212,3 +212,64 @@ Hráč: *„roztáhni ten povrch na kterém stojí holky až na políčko kde st
 
 - Ušlapaná hlína teď vede z dvorku až k domku. Změnilo se zase všech šest obrázků chatky (4× i 8×), prosím rozkrájet
   znovu. Rohy, velikost obrázků i JSON jsou stejné jako v předchozí verzi s menším domkem.
+
+## Pole po dlaždicích, limit plantáže, brambory jako GRF, socha (3. 10.)
+
+Hráč: *„pole marihuana, brambor, budou modulární skládáná. základ je jedno políčko bez kytky, dlaždice se bude opakovat.
+takhle první druhej a čtvrtej řádek pět stejných dlaždic a třetí řádek bude čtyři dlaždice cesty, opět stejné dlaždice
+a pátá dlaždice bude bouda na konci cesty. tu boudu můžeš zas přiložit jako kytky, dáš pátou dlaždici jen cestu
+a přiložime boudu. takhle bude mít pole tři fáze, bez kytek, s malýma kytkama a se vzrostlými smrčky marihuany“*.
+
+### Dlaždice (`pole/dlazdice/`, popis v `pole/README.md`)
+
+- Každý obrázek je **jedno políčko**, všechny mají stejný rám: ve 4× 264 × 200, rohy sever (132, 64), východ
+  (260, 128), západ (4, 128), jih (132, 192); v 8× 528 × 400 a všechno dvakrát. Rohy jsou i v JSONu u každého obrázku.
+- **Zem** (neprůhledná přesně v kosočtverci políčka, sousední dlaždice se nepřekrývají): `mari_zaklad` (pole
+  marihuany bez kytek), `bram_zaklad` (pole brambor bez natě), `cesta` (polní cesta podél x).
+- **Přikládací vrstvy** (jinde průhledné, nic nepřečuhuje pod přední hrany, jen nahoru): `mari_male`, `mari_vzrostle`,
+  `bram_male`, `bram_vzrostle`, `bouda` (kůlna a nádrže na konci cesty, kreslí se na dlaždici cesty), `holky_sz`
+  a `holky_jv` (dvě holky u severozápadního, nebo jihovýchodního okraje dlaždice cesty).
+- **Fáze:** 1 jen zem, 2 zem a malé kytky, 3 zem a vzrostlé smrčky. Dlaždice na sebe navazují (záhony podél x přes celé
+  políčko, rostliny v každém políčku na stejném místě), takže stačí jedna dlaždice na každý druh a opakuje se.
+- **Rozložení podle hráče:** plantáž 5 × 4 (x 0 až 4, y 0 až 3). Řádky y 0, 1 a 3 pole, řádek y 2 cesta: čtyři
+  dlaždice cesty a na konci (x 0) cesta s boudou. Náhled: `pole/dlazdice/nahled/marihuana_3faze.png`.
+- **Brambory:** hráč: *„to samé bramborové pole, uplně stejný na menší ploše, přikládat kytky. musime šetřit Mb“*.
+  Na náhledu 3 × 3 (y 0 a 2 pole, y 1 cesta s boudou na konci), cesta a bouda jsou stejné obrázky jako u marihuany.
+  Holky na bramborové pole zatím ne. Hráč: *„myslim že prumysl s bramborovým polem rozjedem tady jako grf“*, bramborový
+  průmysl tedy uděláme tady v grrrrf jako GRF.
+
+### Cesta je překrývající dlaždice (pod ní silnice)
+
+Hráč: *„takhle bude cesta prostředkem pole, vzor je overlaping titles z toho grf“* (ISR/DWE-style Objects II dirty,
+chujo, GPL v2), *„normálně tam bude tvoje nynější cesta a pod ní postavim silnici pro auta, proto potřebuju aby ta
+cesta v marihuanový plantáži byla overlaping, že tam je obrázek ale mužu pod obrázkem stavět … jsou tam takhle dělané
+i budovy. určitě to budem používat ještě někde“*, *„jedno poličko zaberou a druhé jen nakreslí ale zustane volné“*,
+*„cesta polem bude muset vyčuhovat z dlaždice prázdného pole bez kytky“*, zastávku si hráč postaví sám normálně na
+silnici.
+
+- **Jak to dělá ten GRF:** jsou to obyčejné objekty (252 objektů, žádné zvláštní příznaky). Překrývající obrázky jsou
+  větší než dlaždice nebo posunuté přes vedlejší políčko (třeba 96 × 47 místo 64 × 31 v 1×, nebo dlaždice posunutá
+  o půl políčka) a kreslí se jako placatá budova. Objekt stojí na svém políčku a vedlejší políčko jen přikreslí, to
+  zůstane volné a dá se na něm stavět silnice. Auta a zastávka se kreslí nad tím obrázkem.
+- **Pro plantáž:** obrázek `cesta` patří dlaždici pole vedle řádku cesty (zem prázdného pole je pod kytkami vždycky,
+  takže to platí ve všech fázích) a kreslí se posunutý o políčko přes řádek cesty. Řádek cesty zůstane volný pro
+  hráčovu silnici. Bouda na páté dlaždici sahá jen do půlky políčka na konci cesty (na slepém konci auta otáčejí
+  uprostřed).
+- **Šířka cesty:** auta jezdí ve dvou pruzích čtvrt políčka od středu (3,7 m), ujetá cesta je proto 9,8 m a koleje
+  jsou v pruzích, tráva 2,5 m po krajích. Holky (hráč: *„holky přikladej jen po stranách u kraje dlaždic cesty
+  polem“*) stojí na trávě u kraje, ne v pruzích.
+- **Holky a růst:** hráč: *„a proč to bude skládané, budem přikládat holky na marihuanové pole. když nepřijedou holky
+  hodně dlouho tak tam nic neporoste“*. To je logika pro vás: holky (vrstvy `holky_sz`, `holky_jv`) se ukazují, když
+  přijedou, a pole bez nich dlouho neroste.
+
+### Limit plantáže
+
+Hráč: *„plantaž dostane limit 10 poliček od gymnazia, automatu, hulirny a sochy, to tam napiš kolegovi ať na to
+nezapomenu mu to říct všechno.“* Plantáž tedy dostane limit 10 políček od gymnázia, automatu, hulírny a sochy
+(podle mě smí stát nejvýš 10 políček od nich, přesné pravidlo s hráčem dolaďte).
+
+### Socha: nápis
+
+Hráč: *„nápis roztáhni přes celou ceduli a zvýrazni ho ať je vidět, jiný odstín cedule a nápisu“*. Deska je tmavá,
+písmo světle zlaté přes celou desku. **Změnily se všechny obrázky sochy** (`socha/socha_*_zin4.png`, `…_zin8.png`,
+i s postavami). Rohy a velikost stejné, prosím rozkrájet znovu.
