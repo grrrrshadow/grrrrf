@@ -165,8 +165,8 @@ Obrázky jsou v `chatka/`, popis v `chatka/README.md`.
 - **Přikládací vrstvy:** stejná velikost a rohy jako obrázek bez holek, jinde průhledné. Co holky zakrývá domek,
   lavička nebo rostlina, je už vyříznuté, takže se vrstva kreslí jen navrch obrázku s domkem (rozkrájet ji stejně
   jako obrázek s domkem). Holky nemají stín. Kde holky ve vrstvě jsou, říká `holky_obdelnik` v JSONu (vlevo, nahoře,
-  vpravo, dole), kdybyste chtěli vrstvu oříznout: ve 4× stojící [108, 226, 172, 300], sedící [68, 235, 219, 281].
-  Holky jsou jen na dvorku (předním políčku).
+  vpravo, dole), kdybyste chtěli vrstvu oříznout: ve 4× stojící [108, 209, 240, 300], sedící [75, 234, 219, 281].
+  Holky jsou na dvorku (předním políčku), jedna stojící na zadním políčku před zdí domku.
 - **Kdy která vrstva**, je na vás a na hráči (třeba stojící, když přijíždí bus, sedící jindy). Hráč chce hlavně holku
   od kufru 1203 busu: *„když ji povezem tak tam pak musí být někde“*. Ta je v obou vrstvách (College Girl).
 - **Nic nepřečuhuje:** vrstvy nemají mimo pozemek ani pixel, obrázek s domkem jen okraj stínu s alfou nejvýš 9 z 255.
@@ -181,3 +181,14 @@ teď je měkce jako socha (stín na trávu 20 % místo 55 %, tmavé kouty u scho
 - **Změnily se zase všechny čtyři obrázky:** `gymnazium/gymnazium_zin4.png`, `gymnazium/gymnazium_postavy_zin4.png`,
   `gymnazium/gymnazium_zin8.png`, `gymnazium/gymnazium_postavy_zin8.png`. Prosím rozkrájet znovu (4× i 8×).
 - Rohy v JSONu, velikost obrázků i místa holek jsou stejné, 8× je přesně dvojnásobek 4×.
+
+## Chatka: třetí stojící holka a otočená Galaxia (3. 10.)
+
+Hráč: *„otoč tu holku čelem vzad. na západní lavičce“*, *„ještě jednu mužeš dát na obrázek kde stojí na druhé políčko
+k domku za severovýchodní lavičku ke dveřím domku“*, *„před popínavý rostliny na zdi ji postav“*.
+
+- **Změnily se jen vrstvy s holkami:** `chatka/chatka_stojici_zin4.png`, `chatka/chatka_stojici_zin8.png`,
+  `chatka/chatka_sedici_zin4.png`, `chatka/chatka_sedici_zin8.png` (a jejich `holky_obdelnik` v JSONu). Obrázek
+  s domkem je bit po bitu stejný, rohy i velikost taky.
+- Ve stojící vrstvě přibyla Galaxia na zadním políčku před zdí domku (popínavé rostliny vpravo od dveří), v sedící
+  vrstvě sedí Galaxia na západní lavičce čelem k dvorku (předtím seděla čelem k opěradlu).

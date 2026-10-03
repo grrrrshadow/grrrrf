@@ -240,8 +240,10 @@ sys.path.insert(0, os.path.join(TU, "..", "postavy"))
 import postavy as PO
 def do_sceny(meshe, kotva, gx, gy, gz, uhel):
     """postava (celem k -y, kotva = jeji bod) do bodu hry gx gy gz, celem ve smeru uhel (rad, v rovine hry x y)"""
-    # v Blenderu je smer hry (cos u, sin u) = (sin u, -cos u); postava kouka k -y Blenderu, otocit o (u - 90 st) zpet
-    M_ = Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(-uhel, 4, 'Z') @ Matrix.Scale(K, 4) @ Matrix.Translation(-kotva)
+    # v Blenderu je smer hry (cos u, sin u) = (sin u, -cos u); postava kouka k -y Blenderu = smer hry 0, otocit o +u
+    # (jako u sochy). Do 3. 10. tu bylo -u: sedici na lavicce celem k jihovychodu (Galaxia) sedela celem k operadlu,
+    # hrac: "otoc tu holku celem vzad. na zapadni lavicce". Stojici maji uhly takove, aby staly jako predtim.
+    M_ = Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Scale(K, 4) @ Matrix.Translation(-kotva)
     PO.postav(meshe, M_)
 def na_lavicku(meshe, kotva, lav, u):
     x, y, uhel = lav
@@ -249,12 +251,17 @@ def na_lavicku(meshe, kotva, lav, u):
     v = 0.05
     do_sceny(meshe, kotva, x + (u * -s + v * -c) * K, y + (u * c + v * -s) * K, 0.47 * K, uhel)
 STOJICI, SEDICI = [], []
-# stojici: holka od kufru 1203 (College Girl, ruce podel tela) pred dvermi, Character Girl s kabelkou prichazi brankou
+# stojici: holka od kufru 1203 (College Girl, ruce podel tela) na dvorku, Character Girl s kabelkou prichazi brankou
 cg = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")
-do_sceny(cg, Vector((0, 0, 0)), X0 + 2.6, 6.2, 0.012, math.radians(35)); STOJICI += cg
+do_sceny(cg, Vector((0, 0, 0)), X0 + 2.6, 6.2, 0.012, math.radians(-35)); STOJICI += cg
 ch = PO.nacti_stojici("character_people_girl_001", 1.68)
-do_sceny(ch, Vector((0, 0, 0)), X0 + 9.8, 7.4, 0.012, math.radians(200)); STOJICI += ch
-# sedici: College Girl a Character Girl na lavicce u domku, Galaxia na druhe
+do_sceny(ch, Vector((0, 0, 0)), X0 + 9.8, 7.4, 0.012, math.radians(-200)); STOJICI += ch     # = 160 st, ale cislo jako predtim
+# treti stojici, hrac 3. 10.: "jeste jednu ... na druhe policko k domku za severovychodni lavicku ke dverim domku",
+# "pred popinavy rostliny na zdi ji postav". Galaxia jako u automatu (ruce podel tela) na zadnim policku pred
+# brectanem na jihozapadni zdi vpravo od dveri (zed x 10,58, brectan u zeme y 6,8 az 9,4), celem k dvorku
+ga_st = PO.nacti_stojici("galaxia_anime_girl", 1.58, "ruce_dolu")
+do_sceny(ga_st, Vector((0, 0, 0)), 11.5, 8.1, 0.0, math.radians(25)); STOJICI += ga_st
+# sedici: College Girl a Character Girl na lavicce u domku, Galaxia na druhe (zapadni), vsechny celem od operadla
 cg2, k2 = PO.sedici("college_girl"); na_lavicku(cg2, k2, LAV_1, -0.42); SEDICI += cg2
 ch2, kc = PO.sedici("character_people_girl_001"); na_lavicku(ch2, kc, LAV_1, 0.4); SEDICI += ch2
 ga, kg = PO.sedici("galaxia_anime_girl"); na_lavicku(ga, kg, LAV_2, 0.1); SEDICI += ga

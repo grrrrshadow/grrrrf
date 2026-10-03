@@ -41,15 +41,17 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
 
 ## Holky (přikládací vrstvy)
 
-- **Stojící:** holka od kufru 1203 busu (College Girl, ruce podél těla) stojí na dvorku před dveřmi, holka
-  v tyrkysovém tílku s kabelkou (Character Girl) jde od branky k domku.
-- **Sedící:** College Girl a holka v tyrkysovém tílku na lavičce u domku, bělovlasá Galaxia na druhé lavičce.
+- **Stojící:** holka od kufru 1203 busu (College Girl, ruce podél těla) stojí na dvorku, holka v tyrkysovém tílku
+  s kabelkou (Character Girl) jde od branky k domku a bělovlasá Galaxia (ruce podél těla jako u automatu) stojí na
+  políčku s domkem za lavičkou u domku, vpravo od schůdků ke dveřím, před popínavými rostlinami na zdi.
+- **Sedící:** College Girl a holka v tyrkysovém tílku na lavičce u domku, Galaxia na západní lavičce. Všechny sedí
+  zády k opěradlu, čelem k dvorku.
 - **Ať se ušetří MB:** obrázek s domkem je jen jeden, holky jsou zvlášť. Vrstva má stejnou velikost a rohy jako
-  obrázek bez holek a všude, kde holky nejsou, je průhledná (PNG má 4 až 15 kB). Co holky zakrývá domek, lavička nebo
+  obrázek bez holek a všude, kde holky nejsou, je průhledná (PNG má 5 až 16 kB). Co holky zakrývá domek, lavička nebo
   rostlina, je z vrstvy vyříznuté, takže se vrstva jen položí navrch obrázku s domkem.
 - Holky nemají stín: ten by musel být v obrázku s domkem, kde holky nejsou.
 - `holky_obdelnik` v JSONu říká, kde ve vrstvě holky jsou (vlevo, nahoře, vpravo, dole), kdyby hra chtěla vrstvu
-  oříznout. Ve 4×: stojící [108, 226, 172, 300], sedící [68, 235, 219, 281].
+  oříznout. Ve 4×: stojící [108, 209, 240, 300], sedící [75, 234, 219, 281].
 
 ## Kontrola
 
@@ -66,3 +68,18 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
    minuty). `SAMPLES=32` na zkoušku, `NAHLED=1` rychlý náhled bez Cycles.
 3. Náhled ve hře: `python3 ../hra/nahled_ve_hre.py <výstup.png> chatka_zin4.png@45,16` (s holkami nejdřív položit
    vrstvu na obrázek s domkem a vedle dát kopii JSONu).
+
+## Galaxia otočená a třetí stojící holka (3. 10.)
+
+Hráč: *„na prostřednim obrázku otoč tu holku čelem vzad. na západní lavičce“*, pak *„ještě jednu mužeš dát na obrázek
+kde stojí na druhé políčko k domku za severovýchodní lavičku ke dveřím domku“* a *„před popínavý rostliny na zdi ji
+postav“*.
+
+- **Galaxia na západní lavičce** seděla čelem k opěradlu (nohy za ním zakryté). Chyba byla ve skriptu: postavy se
+  otáčely na opačnou stranu. U lavičky u domku to nebylo poznat, protože míří přesně k jihozápadu. Opraveno, teď sedí
+  čelem k dvorku. Stojící holky mají úhly upravené tak, aby stály stejně jako předtím.
+- **Třetí stojící holka:** Galaxia stojí na políčku s domkem, necelý metr od jihozápadní zdi těsně před
+  popínavými rostlinami (u země zabírají 2,6 m zdi mezi schůdky a rohem domku), čelem k dvorku.
+- Obrázek s domkem (`chatka_zin4.png`, `chatka_zin8.png`) je beze změny, bit po bitu stejný. Změnily se jen obě
+  vrstvy s holkami ve 4× i 8×: ve stojící přibyla Galaxia (dvě původní holky stojí na místě), v sedící je otočená
+  Galaxia (dvě holky na lavičce u domku jsou stejné). Nic nepřečuhuje, 8× zmenšené na půl odpovídá 4×.

@@ -345,8 +345,9 @@ RZD livery: textures from "Teplovoz-m62 РЖД" by Leafia dev.
   https://sketchfab.com/3d-models/a-little-happy-hut-045afe84e4c04400a34f0babab201378 , licence **CC BY 4.0**
   (podle metadat v souboru). Poslal ho hráč 3. 10. v chatu, v gitu není (`chatka/model/`, 11 MB).
 - **Holky** v přikládacích vrstvách (`chatka/chatka_stojici_zin*.png`, `chatka/chatka_sedici_zin*.png`): College Girl
-  (Rotmill) stojí před dveřmi a sedí na lavičce, Character People Girl 001 (kiemtruongkts) jde od branky a sedí na
-  lavičce, Galaxia anime girl (Tatenashi) sedí na druhé lavičce. Všechny CC BY 4.0, z `postavy/` jako u sochy.
+  (Rotmill) stojí na dvorku a sedí na lavičce, Character People Girl 001 (kiemtruongkts) jde od branky a sedí na
+  lavičce, Galaxia anime girl (Tatenashi) stojí před popínavými rostlinami na zdi domku a sedí na západní lavičce.
+  Všechny CC BY 4.0, z `postavy/` jako u sochy.
 - **Plot:** Cannabis Sativa plant (Zbrojmistrz) a Cannabis Plant (streetpharmacy), CC BY 4.0, z `rostliny/` jako
   u sochy.
 - Dvorek (hlína, lavičky, bedny, prkna, pneumatiky, kyblík, odpadky) je vlastní ze skriptu `chatka/render_chatka.py`.
