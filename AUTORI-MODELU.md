@@ -345,11 +345,11 @@ RZD livery: textures from "Teplovoz-m62 РЖД" by Leafia dev.
   https://sketchfab.com/3d-models/a-little-happy-hut-045afe84e4c04400a34f0babab201378 , licence **CC BY 4.0**
   (podle metadat v souboru). Poslal ho hráč 3. 10. v chatu, v gitu není (`chatka/model/`, 11 MB).
 - **Holky** v přikládacích vrstvách (`chatka/chatka_stojici_zin*.png`, `chatka/chatka_sedici_zin*.png`): College Girl
-  (Rotmill) stojí na dvorku a sedí na lavičce, Character People Girl 001 (kiemtruongkts) jde od branky a sedí na
-  lavičce, Galaxia anime girl (Tatenashi) stojí před popínavými rostlinami na zdi domku a sedí na západní lavičce.
+  (Rotmill) stojí na dvorku a sedí na lavičce, Character People Girl 001 (kiemtruongkts) jde od zdi domku (před
+  popínavými rostlinami) a sedí na lavičce, Galaxia anime girl (Tatenashi) stojí u branky a sedí na západní lavičce.
   Všechny CC BY 4.0, z `postavy/` jako u sochy.
-- **Plot:** Cannabis Sativa plant (Zbrojmistrz) a Cannabis Plant (streetpharmacy), CC BY 4.0, z `rostliny/` jako
-  u sochy.
+- **Plot a kytky kolem domku:** Cannabis Sativa plant (Zbrojmistrz) a Cannabis Plant (streetpharmacy), CC BY 4.0,
+  z `rostliny/` jako u sochy.
 - Dvorek (hlína, lavičky, bedny, prkna, pneumatiky, kyblík, odpadky) je vlastní ze skriptu `chatka/render_chatka.py`.
 
 Uvedení pro hru:
@@ -369,6 +369,6 @@ Plants: "Cannabis Sativa plant" by Zbrojmistrz
 "Cannabis Plant" by streetpharmacy
     https://sketchfab.com/3d-models/cannabis-plant-79fe78fd6c6a426b8584115e772a5818
 All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
-Changes: the hut scaled and turned, a yard with benches, junk and a fence of plants added, the figures posed
+Changes: the hut scaled and turned, a yard with benches, junk, plants and a fence of plants added, the figures posed
 (standing, sitting) and scaled, plants recoloured and scaled, rendered into the sprite.
 ```

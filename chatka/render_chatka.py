@@ -4,8 +4,10 @@
 # prilozenejma. chci tam hlavne tu holku co stoji u kufru dvanacetrojky bus", "velikost 1 policko ... muze to byt pres
 # dve policka nebo pres ctyri policka, to je jedno. ale holky prikladaci at usetrime Mb".
 # Domek: "A little happy hut" od Tigrana Safaryana (Sketchfab, CC BY 4.0, model/a_little_happy_hut.glb). Holky jsou jako
-# u sochy a u kufru 1203 dvakrat vetsi, domek je proto zvetseny tak, aby dvere (v modelu 76 jednotek) mely 3,35 m a holka
-# (College Girl 3,24 m) prosla; tim zabere cele zadni policko, vpredu je druhe policko s dvorkem.
+# u sochy a u kufru 1203 dvakrat vetsi, domek byl proto zvetseny tak, aby dvere (v modelu 76 jednotek) mely 3,35 m a holka
+# (College Girl 3,24 m) prosla; tim zabral cele zadni policko, vpredu je druhe policko s dvorkem. Od 3. 10. (hrac: "zmensi
+# domek a na usetrenem miste vysazej kytky okolo") je domek zmenseny na ZMENSENI (0,75, dvere 2,5 m), posunuty k severnimu
+# rohu a vpredu kolem nej jsou vyssi rostliny marihuany.
 # Souradnice jako ve hre: x k jihozapadu, y k jihovychodu, z nahoru, pocatek v severnim rohu pozemku (2 policka podel x:
 # x 0 az 2T, y 0 az T). Kamera, svetlo a slabe stiny jako u sochy (socha/render_socha.py).
 #   [ZIN=8] [SAMPLES=128] python3 render_chatka.py <vystupni adresar>      -> chatka[_stojici|_sedici]_zin4.png + .json
@@ -25,6 +27,8 @@ NAHLED = os.environ.get("NAHLED", "0") == "1"
 TU = os.path.dirname(os.path.abspath(__file__))
 HDRI = os.path.join(TU, "..", "glb", "GLB", "hdri", "snow.exr")
 DVERE_M, DVERE_J = 3.35, 76.0                  # vyska dveri v prizemi: chceme metry, v modelu jednotek
+ZMENSENI = float(os.environ.get("ZMENSENI", "0.75"))   # hrac 3. 10.: "zmensi domek" (dvere 3,35 m * 0,75 = 2,5 m)
+OKRAJ_D = 0.3                                  # zmenseny domek u severniho rohu: od zadnich hran pozemku
 os.makedirs(VYSTUP, exist_ok=True)
 
 def B(x, y, z=0.0):
@@ -117,7 +121,7 @@ meshe_d = [o for o in domek if o.type == 'MESH']
 bpy.context.view_layer.update()
 P = np.vstack([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in meshe_d])
 mn_d, mx_d = P.min(axis=0), P.max(axis=0)
-S_D = DVERE_M / DVERE_J
+S_D = DVERE_M / DVERE_J * ZMENSENI
 stred_d = (mn_d + mx_d) / 2
 # otoceni o 90 st: dvere (stena -x modelu) k jihozapadu na dvorek, schody (strana -y modelu) k jihovychodu k divakovi
 obal = bpy.data.objects.new("domek", None); scene.collection.objects.link(obal)
@@ -129,8 +133,26 @@ bpy.context.view_layer.update()
 P = np.vstack([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in meshe_d])
 # v souradnicich hry: x = -Blender y, y = Blender x
 hx0, hx1, hy0, hy1 = -P[:, 1].max(), -P[:, 1].min(), P[:, 0].min(), P[:, 0].max()
+# hrac: "domek i s holkou u dveri posunem smerem od lavicky na usetrene misto": k severnimu rohu, usetrene misto je pak
+# jen vpredu u jihozapadni a jihovychodni strany (tam kytky), vzadu nic
+POSUN_D = (OKRAJ_D - hx0, OKRAJ_D - hy0)
+obal.matrix_world = Matrix.Translation(B(POSUN_D[0], POSUN_D[1], 0.0)) @ obal.matrix_world
+bpy.context.view_layer.update()
+P = np.vstack([np.array([o.matrix_world @ v.co for v in o.data.vertices]) for o in meshe_d])
+hx0, hx1, hy0, hy1 = -P[:, 1].max(), -P[:, 1].min(), P[:, 0].min(), P[:, 0].max()
 print(f"domek: meritko {S_D:.5f} m/jednotku, x {hx0:.2f}..{hx1:.2f}, y {hy0:.2f}..{hy1:.2f}, vyska {P[:, 2].max():.2f} m", flush=True)
 DOMEK = list(meshe_d)
+def body_hry(o, z_max=None):
+    """vrcholy objektu v souradnicich hry (x, y, z), pripadne jen do vysky z_max"""
+    a = np.zeros(len(o.data.vertices) * 3); o.data.vertices.foreach_get("co", a)
+    Q = (np.c_[a.reshape(-1, 3), np.ones(len(a) // 3)] @ np.array(o.matrix_world).T)[:, :3]
+    Q = np.c_[-Q[:, 1], Q[:, 0], Q[:, 2]]
+    return Q if z_max is None else Q[Q[:, 2] < z_max]
+# misto holky u zdi: pred popinavymi rostlinami na jihozapadni zdi vpravo od dveri (sit "Ivy_", "Ivy 2" je vzadu),
+# 0,75 m pred listy u zeme, uprostred jejich sirky
+Q = body_hry([o for o in meshe_d if o.name.startswith("Ivy_")][0], 2.0)
+U_ZDI = (float(Q[:, 0].max()) + 0.75, float((Q[:, 1].min() + Q[:, 1].max()) / 2))
+print("holka u zdi", tuple(round(v, 2) for v in U_ZDI), flush=True)
 
 # ---------------------------------------------------------------- dvorek: uslapana zem, lavicky, neporadek
 X0 = T                                           # dvorek: x T az 2T, y 0 az T
@@ -216,7 +238,7 @@ sys.path.insert(0, os.path.join(TU, "..", "rostliny"))
 import rostliny as RO
 KOSATA = RO.nacti("cannabis_sativa_plant"); STIHLA = RO.nacti("cannabis_plant")
 rnd_p = random.Random(23)
-ROSTLINY = []
+ROSTLINY = []; PLOT_BODY = []
 def rada(body_od, body_do, krok, vynechat):
     """rostliny v rade od-do po kroku, indexy ve `vynechat` jsou diry"""
     (xa, ya), (xb, yb) = body_od, body_do
@@ -228,12 +250,59 @@ def rada(body_od, body_do, krok, vynechat):
         vys = rnd_p.uniform(1.0, 1.3) * K                     # nizke smrcky: skutecne 1 az 1,3 m
         druh = KOSATA if rnd_p.random() < 0.7 else STIHLA
         ROSTLINY.extend(RO.postav(druh[0], druh[1], Matrix.Translation(B(x, y, 0)), vys, 0.42 * K, rnd_p.random() * 6.3))
+        PLOT_BODY.append((x, y))
 OKRAJ = 1.0                                                   # stred rostliny od hrany pozemku (koruna 0,42*K = 0,84 m, posun 0,12)
 # jihovychodni hrana celeho pozemku (vpredu vpravo), jihozapadni hrana dvorku (vpredu vlevo), severozapadni hrana dvorku
 rada((OKRAJ + 0.4, T - OKRAJ), (2 * T - OKRAJ, T - OKRAJ), 1.45, {3, 11, 16})
 rada((2 * T - OKRAJ, OKRAJ), (2 * T - OKRAJ, T - OKRAJ - 1.0), 1.45, {4, 5})          # siroka dira = branka k dverim
 rada((X0 + 0.6, OKRAJ), (2 * T - OKRAJ - 1.0, OKRAJ), 1.45, {6})
-print("rostlin v plotu:", len(ROSTLINY) // max(1, len(KOSATA[0])), flush=True)
+print("rostlin v plotu:", len(PLOT_BODY), flush=True)
+
+# ---------------------------------------------------------------- kytky kolem zmenseneho domku
+# Hrac 3. 10.: "na usetrenem miste vysazej kytky okolo. za domek kytky nesazej". Rostliny marihuany jako v plotu, jen
+# vyssi (skutecne 1,1 az 1,7 m), na usetrenem miste pred jihozapadni a jihovychodni stranou domku: ne do domku a za nej,
+# ne ke zdem, schudkum a sloupkum, ne pod schody, balkon a strisku, ne na cestu od schudku ke dverim a od paty schodu
+# na balkon na dvorek a ne mezi kameru a holku u zdi.
+from mathutils import kdtree
+dum_zem = np.vstack([body_hry(o, 1.5)[::2, :2] for o in meshe_d])
+kd = kdtree.KDTree(len(dum_zem))
+for i, (x, y) in enumerate(dum_zem): kd.insert((x, y, 0.0), i)
+kd.balance()
+dg = bpy.context.evaluated_depsgraph_get()
+def nad_hlavou(x, y):
+    """jak vysoko je nad bodem neco z domku (schody, balkon, striska, strecha), jinak nekonecno"""
+    hit, loc, _, _, ob, _ = scene.ray_cast(dg, B(x, y, 0.05), Vector((0, 0, 1)))
+    return loc.z if hit and ob in meshe_d else float("inf")
+def z_puvodniho(x, y):
+    """bod domku v puvodni velikosti a poloze (do 3. 10.) -> na zmenseny a posunuty domek"""
+    return (C_D[0] + POSUN_D[0] + (x - C_D[0]) * ZMENSENI, C_D[1] + POSUN_D[1] + (y - C_D[1]) * ZMENSENI)
+ZED_X, ZED_Y = z_puvodniho(10.58, 9.5)                                        # jihozapadni zed a jihovychodni roh
+sx, sy0 = z_puvodniho(12.72, 3.5); _, sy1 = z_puvodniho(12.72, 6.25)          # schudky ke dverim (kraj, sirka)
+px_, py0 = z_puvodniho(14.18, 12.0); _, py1 = z_puvodniho(14.18, 14.5)       # pata schodu na balkon
+CESTY = [(sx - 0.3, T + 1.0, sy0 - 0.5, sy1 + 0.5), (px_ - 0.6, T + 1.0, py0 - 0.5, py1 + 0.5)]
+def pred_holkou(x, y):
+    """zakryla by rostlina holku u zdi? kamera je ve smeru +x +y, 30 st. nad zemi"""
+    dx, dy = x - U_ZDI[0], y - U_ZDI[1]
+    vpred, bok = (dx + dy) / math.sqrt(2), abs(dx - dy) / math.sqrt(2)
+    return math.hypot(dx, dy) < 1.3 or (0 < vpred < 6.0 and bok < 1.5)
+rnd_k = random.Random(31)
+KYTKY = []
+for i in range(int(T / 1.3) + 1):
+    for j in range(int(T / 1.3) + 1):
+        x, y = 0.7 + i * 1.3 + rnd_k.uniform(-0.25, 0.25), 0.7 + j * 1.3 + rnd_k.uniform(-0.25, 0.25)
+        vys = rnd_k.uniform(1.1, 1.7) * K
+        if x > T - 0.35 or y > T - OKRAJ - 1.35: continue                     # jen zadni policko, ne do plotu
+        if x < ZED_X + 0.3 and y < ZED_Y + 0.3: continue                        # v domku nebo za nim
+        if kd.find((x, y, 0.0))[2] < 0.8: continue                             # ke zdem, schudkum, sloupkum
+        if any(a <= x <= b and c <= y <= d for a, b, c, d in CESTY): continue
+        if pred_holkou(x, y): continue
+        if min(math.hypot(x - qx, y - qy) for qx, qy in PLOT_BODY) < 1.3: continue
+        if min(nad_hlavou(x + ox, y + oy) for ox, oy in ((0, 0), (0.6, 0), (-0.6, 0), (0, 0.6), (0, -0.6))) < vys + 0.3:
+            continue                                                            # pod schody, balkonem, striskou
+        druh = KOSATA if rnd_k.random() < 0.6 else STIHLA
+        ROSTLINY.extend(RO.postav(druh[0], druh[1], Matrix.Translation(B(x, y, 0)), vys, 0.36 * K, rnd_k.random() * 6.3))
+        KYTKY.append((round(x, 2), round(y, 2)))
+print("kytek kolem domku:", len(KYTKY), KYTKY, flush=True)
 
 # ---------------------------------------------------------------- holky (prikladaci vrstvy)
 sys.path.insert(0, os.path.join(TU, "..", "postavy"))
@@ -251,16 +320,17 @@ def na_lavicku(meshe, kotva, lav, u):
     v = 0.05
     do_sceny(meshe, kotva, x + (u * -s + v * -c) * K, y + (u * c + v * -s) * K, 0.47 * K, uhel)
 STOJICI, SEDICI = [], []
-# stojici: holka od kufru 1203 (College Girl, ruce podel tela) na dvorku, Character Girl s kabelkou prichazi brankou
+# stojici: holka od kufru 1203 (College Girl, ruce podel tela) na dvorku. U zdi domku pred popinavymi rostlinami vpravo
+# od dveri (hrac 3. 10.: "jeste jednu ... za severovychodni lavicku ke dverim domku", "pred popinavy rostliny na zdi
+# ji postav") jde Character Girl s kabelkou, celem k divakovi (hrac: "ke zdi dej jinou ne tu colege, dej tam tu co chodi
+# na jihozapadu. ta bila holka splyva se zdi"). Bila Galaxia (ruce podel tela jako u automatu) stoji misto ni u branky
+# na hline.
 cg = PO.nacti_stojici("college_girl", 1.62, "ruce_dolu")
 do_sceny(cg, Vector((0, 0, 0)), X0 + 2.6, 6.2, 0.012, math.radians(-35)); STOJICI += cg
 ch = PO.nacti_stojici("character_people_girl_001", 1.68)
-do_sceny(ch, Vector((0, 0, 0)), X0 + 9.8, 7.4, 0.012, math.radians(-200)); STOJICI += ch     # = 160 st, ale cislo jako predtim
-# treti stojici, hrac 3. 10.: "jeste jednu ... na druhe policko k domku za severovychodni lavicku ke dverim domku",
-# "pred popinavy rostliny na zdi ji postav". Galaxia jako u automatu (ruce podel tela) na zadnim policku pred
-# brectanem na jihozapadni zdi vpravo od dveri (zed x 10,58, brectan u zeme y 6,8 az 9,4), celem k dvorku
+do_sceny(ch, Vector((0, 0, 0)), U_ZDI[0], U_ZDI[1], 0.0, math.radians(45)); STOJICI += ch
 ga_st = PO.nacti_stojici("galaxia_anime_girl", 1.58, "ruce_dolu")
-do_sceny(ga_st, Vector((0, 0, 0)), 11.5, 8.1, 0.0, math.radians(25)); STOJICI += ga_st
+do_sceny(ga_st, Vector((0, 0, 0)), X0 + 9.8, 7.4, 0.012, math.radians(120)); STOJICI += ga_st
 # sedici: College Girl a Character Girl na lavicce u domku, Galaxia na druhe (zapadni), vsechny celem od operadla
 cg2, k2 = PO.sedici("college_girl"); na_lavicku(cg2, k2, LAV_1, -0.42); SEDICI += cg2
 ch2, kc = PO.sedici("character_people_girl_001"); na_lavicku(ch2, kc, LAV_1, 0.4); SEDICI += ch2

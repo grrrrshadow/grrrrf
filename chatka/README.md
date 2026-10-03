@@ -9,13 +9,16 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
   https://sketchfab.com/3d-models/a-little-happy-hut-045afe84e4c04400a34f0babab201378 ), poslal ho hráč 3. 10.
   V gitu není (11 MB), patří do `model/a_little_happy_hut.glb` (md5 `d6cc13aa08652713f703ff08ad84a517`). Domek se
   nemění, jen se zvětší a otočí: dveře na dvorek, schody na balkon k divákovi.
-- **Proč 2 políčka:** holky jsou jako u sochy a u kufru 1203 dvakrát větší (College Girl má 3,24 m). Aby holka prošla
-  dveřmi, mají dveře 3,35 m. Domek pak má 14,7 × 14,6 m a 16,6 m na výšku, tedy sám zabere celé jedno políčko.
-  Lavičky a nepořádek jsou na druhém políčku (vpředu vlevo), to je dvorek. Kdyby bylo všechno na jednom políčku,
-  musel by být domek menší a holky by byly větší než dveře.
-- **Dvorek:** ušlapaná hlína, dvě lavičky jako u sochy (dvakrát větší), nepořádek: dvě bedny na sobě, převrhlá
-  bedna, hromada prken, dvě pneumatiky, kyblík a asi sto odpadků (papíry, plechovky, lahve, kelímky, sáčky, zelené
-  balíčky).
+- **Velikost:** holky jsou jako u sochy a u kufru 1203 dvakrát větší (College Girl má 3,24 m). Domek byl nejdřív tak
+  velký, aby holka prošla dveřmi (dveře 3,35 m, domek 14,7 × 14,6 m, 16,6 m na výšku, celé jedno políčko). Hráč pak
+  chtěl menší, takže je zmenšený na tři čtvrtiny: 11 × 11 m, 12,4 m na výšku, dveře 2,5 m. Stojí v severním rohu
+  zadního políčka, 0,3 m od zadních hran.
+- **Kytky kolem domku:** 19 vyšších rostlin marihuany (stejné jako v plotu, skutečně 1,1 až 1,7 m, na obrázku dvakrát
+  větší) na uvolněném místě před jihozápadní a jihovýchodní stranou domku. Za domkem nejsou, nestojí na cestě od
+  schůdků ke dveřím ani od paty schodů na balkon a nezakrývají holku u zdi.
+- **Dvorek** (přední políčko): ušlapaná hlína, dvě lavičky jako u sochy (dvakrát větší), nepořádek: dvě bedny na sobě,
+  převrhlá bedna, hromada prken, dvě pneumatiky, kyblík a asi sto odpadků (papíry, plechovky, lahve, kelímky, sáčky,
+  zelené balíčky).
 - **Plot:** 31 nízkých rostlin marihuany místo plotu (Cannabis Sativa plant a Cannabis Plant jako u sochy, skutečně
   1 až 1,3 m, na obrázku dvakrát větší) podél přední pravé hrany celého pozemku a kolem dvorku. Sem tam je díra,
   vlevo široká jako branka k dveřím.
@@ -25,25 +28,26 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
 
 | soubor | co to je |
 |---|---|
-| `chatka_zin4.png` | chatka bez holek, 400 × 360 px, 32 bpp s průhledností, přiblížení 4× |
+| `chatka_zin4.png` | chatka bez holek, 400 × 320 px, 32 bpp s průhledností, přiblížení 4× |
 | `chatka_stojici_zin4.png` | přikládací vrstva se stojícími holkami, stejně velká, jinde průhledná |
 | `chatka_sedici_zin4.png` | přikládací vrstva se sedícími holkami |
-| `chatka_zin8.png`, `chatka_stojici_zin8.png`, `chatka_sedici_zin8.png` | totéž v 8× (jen naše hra, `zin8`), 800 × 720 px, přesně dvojnásobek 4× |
+| `chatka_zin8.png`, `chatka_stojici_zin8.png`, `chatka_sedici_zin8.png` | totéž v 8× (jen naše hra, `zin8`), 800 × 640 px, přesně dvojnásobek 4× |
 | `*.json` | rohy pozemku na obrázku (`rohy`), počet políček (`policek`: 2 podél x, 1 podél y), u vrstev i `holky_obdelnik` |
 | `nahled_ve_hre.png` | chatka se stojícími holkami ve fotce ze zkušební hry (políčka 45–46 × 16) |
 | `animace_ve_hre.gif` | totéž, střídá se bez holek, stojící a sedící |
 
-- **Rohy pozemku ve 4×:** sever (264, 160), východ (392, 224), západ (8, 288), jih (136, 352). V 8× je všechno
-  dvakrát: (528, 320), (784, 448), (16, 576), (272, 704).
-- Pozemek jsou 2 políčka podél x (k jihozápadu) a 1 podél y. Zadní políčko (u severního rohu) je domek, přední
-  (u západního rohu) dvorek.
+- **Rohy pozemku ve 4×:** sever (264, 120), východ (392, 184), západ (8, 248), jih (136, 312). V 8× je všechno
+  dvakrát: (528, 240), (784, 368), (16, 496), (272, 624).
+- Pozemek jsou 2 políčka podél x (k jihozápadu) a 1 podél y. Zadní políčko (u severního rohu) je domek s kytkami,
+  přední (u západního rohu) dvorek.
 - Render 2 : 1, políčko 256 × 128 px (ve 4×), severní roh na celém pixelu dělitelném 4, jako gymnázium a pole.
 
 ## Holky (přikládací vrstvy)
 
-- **Stojící:** holka od kufru 1203 busu (College Girl, ruce podél těla) stojí na dvorku, holka v tyrkysovém tílku
-  s kabelkou (Character Girl) jde od branky k domku a bělovlasá Galaxia (ruce podél těla jako u automatu) stojí na
-  políčku s domkem za lavičkou u domku, vpravo od schůdků ke dveřím, před popínavými rostlinami na zdi.
+- **Stojící:** holka od kufru 1203 busu (College Girl, ruce podél těla) stojí na dvorku. Holka v tyrkysovém tílku
+  s kabelkou (Character Girl) jde od zdi domku: stojí za lavičkou u domku, vpravo od schůdků ke dveřím, před
+  popínavými rostlinami na zdi, čelem k divákovi. Bělovlasá Galaxia (ruce podél těla jako u automatu) stojí u branky
+  na hlíně.
 - **Sedící:** College Girl a holka v tyrkysovém tílku na lavičce u domku, Galaxia na západní lavičce. Všechny sedí
   zády k opěradlu, čelem k dvorku.
 - **Ať se ušetří MB:** obrázek s domkem je jen jeden, holky jsou zvlášť. Vrstva má stejnou velikost a rohy jako
@@ -51,7 +55,7 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
   rostlina, je z vrstvy vyříznuté, takže se vrstva jen položí navrch obrázku s domkem.
 - Holky nemají stín: ten by musel být v obrázku s domkem, kde holky nejsou.
 - `holky_obdelnik` v JSONu říká, kde ve vrstvě holky jsou (vlevo, nahoře, vpravo, dole), kdyby hra chtěla vrstvu
-  oříznout. Ve 4×: stojící [108, 209, 240, 300], sedící [75, 234, 219, 281].
+  oříznout. Ve 4×: stojící [110, 150, 245, 259], sedící [75, 194, 219, 241].
 
 ## Kontrola
 
@@ -65,7 +69,8 @@ to být přes dvě políčka nebo přes čtyři políčka, to je jedno. ale holk
 
 1. Model do `model/a_little_happy_hut.glb` (ze Sketchfabu, odkaz výš).
 2. `python3 render_chatka.py <adresář>` (4×, asi minuta) a `ZIN=8 python3 render_chatka.py <adresář>` (8×, asi dvě
-   minuty). `SAMPLES=32` na zkoušku, `NAHLED=1` rychlý náhled bez Cycles.
+   minuty). `SAMPLES=32` na zkoušku, `NAHLED=1` rychlý náhled bez Cycles. `ZMENSENI` je velikost domku proti
+   původní (teď 0,75); kytky, holka u zdi a cesty se podle ní posunou samy.
 3. Náhled ve hře: `python3 ../hra/nahled_ve_hre.py <výstup.png> chatka_zin4.png@45,16` (s holkami nejdřív položit
    vrstvu na obrázek s domkem a vedle dát kopii JSONu).
 
@@ -77,9 +82,19 @@ postav“*.
 
 - **Galaxia na západní lavičce** seděla čelem k opěradlu (nohy za ním zakryté). Chyba byla ve skriptu: postavy se
   otáčely na opačnou stranu. U lavičky u domku to nebylo poznat, protože míří přesně k jihozápadu. Opraveno, teď sedí
-  čelem k dvorku. Stojící holky mají úhly upravené tak, aby stály stejně jako předtím.
-- **Třetí stojící holka:** Galaxia stojí na políčku s domkem, necelý metr od jihozápadní zdi těsně před
-  popínavými rostlinami (u země zabírají 2,6 m zdi mezi schůdky a rohem domku), čelem k dvorku.
-- Obrázek s domkem (`chatka_zin4.png`, `chatka_zin8.png`) je beze změny, bit po bitu stejný. Změnily se jen obě
-  vrstvy s holkami ve 4× i 8×: ve stojící přibyla Galaxia (dvě původní holky stojí na místě), v sedící je otočená
-  Galaxia (dvě holky na lavičce u domku jsou stejné). Nic nepřečuhuje, 8× zmenšené na půl odpovídá 4×.
+  čelem k dvorku.
+- **Třetí stojící holka** u zdi před popínavými rostlinami byla nejdřív Galaxia (viz další oddíl).
+
+## Menší domek s kytkami a jiná holka u zdi (3. 10.)
+
+Hráč: *„teď zmenši domek a na ušetřeném místě vysázej kytky okolo. za domek kytky nesázej, domek i s holkou u dveří
+posunem směrem od lavičky na ušetřené místo. ke zdi dej jinou ne tu colege, dej tam tu co chodí na jihozapadu. ta bílá
+holka splývá se zdí“*.
+
+- Domek je zmenšený na tři čtvrtiny a posunutý dozadu do severního rohu, dál od lavičky. Uvolněné místo je vpředu
+  u jihozápadní a jihovýchodní strany a jsou tam kytky (rostliny marihuany), za domkem žádné.
+- U zdi před popínavými rostlinami stojí místo bílé Galaxie holka v tyrkysovém tílku, která chodila na jihozápadě
+  u branky. Posunula se s domkem, stojí zase těsně před rostlinami na zdi.
+- Galaxia stojí na jejím místě u branky, na hnědé hlíně nesplývá.
+- Změnilo se všechno: obrázek s domkem je nižší (400 × 320 místo 400 × 360, v 8× 800 × 640), rohy v JSONu jsou jinde
+  (o 40 px výš ve 4×) a obě vrstvy s holkami jsou nové.

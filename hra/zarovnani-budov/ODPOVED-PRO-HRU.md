@@ -192,3 +192,16 @@ k domku za severovýchodní lavičku ke dveřím domku“*, *„před popínavý
   s domkem je bit po bitu stejný, rohy i velikost taky.
 - Ve stojící vrstvě přibyla Galaxia na zadním políčku před zdí domku (popínavé rostliny vpravo od dveří), v sedící
   vrstvě sedí Galaxia na západní lavičce čelem k dvorku (předtím seděla čelem k opěradlu).
+
+## Chatka: menší domek s kytkami, jiné rohy (3. 10.)
+
+Hráč: *„teď zmenši domek a na ušetřeném místě vysázej kytky okolo. za domek kytky nesázej, domek i s holkou u dveří
+posunem směrem od lavičky na ušetřené místo. ke zdi dej jinou ne tu colege, dej tam tu co chodí na jihozapadu“*.
+
+- **Změnilo se všech šest obrázků chatky** (`chatka/chatka_zin4.png`, `chatka_stojici_zin4.png`,
+  `chatka_sedici_zin4.png` a totéž `_zin8`). Prosím rozkrájet znovu.
+- **Obrázek je nižší a rohy jsou jinde:** 400 × 320 (8× 800 × 640), rohy ve 4× sever (264, 120), východ (392, 184),
+  západ (8, 248), jih (136, 312), v 8× dvojnásobek. Pozemek je pořád 2 × 1 políčko, jen domek je menší.
+- Domek je zmenšený na tři čtvrtiny a stojí v severním rohu zadního políčka, kolem něj vpředu jsou rostliny
+  marihuany. U zdi domku stojí holka v tyrkysovém tílku (Character Girl), Galaxia je místo ní u branky.
+- `holky_obdelnik` ve 4×: stojící [110, 150, 245, 259], sedící [75, 194, 219, 241]. Nic nepřečuhuje.
