@@ -9,6 +9,7 @@
 #   - kotva (bod na koleji pod stredem lokomotivy) spoctena promitnutim, ne odhadem
 #   - ZIN=8: obrazky 8x (zin8) pro nasi hru, dvojnasobne px/m i ram, zbytek stejny; do GRF jdou k 4x
 #   - natier rzd: textury РЖД z par8 (nater.rzd), SMERY=1,3 vyfoti jen nektere smery (zkousky)
+#   - rez (od v9 jen CSD, REZ=0 bez ni, REZ_LADENI=<maska> ukaze masku zelene misto barvy)
 # Spousti se:  [ZIN=8] python3 render_sergej.py <natier: zeleny|cerveny|rzd> <px_na_m (4x)> <osmin: 12|14> <vystup>
 import bpy, os, sys, math, json
 import numpy as np
@@ -93,7 +94,12 @@ koren.parent = natah; koren.matrix_parent_inverse = natah.matrix_world.inverted(
 # plochy pod spodni hranou boku (1,55 m): kola, podvozky, ram, nadrz, skrine, spojka. Lak (zelena, cervena, pruhy, sedy pas
 # RZD na boku) se nemeni. Souradnice v prostoru natahovace (puvodni metry modelu od stredu), takze rez je u vsech smeru
 # na stejnem miste. REZ=0 bez rzi.
-REZ = os.environ.get("REZ", "1") == "1"
+# Od v9 (hrac 3. 10.): rez jen na CSD ("mezinarodni a masu jsi nemel delat rezate ... nech jak byly"), a strecha jen lehce
+# jako stopy po vode: "pruhy na strese od boku k boku s epicentrem na vrchu strechy", "ten cernej velkej flek to muze byt
+# rezaty a cary koroze z toho", vzor CZTR 810 Unifik Rez. Podvozek CSD zustava tmavy olejovy jako ve v8.
+REZ = os.environ.get("REZ", "1") == "1" and NATER == "cerveny"
+VYFUK_Y, VYFUK_X = (-2.96, -2.74), 0.46        # cerna skvrna na strese (otvor vyfuku), metry od stredu modelu
+POL_SIRKY = 1.48                                # pul sirky strechy
 Z_STRECHA, Z_PODVOZEK = 3.50, 1.55
 BEZ_REZU = {"phong3", "phong4", "phong5", "phong9", "phong12"}   # kabina a strojovna za okny, sklo, zaluzie
 TELO = {"phong1", "phong10"}                                       # textura tela (Image_0): strecha i podle radku textury
@@ -147,14 +153,53 @@ def zrezivet(mat):
         pod = mat_('MULTIPLY', pod, mimo_cela)
     strecha = mat_('MULTIPLY', nad, sedost); dole = mat_('MULTIPLY', pod, sedost)
     p = tc.outputs["Object"]
-    # strecha: rez od tmave hnede po oranzovou ve skvrnach, misty prosvita seda; kresba textury (spary, spina) zustava
-    rez_s = rampa(sum_(p, 2.8, 8.0, (3.1, 7.7, 1.3)), [(0.30, (78, 42, 24)), (0.50, (118, 62, 32)), (0.66, (150, 84, 42)), (0.82, (104, 76, 58))])
+    x = xyz.outputs["X"]; y = xyz.outputs["Y"]
+    def vek(meritko, posun):                                          # protazene souradnice pro sum
+        m = N.new("ShaderNodeVectorMath"); m.operation = 'MULTIPLY'; m.inputs[1].default_value = meritko; Lk.new(p, m.inputs[0])
+        s = N.new("ShaderNodeVectorMath"); s.operation = 'ADD'; s.inputs[1].default_value = posun; Lk.new(m.outputs[0], s.inputs[0])
+        return s.outputs[0]
+    def sum2(v, detail, zkresleni=0.0):
+        s = N.new("ShaderNodeTexNoise"); s.inputs["Scale"].default_value = 1.0; s.inputs["Detail"].default_value = detail
+        s.inputs["Roughness"].default_value = 0.6; s.inputs["Distortion"].default_value = zkresleni
+        Lk.new(v, s.inputs["Vector"]); return s.outputs["Fac"]
+    # strecha (v9): stopy po vode. a = jak daleko od hrebene (0 nahore uprostred, 1 na okraji strechy)
+    a = mapa(mat_('ABSOLUTE', x, hodnota=0.0), 0.0, POL_SIRKY, 0.0, 1.0)
+    # struzky napric strechou: sum protazeny podel delky (11x hustsi podel Y nez napric), tenke pruhy od hrebene k bokum
+    struzka = mapa(sum2(vek((0.25, 4.6, 0.25), (2.3, 0.7, 5.1)), 2.0, 0.3), 0.52, 0.62, 0.0, 1.0)
+    # kazda struzka jinak dlouha: dosah od hrebene dolu (podil pul sirky), nahore silnejsi nez dole
+    dosah = mapa(sum2(vek((0.0, 2.1, 0.0), (7.7, 3.3, 1.9)), 1.0), 0.35, 0.65, 0.30, 1.05)
+    konec = mapa(mat_('SUBTRACT', dosah, a), -0.04, 0.10, 0.0, 1.0)
+    vrch = mapa(a, 0.0, 1.0, 1.0, 0.5)
+    f_str = mat_('MULTIPLY', mat_('MULTIPLY', struzka, konec), mat_('MULTIPLY', vrch, None, 0.70))
+    # na hrebeni, kde voda stoji, lehky nadech rzi v ostruvcich
+    hreben = mat_('MULTIPLY', mapa(a, 0.05, 0.40, 1.0, 0.0), mapa(sum2(vek((1.6, 1.3, 1.6), (4.4, 9.9, 2.2)), 3.0), 0.42, 0.68, 0.0, 0.45))
+    # cerna skvrna (vyfuk): sama rezava, kolem ni rezavy lem a z ni hustsi struzky az k okrajum strechy
+    vy0, vy1 = VYFUK_Y
+    dy = mat_('MAXIMUM', mat_('SUBTRACT', mat_('ABSOLUTE', mat_('SUBTRACT', y, None, (vy0 + vy1) / 2), hodnota=0.0), None, (vy1 - vy0) / 2), None, 0.0)
+    dx = mat_('MAXIMUM', mat_('SUBTRACT', mat_('ABSOLUTE', x, hodnota=0.0), None, VYFUK_X), None, 0.0)
+    vzd = N.new("ShaderNodeVectorMath"); vzd.operation = 'LENGTH'
+    kom = N.new("ShaderNodeCombineXYZ"); Lk.new(dx, kom.inputs[0]); Lk.new(dy, kom.inputs[1]); Lk.new(kom.outputs[0], vzd.inputs[0])
+    vzd = vzd.outputs["Value"]
+    skvrna = mat_('MULTIPLY', mapa(vzd, 0.0, 0.03, 1.0, 0.0), mapa(sum2(vek((6.0, 6.0, 6.0), (1.2, 8.8, 3.4)), 4.0), 0.30, 0.60, 0.55, 0.85))
+    lem = mat_('MULTIPLY', mapa(vzd, 0.02, 0.35, 0.6, 0.0), mapa(sum2(vek((4.0, 4.0, 4.0), (6.1, 2.2, 7.3)), 4.0), 0.40, 0.65, 0.0, 1.0))
+    pas_vyfuku = mapa(dy, 0.0, 0.55, 1.0, 0.0)                     # u vyfuku struzky hustsi a az dolu
+    struzka2 = mapa(sum2(vek((0.25, 4.6, 0.25), (2.3, 0.7, 5.1)), 2.0, 0.3), 0.47, 0.58, 0.0, 1.0)
+    f_vyf = mat_('MULTIPLY', mat_('MULTIPLY', struzka2, pas_vyfuku), mapa(a, 0.0, 1.0, 0.75, 0.45))
+    rez_celkem = mat_('MAXIMUM', mat_('MAXIMUM', f_str, hreben), mat_('MAXIMUM', mat_('MAXIMUM', skvrna, lem), f_vyf))
+    f_s = mat_('MULTIPLY', strecha, rez_celkem)
+    LADENI = os.environ.get("REZ_LADENI", "")
+    if LADENI:                                                        # ladeni: maska misto barvy (zelena = rez)
+        ukaz = {"str": f_str, "hreben": hreben, "skvrna": skvrna, "lem": lem, "vyf": f_vyf, "strecha": strecha, "vse": f_s,
+                "struzka": struzka, "konec": konec, "a": a}[LADENI]
+        mx_ = N.new("ShaderNodeMix"); mx_.data_type = 'RGBA'; Lk.new(ukaz, mx_.inputs["Factor"])
+        mx_.inputs["A"].default_value = (0.05, 0.05, 0.05, 1); mx_.inputs["B"].default_value = (0.0, 1.0, 0.0, 1)
+        Lk.new(mx_.outputs["Result"], bsdf.inputs["Base Color"]); return
+    # barva rzi: rezave hneda az oranzova, kresba textury (spary, spina) zustava
+    rez_s = rampa(sum_(p, 3.0, 6.0, (3.1, 7.7, 1.3)), [(0.30, (96, 50, 28)), (0.50, (132, 70, 36)), (0.68, (158, 88, 44)), (0.85, (120, 74, 48))])
     det_s = N.new("ShaderNodeMath"); det_s.operation = 'MULTIPLY_ADD'; Lk.new(hsv.outputs[2], det_s.inputs[0])
     det_s.inputs[1].default_value = 0.75; det_s.inputs[2].default_value = 0.42
     rez_s_d = N.new("ShaderNodeMix"); rez_s_d.data_type = 'RGBA'; rez_s_d.blend_type = 'MULTIPLY'; rez_s_d.inputs["Factor"].default_value = 1.0
     Lk.new(rez_s, rez_s_d.inputs["A"]); Lk.new(det_s.outputs[0], rez_s_d.inputs["B"])
-    pokryti = mapa(sum_(p, 3.3, 4.0, (11.0, 2.0, 5.0)), 0.36, 0.62, 0.80, 1.0)
-    f_s = mat_('MULTIPLY', strecha, pokryti)
     # podvozek: tmavy spinavy rez od oleje: skoro cerna hneda, misty rezava, mista vyprahleho prachu
     rez_d = rampa(sum_(p, 2.6, 6.0, (5.3, 1.1, 9.4)), [(0.28, (26, 22, 19)), (0.48, (52, 35, 24)), (0.68, (86, 52, 30)), (0.86, (64, 54, 44))])
     det_d = N.new("ShaderNodeMath"); det_d.operation = 'MULTIPLY_ADD'; Lk.new(hsv.outputs[2], det_d.inputs[0])

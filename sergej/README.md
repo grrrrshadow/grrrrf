@@ -4,8 +4,8 @@ Tři lokomotivy M62 v jednom GRF, ve dvou velikostech, každý sprite v přiblí
 
 | GRF | `grf_id` | měřítko | délka | kolej |
 |---|---|---|---|---|
-| `grf/orig/M62_Sergej-v8.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4), 24,4 px/m (zin8) | 12/8 (2 + 8 + 2) | na koleje CZTR |
-| `grf/bryle/M62_Sergej_BRYLE-v8.grf` | `MAXc` | o 20 % větší, 14,64 px/m (zin4), 29,28 px/m (zin8) | 14/8 (3 + 8 + 3) | na původní koleje hry |
+| `grf/orig/M62_Sergej-v9.grf` | `MAXb` | jako CZTR, 12,2 px/m (zin4), 24,4 px/m (zin8) | 12/8 (2 + 8 + 2) | na koleje CZTR |
+| `grf/bryle/M62_Sergej_BRYLE-v9.grf` | `MAXc` | o 20 % větší, 14,64 px/m (zin4), 29,28 px/m (zin8) | 14/8 (3 + 8 + 3) | na původní koleje hry |
 
 Obě mají `track_type 0`, tedy štítek `RAIL`. Na něm jezdí i lokomotivy a vagony CZTR (v jejich
 převodní tabulce je `RAIL` na indexu 1) a všechny koleje CZTR Rails (RA01–RA13, ELRL, ER01–08)
@@ -27,12 +27,12 @@ Popis (Action08) jde v hráčově pořadí: `{red}M62 Sergej{green}  {train}`, z
 řádek varianty v její barvě, `{orange}` informace (lokomotivy, 3D model, zvuky) a nakonec zeleně
 `ottd decouple by Karel Mácha`, odkaz na itch a licence.
 
-Soubory se jmenují `M62_Sergej-v8.grf` a `M62_Sergej_BRYLE-v8.grf`, aby šly v seznamu najít podle jména.
+Soubory se jmenují `M62_Sergej-v9.grf` a `M62_Sergej_BRYLE-v9.grf`, aby šly v seznamu najít podle jména.
 Číslo verze (hráč: *„piš tam verzi do jména souboru grf“*) je `VERZE` v `pack_sergej.py`, stejné
 číslo jde do Action14 (`VRSN`) a hra ho ukáže v okně GRF. Každé sestavení pro hráče o jedna výš:
 1 první sprity, 2 sever o 3 px, 3 přezdívky a licence, 4 troubení, 5 motor podle rychlosti a barevné
 jméno, 6 jméno „M62 Sergej“ červeně a zbytek zeleně, 7 třetí lokomotiva Maša РЖД a všechno v 4× i 8×, 8 rezavá střecha, tmavý špinavý
-rez na podvozku a u ČSD černé nárazníky. `MINV` je 1,
+rez na podvozku a u ČSD černé nárazníky, 9 rez jen u ČSD: na střeše lehké stopy po vodě, zelená a Maša bez rzi jako ve v7. `MINV` je 1,
 takže nová verze smí v uložené hře nahradit kteroukoli starší.
 
 ## Lokomotivy
@@ -74,7 +74,7 @@ Maša má zvuky zelené (motor bez tlumiče).
    `python3 render_sergej.py <zeleny|cerveny|rzd> <px_na_m> <osmin> <výstup>`; s `ZIN=8` fotí 8×
    (dvojnásobné px/m i rám 640 px) do adresáře `<výstup>_zin8`. `SMERY=1,8` vyfotí jen dané směry (zkoušky).
 4. **Balení** (`pack_sergej.py`): `python3 pack_sergej.py <orig|bryle> <adresář fotek> grf/<orig|bryle>`,
-   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v8.grf` (nebo `M62_Sergej_BRYLE-v8.grf`).
+   pak v `grf/<varianta>` spustit `yagl -e M62_Sergej-v9.grf` (nebo `M62_Sergej_BRYLE-v9.grf`).
    Chce fotky 4× (`<orig|bryle>_<nátěr>`) i 8× (`…_zin8`) všech tří nátěrů.
    Zvuky bere ze `zvuky/` (`zvuky.json`), připravuje je `zvuky/priprav_zvuky.py`, viz `zvuky/README.md`.
 5. **Kontroly** na rozbaleném GRF (`yagl -d`), poslední argument 4 nebo 8 je zoom:
@@ -95,7 +95,31 @@ siluety 8× mimo dvojnásobný rámeček 4× balič spočítá (`pixelu 8x mimo 
 Prázdné směry (hlava a záď na šikmé koleji) mají jen `zin4` 1×1. Hra 8× ukáže, když je v nastavení přiblížení 8×
 (`gui.zoom_min 0`); v jiné hře (bez zin8) se řádek přeskočí a 4× se zvětší jako dřív.
 
-## Rez (v8, 2. 10. 2026)
+## Rez jen u ČSD (v9, 3. 10. 2026)
+
+Ve v8 byly rezavé všechny tři lokomotivy a střecha ve skvrnách. Hráč 3. 10.: *„mezinárodní a mašu jsi neměl dělat
+rezaté. mezinárodní a čsd měly úplně stejnou střechu šedivou tak jsem chtěl na čsd trochu rezu“*, *„maša a mezinárodní
+nech jak byly v poslední verzi, nerezatý, a sergeje čsd jen lehce vem korozí jako když teče voda po té střeše“*,
+*„koukni jak maj rezatý střechy (CZTR), motorák 810 jeden livery je hezky rezatej na střeše … tam se dělaj pruhy na
+střeše od boku k boku s epicentrem na vrchu střechy. co je tam ten černej velkej flek to může být rezatý a čáry
+koroze z toho … to nemá být rezatý naskrz, jenom stopa po vodě kudy vždy teče. lehce rezatý.“*
+
+- **Zelená (mezinárodní) a Maša** jsou bez rzi, stejné jako ve v7 (`REZ` se zapne jen pro nátěr `cerveny`).
+- **Vzor:** CZTR Engines – DMU 1.2.0 (BaNaNaS `4d490211`, jen jako předloha, nic se nepřebírá), 810 v nátěrech
+  „Unifik88 V3 Rez“ a „Unifik88“ s lehkou rzí: šedá střecha s tenkými rezavými pruhy napříč, nejvíc nahoře.
+- **ČSD střecha** (`render_sergej.py`, funkce `zrezivet`), jen na šedých plochách střechy jako dřív:
+  - **stružky napříč střechou:** šum protažený podél délky (4,6× hustší podél lokomotivy než napříč) dá úzké pruhy
+    od hřebene dolů k bokům, každý jinak dlouhý (druhý šum podél délky), nahoře nejsilnější, k okraji slábnou;
+  - **na hřebeni**, kde voda stojí, slabý nádech rzi v ostrůvcích;
+  - **černá skvrna** (otvor výfuku, změřená na pohledu shora: 2,74 až 2,96 m za středem, ±0,46 m od osy) je
+    rezavá, kolem ní rezavý lem a v pásu ±0,55 m od ní hustší stružky až dolů k okrajům;
+  - rez je jen přimíchaná (nejvýš asi 70 %), šedá a kresba textury prosvítají.
+- **ČSD podvozek** zůstává jako ve v8: šedé plochy pod 1,55 m tmavý, skoro černohnědý rez od oleje. Černé dorazy
+  pod světly zůstávají (`nater.py`).
+- `REZ=0` fotí bez rzi, `REZ_LADENI=<maska>` ukáže místo barvy masku zeleně (`str`, `hreben`, `skvrna`, `lem`,
+  `vyf`, `strecha`, `vse`, `struzka`, `konec`, `a`).
+
+## Rez ve v8 (2. 10. 2026, od v9 nahrazeno)
 
 Hráč: *„střechu sergeje uděláme rezatou a podvozek taky, kola všechno co je šedý dole bude taky rezatý ale ne jako
 střecha. dole tmavší rez, od oleje, špinavý“*, *„rez kde je šedý, na podvozek tmavý špinavý rez“*. Dělá to
@@ -110,6 +134,18 @@ střecha. dole tmavší rez, od oleje, špinavý“*, *„rez kde je šedý, na 
   zaprášenými místy. Rez je matný a není kov.
 - Souřadnice jsou v prostoru natahovače (původní metry modelu), takže rez je ve všech směrech na stejném místě.
   `REZ=0` fotí bez rzi.
+
+## Verze 9 ve hře (3. 10. 2026)
+
+- **Zkušební hra** z `51428e5` jako u v7 a v8 (`testvlakfoto`, tři lokomotivy, osm fotek v 8× a osm ve 4×).
+- **Pixelová kontrola** (`kontrola_pixel.py`): v 8× sedí všech 51 článků na 100 % s posunem (0,0), ve 4× 49 z 51;
+  dva články Maši na jedné fotce zakrývá kouř z výfuku jako ve v8. Výřezy: `kontrola/hra_8x_v9.png`, `kontrola/hra_4x_v9.png`.
+- **Zelená a Maša** vyšly stejně jako ve v7: průměrný rozdíl fotek 0,04 až 0,1 z 255, nad 20 se liší nejvýš 3 pixely
+  (šum renderu).
+- **Spoje a koleje** 4× i 8× u obou velikostí v pořádku.
+- **GRF:** `grf/orig/M62_Sergej-v9.grf` 10,9 MB (md5 `55b15b6a4f95b99e2ecb0295b65c6d07`),
+  `grf/bryle/M62_Sergej_BRYLE-v9.grf` 12,3 MB (md5 `eaff8fa991c8f33c46dc3190a038fef2`), stejná stavba jako v7 a v8.
+  Oba GRF a licence jsou i v `M62_Sergej-v9.zip`, soubory v8 jsou z repa pryč (zůstávají v historii gitu).
 
 ## Verze 8 ve hře (2. 10. 2026 v noci)
 

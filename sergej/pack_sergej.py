@@ -133,8 +133,10 @@ for n in NATERY:
 # kteroukoli starsi v ulozene hre (ID vozu se nemeni).
 # 1 prvni sprity, 2 sever o 3 px, 3 prezdivky a licence, 4 troubeni, 5 motor podle rychlosti a barevne jmeno,
 # 6 jmeno: M62 Sergej cervene, zbytek zelene, 7 treti lokomotiva Masa РЖД (textury z par8), vsechno v zin4 i zin8,
-#   model s texturami 2048 px (par8), 8 rez na strese (kde je seda) a tmavy spinavy rez na podvozku, CSD cerne narazniky
-VERZE = 8
+#   model s texturami 2048 px (par8), 8 rez na strese (kde je seda) a tmavy spinavy rez na podvozku, CSD cerne narazniky,
+# 9 rez jen na CSD: strecha jen lehce jako stopy po vode napric strechou (vzor CZTR 810), podvozek tmavy; zelena a Masa
+#   bez rzi jako v7
+VERZE = 9
 JMENO = {"orig": "M62_Sergej", "bryle": "M62_Sergej_BRYLE"}[VARIANTA] + f"-v{VERZE}"
 PNG32 = f"{JMENO}-32bpp-zin4.png"; PNG8 = f"{JMENO}-8bpp.png"
 PNG32_8 = f"{JMENO}-32bpp-zin8.png"             # od verze 7: obrazky 8x (zin8) na vlastnim listu
