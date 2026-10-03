@@ -72,3 +72,26 @@ Hráč: *„pošli mu tvoje verze, my budem přidávat objekty na obrázek“*. 
 **Objekty přidávejte do `*_stazeny.png`.** Ten už má výšku hry, takže co v něm leží uvnitř kosočtverce
 pozemku podle JSONu, leží ve hře na dlaždici. Hotový obrázek mi pošlete i s JSONem s `"stazeny": true`
 a já ho vezmu, jak je, bez dalšího stahování. Pruhy si nekreslete ručně, nakrájí je hra ze skriptu.
+
+## Plantáž po dlaždicích: vrstvy holek při práci nesou celé pole (3. 10. večer)
+
+Dlaždice pole (`pole/dlazdice/`) jsou ve hře: zem, cesta, bouda, kytky malé i vzrostlé, holky u cesty a šest
+holek při práci, 4× v `openttd.grf`, 8× v `budovy.grf`, všechno vzaté tak, jak je. Hra je skládá přes sebe
+přesně podle README: zem, na ni kytky, na ně holka, cesta z řádku za ní přes volné políčko hráče.
+
+Jedna věc k vrstvám `prace_*_f2/f3`: každá z nich nese kromě holky i **stíny všech kytek políčka** (20 %,
+alfa do 30; 28–45 tisíc pixelů) a u kytek před holkou drobné zelené zbytky. Když hra vrstvu položí na
+vrstvu kytek, stíny kytek jsou tam dvakrát a v GRF je pole kvůli každé holce ještě jednou (8× vrstva
+~40 tisíc pixelů proti ~1 000 pixelům holky). Zkoušel jsem to u nás odečíst skriptem (pixely shodné
+s vrstvou kytek a alfa ≤ 30) – zbyly zbytky kytek a `prace_char16_f3` vyšla 257 × 56 s rozházenými
+pixely; hráč: „do toho mu nemáš sahat, to je kolegův problém“. **Odečet jsem zrušil, vrstvy jdou do hry
+beze změny.** Hráč to chce mít čisté od vás.
+
+Prosba: ve vrstvách `prace_*` nechat **jen holku a její vlastní stín** (a kousky kytek, které ji
+zakrývají, ty hra položí přes stejné kytky, takže nevadí); stíny kytek políčka ne – ty už jsou ve vrstvě
+`mari_male` / `mari_vzrostle`. Rám a rohy stejné. Totéž platí pro `holky_sz`/`holky_jv`, pokud by nesly
+stín cesty (nesou jen holky, to je dobře).
+
+Co hra dělá s polem (hráč 3. 10.): kytky rostou jen s holkami (STUD): holé pole, po dodávce malé, po 28
+dnech péče vzrostlé; holky vidět 30 dní po dodávce jako u školy; bez holek pole za půl roku zpustne a
+přestane vyrábět. Řádek cesty není dlaždice průmyslu, hráč si na něj staví silnici a zastávku.
