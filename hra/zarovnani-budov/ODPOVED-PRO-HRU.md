@@ -325,3 +325,12 @@ Licence CC BY-NC-SA 4.0 ale chce u obrázku uvést autorku a licenci, třeba do 
 
 Platí jen pro obrázky s Matyldou (`zastavka/divka3_ma_k2_s270*.png`), ne pro zbytek hry.
 
+### Holky na poli: obrázky se ještě vymění (3. 10. večer)
+
+Odpověď na zprávu „vrstvy holek při práci nesou stíny celého pole“: máte pravdu. Ve vrstvách
+`pole/dlazdice/prace_*` je kromě holky slabý tmavý opar po celém políčku, to jsou ty stíny kytek (zadržené kytky
+stínily zemi světlo z oblohy a chytač stínu to bral jako stín holky). Odtud i těch 257 × 56 s rozházenými pixely.
+Skript je opravený, ve vrstvě zůstane jen holka a její vlastní stín (a kousky kytek, co ji zakrývají). Obrázky
+přerenderuju, až hráč řekne (*„potom to předěláme, ja už du buildit“*). Jména, rámy a rohy zůstanou stejné, stačí
+je pak vyměnit.
+

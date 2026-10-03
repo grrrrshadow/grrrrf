@@ -379,16 +379,19 @@ yy, xx = np.mgrid[0:RAM[1], 0:RAM[0]] + 0.5
 KOSOCTVEREC = (np.abs(xx - SEVER[0]) / (128 * S4) + np.abs(yy - SEVER[1] - 64 * S4) / (64 * S4)) <= 1.0
 
 VSE = [o for sk in SKUPINY.values() for o in sk]
-def nastav(videt=(), chytac=(), drzi=(), jen_stin=(), bez_stinu=()):
-    """co je videt; chytac stinu; zadrzene (zakryva, samo pruhledne); jen vrha stin; nevrha stin (skupiny)"""
+def nastav(videt=(), chytac=(), drzi=(), jen_stin=(), bez_stinu=(), jen_kamera=()):
+    """co je videt; chytac stinu; zadrzene (zakryva, samo pruhledne); jen vrha stin; nevrha stin; jen pro kameru
+    (skupiny). jen_kamera: pro odrazene a rozptylene paprsky neexistuje, nezastini okolni svetlo (jinak zadrzene
+    kytky ve vrstve holek zastinily svetlo z oblohy zemi a chytac to bral jako slaby stin po celem policku)"""
     g = lambda jm: {o for s in jm for o in SKUPINY.get(s, [])}
-    v, ch, dr, js, bs = g(videt), g(chytac), g(drzi), g(jen_stin), g(bez_stinu)
+    v, ch, dr, js, bs, jk = g(videt), g(chytac), g(drzi), g(jen_stin), g(bez_stinu), g(jen_kamera)
     for o in VSE:
         o.hide_render = o not in v
         o.is_shadow_catcher = o in ch
         o.is_holdout = o in dr
         o.visible_camera = o not in js
-        o.visible_shadow = o not in bs
+        o.visible_shadow = o not in bs and o not in jk
+        o.visible_diffuse = o.visible_glossy = o.visible_transmission = o.visible_volume_scatter = o not in jk
 
 def render_do_pole(jm):
     cesta = os.path.join(VYSTUP, f"_{jm}.png")
@@ -441,13 +444,14 @@ def vrstva_holek(zem_sk, holky, zakryva, jm, popis):
     uloz(H, jm, "vrstva", popis)
 
 def vrstva_prace(zem_sk, holky, zakryva, jm, popis):
-    """holka mezi kytkami se stinem na zem: kytky policka (zakryva) jsou zadrzene a nevrhaji stin (ten je ve vrstve
-    kytek); A se zemi jako chytacem stinu, B se zemi zadrzenou, stin = (A.a - B.a) / (1 - B.a) jen v kosoctverci
+    """holka mezi kytkami se stinem na zem: kytky policka (zakryva) jsou zadrzene jen pro kameru, nevrhaji stin ani
+    nestini okolni svetlo (to je ve vrstve kytek; jinak by ve vrstve byl slaby opar po celem policku); A se zemi jako
+    chytacem stinu, B se zemi zadrzenou, stin = (A.a - B.a) / (1 - B.a) jen v kosoctverci
     policka na STIN (20 %) jako u kytek; alfa holky omezena pruchodem s holkou samotnou (listy s pruhlednou texturou
     nechavaji v zadrzene scene slabe cerne obrysy)"""
-    nastav(videt=[zem_sk, holky] + zakryva, chytac=[zem_sk], drzi=zakryva, bez_stinu=zakryva)
+    nastav(videt=[zem_sk, holky] + zakryva, chytac=[zem_sk], drzi=zakryva, jen_kamera=zakryva)
     A = render_do_pole(jm + "_a")
-    nastav(videt=[zem_sk, holky] + zakryva, drzi=[zem_sk] + zakryva, bez_stinu=zakryva)
+    nastav(videt=[zem_sk, holky] + zakryva, drzi=[zem_sk] + zakryva, jen_kamera=zakryva)
     Bp = render_do_pole(jm + "_b")
     nastav(videt=[holky])
     G = render_do_pole(jm + "_g")

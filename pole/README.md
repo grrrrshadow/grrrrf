@@ -166,6 +166,10 @@ taky, vem další holky ze zipu“*.
   šikmé průhledy. Každá holka klečí nebo sedí bokem ke kytce v takovém průhledu, kytky ji zakrývají jen trochu.
 - **Každá u jiné kytky** (z 16 na políčku), takže jdou dát i dvě nebo tři na jedno políčko a nepřekrývají se.
 - Holky mají slabý stín na zem jako kytky (20 %), nic nepřečuhuje pod přední hrany políčka.
+- **Pozor, opar (3. 10. večer):** obrázky `prace_*` mají kromě holky ještě slabý tmavý opar po celém políčku
+  (do 8 % průhlednosti mezi kytkami). Zadržené kytky stínily zemi světlo z oblohy a chytač stínu to bral jako stín
+  holky. Skript je opravený (kytky jsou ve vrstvě holek jen pro kameru, `nastav(jen_kamera=…)`), zkušební render
+  už opar nemá. Obrázky se přerenderují později, hráč: *„potom to předěláme, ja už du buildit“*.
 - Rám a rohy stejné jako ostatní dlaždice (4× 264 × 200, 8× 528 × 400), soubory `dlazdice/prace_*_f2_zin4.png` atd.
 - Náhled: `dlazdice/nahled/marihuana_3faze.png` (fáze 2 a 3 s holkami na šesti políčkách), zblízka
   `dlazdice/nahled/holky_na_poli_zin8.png`.
