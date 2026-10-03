@@ -408,6 +408,12 @@ v `postavy/par10/` (v gitu nejsou, některé mají přes 50 MB). Licence podle m
 | `girl_02.glb` | GIRL 02, ZEPETO EXPORTER | CC BY 4.0 | ne, poloha T | zatím ne |
 | `anime_girl-2.glb` | Anime Girl, guudorta | CC BY 4.0 | ne, poloha A | zatím ne |
 | `anime-girl.zip` | zdroj a textury bez metadat | ? | ? | ne (licence neznámá) |
-| `3d_anime_girl..glb` | 3D Anime girl., GermanURR | CC BY-SA 4.0 (obrázky by musely mít stejnou licenci) | ne | ne |
-| `vivi_manga_student_girl_style.glb` | Vivi manga student girl style, daydev | CC BY-NC-SA 4.0 | ano | ne |
+| `3d_anime_girl..glb` | 3D Anime girl., GermanURR | CC BY-SA 4.0 (obrázky s ní pod stejnou licencí) | ne | zatím ne, jde (viz níž) |
+| `vivi_manga_student_girl_style.glb` | Vivi manga student girl style, daydev | CC BY-NC-SA 4.0 | ano | zatím ne, jde (viz níž) |
+
+**NC a SA jdou (hráč 3. 10.):** *„nebudem prodávat hru, neberem ani donate. tak to mužem skusit ve hře jo?“* Ano:
+hra je zdarma a bez darů, NC (nekomerčně) je tím splněné. SA (stejná licence) se týká jen obrázků z takového modelu:
+musí jít šířit pod stejnou licencí a s uvedením autora a toho, že je model upravený. Zbytek hry se tím neřídí.
+Kdo by hru chtěl prodávat, musí obrázky s NC modely vyndat. Platí to pro Matyldu (CC BY-NC-SA), Buran (CC BY-NC)
+a případně 3D Anime girl (CC BY-SA) a Vivi (CC BY-NC-SA).
 

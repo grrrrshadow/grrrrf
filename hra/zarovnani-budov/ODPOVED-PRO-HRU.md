@@ -313,3 +313,15 @@ Hráč: *„matylda je na zastávku kde holka chybí … tam dame matyldu a pův
 - **Licence Matyldy je CC BY-NC-SA 4.0** (nicolekeane): nekomerčně a obrázek s ní pod stejnou licencí a se jménem
   autorky (`AUTORI-MODELU.md`).
 
+### Matylda: uvedení autorky (3. 10.)
+
+Hráč: *„nebudem prodávat hru, neberem ani donate. tak to mužem skusit ve hře jo?“* Ano, nekomerčně to splňuje.
+Licence CC BY-NC-SA 4.0 ale chce u obrázku uvést autorku a licenci, třeba do titulků nebo licence hry:
+
+> Matilda (bus stop) is based on "Matilda" by nicolekeane
+> (https://sketchfab.com/3d-models/matilda-7ddedfb652bd4ea091bc3de27f98fc02), licensed under CC BY-NC-SA 4.0
+> (https://creativecommons.org/licenses/by-nc-sa/4.0/). Rendered and modified for the game; this sprite is
+> available under the same license.
+
+Platí jen pro obrázky s Matyldou (`zastavka/divka3_ma_k2_s270*.png`), ne pro zbytek hry.
+
