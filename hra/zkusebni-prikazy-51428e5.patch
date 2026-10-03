@@ -1,6 +1,6 @@
 diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
---- a/openttd/src/console_cmds.cpp	2026-10-02 23:44:26.096157430 +0000
-+++ b/openttd/src/console_cmds.cpp	2026-10-02 23:44:26.102088110 +0000
+--- a/openttd/src/console_cmds.cpp	2026-10-03 16:38:48.253819217 +0000
++++ b/openttd/src/console_cmds.cpp	2026-10-03 16:38:48.256006766 +0000
 @@ -17,6 +17,7 @@
  #include "water_cmd.h"
  #include "road_cmd.h"
@@ -27,7 +27,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  #include "tree_cmd.h"
  #include "order_cmd.h"
  #include "order_func.h"
-@@ -2524,6 +2529,908 @@
+@@ -2524,6 +2529,925 @@
   * the wrong one.
   * @copydoc IConsoleCmdProc
   */
@@ -433,8 +433,25 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
 +			CargoType ct = GetCargoTypeByLabel(CargoLabel{l});
 +			if (IsValidCargoType(ct)) Command<Commands::RefitVehicle>::Do(DoCommandFlag::Execute, vid, ct, n.podtyp, false, false, 0);
 +			if (IsValidCargoType(ct) && n.plne) {
++				/* TEST_FOTO_MNOZSTVI=n (V3S v17): do kazdeho dilu jen n jednotek misto plne kapacity */
++				const char *mn = std::getenv("TEST_FOTO_MNOZSTVI");
++				uint mnozstvi = 0;
++				if (mn != nullptr) for (const char *c = mn; *c != '\0'; c++) if (*c >= '0' && *c <= '9') mnozstvi = mnozstvi * 10 + (*c - '0');
 +				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next()) {
-+					if (u->cargo_cap > 0 && u->cargo_type == ct && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), u->cargo_cap, Source{}));
++					uint kolik = mn != nullptr ? std::min<uint>(u->cargo_cap, mnozstvi) : u->cargo_cap;
++					if (u->cargo_cap > 0 && kolik > 0 && u->cargo_type == ct && CargoPacket::CanAllocateItem()) u->cargo.Append(CargoPacket::Create(StationID::Invalid(), kolik, Source{}));
++				}
++			}
++			/* TEST_DAVKA=1 (V3S v17): davka nakladani (vlastnost 0x07 a callback 0x36) kazdeho dilu pri nakladani a pri vykladani */
++			if (std::getenv("TEST_DAVKA") != nullptr) {
++				int i = 0;
++				for (RoadVehicle *u = RoadVehicle::From(Vehicle::Get(vid)); u != nullptr; u = u->Next(), i++) {
++					int vlastnost = u->GetEngine()->info.load_amount;
++					int nakl = GetVehicleProperty(u, PROP_VEHICLE_LOAD_AMOUNT, -1);
++					u->vehicle_flags.Set(VehicleFlag::CargoUnloading);
++					int vykl = GetVehicleProperty(u, PROP_VEHICLE_LOAD_AMOUNT, -1);
++					u->vehicle_flags.Reset(VehicleFlag::CargoUnloading);
++					V3SLog("V3SDAVKA: {} 0x{:04X} {} dil {} kapacita {} vlastnost {} nakladani {} vykladani {}", n.grf, n.local, n.naklad, i, u->cargo_cap, vlastnost, nakl, vykl);
 +				}
 +			}
 +		}
@@ -936,7 +953,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  static bool _testspoj_active = false;
  static uint _testmapa_area[4]; ///< Last built test scene's surroundings, for a no-argument testmapa.
  
-@@ -2702,6 +3609,17 @@
+@@ -2702,6 +3626,17 @@
  		eid_wagon = eid_artic_wagon;
  		IConsolePrint(CC_DEFAULT, "testspoj kloub: rada bude z vagonu typu {} o {} clancich.", eid_wagon.base(), CountArticulatedParts(eid_wagon) + 1);
  	}
@@ -954,7 +971,7 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	if (eid_loco == EngineID::Invalid() || eid_wagon == EngineID::Invalid()) {
  		IConsolePrint(CC_ERROR, "testspoj: no available engine or wagon.");
  		return true;
-@@ -13545,6 +14463,13 @@
+@@ -13545,6 +14480,13 @@
  	IConsole::CmdRegister("vlak123",                 ConShowTrainOrientation);
  	IConsole::CmdRegister("legacyimport",            ConLegacyDecoupleImport);
  	IConsole::CmdRegister("testspoj",                ConTestCouple);
@@ -969,8 +986,8 @@ diff -ruN a/openttd/src/console_cmds.cpp b/openttd/src/console_cmds.cpp
  	IConsole::CmdRegister("teststanice",             ConTestStationCargo);
  	IConsole::CmdRegister("testpauza",               ConTestUnpause);
 diff -ruN a/openttd/src/newgrf_gui.cpp b/openttd/src/newgrf_gui.cpp
---- a/openttd/src/newgrf_gui.cpp	2026-10-02 23:44:26.104157430 +0000
-+++ b/openttd/src/newgrf_gui.cpp	2026-10-02 23:44:26.110828379 +0000
+--- a/openttd/src/newgrf_gui.cpp	2026-10-03 16:38:48.258228936 +0000
++++ b/openttd/src/newgrf_gui.cpp	2026-10-03 16:38:48.259971439 +0000
 @@ -1989,6 +1989,25 @@
  	new NewGRFWindow(_newgrf_desc, editable, show_params, exec_changes, config);
  }
@@ -998,8 +1015,8 @@ diff -ruN a/openttd/src/newgrf_gui.cpp b/openttd/src/newgrf_gui.cpp
  static constexpr std::initializer_list<NWidgetPart> _nested_save_preset_widgets = {
  	NWidget(NWID_HORIZONTAL),
 diff -ruN a/openttd/src/newgrf_sound.cpp b/openttd/src/newgrf_sound.cpp
---- a/openttd/src/newgrf_sound.cpp	2026-10-02 23:44:26.284157441 +0000
-+++ b/openttd/src/newgrf_sound.cpp	2026-10-02 23:44:26.290903514 +0000
+--- a/openttd/src/newgrf_sound.cpp	2026-10-03 16:38:48.261699858 +0000
++++ b/openttd/src/newgrf_sound.cpp	2026-10-03 16:38:48.263563982 +0000
 @@ -152,9 +152,18 @@
  	if (file == nullptr) return false;
  

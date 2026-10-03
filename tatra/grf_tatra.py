@@ -160,7 +160,7 @@ def tatra_yagl():
         sj = obr.index(("v", "studentky_sedi")) if (kde, k) == ("v", "studentky") and ("v", "studentky_sedi") in obr else si
         Y += [f"sprite_groups<RoadVehicles, 0x{G_T[kde, k]:02X}> // Action02 basic, Tatra {kde} {k}: prazdno, naklad"
               + (", za jizdy sedi" if sj != si else ""), "{",
-              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{sj:04X} ];", f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
+              f"    primary_spritesets: [ 0x{i_nic:04X} 0x{sj:04X} ];", f"    secondary_spritesets: {sady_na_zastavce(i_nic, si)};", "}"]   # od verze 17 na zastavce od 1. jednotky
 
     for n in T_AUTA:
         h = T_ID[n]; auto = T_ID_AUTO[n] if CUMAK else h
@@ -335,6 +335,8 @@ def tatra_yagl():
                 Y += sw(obal[c], "zvuk, jinak grafika", CALLBACK, zvuk, c)
             mapa = {k: obal.get(v, v) for k, v in mapa.items()}
             vychozi = obal[vychozi_cil]
+        s_davka = davka_switche(nove, g_prazdny)
+        mapa, vychozi = obal_nakladani(nove, mapa, vychozi, s_davka)    # od verze 17 davka nakladani (callback 0x36)
         if not CUMAK:
             mapa[0xFF] = s_nakup
         Y += action3(auto, vychozi, sorted(mapa.items()))

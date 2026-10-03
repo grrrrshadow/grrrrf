@@ -59,7 +59,10 @@ CUMAK = {"mala": 0, "velka": 2}[VEL]           # delka neviditelneho cumaku v os
 # 15 jmeno a popis v okne grafik (hrac 2. 10.): kratsi jmeno "V3S,Tatra138,148", aby se ottd Decouple by Karel Macha
 #   veslo do seznamu; v popisu misto dvou radku jmena jeden zeleny "V3S Praga, Tatra 138, 148" s nakladakem barvy
 #   varianty, hned pod nim 3D: hans1240; Tatry vsude nejdriv 138 ("nejdriv mensi cislo")
-VERZE = 16
+# 17 nakladani a vykladani (hrac 3. 10.: "v3s, tatra vykladaji moc rychle, to je mzik, vem si priklad z dvanacetrojek.
+#   nakladaji skoro dobre, muze to byt trosicku delsi at se ten obrazek ukaze na delsi dobu"): obrazek nakladu je na
+#   zastavce videt od prvni jednotky do posledni (za jizdy dal od poloviny), vyklada se po 2 a naklada po 4 (dosud po 5)
+VERZE = 17
 # Tatry (tatra/grf_tatra.py) jdou do stejneho GRF, kdyz je ctvrty argument adresar s fotkami Tater (tatra/fotky_tatra.py)
 TATRA = len(sys.argv) > 4
 JMENO = {"mala": "Praga_V3S", "velka": "Praga_V3S_BRYLE"}[VEL] + f"-v{VERZE}"
@@ -557,6 +560,35 @@ def action3(eid, default, naklady):
     return r + ["    };", "}"]
 
 CALLBACK = ["value1 = variable[0x0C] & 0x0000FFFF;"]
+# Od verze 17 nakladani a vykladani. Hra naklada i vyklada po davkach kazdych 20 tiku (economy.cpp,
+# gradual_loading_wait_time), davka je vlastnost 0x07 (5) a u GRF8 ji meni callback 0x36 (promenna 0x10 = 0x07).
+# Pri vykladani (promenna 0xFE bit 1: vozidlo vyklada) davka 2, jinak 4. Obrazek nakladu na zastavce (sekundarni sady)
+# je od prvni jednotky: SADY_NA_ZASTAVCE sad, prvni prazdna, ostatni naklad (hra bere sadu pocet * sad / kapacita),
+# za jizdy (primarni sady) zustavaji dve sady, naklad od poloviny.
+DAVKA_NAKLADANI, DAVKA_VYKLADANI = 4, 2
+SADY_NA_ZASTAVCE = 32
+def sady_na_zastavce(i_nic, si):
+    return "[ " + " ".join([f"0x{i_nic:04X}"] + [f"0x{si:04X}"] * (SADY_NA_ZASTAVCE - 1)) + " ]"
+def davka_switche(nove, g_selhani):
+    """switche davky nakladani pro callback 0x36; vraci switch, kam ma callback 0x36 jit"""
+    global Y
+    s_davka = nove()
+    Y += sw(s_davka, f"davka: vykladani {DAVKA_VYKLADANI}, nakladani {DAVKA_NAKLADANI}",
+            ["value1 = variable[0xFE] & 0x00000002;"], [(0x02, 0x8000 | DAVKA_VYKLADANI)], 0x8000 | DAVKA_NAKLADANI)
+    s_vlastnost = nove()
+    Y += sw(s_vlastnost, "callback 0x36: vlastnost 0x07 (davka), jine vlastnosti beze zmeny",
+            ["value1 = variable[0x10] & 0x000000FF;"], [(0x07, s_davka)], g_selhani)
+    return s_vlastnost
+def obal_nakladani(nove, mapa, vychozi, s_vlastnost, hotove=()):
+    """cile Action 3 viditelneho auta obali callbackem 0x36 (davka); cile v `hotove` ho uz umi samy"""
+    global Y
+    obal = {}
+    for c in [vychozi] + sorted(set(mapa.values()) - {vychozi}):
+        if c in hotove:
+            obal[c] = c; continue
+        obal[c] = nove()
+        Y += sw(obal[c], "davka (callback 0x36), jinak dal", CALLBACK, [(0x36, s_vlastnost)], c)
+    return {k: obal[v] for k, v in mapa.items()}, obal[vychozi]
 ID = {"vojenska": 0x0100, "modra": 0x0101}         # kupovane cislo (u velke cumak)
 ID_AUTO = {"vojenska": 0x0110, "modra": 0x0111}    # u velke viditelne auto, druhy clanek
 
@@ -583,7 +615,7 @@ if OBRAZKY:
         Y += [f"sprite_groups<RoadVehicles, 0x{G_VRSTVA[k]:02X}> // Action02 basic, naklad {k}: prazdno, naklad"
               + (", za jizdy sedi" if sj != si else ""), "{",
               f"    primary_spritesets: [ 0x{i_nic:04X} 0x{sj:04X} ];",
-              f"    secondary_spritesets: [ 0x{i_nic:04X} 0x{si:04X} ];", "}"]
+              f"    secondary_spritesets: {sady_na_zastavce(i_nic, si)};", "}"]
 VRSTVY_VYRAZ = ["value1 = variable[0x1A] & 0x00000001;", "value2 = variable[0x10] >> 8 & 0x000000FF;",
                 "value1 = Subtraction(value1, value2);",                                          # 1 - vrstva
                 "value2 = variable[0x1A] & 0x0000001F;", "value1 = ShiftLeft(value1, value2);",    # vrstva 0: bit 31
@@ -657,6 +689,8 @@ for n in ("modra", "vojenska"):
               f"    primary_spritesets: [ 0x{si:04X} ];", f"    secondary_spritesets: [ 0x{si:04X} ];", "}"]
     Y += [f"sprite_groups<RoadVehicles, 0x{g_prazdny:02X}> // Action02 basic, prazdny cumak", "{",
           f"    primary_spritesets: [ 0x{i_prazdny:04X} ];", f"    secondary_spritesets: [ 0x{i_prazdny:04X} ];", "}"]
+    s_davka = davka_switche(nove, g_prazdny)                # od verze 17 davka nakladani (callback 0x36)
+    DAVKA = [(0x36, s_davka)]
     # obrazek do nakupu: smer W, u modre odstin A (vychozi naklad je zbozi)
     g_nakup = nove()
     Y += ["sprite_sets<RoadVehicles, 0x0000> // Action01, obrazek do nakupu", "{", "    sprite_set // 0x0000 nakup", "    {"]
@@ -708,11 +742,11 @@ for n in ("modra", "vojenska"):
     # osoby: callback 0x15 vrati kapacitu, jinak grafika (vojaci pod plachtou, modra bez plachty); u male i zvuk
     g_lide = grafika("PASS")
     Y += sw(s_lidi, f"osoby: kapacita {'auta ' if CUMAK else ''}{lidi_auto}", CALLBACK,
-            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), g_lide)
+            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk) + DAVKA, g_lide)
     # od verze 13 studentky: stejna kapacita jako osoby, ale obrazek holek na korbe (u vojenske bez plachty)
     s_stud = nove()
     Y += sw(s_stud, f"studentky: kapacita {'auta ' if CUMAK else ''}{lidi_auto}, jinak holky na korbe", CALLBACK,
-            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk), grafika("STUD"))
+            [(0x15, 0x8000 | lidi_auto)] + ([] if CUMAK else zvuk) + DAVKA, grafika("STUD"))
     popis_nakup = [(0x23, 0x8000 | TEXT[n])]
     if CUMAK:
         Y += sw(s_clanky, "clanky (callback 0x16): 1 = viditelne auto, dal nic", ["value1 = variable[0x10] & 0x000000FF;"],
@@ -739,15 +773,19 @@ for n in ("modra", "vojenska"):
         cil = (s_stud if k == "STUD" else s_lidi) if k in LIDE else (s_podtyp[k] if k in PODTYPY else grafika(k))
         if cil != vychozi_g: mapa[INDEX[k]] = cil
     vychozi = vychozi_g
+    hotove = {s_lidi, s_stud}                                # davku (callback 0x36) umi samy
     if not CUMAK and id_zvuk:
         # mala: Action 3 vybira podle nakladu a callback 0x33 jde stejnou cestou, tak kazdy cil grafiky
-        # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi)
+        # dostane obal "zvuk, jinak grafika" (osoby uz zvuk maji v s_lidi); od verze 17 v nem i davka (0x36),
+        # na zvlastni obaly by u male nezbyla cisla switchu (do 0xBF)
         obal = {}
         for cil in [vychozi_g] + sorted(set(mapa.values()) - {s_lidi, s_stud, vychozi_g}):
             obal[cil] = nove()
-            Y += sw(obal[cil], "zvuk, jinak grafika", CALLBACK, zvuk, cil)
+            Y += sw(obal[cil], "zvuk, davka nakladani, jinak grafika", CALLBACK, zvuk + DAVKA, cil)
         mapa = {k: obal.get(v, v) for k, v in mapa.items()}
         vychozi = obal[vychozi_g]
+        hotove |= set(obal.values())
+    mapa, vychozi = obal_nakladani(nove, mapa, vychozi, s_davka, hotove)  # od verze 17 davka nakladani (callback 0x36)
     if not CUMAK:
         mapa[0xFF] = s_nakup
     Y += action3(auto, vychozi, sorted(mapa.items()))

@@ -1,5 +1,48 @@
 # V3S Vejtřaska: Praga V3S jako vlastní GRF
 
+## Verze 17 (3. 10.): pomalejší vykládání, náklad na zastávce vidět hned
+
+Hráč: *„v3s, tatra vykládají moc rychle, to je mžik, vem si příklad z dvanácettrojek. nakládají skoro dobře, může to
+být trošičku delší ať se ten obrázek ukáže na delší dobu“*.
+
+Proč to byl mžik:
+- Hra nakládá a vykládá silniční auta po dávkách, jednu dávku každých 20 tiků (1 tik je 27 ms). Naše auta měla dávku
+  5 jednotek, takže zelená vejtřaska s 20 studentkami vyložila za 4 dávky a Tatra se 3 najednou.
+- Hlavně ale byl obrázek „na zastávce“ (u studentek stojící holky) vidět jen od poloviny nákladu. Hra bere obrázek
+  podle toho, kolik je naloženo (sada = počet · počet sad / kapacita), a my jsme měli jen dvě sady, prázdnou
+  a plnou. Holky tak zmizely, jakmile se vyložila polovina, a při nakládání naskočily až v půlce.
+- Dvanácettrojky žádnou zvláštní rychlost nakládání nemají, holky u dveří jsou tam ale celou dobu stání.
+
+Co je nové:
+- **Na zastávce je náklad vidět od první jednotky až do poslední:** obrázek „na zastávce“ má 32 sad místo dvou,
+  první prázdnou a 31 plných. Při kapacitě do 32 tak stačí jedna jednotka (zelená vejtřaska veze 20 studentek,
+  Tatry 3), při větší 1/32 nákladu. Platí to pro všechny náklady, nejen pro studentky. Za jízdy je náklad vidět od
+  poloviny jako dosud.
+- **Vykládá se po 2 jednotkách, nakládá po 4** (dřív obojí po 5). Callback 0x36 (vlastnost 0x07, dávka nakládání)
+  vrátí 2, když hra vykládá (proměnná 0xFE bit 1), jinak 4; na ostatní vlastnosti callback nesahá. Platí pro všechny
+  náklady, u vejtřasek i Tater, malých i BRÝLÍ (`davka_switche` a `obal_nakladani` v `pack_v3s.py`, Tatry
+  v `grf_tatra.py`). Neviditelný čumák BRÝLÍ veze 1 jednotku a má dávku dál 5.
+- **Zelená vejtřaska s 20 studentkami:**
+
+| | v16 | v17 |
+|---|---|---|
+| vykládání | 4 dávky po 5 (2,2 s), holky zmizí se 3. dávkou, po 1,1 s | 10 dávek po 2 (5,4 s), holky zmizí až s poslední, po 4,9 s |
+| nakládání | 4 dávky po 5 (2,2 s), holky naskočí až s 2. dávkou | 5 dávek po 4 (2,7 s), holky naskočí hned s 1. dávkou |
+
+- **Modrá vejtřaska a Tatry (3 studentky):** vykládají ve 2 dávkách místo jedné, holky zmizí po 0,6 s (dřív hned
+  s první dávkou). Nakládají jednou dávkou jako dřív, holky jsou na zastávce vidět od první studentky, dřív až od dvou.
+- První dávka přijde tik po zastavení, další vždy po 20 tikách; mezi poslední vyloženou a první naloženou dávkou je
+  auto 20 tiků prázdné.
+- Listy spritů jsou stejné jako ve v16 (stejné soubory). Ve zdroji yaglu se liší jen číslo verze, 32 sad na zastávce
+  a switche s callbackem 0x36.
+- Malá 7,45 MB (`98bf7b3d…`), velká 8,94 MB (`d67377b2…`), balík `Praga_V3S_Tatra-v17.zip`.
+- **Ověřeno ve zkušební hře z `51428e5`** (`hra/README.md`, nové volby `TEST_DAVKA` a `TEST_FOTO_MNOZSTVI`):
+  - výpis dávek: každý díl s nákladem nakládá po 4 a vykládá po 2, se studentkami i s cihlami, ovocem, bramborami,
+    pivem, chmelem, uhlím, vodou, obilím, ropou, ocelí, kravičkami a kyselinou, u malé i u BRÝLÍ; čumák BRÝLÍ má 5
+    (vlastnost auta, callback ho nemění);
+  - fotka aut zastavených při nakládání s jedinou studentkou v každém autě: ve v17 jsou holky na korbě všech aut, ve
+    v16 na žádném (kromě BRÝLÍ Tatry, kde je 1 ze 2 polovina), `kontrola/hra_nakladani_v17.png`.
+
 ## Verze 16 (2. 10. odpoledne): studentky v přiblížení 8×, College Girl má ruce
 
 Hráč po dodávkách v10 (`holky-u-aut/README.md`): *„tak jo, zin8 funguje dobře, teď uděláme 8× náklady stud V3S,
@@ -535,7 +578,8 @@ Hra umí kreslit vozidlo z až osmi obrázků přes sebe, když má vlastnost `m
 (`GetCustomEngineSprite` v `newgrf_engine.cpp`; registry se před každou vrstvou nulují). Vrstva 0
 je auto (u modré v odstínu podle nákladu), vrstva 1 náklad. Switch `vrstvy <kód>` spočítá
 `(1 − vrstva) << 31`, uloží do registru 0x100 (`TempStore`) a podle vrstvy vybere auto nebo
-náklad. Náklad je vidět od poloviny nákladu (hra bere sadu naklad · počet / kapacita).
+náklad. Náklad je vidět od poloviny nákladu (hra bere sadu naklad · počet / kapacita), od verze 17
+na zastávce už od první jednotky (32 sad na zastávce, viz verze 17).
 
 Fotky nákladu: `render_v3s.py naklad_<KÓD>` nafotí jen náklad, auto je neviditelné, ale zakrývá,
 co je za bočnicemi (`is_holdout`). Stejná vrstva pak jde na vojenskou i všechny odstíny modré,
