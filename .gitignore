@@ -34,3 +34,6 @@ osobacky/model/
 
 # Chatka: model "A little happy hut" (11 MB, Sketchfab, CC BY 4.0) poslal hrac 3. 10. v chatu, sem se jen kopiruje.
 chatka/model/
+
+# Holky z releasu par10 (zip9/*.glb): nektere maji pres 50 MB (girl_sitting 84 MB, chill_girl 103 MB), sem se jen kopiruji.
+postavy/par10/

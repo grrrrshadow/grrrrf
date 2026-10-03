@@ -317,3 +317,88 @@ def sedici(jmeno):
     nohy = stredy_nohou(m, vyska)
     kotva, _, _ = sed(m, vyska, z_kycel, z_koleno, [nohy[0][1], nohy[1][1]])
     return m, kotva
+
+
+# ---------------------------------------------------------------- divky vklece u kytky (plantaz, hrac 3. 10.: "muzes
+# pridat na pole dalsi takhle sedici, klecici u kytek, nasmeruj je celem ke kytce vzdy jako ze delaj na ty kytce")
+def na_zem(meshe):
+    """posune postavu dolu, at nejnizsi bod (kolena) je v z 0"""
+    lo, _, _ = rozmery_siti(meshe)
+    for o in meshe:
+        _zapis(o, _vrcholy(o) - np.array([0.0, 0.0, lo[2]]))
+    return meshe
+
+
+def klec_galaxia(arm, meshe):
+    """galaxia (pozice T) vklece: stehna svisle, lytka dozadu po zemi, trup predkloneny, ruce dopredu dolu ke kytce"""
+    otoc_kost(arm, _kost(arm, "J_Bip_C_Spine"), (1, 0, 0), math.radians(28))
+    for st in ("L", "R"):
+        zn = 1 if st == "L" else -1
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerLeg"), (1, 0, 0), math.radians(90))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (0, 1, 0), zn * math.radians(70))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_UpperArm"), (1, 0, 0), math.radians(-45))
+        otoc_kost(arm, _kost(arm, f"J_Bip_{st}_LowerArm"), (1, 0, 0), math.radians(-30))
+
+
+def klec_college(arm, meshe):
+    """college_girl (pozice T ze snimku akce) vklece jako klec_galaxia; paze ma model uz 25 st. pod vodorovnou"""
+    otoc_kost(arm, _kost(arm, "Spine1_M_"), (1, 0, 0), math.radians(28))
+    for st, zn in (("L", 1), ("R", -1)):
+        otoc_kost(arm, _kost(arm, f"Knee_{st}_"), (1, 0, 0), math.radians(90))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (0, 1, 0), zn * math.radians(45))
+        otoc_kost(arm, _kost(arm, f"Shoulder_{st}_"), (1, 0, 0), math.radians(-45))
+        otoc_kost(arm, _kost(arm, f"Elbow_{st}_"), (1, 0, 0), math.radians(-30))
+
+
+def _kost_mixamo(arm, konec):
+    """kost kostry Mixamo podle jmena bez predpony a cisla (mixamorig:LeftLeg_056 i LeftLeg_058 -> "LeftLeg")"""
+    return next(b.name for b in arm.pose.bones if b.name.split(":")[-1].rsplit("_", 1)[0] == konec)
+
+
+def klec_mixamo(arm, meshe, dolu):
+    """kostra Mixamo (pubg_girl, character_girl_16) vklece jako klec_galaxia; dolu = o kolik stupnu sklopit paze
+    k telu (pozice T 70, pozice A mene)"""
+    otoc_kost(arm, _kost_mixamo(arm, "Spine"), (1, 0, 0), math.radians(28))
+    for st, zn in (("Left", 1), ("Right", -1)):
+        otoc_kost(arm, _kost_mixamo(arm, f"{st}Leg"), (1, 0, 0), math.radians(90))
+        otoc_kost(arm, _kost_mixamo(arm, f"{st}Arm"), (0, 1, 0), zn * math.radians(dolu))
+        otoc_kost(arm, _kost_mixamo(arm, f"{st}Arm"), (1, 0, 0), math.radians(-45))
+        otoc_kost(arm, _kost_mixamo(arm, f"{st}ForeArm"), (1, 0, 0), math.radians(-30))
+
+
+#: modely bez kostry, ktere jdou vklece ohnutim nohou v siti: kycle a kolena (podil vysky)
+KLECICI = {"par10/chill_girl": (0.52, 0.28)}
+#: modely s kostrou Mixamo: o kolik sklopit paze (pubg je v pozici T, character_girl_16 v pozici A)
+MIXAMO = {"par10/pubg_girl_pose_t": 70, "par10/character_girl_16_fbx": 40}
+
+
+def klecici(jmeno, vyska, predklon=28.0):
+    """divka vklece u kytky, kolena v z 0, celem k -y. Galaxia, college_girl a kostry Mixamo kostrou (i ruce ke
+    kytce), modely bez kostry ohnutim v siti: lytka dozadu, trup od kycli predkloneny i s rukama (body dal od stredu
+    nez stehna, nad zemi, jdou s trupem); predklon 0 = rovne (chill_girl drzi v rukou telefon)"""
+    bez_koule = lambda o: "Icosphere" not in o.name
+    if "galaxia" in jmeno:
+        return na_zem(nacti(jmeno, vyska, priprava=klec_galaxia, nechat=bez_koule))
+    if "college" in jmeno:
+        return na_zem(nacti(jmeno, vyska, priprava=klec_college, nechat=divka_a))
+    if jmeno in MIXAMO:
+        return na_zem(nacti(jmeno, vyska, priprava=lambda arm, m: klec_mixamo(arm, m, MIXAMO[jmeno]), nechat=bez_koule))
+    z_kycel, z_koleno = KLECICI[jmeno] if jmeno in KLECICI else SEDICI[jmeno][1:]
+    m = nacti(jmeno, vyska, emise=0.0 if "anime" in jmeno else None, nechat=bez_koule)
+    nohy = stredy_nohou(m, vyska)
+    ohni_nohy(m, vyska, z_kycel, z_koleno, [(x, ((1, 0, 0), 0.0), ((1, 0, 0), math.radians(90))) for x in (nohy[0][1], nohy[1][1])])
+    if not predklon:
+        return na_zem(m)
+    lo, _, vse = rozmery_siti(m)
+    pas = vse[np.abs(vse[:, 2] - z_kycel * vyska) < 0.02 * vyska]
+    xc, yc, zk = float(np.mean([nohy[0][1], nohy[1][1]])), float(pas[:, 1].mean()), z_kycel * vyska
+    R = _rot(((1, 0, 0), math.radians(predklon)))
+    for o in m:
+        v = _vrcholy(o)
+        trup = 1.0 - _pod(v[:, 2], zk, 0.03 * vyska)
+        ruce = (np.abs(v[:, 0] - xc) > 0.125 * vyska) & (v[:, 2] > lo[2] + 0.04 * vyska)
+        w = np.maximum(trup, ruce.astype(float))
+        p = np.array([xc, yc, zk])
+        _zapis(o, v + w[:, None] * (((v - p) @ R.T + p) - v))
+    return na_zem(m)
+

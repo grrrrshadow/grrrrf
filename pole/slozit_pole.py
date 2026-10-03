@@ -42,11 +42,16 @@ if os.path.exists(os.path.join(D, f"mari_zaklad_zin{ZIN}.png")):
     Z, C, BO = nacti("mari_zaklad"), nacti("cesta"), nacti("bouda")
     MA, VZ, HS, HJ = nacti("mari_male"), nacti("mari_vzrostle"), nacti("holky_sz"), nacti("holky_jv")
     CESTA_Y = 2
+    # holky pri praci mezi kytkami (od 3. 10. vecer): kazda na sve dlazdici pole, vrstva podle faze (zakryvaji je
+    # male, nebo vzrostle kytky); kladou se hned po kytkach sve dlazdice
+    PRACE = {(1, 1): "prace_real", (3, 0): "prace_sedi", (2, 3): "prace_punk", (4, 1): "prace_pubg",
+             (0, 3): "prace_char16", (4, 3): "prace_chill"}
     def zem(x, y):
         return [Z] if y != CESTA_Y else [C]
     for faze, kytky in ((1, None), (2, MA), (3, VZ)):
-        def vrstvy(x, y, kytky=kytky):
-            if y != CESTA_Y: return [kytky]
+        def vrstvy(x, y, kytky=kytky, faze=faze):
+            if y != CESTA_Y:
+                return [kytky] + ([nacti(f"{PRACE[x, y]}_f{faze}")] if faze > 1 and (x, y) in PRACE else [])
             return ([BO] if x == 0 else []) + ([HS] if x == 2 else []) + ([HJ] if x == 3 else [])
         slozit(5, 4, zem, vrstvy, f"pole_marihuany_faze{faze}_zin{ZIN}.png")
 if os.path.exists(os.path.join(D, f"bram_zaklad_zin{ZIN}.png")):

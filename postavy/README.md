@@ -34,3 +34,20 @@ od Galaxie) je dalo přes svislici dovnitř trupu, zápěstí skončilo uprostř
 `ruce_dolu_college` otáčí teď o 50° a `sed_college` taky (dřív 74°): ruce podél těla, vidět. Obrázky z dřívějška
 (studentky na korbě V3S a Tater stojící i sedící, dvě stojící College Girl u gymnázia, levá ruka u automatu
 s vlastním otočením 76° v `automat/render_automat.py`) mají ještě ruce schované, jsou na přefocení.
+
+## Holky z par10 a pózy vkleče (3. 10.)
+
+Další dívky od hráče jsou v `par10/` (release par10, `zip9.zip`; v gitu nejsou, některé mají přes 50 MB), seznam
+a licence v `../AUTORI-MODELU.md` (oddíl „Holky z par10“). Načítají se stejně, jen s cestou: `nacti("par10/real_girl",
+1.11)`. Real Girl, girl sitting a Teenage Punk girl jsou už napozované (klečí, na bobku, sedí), Matilda stojí s kytkou.
+
+`klecici(jmeno, vyska, predklon)` dá dívku vkleče u kytky (kolena v z 0, čelem k −y): stehna svisle, lýtka dozadu
+po zemi, trup předkloněný.
+- **pubg Girl** (poloha T) a **character girl #16** (poloha A) mají kostru Mixamo (`klec_mixamo`): koleno, páteř,
+  paže sklopené k tělu (o 70°, nebo o 40° z polohy A) a pak dopředu ke kytce, předloktí pokrčené.
+- **Galaxia a College Girl** to umí kostrou taky (`klec_galaxia`, `klec_college`), na plantáži ale nejsou (hráč:
+  *„colege nech na cestě a ty ostatní na cestě taky“*).
+- **Modely bez kostry** (Chill girl, `KLECICI`) ohnutím nohou v síti; s `predklon` > 0 se od kyčlí předkloní trup
+  i s rukama, Chill girl zůstává rovně (drží telefon).
+- Pomocná koule `Icosphere`, kterou mají některé modely v souboru (Galaxia, pubg, character girl #16), se vynechává.
+

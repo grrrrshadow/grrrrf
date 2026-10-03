@@ -6,7 +6,8 @@ releasu: `python3` skript čte jen začátek každého `.glb` v zipu, celé mode
 
 **Licence:** všechno je CC BY 4.0 (uvést autora, název, odkaz a že jsme to upravili), kromě
 **Buranu od tashtego: CC BY-NC 4.0, jen nekomerčně.** GRF s Buranem se nesmí prodávat a jeho licence
-musí NC převzít.
+musí NC převzít. **Matylda od nicolekeane (par10) je CC BY-NC-SA 4.0:** taky jen nekomerčně, a obrázky s ní
+(Matylda na zastávce) musí mít stejnou licenci CC BY-NC-SA 4.0 a jméno autorky.
 
 **Pozor:** modely od hans1240 jsou nejspíš převzaté z herních modů, jeho CC BY nemusí platit. Viz oddíl
 „Pozor na modely od hans1240“ dole.
@@ -15,16 +16,20 @@ musí NC převzít.
 |---|---|---|---|
 | [3D Sci-Fi](https://sketchfab.com/3D_Sci-Fi) | BSG – Shuttle Mk. II (`bsg__shuttle_mk._ii.glb`); BSG – Rising Star-type (`bsg__rising_star-type.glb`); BSG – Caprica Clipper (`bsg__caprica_clipper.glb`); BSG – Pyxis / Chrion (`bsg__pyxis__chrion.glb`); BSG – Olympic Carrier (`bsg__olympic_carrier.glb`); BSG – Gemenon Liner 1701 (`bsg__gemenon_liner_1701.glb`); BSG – Colonial Liner (`bsg__colonial_liner.glb`); BSG – Shuttle Mk. II (`bsg__shuttle_mk._iiix0cx60.glb`) | CC-BY-4.0 | glb (GLB.zip), z něj je shuttle.grf, par6 |
 | [Chicken cutlet](https://sketchfab.com/Chicken_Cutlet) | Diesel locomotive M62 (`diesel_locomotive_m62.glb`) | CC-BY-4.0 | par5 (zip5/m62) s texturami 1024 px, par8 s texturami 2048 px; z něj je Sergej (`sergej/`) |
+| [BELAZ](https://sketchfab.com/asset_for_games) | character girl #16 (FBX) (`character_girl_16_fbx.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), holka vkleče s rukama u kytky na marihuanové plantáži (`pole/`) |
 | [demidrew](https://sketchfab.com/demidrew) | Anime Girl (`anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, gymnázium s holkami |
 | [DynamicSAV](https://sketchfab.com/dynamicsav) | Car trailer model game ready for free PBR (`car_trailer_model_game_ready_for_free_pbr.glb`) | CC-BY-4.0 | par6 |
 | [Fratzica](https://sketchfab.com/vasilebetivu62) | Opel Movano (`opel_movano.glb`) | CC-BY-4.0 | par6 |
 | [hans1240](https://sketchfab.com/hans1240) | Tatra-148-AKT-3-3 (`tatra-148-akt-3-3.glb`); Praga-V3S (`praga-v3s.glb`); Tatra-815 (`tatra-815.glb`); ZiL-4514 (`zil-4514.glb`); ZiL-164 (`zil-164.glb`); Amur (`amur.glb`) | CC-BY-4.0 (**nejisté**, viz „Pozor na modely od hans1240“ dole) | par6, z Pragy V3S je V3S Vejtřaska (`v3s/`) |
 | [kiemtruongkts](https://sketchfab.com/kiemtruongkts) | Character People Girl 001 (`character_people_girl_001.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, dívka na zastávce, holka u dveří busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
+| [iysif](https://sketchfab.com/iysif) | pubg Girl Pose T (`pubg_girl_pose_t.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), holka v pyžamu vkleče u kytky na plantáži (`pole/`) |
 | [KOG_THORNS](https://sketchfab.com/ioai25312) | Antonov AN-225 (`antonov_an-225.glb`) | CC-BY-4.0 | par8 |
 | [LarsH.](https://sketchfab.com/LarsH.) | Star Wars A-A5 heavy speeder truck (`star_wars_a-a5_heavy_speeder_truck.glb`); Star Wars Landspeeder Collection (`star_wars_landspeeder_collection.glb`) | CC-BY-4.0 | par6 |
 | [Leafia dev.](https://sketchfab.com/Leaf_dev) | Teplovoz-m62 РЖД (`teplovoz-m62.glb`) | CC-BY-4.0 | par8; textury těla, žaluzií a spojky jsou nátěr Maša РЖД Sergeje od v7 (`sergej/model/rzd_*.png`) |
 | [manilov.ap](https://sketchfab.com/manilov.ap) | Mig21 (`mig21.glb`); Yak42 (`yak42.glb`); Tu204 (`tu204.glb`); Tu154 (`tu154.glb`); Tu144 (`tu144.glb`); Tu114 (`tu114.glb`); An225 (`an225.glb`); An10 (`an10.glb`); An124 (`an124.glb`); An74 (`an74.glb`) | CC-BY-4.0 | par6 |
 | [Miguel Adão](https://sketchfab.com/theauditor) | Zeppelin Aircraft (`zeppelin_aircraft.glb`) | CC-BY-4.0 | par6 |
+| [nicolekeane](https://sketchfab.com/nicolekeane) | Matilda (`matilda.glb`) | CC-BY-NC-SA-4.0 | par10 (zip9, `postavy/par10/`), Matylda na zastávce (`zastavka/`) |
+| [planetrey.com](https://sketchfab.com/planetrey.com) | girl sitting (`girl_sitting.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), holka na bobku u kytky na plantáži (`pole/`) |
 | [Pavlo_Holubov](https://sketchfab.com/Pavlo_Holubov) | Zuk (`zukpavloholubov.glb`) | CC-BY-4.0 | par6 |
 | [rhcreations](https://sketchfab.com/rhcreations) | Large Caravan (`large_caravan.glb`); Small Caravan (`small_caravan.glb`) | CC-BY-4.0 | par6 |
 | [Rotmill](https://sketchfab.com/Rotmill) | College Girl (`college_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, druhá dívka na zastávce, holka u kufru busů (dodávky v5), studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
@@ -34,9 +39,12 @@ musí NC převzít.
 | [streetpharmacy](https://sketchfab.com/streetpharmacy) | Small Cannabis Plant (`small_cannabis_plant.glb`); Cannabis Plant (`cannabis_plant.glb`); Fat Joint (`fat_joint.glb`) | CC-BY-4.0 | par6; Cannabis Plant je u sochy Karla Máchy (`rostliny/`) a v plotu chatky, Small Cannabis Plant a Cannabis Plant na marihuanové plantáži (`pole/`) |
 | [tashtego](https://sketchfab.com/tashtego) | Space Shuttle Buran (`space_shuttle_buran.glb`) | CC-BY-NC-4.0 | par6 |
 | [Tatenashi](https://sketchfab.com/Tatenashi) | Galaxia anime girl (`galaxia_anime_girl.glb`) | CC-BY-4.0 | zip7 (`postavy/`), socha Karla Máchy s postavami, studentky na korbě (V3S a Tatry v13, od v14 i sedící), automat a gymnázium s holkami, chatka |
+| [tr.onurdk1](https://sketchfab.com/onurdk1) | Chill girl (`chill_girl.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), holka vkleče s telefonem u kytky na plantáži (`pole/`) |
 | [Thcyrax](https://sketchfab.com/thcyrax) | Vehicle - Ural Truck 44202 (`vehicle_-_ural_truck_44202.glb`) | CC-BY-4.0 | par6 |
 | [Tigran Safaryan](https://sketchfab.com/Tigran_Eredas) | A little happy hut (`a_little_happy_hut.glb`) | CC-BY-4.0 | poslal hráč 3. 10. v chatu; chatka (`chatka/`) |
 | [Zbrojmistrz](https://sketchfab.com/zbrojmistrz) | Cannabis Sativa plant (`cannabis_sativa_plant.glb`) | CC-BY-4.0 | par6; u sochy Karla Máchy (`rostliny/`), na marihuanové plantáži (`pole/`) a v plotu chatky |
+| [YØD](https://sketchfab.com/YOD3DD) | Teenage Punk girl (`teenage_punk_girl.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), punkerka sedí s nohama u kytky na plantáži (`pole/`) |
+| [zalomskij](https://sketchfab.com/zalomskij) | Real Girl (`real_girl.glb`) | CC-BY-4.0 | par10 (zip9, `postavy/par10/`), holka vkleče u kytky na plantáži (`pole/`) |
 | ? (v souboru není) | v3s_praga.glb (`v3s_praga.glb`); bsg_shuttle_mk_ii_olympic_carriers_fanon.glb (`bsg_shuttle_mk_ii_olympic_carriers_fanon.glb`) | ? | par6 |
 
 Bez metadat v par6:
@@ -372,3 +380,34 @@ All licensed under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/
 Changes: the hut scaled and turned, a yard with benches, junk, plants and a fence of plants added, the figures posed
 (standing, sitting) and scaled, plants recoloured and scaled, rendered into the sprite.
 ```
+
+## Holky z par10 (zip9, 3. 10.)
+
+Hráč poslal 21 dívek (release `par10`, `zip9.zip`, 342 MB): *„na pole mam specialni pózy. soubory real, siting a punk“*,
+*„matylda je na zastávku“*, *„vem další holky ze zipu“*, *„zbytek holek použijem jinde“*. Použité leží
+v `postavy/par10/` (v gitu nejsou, některé mají přes 50 MB). Licence podle metadat v souborech:
+
+| soubor | model, autor | licence | kostra | použito |
+|---|---|---|---|---|
+| `real_girl.glb` | Real Girl, zalomskij | CC BY 4.0 | ne, klečí | plantáž, vkleče u kytky |
+| `girl_sitting.glb` | girl sitting, planetrey.com | CC BY 4.0 | ne, na bobku | plantáž, na bobku u kytky |
+| `teenage_punk_girl.glb` | Teenage Punk girl, YØD | CC BY 4.0 | ne, sedí na zemi | plantáž, sedí s nohama u kytky |
+| `pubg_girl_pose_t.glb` | pubg Girl Pose T, iysif | CC BY 4.0 | Mixamo, poloha T | plantáž, vkleče s rukama u kytky |
+| `character_girl_16_fbx.glb` | character girl #16 (FBX), BELAZ | CC BY 4.0 | Mixamo, poloha A | plantáž, vkleče s rukama u kytky |
+| `chill_girl.glb` | Chill girl, tr.onurdk1 | CC BY 4.0 | ne, stojí s telefonem | plantáž, vkleče s telefonem |
+| `matilda.glb` | Matilda, nicolekeane | **CC BY-NC-SA 4.0** | ne, stojí s kytkou v květináči | zastávka podél Y |
+| `female_girl.glb` | Female Girl, Ezau954gamer | CC BY 4.0 | ne, poloha A | zatím ne |
+| `fashion_girl.glb` | Fashion Girl, Abner Wu | CC BY 4.0 | prázdná (jen kořen), poloha T | zatím ne |
+| `anime_girl.glb` | Anime Girl, Michael.Chim (jiná než `postavy/anime_girl.glb`) | CC BY 4.0 | ne | zatím ne |
+| `girl_in_skirt.glb` | girl in skirt, planetrey.com | CC BY 4.0 | ne, stojí, jedna noha vpřed | zatím ne |
+| `character_girl_animated__walk_v02.glb` | character girl animated walk v02, Unity (shehab house) | CC BY 4.0 | ano, chůze | zatím ne |
+| `cute_cartoon_girl.glb` | Cute Cartoon Girl, Chenchanchong | CC BY 4.0 | ano | zatím ne |
+| `anime_girl_casual_outfit__stylized_3d_character.glb` | Anime Girl Casual Outfit, agra_aoe | CC BY 4.0 | ne, poloha T | zatím ne |
+| `anime_girl-1.glb` | ANIME GIRL, karimsame | CC BY 4.0 | ne | zatím ne (v náhledu nic nebylo vidět) |
+| `anime_girl_character.glb` | Anime Girl Character, Ar3Designer | CC BY 4.0 | ne, s batohem | zatím ne |
+| `girl_02.glb` | GIRL 02, ZEPETO EXPORTER | CC BY 4.0 | ne, poloha T | zatím ne |
+| `anime_girl-2.glb` | Anime Girl, guudorta | CC BY 4.0 | ne, poloha A | zatím ne |
+| `anime-girl.zip` | zdroj a textury bez metadat | ? | ? | ne (licence neznámá) |
+| `3d_anime_girl..glb` | 3D Anime girl., GermanURR | CC BY-SA 4.0 (obrázky by musely mít stejnou licenci) | ne | ne |
+| `vivi_manga_student_girl_style.glb` | Vivi manga student girl style, daydev | CC BY-NC-SA 4.0 | ano | ne |
+

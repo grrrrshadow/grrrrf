@@ -11,7 +11,7 @@
 #   (trava a polni cesta podel x);
 # - prikladaci vrstvy (jinde pruhledne, nic nepresahuje pod predni hrany policka, jen nahoru): bouda (kulna a nadrze na
 #   konci cesty vedle ni, na trave u severozapadniho okraje), male a vzrostle kytky (i se stinem na zem), holky u okraju
-#   cesty.
+#   cesty, holky pri praci u kytek na dlazdici pole (prace_*, zvlast pro male a vzrostle kytky, viz nize).
 # Cesta prostredkem pole (hrac: "takhle bude cesta prostredkem pole, vzor je overlaping titles z toho grf", "normalne tam
 # bude tvoje nynejsi cesta a pod ni postavim silnici pro auta, proto potrebuju aby ta cesta v marihuanovy plantazi byla
 # overlaping, ze tam je obrazek ale muzu pod obrazkem stavet"): obrazek cesty je plny, ve hre se kresli jako prekryvajici
@@ -319,6 +319,33 @@ if POLE == "marihuana":
     do_sceny(PO.nacti_stojici("college_girl", 1.62, "ruce_dolu"), 10.4, 1.9, 0.0, math.radians(40), "holky_sz")
     do_sceny(PO.nacti_stojici("character_people_girl_001", 1.68), 9.2, T - 1.7, 0.0, math.radians(15), "holky_jv")
     do_sceny(PO.nacti_stojici("college_girl", 1.62, "ruce_dolu"), 12.6, T - 2.0, 0.0, math.radians(50), "holky_jv")
+    # holky pri praci mezi kytkami (hrac 3. 10.: "na pole mam specialni pozy. soubory real, siting a punk tyhle at jsou
+    # videt dobre mezi kytkama jak pracujou", "nasmeruj je celem ke kytce vzdy jako ze delaj na ty kytce, z ktery strany
+    # delaj na kytce je jedno"): modely uz napozovane (release par10, zip9; v gitu nejsou, patri do postavy/par10/),
+    # bez kostry, ve skutecne velikosti (punk je asi o petinu mensi, proto 1,17x). Kazda holka je vlastni vrstva na
+    # dlazdici pole (MISTA jsou na vsech polickach stejna), kazda u jine kytky, takze jdou dat i vic na jedno policko.
+    # Kytky stoji v mrizce po T/4 a kamera se diva sikmo pod 45 st.: mezi sloupci kytek jsou sikme pruhledy (y - x
+    # o pul rozestupu od kytek). Holka sedi nebo kleci bokem ke kytce v pruhledu, takze je dobre videt a kytky ji
+    # zakryvaji jen trochu (zvlast vrstva pro male a pro vzrostle kytky).
+    S2 = math.sqrt(0.5)
+    PRACE = {   # skupina: (model, vyska posazene postavy v m, kytka z MISTA, odstup od kytky v m, smer od holky ke kytce)
+        "prace_real": ("par10/real_girl", 1.11, 5, 1.5, (S2, -S2)),                  # klecici, vpravo od kytky
+        "prace_sedi": ("par10/girl_sitting", 1.043, 10, 1.35, (-S2, S2)),            # na bobku, vlevo od kytky
+        "prace_punk": ("par10/teenage_punk_girl", 0.697 * 1.17, 7, 1.1, (S2, -S2)),  # sedi, nohy ke kytce, vpravo od ni
+    }
+    # dalsi holky vklece u kytek (hrac: "muzes pridat na pole dalsi takhle sedici, klecici u kytek", "colege nech na
+    # ceste a ty ostatni na ceste taky, vem dalsi holky ze zipu"): z par10 pubg_girl a character_girl_16 kostrou
+    # Mixamo i s rukama ke kytce, chill_girl ohnutim nohou v siti, rovne, s telefonem v rukou (pauza)
+    KLECI = {"prace_pubg", "prace_char16", "prace_chill"}
+    PRACE.update({
+        "prace_pubg": ("par10/pubg_girl_pose_t", 1.62, 2, 1.6, (S2, -S2)),           # vpravo od kytky
+        "prace_char16": ("par10/character_girl_16_fbx", 1.62, 13, 1.6, (-S2, S2)),   # vlevo od kytky
+        "prace_chill": ("par10/chill_girl", 1.65, 11, 1.3, (S2, -S2)),               # vpravo od kytky, s telefonem
+    })
+    for sk, (model, vyska, kytka, odstup, (sx, sy)) in PRACE.items():
+        kx, ky = MISTA[kytka][0], MISTA[kytka][1]
+        meshe = PO.klecici(model, vyska, predklon=0.0 if sk == "prace_chill" else 28.0) if sk in KLECI else PO.nacti(model, vyska)
+        do_sceny(meshe, kx - sx * odstup, ky - sy * odstup, 0.0, math.atan2(sy, sx), sk)
 
 # ---------------------------------------------------------------- kamera, slunce, ram
 stred = B(T / 2, T / 2, 0.0)
@@ -413,6 +440,24 @@ def vrstva_holek(zem_sk, holky, zakryva, jm, popis):
     H[H[..., 3] < 0.004] = 0.0
     uloz(H, jm, "vrstva", popis)
 
+def vrstva_prace(zem_sk, holky, zakryva, jm, popis):
+    """holka mezi kytkami se stinem na zem: kytky policka (zakryva) jsou zadrzene a nevrhaji stin (ten je ve vrstve
+    kytek); A se zemi jako chytacem stinu, B se zemi zadrzenou, stin = (A.a - B.a) / (1 - B.a) jen v kosoctverci
+    policka na STIN (20 %) jako u kytek; alfa holky omezena pruchodem s holkou samotnou (listy s pruhlednou texturou
+    nechavaji v zadrzene scene slabe cerne obrysy)"""
+    nastav(videt=[zem_sk, holky] + zakryva, chytac=[zem_sk], drzi=zakryva, bez_stinu=zakryva)
+    A = render_do_pole(jm + "_a")
+    nastav(videt=[zem_sk, holky] + zakryva, drzi=[zem_sk] + zakryva, bez_stinu=zakryva)
+    Bp = render_do_pole(jm + "_b")
+    nastav(videt=[holky])
+    G = render_do_pole(jm + "_g")
+    aB = np.minimum(Bp[..., 3], G[..., 3])
+    aS = np.clip((A[..., 3] - Bp[..., 3]) / np.maximum(1 - Bp[..., 3], 1e-6), 0, 1) * STIN * KOSOCTVEREC
+    alfa = aB + (1 - aB) * aS
+    barva = np.where(alfa[..., None] > 0, Bp[..., :3] * aB[..., None] / np.maximum(alfa[..., None], 1e-6), 0)
+    out = np.dstack([barva, alfa]); out[alfa < 0.004] = 0.0
+    uloz(out, jm, "vrstva", popis)
+
 def chci(jm):
     return not JEN or jm in JEN
 
@@ -426,6 +471,11 @@ if POLE == "marihuana":
         vrstva_se_stinem("mari_zaklad", "mari_vzrostle", ["mari_vzrostle_sousede"], "mari_vzrostle", "vzrostle smrcky 3,8 az 5 m")
     if chci("holky_sz"): vrstva_holek("cesta", "holky_sz", [], "holky_sz", "dve holky u severozapadniho okraje cesty (ne na dlazdici s boudou)")
     if chci("holky_jv"): vrstva_holek("cesta", "holky_jv", [], "holky_jv", "dve holky u jihovychodniho okraje cesty (i s boudou)")
+    for sk in PRACE:
+        for f, kytky in ((2, "mari_male"), (3, "mari_vzrostle")):
+            if chci(f"{sk}_f{f}"):
+                vrstva_prace("mari_zaklad", sk, [kytky], f"{sk}_f{f}",
+                             f"holka pri praci u kytky ({PRACE[sk][0].split('/')[-1]}), zakryta {'malymi' if f == 2 else 'vzrostlymi'} kytkami policka, faze {f}")
 if POLE == "brambory":
     if chci("bram_zaklad"): zaklad("bram_zaklad", "bram_zaklad", "pole brambor bez nate: zem, 20 hrebenu podel x")
     if chci("bram_male"): vrstva_se_stinem("bram_zaklad", "bram_male", ["bram_male_sousede"], "bram_male", "mlada nat 0,2 az 0,27 m")

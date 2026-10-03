@@ -136,3 +136,40 @@ Hráč: *„postavil jsi boudu do cesty na marihuanový plantaži : ) tam budou 
 - Na dlaždici s boudou jdou jen holky `holky_jv` (u jihovýchodního okraje). `holky_sz` stojí na trávě, kde je
   teď kůlna.
 - Změnil se jen obrázek `bouda` (4× i 8×) a náhledy, ostatní dlaždice jsou stejné.
+
+## Holky při práci mezi kytkami (3. 10. večer)
+
+Hráč: *„holky na marihuanový plantáži rozptyl mezi kytky, tak mužou být trochu zakryté kytkama, a ať se holky
+u kytek ohnou a něco dělaj“*, *„holky na cestě nech, to je dobrý, na pole mam specialní pózy. soubory real, siting
+a punk tyhle ať jsou vidět dobře mezi kytkama jak pracujou. mužeš přidat na pole další takhle sedící, klečící
+u kytek, nasměruj je čelem ke kytce vždy jako že dělaj na tý kytce“*, *„když tam bude 10, 12 studentek na brigádě
+na poli tak to je asi dobrý, nemusí všechny pracovat, povidaj si“*, *„colege nech na cestě a ty ostatní na cestě
+taky, vem další holky ze zipu“*.
+
+- **Šest holek na poli**, každá u své kytky, čelem k ní, z releasu par10 (`AUTORI-MODELU.md`, oddíl Holky z par10):
+
+| vrstva | holka | co dělá |
+|---|---|---|
+| `prace_real` | Real Girl | klečí u kytky |
+| `prace_sedi` | girl sitting | sedí na bobku, ruce u kytky |
+| `prace_punk` | Teenage Punk girl | sedí na zemi, nohy kolem kytky |
+| `prace_pubg` | pubg Girl (v pyžamu) | klečí v předklonu, ruce ke kytce (kostrou) |
+| `prace_char16` | character girl #16 | klečí v předklonu, ruce ke kytce (kostrou) |
+| `prace_chill` | Chill girl | klečí rovně s telefonem v rukou, má pauzu |
+
+- Se čtyřmi holkami na cestě (`holky_sz`, `holky_jv`, ty si povídají) je to deset studentek na brigádě.
+- **Každá holka je přikládací vrstva na dlaždici pole** (`mari_zaklad`), ve dvou verzích: `…_f2` pro malé kytky
+  (fáze 2) a `…_f3` pro vzrostlé (fáze 3). Kytky před holkou ji ve vrstvě zakrývají, proto je vrstva pro každou
+  fázi zvlášť. Ve fázi 1 (bez kytek) holky na poli nejsou, nemají u čeho pracovat. Vrstva se klade hned po kytkách
+  své dlaždice, před dlaždice blíž k divákovi (ty ji pak zakryjí samy).
+- **Dobře vidět:** kytky stojí v mřížce po čtvrt políčka a kamera se dívá šikmo, takže mezi sloupci kytek jsou
+  šikmé průhledy. Každá holka klečí nebo sedí bokem ke kytce v takovém průhledu, kytky ji zakrývají jen trochu.
+- **Každá u jiné kytky** (z 16 na políčku), takže jdou dát i dvě nebo tři na jedno políčko a nepřekrývají se.
+- Holky mají slabý stín na zem jako kytky (20 %), nic nepřečuhuje pod přední hrany políčka.
+- Rám a rohy stejné jako ostatní dlaždice (4× 264 × 200, 8× 528 × 400), soubory `dlazdice/prace_*_f2_zin4.png` atd.
+- Náhled: `dlazdice/nahled/marihuana_3faze.png` (fáze 2 a 3 s holkami na šesti políčkách), zblízka
+  `dlazdice/nahled/holky_na_poli_zin8.png`.
+- Modely nejsou v gitu (některé přes 50 MB), patří do `postavy/par10/` z releasu par10 (`zip9.zip`).
+  Pózy vkleče pro pubg a character girl #16 (kostra Mixamo) a pro Chill girl (ohnutí nohou v síti) jsou
+  v `postavy/postavy.py` (`klecici`).
+

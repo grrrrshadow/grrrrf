@@ -81,3 +81,39 @@ tyrkysová `divka_k2_s90` a tmavovlasá zády `divka2_co_k2_s260`, podél Y `div
 `postavy/fotka_postavy.py` s `PX_M=24.4 RAM=320 SAMPLES=1024`: stejná kamera, dvojnásobné rozlišení, obrázek 8× je
 přesně dvojnásobek 4× i s chodidly uprostřed. Tmavovlasá College Girl má zároveň ve 4× i 8× ruce (dřív je otočení
 ramen o 76° schovalo do trupu, teď 50°, `postavy/README.md`), `divka2_co_k2_s260.png` je proto znovu.
+
+## Matylda na blízkém chodníku podél Y (3. 10.)
+
+Hráč: *„matylda je na zastávku kde holka chybí směr jihovýchod asi? tam dame matyldu a původní zastávka ji schová,
+se nic neskazí“*, pak k náhledu *„jo přesně tak jsem ji chtěl, ať vyhlíží : )“*.
+
+- **Kde chyběla:** u silnice podél Y (severozápad–jihovýchod) byla jen jedna dívka, na vzdáleném okraji. Na blízkém
+  okraji by ji originální přístřešek zakryl. Hráč chce, ať tam stojí: v originále ji přístřešek schová, na CZTR je
+  vidět.
+- **Matylda** (Matilda od nicolekeane, Sketchfab, release par10 `zip9/matilda.glb`, v `postavy/par10/`): holka
+  z filmu Leon s mikádem, v hnědé bundě a s kytkou v květináči. **Licence CC BY-NC-SA 4.0:** nekomerčně (jako
+  Buran) a obrázky s ní musí mít stejnou licenci a jméno autorky (`AUTORI-MODELU.md`).
+- **Vyhlíží autobus:** stojí na kraji chodníku u silnice a kouká podél silnice k severozápadu (směr 270 st.), kytka
+  v květináči je z pohledu hráče vidět. Velikost 2× jako ostatní dívky (skutečná výška 1,6 m), slabý stín jako na
+  zastávce.
+
+| silnice | bod (šestnáctiny) | čelem k | posun od severního rohu, 4× | 1× | 8× | kreslit |
+|---|---|---|---|---|---|---|
+| podél Y | x 13,4, y 5 (blízký okraj, kraj chodníku u silnice) | podél silnice k severozápadu (270 st.) | (−67,2, 73,6) | (−16,8, 18,4) | (−134,4, 147,2) | jako podřízený obrázek **vzdáleného** přístřešku `Y_E`, tedy před blízkým `Y_W` |
+
+- **Originál:** blízký přístřešek `Y_W` se kreslí až po ní, jeho zadní stěna, lavička a střecha ji zakryjí. Jak moc
+  přesně, ukáže až hra.
+- **CZTR:** blízký skleněný přístřešek je u jižního rohu, Matylda stojí v severozápadní části na volném chodníku
+  (`matylda_na_zastavce_cztr.png`). Chodník je součást obrázku `Y_W` a kreslí se po ní, může jí překrýt podrážky
+  o pixel.
+- **Podél Y jsou teď dvě:** vzdálená v tyrkysovém tílku (`divka_k2_s0`) a Matylda.
+
+| soubor | co to je |
+|---|---|
+| `divka3_ma_k2_s270.png` (+ `.json`) | Matylda ve 4×, 160 × 160 px, chodidla přesně uprostřed (80, 80) |
+| `divka3_ma_k2_s270_zin8.png` (+ `.json`) | totéž v 8× (jen naše hra, `zin8`), 320 × 320 px, chodidla (160, 160), přesně dvojnásobek 4× |
+| `matylda_na_zastavce_cztr.png` | náhled: Matylda vložená do zastávky CZTR podél Y (z `vysledek_2x.png`, 2× zvětšené) |
+
+Fotka: `POSTAVA=par10/matilda VYSKA=1.6 SMER=270 STIN=0.2 SAMPLES=256 python3 ../postavy/fotka_postavy.py
+divka3_ma_k2_s270.png`, 8× s `PX_M=24.4 RAM=320 SAMPLES=1024`.
+

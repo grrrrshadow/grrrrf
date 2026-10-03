@@ -283,3 +283,33 @@ Hráč: *„postavil jsi boudu do cesty na marihuanový plantaži : ) tam budou 
 - Je to na severozápadní straně, za auty: překrývající obrázek se kreslí pod auty, auto jedoucí kolem ho tedy zakryje
   správně.
 - Na dlaždici s boudou jen holky `holky_jv`. Holky `holky_sz` stojí na stejné trávě jako kůlna.
+
+## Holky při práci na plantáži, Matylda na zastávce (3. 10. večer)
+
+### Plantáž: šest holek mezi kytkami
+
+Hráč: *„holky na marihuanový plantáži rozptyl mezi kytky … ať se holky u kytek ohnou a něco dělaj“*, *„když tam bude
+10, 12 studentek na brigádě na poli tak to je asi dobrý, nemusí všechny pracovat, povidaj si“*. Holky na cestě
+(`holky_sz`, `holky_jv`) zůstávají.
+
+- **Nové přikládací vrstvy na dlaždici pole** (`pole/dlazdice/prace_*_f2_zin4/8.png` a `…_f3_…`): `prace_real`,
+  `prace_sedi`, `prace_punk`, `prace_pubg`, `prace_char16`, `prace_chill`. Každá je jedna holka u jedné kytky.
+- **Verze podle fáze:** `_f2` k malým kytkám (fáze 2), `_f3` ke vzrostlým (fáze 3); kytky před holkou ji ve vrstvě
+  zakrývají. Ve fázi 1 (bez kytek) holky na poli nejsou.
+- **Pořadí kreslení:** zem dlaždice, kytky dlaždice, holka, pak teprve dlaždice blíž k divákovi.
+- Každá holka je u jiné kytky, na jedno políčko jich jde dát i víc. Rám a rohy jako ostatní dlaždice.
+- Logika je na vás: holky se ukazují, když přijedou (s holkami na cestě jich je deset), bez nich pole dlouho neroste.
+
+### Zastávka: Matylda podél Y
+
+Hráč: *„matylda je na zastávku kde holka chybí … tam dame matyldu a původní zastávka ji schová, se nic neskazí“*.
+
+- **Obrázky:** `zastavka/divka3_ma_k2_s270.png` (4×, 160 × 160, chodidla uprostřed) a `…_zin8.png` (8×, 320 × 320).
+- **Kde:** silnice podél Y, blízký okraj, bod x 13,4, y 5 (šestnáctiny), posun od severního rohu dlaždice ve 4×
+  (−67,2, 73,6), v 1× (−16,8, 18,4), v 8× (−134,4, 147,2).
+- **Kreslit jako podřízený obrázek vzdáleného přístřešku `Y_E`**, tedy před blízkým `Y_W`. Originální blízký
+  přístřešek ji pak zakryje, na CZTR stojí na volném chodníku a vyhlíží autobus. Jen když čekají cestující, jako
+  ostatní dívky.
+- **Licence Matyldy je CC BY-NC-SA 4.0** (nicolekeane): nekomerčně a obrázek s ní pod stejnou licencí a se jménem
+  autorky (`AUTORI-MODELU.md`).
+
