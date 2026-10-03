@@ -227,7 +227,7 @@ a přiložime boudu. takhle bude mít pole tři fáze, bez kytek, s malýma kytk
 - **Zem** (neprůhledná přesně v kosočtverci políčka, sousední dlaždice se nepřekrývají): `mari_zaklad` (pole
   marihuany bez kytek), `bram_zaklad` (pole brambor bez natě), `cesta` (polní cesta podél x).
 - **Přikládací vrstvy** (jinde průhledné, nic nepřečuhuje pod přední hrany, jen nahoru): `mari_male`, `mari_vzrostle`,
-  `bram_male`, `bram_vzrostle`, `bouda` (kůlna a nádrže na konci cesty, kreslí se na dlaždici cesty), `holky_sz`
+  `bram_male`, `bram_vzrostle`, `bouda` (kůlna a nádrže na konci cesty vedle ní, kreslí se na dlaždici cesty), `holky_sz`
   a `holky_jv` (dvě holky u severozápadního, nebo jihovýchodního okraje dlaždice cesty).
 - **Fáze:** 1 jen zem, 2 zem a malé kytky, 3 zem a vzrostlé smrčky. Dlaždice na sebe navazují (záhony podél x přes celé
   políčko, rostliny v každém políčku na stejném místě), takže stačí jedna dlaždice na každý druh a opakuje se.
@@ -253,8 +253,7 @@ silnici.
   zůstane volné a dá se na něm stavět silnice. Auta a zastávka se kreslí nad tím obrázkem.
 - **Pro plantáž:** obrázek `cesta` patří dlaždici pole vedle řádku cesty (zem prázdného pole je pod kytkami vždycky,
   takže to platí ve všech fázích) a kreslí se posunutý o políčko přes řádek cesty. Řádek cesty zůstane volný pro
-  hráčovu silnici. Bouda na páté dlaždici sahá jen do půlky políčka na konci cesty (na slepém konci auta otáčejí
-  uprostřed).
+  hráčovu silnici. Bouda stojí od 3. 10. večer vedle cesty, ne na ní (viz oddíl Bouda vedle cesty níž).
 - **Šířka cesty:** auta jezdí ve dvou pruzích čtvrt políčka od středu (3,7 m), ujetá cesta je proto 9,8 m a koleje
   jsou v pruzích, tráva 2,5 m po krajích. Holky (hráč: *„holky přikladej jen po stranách u kraje dlaždic cesty
   polem“*) stojí na trávě u kraje, ne v pruzích.
@@ -273,3 +272,14 @@ nezapomenu mu to říct všechno.“* Plantáž tedy dostane limit 10 políček 
 Hráč: *„nápis roztáhni přes celou ceduli a zvýrazni ho ať je vidět, jiný odstín cedule a nápisu“*. Deska je tmavá,
 písmo světle zlaté přes celou desku. **Změnily se všechny obrázky sochy** (`socha/socha_*_zin4.png`, `…_zin8.png`,
 i s postavami). Rohy a velikost stejné, prosím rozkrájet znovu.
+
+## Bouda vedle cesty (3. 10. večer)
+
+Hráč: *„postavil jsi boudu do cesty na marihuanový plantaži : ) tam budou jezdit auta přece : )“*.
+
+- **Změnil se obrázek `pole/dlazdice/bouda_zin4.png` a `bouda_zin8.png`** (rám a rohy stejné), prosím rozkrájet znovu.
+- Kůlna a tři nádrže stojí na trávě u severozápadního okraje páté dlaždice cesty (2,5 m pás trávy), pořád na konci
+  cesty. Ujetá cesta a oba pruhy jsou volné po celé délce řádku, takže hráč může silnici postavit i přes pátou dlaždici.
+- Je to na severozápadní straně, za auty: překrývající obrázek se kreslí pod auty, auto jedoucí kolem ho tedy zakryje
+  správně.
+- Na dlaždici s boudou jen holky `holky_jv`. Holky `holky_sz` stojí na stejné trávě jako kůlna.

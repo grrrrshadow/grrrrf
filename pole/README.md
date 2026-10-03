@@ -92,8 +92,8 @@ západ (4, 128), jih (132, 192); v 8× 528 × 400 px a všechno dvakrát. Nad se
 | `mari_male` | přikládací: malé kytky (mladé rostliny 1,5 až 2,2 m) |
 | `mari_vzrostle` | přikládací: vzrostlé smrčky 3,8 až 5 m (jako druhá fáze staré plantáže) |
 | `bram_male`, `bram_vzrostle` | přikládací: mladá nať 0,2 až 0,27 m, vzrostlá nať 0,4 až 0,52 m, část kvete |
-| `bouda` | přikládací: kůlna a tři nádrže na konci cesty (na dlaždici cesty, severovýchodní konec, dveře na cestu) |
-| `holky_sz`, `holky_jv` | přikládací: dvě holky u severozápadního, nebo jihovýchodního okraje dlaždice cesty |
+| `bouda` | přikládací: kůlna a tři nádrže na konci cesty, vedle ní na trávě u severozápadního okraje dlaždice cesty (ujetá cesta zůstává volná), dveře na cestu |
+| `holky_sz`, `holky_jv` | přikládací: dvě holky u severozápadního, nebo jihovýchodního okraje dlaždice cesty (na dlaždici s boudou jen `holky_jv`) |
 
 - **Zem** (`*_zaklad`, `cesta`) je neprůhledná přesně v kosočtverci políčka: pixel patří políčku, když v něm leží jeho
   střed. Sousední dlaždice se tak nepřekrývají a nemají mezi sebou díru.
@@ -116,8 +116,23 @@ západ (4, 128), jih (132, 192); v 8× 528 × 400 px a všechno dvakrát. Nad se
 - **Proč je cesta tak široká:** auta ve hře jezdí ve dvou pruzích čtvrt políčka od středu (3,7 m), ujetá cesta je
   proto 9,8 m široká a koleje jsou v pruzích. Holky (hráč: *„holky přikladej jen po stranách u kraje dlaždic cesty
   polem“*) stojí na trávě u kraje, ne v pruzích.
-- **Velikost:** všechny dlaždice marihuany ve 4× mají dohromady asi 135 kB, v 8× asi 475 kB; brambory 140 a 455 kB.
+- **Velikost:** všechny dlaždice marihuany ve 4× mají dohromady asi 130 kB, v 8× asi 460 kB (s boudou vedle cesty);
+  brambory bez cesty a boudy 140 a 455 kB.
 
 Složit znovu: `POLE=marihuana python3 render_dlazdice.py <adresář>` (zem, cesta, bouda, kytky, holky) a
 `POLE=brambory python3 render_dlazdice.py <adresář>`, 8× s `ZIN=8`; `JEN=mari_male,…` jen některé. Náhled celého
 pole: `python3 slozit_pole.py <adresář dlaždic> 4 <výstup>` (`dlazdice/nahled/`).
+
+## Bouda vedle cesty (3. 10. večer)
+
+Hráč: *„postavil jsi boudu do cesty na marihuanový plantaži : ) tam budou jezdit auta přece : )“*.
+
+- Kůlna stála napříč ujetou cestou na konci a nádrže v jihovýchodním pruhu, auta by jezdila skrz.
+- Teď stojí kůlna i tři nádrže na trávě u severozápadního okraje páté dlaždice cesty, pořád na konci cesty
+  (u severovýchodního konce). Ujetá cesta a oba pruhy aut jsou volné po celé délce, silnici jde postavit i přes pátou
+  dlaždici. Kůlna je užší (4,4 × 2 m), aby se na trávu vešla, dveře a okno má na cestu, střecha spadá k cestě.
+- Proč na severozápadní straně: ta je za auty. Překrývající obrázek se ve hře kreslí pod auty, takže auto jedoucí
+  kolem kůlnu správně zakryje. Na jihovýchodní straně by auto za kůlnou bylo nakreslené přes ni.
+- Na dlaždici s boudou jdou jen holky `holky_jv` (u jihovýchodního okraje). `holky_sz` stojí na trávě, kde je
+  teď kůlna.
+- Změnil se jen obrázek `bouda` (4× i 8×) a náhledy, ostatní dlaždice jsou stejné.

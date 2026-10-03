@@ -10,7 +10,8 @@
 # - zaklady (neprusvitne presne v kosoctverci policka): pole marihuany (zem se zahony), pole brambor (hrebeny), cesta
 #   (trava a polni cesta podel x);
 # - prikladaci vrstvy (jinde pruhledne, nic nepresahuje pod predni hrany policka, jen nahoru): bouda (kulna a nadrze na
-#   konci cesty), male a vzrostle kytky (i se stinem na zem), holky u okraju cesty.
+#   konci cesty vedle ni, na trave u severozapadniho okraje), male a vzrostle kytky (i se stinem na zem), holky u okraju
+#   cesty.
 # Cesta prostredkem pole (hrac: "takhle bude cesta prostredkem pole, vzor je overlaping titles z toho grf", "normalne tam
 # bude tvoje nynejsi cesta a pod ni postavim silnici pro auta, proto potrebuju aby ta cesta v marihuanovy plantazi byla
 # overlaping, ze tam je obrazek ale muzu pod obrazkem stavet"): obrazek cesty je plny, ve hre se kresli jako prekryvajici
@@ -181,28 +182,36 @@ if POLE == "marihuana":
         for k in (-0.75, 0.75):
             kvadr("cesta", M["kolej"], OD, DO, pr + k - 0.24, pr + k + 0.24, 0.0, 0.013)
     kvadr("cesta", M["trava"], OD, DO, YT - 0.6, YT + 0.6, 0.0, 0.02)
-    # bouda na konci cesty (severovychodni konec dlazdice, x maly), napric cestou, dvere k jihozapadu na cestu, okno
-    # k jihovychodu, jako kulna na stare plantazi: drevena, pultova plechova strecha; vedle tri IBC nadrze na vodu.
-    # Do pulky dlazdice (x do 7,4) nesaha: na slepem konci silnice auta otaci uprostred dlazdice.
-    KX0, KX1, KY0, KY1 = 0.5, 4.9, YT - 2.0, YT + 2.0
-    ZK, ZK1 = 2.5, 3.1
+    # bouda na konci cesty, vedle ni (hrac 3. 10.: "postavil jsi boudu do cesty na marihuanovy plantazi : ) tam budou
+    # jezdit auta prece"): stoji na trave u severozapadniho okraje dlazdice (y do 2,5 m, cesta zacina na 2,52 m)
+    # u severovychodniho konce (x maly), ujeta cesta i oba pruhy aut zustavaji volne. Drevena kulna s pultovou
+    # plechovou strechou spadajici k ceste, dvere a okno na cestu (k jihovychodu), okno k jihozapadu; vedle ni
+    # k jihozapadu tri IBC nadrze na vodu, take na trave. Severozapadni strana je za auty, auta ji ve hre prekresli
+    # spravne (prekryvajici obrazek se kresli pod auty).
+    KX0, KX1, KY0, KY1 = 0.6, 5.0, 0.2, 2.2
+    ZK, ZK1 = 2.5, 3.1                             # stena u cesty a vzadu
     kvadr("bouda", M["prkna"], KX0, KX1, KY0, KY1, 0.0, ZK)
-    mnohostena("bouda", M["prkna"], [(KX0, KY0, ZK), (KX1, KY0, ZK), (KX1, KY1, ZK), (KX0, KY1, ZK), (KX0, KY0, ZK1), (KX0, KY1, ZK1)],
-               [(0, 1, 2, 3), (0, 4, 1), (3, 2, 5), (0, 3, 5, 4)])
-    O = 0.3
-    mnohostena("bouda", M["plech"], [(KX0 - O, KY0 - O, ZK1 + 0.08), (KX0 - O, KY1 + O, ZK1 + 0.08), (KX1 + O, KY1 + O, ZK - 0.12),
-                                     (KX1 + O, KY0 - O, ZK - 0.12), (KX0 - O, KY0 - O, ZK1 + 0.14), (KX0 - O, KY1 + O, ZK1 + 0.14),
-                                     (KX1 + O, KY1 + O, ZK - 0.06), (KX1 + O, KY0 - O, ZK - 0.06)],
+    mnohostena("bouda", M["prkna"], [(KX0, KY0, ZK), (KX1, KY0, ZK), (KX1, KY1, ZK), (KX0, KY1, ZK), (KX0, KY0, ZK1), (KX1, KY0, ZK1)],
+               [(0, 1, 2, 3), (0, 4, 5, 1), (3, 2, 5, 4), (0, 3, 4), (1, 5, 2)])
+    O = 0.25
+    mnohostena("bouda", M["plech"], [(KX0 - O, KY0 - O, ZK1 + 0.08), (KX1 + O, KY0 - O, ZK1 + 0.08), (KX1 + O, KY1 + O, ZK - 0.12),
+                                     (KX0 - O, KY1 + O, ZK - 0.12), (KX0 - O, KY0 - O, ZK1 + 0.14), (KX1 + O, KY0 - O, ZK1 + 0.14),
+                                     (KX1 + O, KY1 + O, ZK - 0.06), (KX0 - O, KY1 + O, ZK - 0.06)],
                [(0, 3, 2, 1), (4, 5, 6, 7), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)])
-    for k in range(int((KY1 - KY0) / 0.22)):
+    for k in range(int((KX1 - KX0) / 0.22)):      # spary prken na stene u cesty
+        x = KX0 + 0.22 * (k + 1)
+        kvadr("bouda", M["tmava"], x - 0.012, x + 0.012, KY1, KY1 + 0.012, 0.05, ZK - 0.05)
+    for k in range(int((KY1 - KY0) / 0.22)):      # a na jihozapadni stene
         y = KY0 + 0.22 * (k + 1)
         kvadr("bouda", M["tmava"], KX1, KX1 + 0.012, y - 0.012, y + 0.012, 0.05, ZK - 0.05)
-    kvadr("bouda", M["tmava"], KX1, KX1 + 0.02, KY0 + 0.5, KY0 + 1.6, 0.0, 2.1)
-    kvadr("bouda", M["prkna"], KX1 + 0.02, KX1 + 0.05, KY0 + 0.55, KY0 + 1.55, 0.02, 2.05)
-    kvadr("bouda", M["sklo"], KX0 + 1.4, KX0 + 2.6, KY1, KY1 + 0.02, 1.3, 2.0)
-    kvadr("bouda", M["prkna"], KX0 + 1.35, KX0 + 2.65, KY1, KY1 + 0.05, 1.25, 1.3)
+    kvadr("bouda", M["tmava"], KX0 + 0.5, KX0 + 1.6, KY1, KY1 + 0.02, 0.0, 2.1)            # dvere na cestu
+    kvadr("bouda", M["prkna"], KX0 + 0.55, KX0 + 1.55, KY1 + 0.02, KY1 + 0.05, 0.02, 2.05)
+    kvadr("bouda", M["sklo"], KX0 + 2.5, KX0 + 3.5, KY1, KY1 + 0.02, 1.3, 2.0)              # okno na cestu
+    kvadr("bouda", M["prkna"], KX0 + 2.45, KX0 + 3.55, KY1, KY1 + 0.05, 1.25, 1.3)
+    kvadr("bouda", M["sklo"], KX1, KX1 + 0.02, KY0 + 0.5, KY0 + 1.5, 1.3, 2.0)              # okno k jihozapadu
+    kvadr("bouda", M["prkna"], KX1, KX1 + 0.05, KY0 + 0.45, KY0 + 1.55, 1.25, 1.3)
     for i in range(3):
-        nx0, ny0 = 0.7 + 1.35 * i, KY1 + 0.8
+        nx0, ny0 = KX1 + 0.6 + 1.35 * i, 0.6
         kvadr("bouda", M["paleta"], nx0, nx0 + 1.2, ny0, ny0 + 1.0, 0.0, 0.15)
         kvadr("bouda", M["nadrz"], nx0 + 0.05, nx0 + 1.15, ny0 + 0.05, ny0 + 0.95, 0.15, 1.15)
         for t in (0.0, 0.33, 0.66, 1.0):
@@ -304,7 +313,8 @@ if POLE == "marihuana":
         PO.postav(meshe, Matrix.Translation(B(gx, gy, gz)) @ Matrix.Rotation(uhel, 4, 'Z') @ Matrix.Scale(K, 4))
         for o in meshe: do_skupiny(sk, o)
     # u okraju dlazdice cesty: u severozapadniho okraje (y maly) a u jihovychodniho (y velky), kazda strana zvlast;
-    # stoji na trave u kraje (cesta od 2,5 m); u jihovychodniho jen za boudou a nadrzemi (x > 8)
+    # stoji na trave u kraje (cesta od 2,5 m). Na dlazdici s boudou jen jihovychodni (bouda a nadrze stoji na trave
+    # u severozapadniho okraje)
     do_sceny(PO.nacti_stojici("galaxia_anime_girl", 1.58, "ruce_dolu"), 4.2, 1.6, 0.0, math.radians(60), "holky_sz")
     do_sceny(PO.nacti_stojici("college_girl", 1.62, "ruce_dolu"), 10.4, 1.9, 0.0, math.radians(40), "holky_sz")
     do_sceny(PO.nacti_stojici("character_people_girl_001", 1.68), 9.2, T - 1.7, 0.0, math.radians(15), "holky_jv")
@@ -409,12 +419,12 @@ def chci(jm):
 if POLE == "marihuana":
     if chci("mari_zaklad"): zaklad("mari_zaklad", "mari_zaklad", "pole marihuany bez kytek: zem, 4 zahony podel x")
     if chci("cesta"): zaklad("cesta", "cesta", "polni cesta podel x s travou kolem; ve hre prekryvajici obrazek, pod nim silnice")
-    if chci("bouda"): vrstva_se_stinem("cesta", "bouda", [], "bouda", "kulna a tri nadrze na konci cesty, na policko cesty")
+    if chci("bouda"): vrstva_se_stinem("cesta", "bouda", [], "bouda", "kulna a tri nadrze na konci cesty vedle ni, na trave u severozapadniho okraje dlazdice cesty; cesta volna")
     if chci("mari_male"):
         vrstva_se_stinem("mari_zaklad", "mari_male", ["mari_male_sousede"], "mari_male", "male kytky (mlade rostliny 1,5 az 2,2 m)")
     if chci("mari_vzrostle"):
         vrstva_se_stinem("mari_zaklad", "mari_vzrostle", ["mari_vzrostle_sousede"], "mari_vzrostle", "vzrostle smrcky 3,8 az 5 m")
-    if chci("holky_sz"): vrstva_holek("cesta", "holky_sz", [], "holky_sz", "dve holky u severozapadniho okraje cesty")
+    if chci("holky_sz"): vrstva_holek("cesta", "holky_sz", [], "holky_sz", "dve holky u severozapadniho okraje cesty (ne na dlazdici s boudou)")
     if chci("holky_jv"): vrstva_holek("cesta", "holky_jv", [], "holky_jv", "dve holky u jihovychodniho okraje cesty (i s boudou)")
 if POLE == "brambory":
     if chci("bram_zaklad"): zaklad("bram_zaklad", "bram_zaklad", "pole brambor bez nate: zem, 20 hrebenu podel x")

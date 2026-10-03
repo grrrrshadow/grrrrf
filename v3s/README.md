@@ -41,7 +41,11 @@ Co je nové:
     pivem, chmelem, uhlím, vodou, obilím, ropou, ocelí, kravičkami a kyselinou, u malé i u BRÝLÍ; čumák BRÝLÍ má 5
     (vlastnost auta, callback ho nemění);
   - fotka aut zastavených při nakládání s jedinou studentkou v každém autě: ve v17 jsou holky na korbě všech aut, ve
-    v16 na žádném (kromě BRÝLÍ Tatry, kde je 1 ze 2 polovina), `kontrola/hra_nakladani_v17.png`.
+    v16 na žádném (kromě BRÝLÍ Tatry, kde je 1 ze 2 polovina), `kontrola/hra_nakladani_v17.png`. Auta na té fotce
+    stojí na silnici, ne v zastávce: zkušební příkaz je zastaví a přepne do nakládání, aby šel vyfotit obrázek „na
+    zastávce“;
+  - plná auta za jízdy a při nakládání (`kontrola/hra_sedi_stoji_v17.png`): za jízdy studentky sedí na lavicích jako
+    dosud, stojí jen při nakládání a vykládání.
 
 ## Verze 16 (2. 10. odpoledne): studentky v přiblížení 8×, College Girl má ruce
 
